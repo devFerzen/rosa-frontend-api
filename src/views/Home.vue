@@ -1,18 +1,16 @@
 <template>
-  <v-container fluid fill-height class="white">
-    <v-row style="min-height:100%">
-      <v-col
+  <v-row style="min-height:100%">
+    <v-col
+    cols="12"
+    :lg="herramientasWidth">
+      <panel-herramientas />
+    </v-col>
+    <v-col
       cols="12"
-      :lg="herramientasWidth">
-        <panel-herramientas />
-      </v-col>
-      <v-col
-        cols="12"
-        :lg="sistemaWidth">
-        <sistema-tarjetas />
-      </v-col>
-    </v-row>
-  </v-container>
+      :lg="sistemaWidth">
+      <sistema-tarjetas />
+    </v-col>
+  </v-row>
 </template>
 
 <script>

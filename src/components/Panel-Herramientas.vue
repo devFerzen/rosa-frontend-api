@@ -1,7 +1,7 @@
 <template>
   <v-card
     :loading="herramientasLoader"
-    class="mt-2 rounded-xl herramientas-card"
+    class="mt-2 rounded-xl d-flex flex-column"
     height="85%"
     elevation="2"
     outlined>
@@ -23,11 +23,12 @@
       <v-row no-gutters>
         <v-col
           cols="6"
-          class="mr-1">
+          class="mr-1 mb-0">
           <v-select
             :items="estados"
             label="Estados"
-            outlined></v-select>
+            outlined
+            class="mb-0"></v-select>
         </v-col>
         <v-col
           cols>
@@ -39,43 +40,46 @@
       </v-row>
     </v-card-text>
 
-    <v-slide-group
-      v-model="panelCategoria"
-      mandatory
-      show-arrows
-      center-active>
-      <v-slide-item
-        v-for="n in 5"
-        :key="n"
-        v-slot="{active, toggle}">
-        <v-card
-          class="ma-2"
-          height="50"
-          width="100"
-          :color="active ? 'primary' : 'grey lighten-1'"
-          @click="toggle">
-          <v-card-text
-            >
-            <div class="text-body-1">
-              Lorem {{n}}
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-slide-item>
-    </v-slide-group>
+    <v-row align="center" justify="center">
+      <v-slide-group
+        v-model="panelCategoria"
+        mandatory
+        show-arrows
+        center-active>
+        <v-slide-item
+          v-for="n in 5"
+          :key="n"
+          v-slot="{active, toggle}">
+          <v-card
+            class="ma-2"
+            height="50"
+            width="100"
+            :color="active ? 'primary' : 'grey lighten-1'"
+            @click="toggle">
+            <v-card-text>
+              <div class="text-body-1">
+                Lorem {{n}}
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+    </v-row>
 
-    <v-card-actions class="mb-0 acciones-herramientas-card">
-      <v-btn
-        depressed
-        elevation="2"
-        color="primary"
-        width="140"></v-btn>
-      <v-btn
-        depressed
-        outlined
-        color="primary"
-        width="140"></v-btn>
-    </v-card-actions>
+    <v-row align="center" justify="center">
+      <v-card-actions>
+        <v-btn
+          depressed
+          elevation="2"
+          color="primary"
+          width="140"></v-btn>
+        <v-btn
+          depressed
+          outlined
+          color="primary"
+          width="140"></v-btn>
+      </v-card-actions>
+    </v-row>
   </v-card>
 </template>
 
@@ -84,26 +88,13 @@
     name: 'Panel-Herramientas',
     data: () => ({
       herramientasLoader: false,
-      panelCategoria: 3
+      panelCategoria: 2,
+      ciudades: [],
+      estados: []
     }),
   }
 </script>
 
 <style lang="scss">
-  .loginClass {
-    background-color: red;
-  }
 
-  .herramientasHigh {
-    height: 100%;
-  }
-
-  .herramientas-card {
-    position: relative;
-  }
-
-  .acciones-herramientas-card{
-    position: absolute;
-    bottom: 0;
-  }
 </style>

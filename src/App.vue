@@ -3,42 +3,50 @@
     <v-app-bar
       app
       color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
+      dark>
+      <div class="d-flex align-center mx-3">
         <v-img
           alt="Vuetify Logo"
-          class="shrink mr-2"
+          class="shrink"
           contain
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
           transition="scale-transition"
           width="40"
         />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
       </div>
 
-      <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text>
-        <span class="mr-2">Latest Release</span>
-        <v-icon>open_in_new</v-icon>
-      </v-btn>
-      
+      <v-row
+        align="center"
+        justify="end">
+        <v-btn
+          tile
+          depressed
+          raised
+          width="185"
+          min-width="185"
+          class="mr-2 rounded-lg"
+          color="light-blue accent-3"
+          >
+          <v-icon>perm_identity</v-icon>
+          <span class="ml-2">Anunciaté</span>
+        </v-btn>
+
+        <v-btn
+          outlined
+          color="white"
+          class="mx-3 rounded-lg">
+          <v-icon>perm_identity</v-icon>
+          <span>Login Usuario</span>
+        </v-btn>
+      </v-row>
+
     </v-app-bar>
 
     <v-main>
-      <router-view/>
+      <v-container fluid fill-height class="white">
+        <router-view/>
+      </v-container>
     </v-main>
   </v-app>
 </template>
