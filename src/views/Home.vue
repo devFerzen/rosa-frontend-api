@@ -3,12 +3,12 @@
     <v-row style="min-height:100%">
       <v-col
       cols="12"
-      :md="herramientasWidth">
+      :lg="herramientasWidth">
         <panel-herramientas />
       </v-col>
       <v-col
         cols="12"
-        :md="sistemaWidth">
+        :lg="sistemaWidth">
         <sistema-tarjetas />
       </v-col>
     </v-row>
