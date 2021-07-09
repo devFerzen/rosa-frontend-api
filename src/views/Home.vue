@@ -1,8 +1,9 @@
 <template>
-  <v-row style="min-height:100%">
+  <v-row>
     <v-col
-    cols="12"
-    :lg="herramientasWidth">
+      cols="12"
+      :lg="herramientasWidth"
+      style="position: sticky; height:100vh; top:9vh; max-height: calc(100% - 9vh); transform: translateX(0%);">
       <panel-herramientas />
     </v-col>
     <v-col

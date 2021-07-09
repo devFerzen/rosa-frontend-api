@@ -2,7 +2,8 @@
   <v-card
     :loading="herramientasLoader"
     class="mt-2 rounded-xl d-flex flex-column"
-    height="85%"
+    max-height="85vh"
+    min-height="85vh"
     elevation="2"
     outlined>
 
