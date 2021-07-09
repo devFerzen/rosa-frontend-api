@@ -1,9 +1,9 @@
 <template>
-  <v-row>
+  <v-row align="start">
     <v-col
       cols="12"
       :lg="herramientasWidth"
-      style="position: sticky; height:100vh; top:9vh; max-height: calc(100% - 9vh); transform: translateX(0%);">
+      class="panel-herramientas-mb">
       <panel-herramientas />
     </v-col>
     <v-col
@@ -40,3 +40,22 @@ import SistemaTarjetas from '@/components/Sistema-Tarjetas'
     }
   }
 </script>
+<style>
+
+.panel-herramientas-mb{
+  position: sticky;
+    height: 28vh;
+    top: 9vh;
+    max-height: calc(28vh - 9vh);
+    transform: translateX(0%);
+    z-index: 1;
+}
+
+.panel-herramientas{
+  position: sticky;
+  height:100vh;
+  top:9vh;
+  max-height: calc(100% - 9vh);
+  transform: translateX(0%);
+}
+</style>
