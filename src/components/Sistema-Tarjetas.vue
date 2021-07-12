@@ -129,8 +129,18 @@
         hide-overlay
         transition="dialog-bottom-transition"
       >
-      <v-card>
-        <p>Hi</p><!--Crear Componente tarjeta-->
+
+      <v-card height="80vh">
+        <v-container fluid>
+          <v-row style="min-height: 95vh;">
+            <v-col cols="4" style="background-color:blue;">
+              <p>Hi</p>
+            </v-col>
+            <v-col cols="8" style="background-color:red;">
+              <p>Hi2</p>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
     </v-dialog><!--Venta Anuncio Completa-->
   </div>
@@ -141,7 +151,7 @@
   export default {
     name: 'Sistema-tarjetas',
     data: () => ({
-      fullAnuncioEstado: false,
+      fullAnuncioEstado: true,
       items:[{
         urlImage: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
       },{

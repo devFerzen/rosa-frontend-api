@@ -3,7 +3,8 @@
     :loading="herramientasLoader"
     class="mt-2 rounded-xl d-flex flex-column"
     max-height="85vh"
-    min-height="85vh"
+    :height="panelCSS.panelCardHeight"
+    min-height="20vh"
     elevation="2"
     outlined>
 
@@ -16,38 +17,39 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses" >Lorem ipsum dolor</h6>
+      <h6 class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses">Lorem ipsum dolor</h6>
       <v-row no-gutters>
-        <v-col :lg="cols[0]" :md="cols[0]" :sm="cols[0]" :xs="cols[0]">
+        <v-col order="1" :cols="cols['searchField']">
           <v-text-field
             label="Lorem ipsum"
             placeholder="Lorem ipsum"
             outlined></v-text-field>
-        </v-col>
+        </v-col> <!--Busqueda-->
 
-        <v-col order="1" cols="1">
-          <v-btn text icon>
+        <v-col :order="columnOrders['masFiltros']" cols="1" :class="filterInputClass">
+          <v-btn text icon @click="showingMasFiltros">
             <span class="material-icons">maximize</span>
           </v-btn>
-        </v-col>
+        </v-col> <!--Icono más filtros-->
 
-        <v-col cols="6" class="mr-1 mb-0" :order="panelCSS.colOrder.estados">
+        <v-col cols="6" class="mr-1 mb-0" :order="panelCSS.colOrder.estados" v-show="panelCSS.masFiltros">
           <v-select
             :items="estados"
             label="Estados"
             outlined
             class="mb-0"></v-select>
-        </v-col>
-        <v-col :order="panelCSS.colOrder.ciudades">
+        </v-col> <!--Estados-->
+
+        <v-col :order="panelCSS.colOrder.ciudades" v-show="panelCSS.masFiltros">
           <v-select
             :items="ciudades"
             label="Ciudades"
             outlined></v-select>
-        </v-col>
+        </v-col> <!--Ciudades-->
 
-        <v-col :sm="cols[1]" :md="cols[1]" :order="panelCSS.colOrder.categorias">
+        <v-col :cols="cols['categoriasField']" :order="columnOrders['categorias']" class="mb-4" v-show="panelCSS.categorizacion">
           <v-slide-group
-            v-model="panelCategoria"
+            v-model="categoriaSeleccionada"
             mandatory
             show-arrows
             center-active>
@@ -69,11 +71,11 @@
               </v-card>
             </v-slide-item>
           </v-slide-group>
-        </v-col>
+        </v-col> <!--Categorías-->
       </v-row>
     </v-card-text>
 
-    <v-row align="center" justify="center">
+    <v-row align="center" justify="center" v-show="panelCSS.masFiltros">
       <v-card-actions>
         <v-btn
           depressed
@@ -95,17 +97,20 @@
     name: 'Panel-Herramientas',
     data: () => ({
       herramientasLoader: false,
-      panelCategoria: 2,
+      categoriaSeleccionada: 2,
       ciudades: [],
       estados: [],
       panelCSS: {
         colOrder: {
-          categorias: 1,
-          ciudades: 4,
-          estados: 3
+          categorias: 2,
+          ciudades: 5,
+          estados: 4
         },
         headerClass: 'hidden',
-        isMax: false
+        isMax: false,
+        masFiltros: false,
+        categorizacion: true,
+        panelCardHeight: '85vh'
       },
     }),
     computed: {
@@ -113,18 +118,66 @@
         const { lg, sm, md, xs } = this.$vuetify.breakpoint
         console.log(`lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
         console.log(`${lg ? [3, 9] : sm ? [4, 6] : [10, 12]}`);
-        return lg ? [12, 6] : md ? [6, 5] : sm ? [4, 6] : [11, 12];
+        return lg ? {searchField: 12, categoriasField: 12} : md ? {searchField: 5, categoriasField: 6} : sm ? {searchField: 5, categoriasField: 6} : {searchField: 11, categoriasField: 12};
       },
       cardClasses() {
-        const { md } = this.$vuetify.breakpoint
-        return md ? this.panelCSS.headerClass : '';
+        const { sm, md, xs } = this.$vuetify.breakpoint;
+        return sm || md || xs ? this.panelCSS.headerClass : '';
+      },
+      filterInputClass() {
+        const { lg, xl } = this.$vuetify.breakpoint;
+        return lg || xl ? this.panelCSS.headerClass : '';
+      },
+      columnOrders(){
+        const { sm, md, xs } = this.$vuetify.breakpoint;
+        return xs ? { masFiltros: 2, categorias: 3 } : { masFiltros: 3, categorias: 2 };
       }
+
+    },
+    methods: {
+      showingMasFiltros () {
+        this.panelCSS.masFiltros = !this.panelCSS.masFiltros;
+        this.panelCSS.categorizacion = window.innerWidth < 601 ? !this.panelCSS.categorizacion : true;
+
+        if(this.panelCSS.masFiltros && window.innerWidth < 1263){
+          this.panelCardHeight = '50vh';
+        } else {
+          this.panelCardHeight = 'auto';
+        }
+      },
+      onResizeMasFiltros () {
+        if(window.innerWidth < 1263){
+          this.panelCSS.masFiltros = false;
+          this.panelCSS.panelCardHeight = 'auto';
+        }
+
+        if(window.innerWidth > 1263){
+          this.panelCSS.masFiltros = true;
+          this.panelCSS.panelCardHeight = '85vh';
+        }
+
+        if(window.innerWidth < 600){
+          this.panelCSS.categorizacion = false;
+        }
+
+        if(window.innerWidth >= 600){
+          this.panelCSS.categorizacion = true;
+        }
+      },
+    },
+    mounted () {
+      this.onResizeMasFiltros()
+      window.addEventListener('resize', this.onResizeMasFiltros, { passive: true })
+    },
+    beforeDestroy () {
+      if (typeof window === 'undefined') return
+      window.removeEventListener('resize', this.onResizeMasFiltros, { passive: true })
     },
   }
 </script>
 
 <style lang="scss">
-.hidden{
-  display: none;
-}
+  .hidden{
+    display: none;
+  }
 </style>
