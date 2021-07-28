@@ -10,7 +10,7 @@
 
     <v-form ref="inicioSesion" v-model="valid" lazy-validation>
       <v-text-field
-        v-model="FormIS.email"
+        v-model="FormIS.usuario"
         :rules="emailRules"
         label="Correo"
         required
@@ -33,7 +33,7 @@
         color="primary"
         width="140"
         :disabled="!valid"
-        @click="validandoUsuario"></v-btn>
+        @click="iniciandoSesion"></v-btn>
     </v-card-actions>
   </v-row>
 
@@ -44,9 +44,13 @@
       </div>
     </v-col>
     <v-col cols="6">
-      <div class="text-caption grey--text text--lighten-1 text-center">
-        Deseas Anunciarte?
-      </div>
+      <v-btn
+        text
+        @click="paraRegistro">
+        <div class="text-caption grey--text text--lighten-1 text-center">
+          Deseas Registrarte?
+        </div>
+      </v-btn>
     </v-col>
   </v-row>
 
@@ -72,7 +76,7 @@ export default {
         panelCardHeight: '85vh'
       },
       FormIS: {
-        email: '',
+        usuario: '',
         contrasena: ''
       },
       emailRules: [
@@ -85,8 +89,24 @@ export default {
 
   },
   methods: {
-    validandoUsuario(){
-       this.$refs.inicioSesion.validate()
+    paraRegistro(){
+      this.$store.dispatch('REGISTRANDOSE',true);
+    },
+    iniciandoSesion(){
+       if(this.$refs.inicioSesion.validate()){
+         console.log("iniciandoSesion...");
+         this.$store.dispatch('inicioSesionUsuario',this.FormIS)
+         .then((result)=> {
+           console.log("vue iniciandoSesion en éxito...");
+           console.dir(result);
+           this.$store.dispatch('activandoInicioSesion', false);
+           this.$router.push('Dashboard');
+         })
+         .catch((error) => {
+           console.log("vue iniciandoSesion en error...");
+           console.dir(error);
+         });
+       }
     }
   }
 }

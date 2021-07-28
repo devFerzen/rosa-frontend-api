@@ -11,25 +11,27 @@
     <v-system-bar
       height="30">
       <v-spacer></v-spacer>
-      <v-btn text icon @click="panelCSS.isMax = !panelCSS.isMax">
-        <span class="material-icons">{{ panelCSS.isMax ? 'maximize': 'minimize'}}</span>
+      <v-btn text icon @click="barAction">
+        <span class="material-icons">{{ panelCSS.isMin ? 'maximize': 'minimize'}}</span>
       </v-btn>
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses">Lorem ipsum dolor</h6>
+      <h6 class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses['class']">Lorem ipsum dolor</h6>
       <v-row no-gutters>
-        <v-col order="1" :cols="cols['searchField']">
+        <v-col order="1" :cols="cols['formSearchField']">
           <v-text-field
             label="Lorem ipsum"
             placeholder="Lorem ipsum"
             outlined></v-text-field>
         </v-col> <!--Busqueda-->
 
-        <v-col :order="columnOrders['masFiltros']" cols="1" :class="filterInputClass">
-          <v-btn text icon @click="showingMasFiltros">
-            <span class="material-icons">maximize</span>
-          </v-btn>
+        <v-col cols="2" :class="filterInputClass['class']" :order="columnOrders['formMasFiltros']">
+          <div class="d-flex align-center justify-center">
+            <v-btn text icon @click="showingMasFiltros">
+              <span class="material-icons">maximize</span>
+            </v-btn>
+          </div>
         </v-col> <!--Icono más filtros-->
 
         <v-col cols="6" class="mr-1 mb-0" :order="panelCSS.colOrder.estados" v-show="panelCSS.masFiltros">
@@ -47,7 +49,7 @@
             outlined></v-select>
         </v-col> <!--Ciudades-->
 
-        <v-col :cols="cols['categoriasField']" :order="columnOrders['categorias']" class="mb-4" v-show="panelCSS.categorizacion">
+        <v-col :cols="cols['formCategoriasField']" :order="columnOrders['formCategorias']" class="mb-4" v-show="panelCSS.categorizacion">
           <v-slide-group
             v-model="categoriaSeleccionada"
             mandatory
@@ -75,18 +77,19 @@
       </v-row>
     </v-card-text>
 
-    <v-row align="center" justify="center" v-show="panelCSS.masFiltros">
+    <v-row align="center" justify="center" v-show="panelCSS.masFiltros" class="mb-2">
       <v-card-actions>
         <v-btn
           depressed
           elevation="2"
           color="primary"
-          width="140"></v-btn>
+          width="140"> Buscar</v-btn>
         <v-btn
           depressed
           outlined
           color="primary"
-          width="140"></v-btn>
+          width="140"
+          @click="creandoAnuncio"> Anunciate</v-btn>
       </v-card-actions>
     </v-row>
   </v-card>
@@ -97,7 +100,7 @@
     name: 'Panel-Herramientas',
     data: () => ({
       herramientasLoader: false,
-      categoriaSeleccionada: 2,
+      categoriaSeleccionada: 1,
       ciudades: [],
       estados: [],
       panelCSS: {
@@ -107,7 +110,7 @@
           estados: 4
         },
         headerClass: 'hidden',
-        isMax: false,
+        isMin: false,
         masFiltros: false,
         categorizacion: true,
         panelCardHeight: '85vh'
@@ -116,25 +119,42 @@
     computed: {
       cols () {
         const { lg, sm, md, xs } = this.$vuetify.breakpoint
-        console.log(`lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
-        console.log(`${lg ? [3, 9] : sm ? [4, 6] : [10, 12]}`);
-        return lg ? {searchField: 12, categoriasField: 12} : md ? {searchField: 5, categoriasField: 6} : sm ? {searchField: 5, categoriasField: 6} : {searchField: 11, categoriasField: 12};
+        console.log(`vista: lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
+        return lg ? {formSearchField: 12, formCategoriasField: 12} : md ? {formSearchField: 5, formCategoriasField: 6} : sm ? {formSearchField: 5, formCategoriasField: 6} : {formSearchField: 11, formCategoriasField: 12};
       },
       cardClasses() {
         const { sm, md, xs } = this.$vuetify.breakpoint;
-        return sm || md || xs ? this.panelCSS.headerClass : '';
+        return sm || md || xs ?{class:this.panelCSS.headerClass} : {class:''};
       },
       filterInputClass() {
         const { lg, xl } = this.$vuetify.breakpoint;
-        return lg || xl ? this.panelCSS.headerClass : '';
+        return lg || xl ? {class: this.panelCSS.headerClass} : { class: ''};
       },
       columnOrders(){
         const { sm, md, xs } = this.$vuetify.breakpoint;
-        return xs ? { masFiltros: 2, categorias: 3 } : { masFiltros: 3, categorias: 2 };
+        return xs ? { formMasFiltros: 2, formCategorias: 3 } : { formMasFiltros: 3, formCategorias: 2 };
       }
 
     },
     methods: {
+      activandoRegistro(value){
+        this.$store.dispatch('activandoRegistro', value);
+      },
+      creandoAnuncio () {
+        this.$store.dispatch('creandoAnuncio', this.TestnewAnuncio)
+        .then((result)=> {
+            console.log("vista: creandoAnuncio en éxito...");
+            console.log(result);
+            this.$store.dispatch('activandoRegistro', false);
+        })
+        .catch((error)=> {
+          if(!!error.activeTo && error.activeTo == 'registro'){
+            this.$store.dispatch('activandoRegistro', true);
+          }
+          console.log("vista: creandoAnuncio en error...");
+          console.log(error.mensaje);
+        });
+      },
       showingMasFiltros () {
         this.panelCSS.masFiltros = !this.panelCSS.masFiltros;
         this.panelCSS.categorizacion = window.innerWidth < 601 ? !this.panelCSS.categorizacion : true;
@@ -164,6 +184,47 @@
           this.panelCSS.categorizacion = true;
         }
       },
+      barAction() {
+        console.log(`vue PanelHerramientas: barAction... isMin ${this.panelCSS.isMin}`);
+        let _categoriaSeleccionada = this.categoriaSeleccionada;
+        if(!this.panelCSS.isMin){
+          console.log(`minimizeHerramientas`);
+          this.$emit('activandoGrid', {herramientasWidth: 8, sistemaWidth: 12});
+          this.$emit('panelMinimizeH', { panelHerramientasClases: 'panel-herramientas-mbview' });
+          this.minimizeHerramientas();
+          this.categoriaSeleccionada = _categoriaSeleccionada;
+          return;
+        }
+        console.log(`maximizeHerramientas`);
+        this.$emit('activandoGrid', { herramientasWidth: 3, sistemaWidth: 9 });
+        this.$emit('panelMinimizeH', { panelHerramientasClases: 'panel-herramientas-pcview' });
+        this.maximizeHerramientas();
+        this.categoriaSeleccionada = _categoriaSeleccionada;
+      },
+      minimizeHerramientas () {
+        this.panelCSS.isMin = true;
+        this.categoriaSeleccionada = 0;
+        this.cols['formSearchField'] = 4;
+        this.cols['formCategoriasField'] = 6;
+        this.cols['formMasFiltros'] = 2;
+        this.cols['formCategorias'] = 3;
+        this.filterInputClass['class'] = '';
+        this.cardClasses['class'] = this.panelCSS.headerClass;
+        this.panelCSS.masFiltros = false;
+        this.panelCSS.panelCardHeight = 'auto';
+      },
+      maximizeHerramientas () {
+        this.panelCSS.isMin = false;
+        this.categoriaSeleccionada = 0;
+        this.cols['formSearchField'] = 12;
+        this.cols['formCategoriasField'] = 12;
+        this.cols['formMasFiltros'] = 3;
+        this.cols['formCategorias'] = 2;
+        this.filterInputClass['class'] = this.panelCSS.headerClass;
+        this.cardClasses['class'] = '';
+        this.panelCSS.masFiltros = true;
+        this.panelCSS.panelCardHeight = '85vh';
+      }
     },
     mounted () {
       this.onResizeMasFiltros()

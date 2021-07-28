@@ -27,7 +27,7 @@
           min-width="185"
           class="mr-2 rounded-lg"
           color="light-blue accent-3"
-          >
+           @click="creandoAnuncio">
           <v-icon>perm_identity</v-icon>
           <span class="ml-2">Anunciaté</span>
         </v-btn>
@@ -35,7 +35,8 @@
         <v-btn
           outlined
           color="white"
-          class="mx-3 rounded-lg">
+          class="mx-3 rounded-lg"
+          @click="iniciandoSesion">
           <v-icon>perm_identity</v-icon>
           <span>Login Usuario</span>
         </v-btn>
@@ -44,9 +45,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid fill-height class="white">
-        <router-view/>
-      </v-container>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
@@ -59,5 +58,29 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    iniciandoSesion(){
+      this.$store.dispatch('activandoInicioSesion', true);
+    },
+    creandoAnuncio () {
+      this.$store.dispatch('creandoAnuncio', null)
+      .then((result)=> {
+          console.log("creandoAnuncio en éxito...");
+          console.log(result);
+          this.$store.dispatch('activandoRegistro',false);
+      })
+      .catch((error)=> {
+        if(!!error.activeTo && error.activeTo == 'registro'){
+          this.$store.dispatch('activandoRegistro',true);
+        }
+        if(!!error.activeTo && error.activeTo == 'creacionAnuncio'){
+          console.log("aqui va el push route para crear Anuncio");
+        }
+        //notificar el error al usuario
+        console.log("creandoAnuncio en error...");
+        console.log(error.mensaje);
+      });
+    }
+  }
 };
 </script>

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Dashboard from '../views/Dashboard.vue'
+import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
@@ -9,12 +11,12 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    props: true
+    props: route => ({ id: route.query.q})
   },
   {
-    path: '/:id',
-    name: 'Home',
-    component: Home,
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
     props: true
   }
 ]

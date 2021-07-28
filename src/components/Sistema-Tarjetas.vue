@@ -1,63 +1,63 @@
 <template>
 <div class="">
   <v-row>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden; position:relative;">
         <v-img lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api" max-height="100%" contain src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; position:relative; ">
         <v-img max-height="100%" contain lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api" src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden; position:relative;">
         <v-img lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api" max-height="100%" contain src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden; position:relative;">
         <v-img lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api" max-height="100%" src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; position:relative; ">
         <v-img max-height="100%" lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api" src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden; position:relative;">
         <v-img lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api" max-height="100%" src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
           style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden; position:relative;">
         <v-img lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api" min-height="500px" max-height="500px" max-width="100%" position="center center"
           src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; position:relative; ">
         <v-img min-height="500px" max-height="500px" max-width="100%" lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api" position="center center"
           src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api">
         </v-img>
       </v-card>
     </v-col>
-    <v-col cols="4">
+    <v-col :cols="gridCardWH['cardCols']">
       <v-card class="rounded-xl" style="height:500px; max-height:500px; overflow:hidden;">
         <v-img lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api" min-height="500px" max-height="500px" max-width="100%" position="center center"
           src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api">
@@ -72,12 +72,12 @@
         <v-row align="center" justify="center" class="fill-height" no-gutters>
           <v-col cols="12" md="4" style="min-height: 95vh;">
             <v-carousel height="90vh" class="my-4">
-              <v-carousel-item v-for="(imagen,i) in imagenesCarrusel" :key="i" :src="imagen.url" reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
+              <v-carousel-item v-for="(imagen,i) in anuncioView.Sec_Imagen" :key="i" :src="imagen.url" reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
             </v-carousel>
           </v-col>
           <!--Carrusel-->
           <v-col cols="12" md="8" style="min-height: 95vh; max-height: auto;" class="d-flex flex-column justify-center align-center">
-            <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey;" tile :height="bodyWH['vMainContenth']" :width="bodyWH['vMainContentw']">
+            <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey;" tile :height="fullAnuncioBodyWH['vMainContenth']" :width="fullAnuncioBodyWH['vMainContentw']">
               <v-tabs class="d-flex flex-column-reverse">
                 <v-tab-item v-if="anuncioView.Sec_Descripcion">
                   <v-container fluid style="height: auto; min-height: 61vh;" class="pa-4 pa-lg-8">
@@ -104,7 +104,7 @@
                     <!--EstadoCiudad-->
                     <v-row no-gutters style="overflow: hidden;">
                       <v-col>
-                        <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
+                        <v-card :height="fullAnuncioBodyWH['vTextContent']" flat class="mb-2">
                           <template v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
                         </v-card>
                       </v-col>
@@ -153,7 +153,7 @@
                     <!--Titulo-->
                     <v-container>
                       <v-row align="center" justify="space-around">
-                        <v-col :cols="bodyWH['CardTarifaCol']" v-for="(tarifa, i) in anuncioView.Sec_Tarifas" :key="i">
+                        <v-col :cols="fullAnuncioBodyWH['CardTarifaCol']" v-for="(tarifa, i) in anuncioView.Sec_Tarifas" :key="i">
                           <v-card>
                             <v-card-text>
                               <v-row align="center" class="mx-0 mb-2">
@@ -329,15 +329,18 @@ export default {
           }
         ],
         Sec_Imagen: [{
-          nombre: '',
-          url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
-        }, {
-          nombre: '',
-          url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
-        }, {
-          nombre: '',
-          url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
-        }]
+            nombre: '',
+            url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
+          },
+          {
+            nombre: '',
+            url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
+          },
+          {
+            nombre: '',
+            url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
+          }
+        ]
       },
       imagenesCarrusel: [{
         nombre: '',
@@ -353,12 +356,14 @@ export default {
     }
   },
   computed: {
-    bodyWH() {
-      const {
-        sm,
-        xs,
-        md
-      } = this.$vuetify.breakpoint;
+    gridCardWH() {
+      const { sm, xs , md } = this.$vuetify.breakpoint;
+
+      return xs || sm ? { 'cardCols': 12 } : { 'cardCols': 4 };
+    },
+    fullAnuncioBodyWH() {
+      const { sm, xs, md } = this.$vuetify.breakpoint;
+
       return sm || xs || md ? {
         'vMainContentw': '85vw',
         'vMainContenth': 'auto',
