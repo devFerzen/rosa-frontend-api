@@ -1,23 +1,184 @@
 <template>
-  <v-card height="100%">
-    <v-container fluid>
+  <v-card width="750">
+    <v-container fluid class="py-0 pl-0">
       <v-row align="center" justify="center" class="fill-height" no-gutters>
-        <v-col cols="12" lg="4">
-          <v-carousel :height="tarjetaWH['carrusel']" class="my-4">
-            <v-carousel-item v-for="(imagen,i) in anuncioView.Sec_Imagen" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
+        <v-col cols="12" lg="5">
+          <v-carousel :height="tarjetaWH['carrusel']">
+            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagen" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
           </v-carousel>
         </v-col>
         <!--Carrusel-->
-        <v-col cols="12" lg="8" class="d-flex flex-column justify-center align-center align-stretch">
+        <v-col cols="12" lg="7" class="d-flex flex-column justify-center align-center align-stretch">
           <v-sheet
             class="d-flex"
             color="grey lighten-3"
-            height="382">
-            <sheet-footer>
-              #1: (3r x 2c)
-            </sheet-footer>
-          </v-sheet>
+            :height="tarjetaWH['cuerpoAnuncio']">
+            <v-tabs class="d-flex flex-column-reverse">
+              <v-tab-item v-if="OpcionesAnuncio.Descripcion.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        {{anuncioUsuario.Sec_Descripcion.titulo}}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--Título-->
+                  <v-row no-gutters>
+                    <v-col cols="6" md="3">
+                      <div class="text-h7 text-xl-h6 mb-4">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                    <v-col cols="6" md="3">
+                      <div class="text-h7 text-xl-h6">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--EstadoCiudad-->
+                  <v-row no-gutters style="overflow: hidden;">
+                    <v-col>
+                      <v-card  flat class="mb-2">
+                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!--Descripcion-->
+                </v-container>
+              </v-tab-item>
+              <!--Descripcion-->
+              <v-tab-item v-if="OpcionesAnuncio.Actualizacion.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        Actualziacion
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--Título-->
 
+                  <!--Componente de Compra-->
+                </v-container>
+              </v-tab-item>
+              <!--Actualizacion-->
+              <v-tab-item v-if="OpcionesAnuncio.Compras.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        Compras
+                      </div>
+                    </v-col>
+                  </v-row>
+
+                  <v-row align="center" justify="center">
+                    <v-slide-group
+                      v-model="categoriaSeleccionada"
+                      mandatory
+                      show-arrows
+                      center-active>
+                      <v-slide-item v-for="(tarifa, i) in anuncioUsuario.Sec_Tarifas" :key="i" v-slot="{active, toggle}">
+                        <v-card
+                          width="210"
+                          class="ma-4"
+                          :color="active ? 'primary' : 'gray lighten-1'"
+                          @click="toggle">
+                          <v-card-text>
+                            <v-row align="center" class="mx-0 mb-2">
+                              <v-card-title>{{ tarifa.nombre }}</v-card-title>
+                              <font-awesome-icon icon="dollar-sign" class="tw-redes-icons" />
+                              <div class="grey--text ml-2">{{ tarifa.precio }}</div>
+                            </v-row>
+                            <div>{{tarifa.descripcion}}</div>
+                          </v-card-text>
+
+                          <v-divider class="mx-4"></v-divider>
+
+                          <v-card-title>Lorem Ipsum</v-card-title>
+
+                          <v-card-text>
+                            <v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+                              <v-chip>5:30PM</v-chip>
+
+                              <v-chip>7:30PM</v-chip>
+
+                            </v-chip-group>
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-btn color="deep-purple lighten-2" text>
+                              Lorem
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-slide-item>
+
+                    </v-slide-group>
+                  </v-row>
+                </v-container>
+              </v-tab-item>
+              <!--Compras-->
+              <v-tab-item v-if="OpcionesAnuncio.Edicion.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        Descripción
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--Título-->
+                  <v-row no-gutters>
+                    <v-col cols="6" md="3">
+                      <div class="text-h7 text-xl-h6 mb-4">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                    <v-col cols="6" md="3">
+                      <div class="text-h7 text-xl-h6">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--EstadoCiudad-->
+                  <v-row no-gutters style="overflow: hidden;">
+                    <v-col>
+                      <v-card  flat class="mb-2">
+                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!--Descripcion-->
+                </v-container>
+              </v-tab-item>
+              <!--Edicion-->
+              <v-tab-item v-if="OpcionesAnuncio.Eliminar.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        Eliminar
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--Título-->
+
+                </v-container>
+              </v-tab-item>
+              <!--Eliminar-->
+              <v-tab
+                v-for="(opcion, key, i) in OpcionesAnuncio"
+                :key="i"
+                v-if=" opcion.permisos "
+                style="height: 52px; min-width: 50px;"
+                >
+                <font-awesome-icon :icon="[opcion.categoria, opcion.icono]" class="tw-redes-icons fa-2x" />
+              </v-tab>
+            </v-tabs>
+
+          </v-sheet>
         </v-col>
         <!--Cuepo-->
       </v-row>
@@ -34,93 +195,44 @@ export default {
   },
   data() {
     return {
-      anuncioView: {
-        Sec_Descripcion: {
-          titulo: 'Lorem ipsum dolor',
-          estado: '1',
-          ciudad: '1',
-          descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-          Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`
+      selectedContactItem: '',
+      OpcionesAnuncio:{
+        Descripcion: {
+          permisos: false,
+          categoria: 'fab',
+          icono: 'whatsapp'
         },
-        Sec_Contacto: [{
-            contacto: '811-000-0000',
-            tipo: {
-              categoria: 'fab',
-              icono: 'whatsapp'
-            }
-          },
-          {
-            contacto: 'lorem.ipsum',
-            url: '',
-            tipo: {
-              categoria: 'fab',
-              icono: 'twitter'
-            }
-          },
-          {
-            contacto: 'lorem.ipsum',
-            url: '',
-            tipo: {
-              categoria: 'fab',
-              icono: 'instagram'
-            }
-          },
-          {
-            contacto: 'lorem.ipsum',
-            url: '',
-            tipo: {
-              categoria: 'fa',
-              icono: 'phone-alt'
-            }
-          },
-          {
-            contacto: 'lorem.ipsum',
-            url: '',
-            tipo: {
-              categoria: 'fa',
-              icono: 'globe'
-            }
-          }
-        ],
-        Sec_Tarifas: [
-          {
-            nombre: 'Lorem 1',
-            precio: 1500,
-            descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-          },
-          {
-            nombre: 'Lorem 2',
-            precio: 1500,
-            descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-          },
-          {
-            nombre: 'Lorem 3',
-            precio: 1500,
-            descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-          }
-        ],
-        Sec_Imagen: [{
-            nombre: '',
-            url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
-          },
-          {
-            nombre: '',
-            url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
-          },
-          {
-            nombre: '',
-            url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
-          }
-        ]
-      },
+        Actualizacion: {
+          permisos: true,
+          categoria: 'fas',
+          icono: 'sync-alt'
+        },
+        Compras: {
+          permisos: true,
+          categoria: 'fas',
+          icono: 'shopping-bag'
+        },
+        Edicion: {
+          permisos: true,
+          categoria: 'fas',
+          icono: 'pencil-alt'
+        },
+        Eliminar: {
+          permisos: true,
+          categoria: 'fas',
+          icono: 'trash-alt'
+        }
+      }
 
     }
   },
   computed: {
     tarjetaWH(){
       const { xs, sm, md } = this.$vuetify.breakpoint;
-      return xs || sm || md ? {carrusel: 560} : {carrusel: 320};
+      return xs || sm || md ? {carrusel: 560, cuerpoAnuncio: 'auto'} : {carrusel: '62vh', cuerpoAnuncio: '62vh'};
+    },
+    categoriaSeleccionada(){
+      return 1;
     }
   },
   methods: {},

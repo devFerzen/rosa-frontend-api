@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faStar, faShare, faTimes,
           faPhoneAlt, faEnvelope, faGlobe,
           faTrashAlt, faPencilAlt, faEye,
-          faHeart, faDollarSign
+          faHeart, faDollarSign, faSyncAlt,
+          faShoppingBag
         } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookSquare, faApple, faGoogle,
           faInstagram, faWhatsapp, faLinkedin,
@@ -20,7 +21,8 @@ Vue.config.productionTip = false;
 library.add(faStar, faShare, faTimes,
             faPhoneAlt, faEnvelope, faGlobe,
             faTrashAlt, faPencilAlt, faEye,
-            faHeart, faDollarSign,
+            faHeart, faDollarSign, faSyncAlt,
+            faShoppingBag,
             faFacebookSquare, faApple, faGoogle,
             faInstagram, faWhatsapp, faLinkedin,
             faTwitter);

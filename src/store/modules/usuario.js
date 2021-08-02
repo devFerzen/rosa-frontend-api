@@ -75,7 +75,7 @@ export const actions = {
       .catch((e) => {
         console.log("e axios inicioSesionUsuario");
         console.dir(e);
-        return reject({e, mensaje: `${e.error.mensaje}, Favor de intentar más tarde`});
+        return reject({e, mensaje: `${e}, Favor de intentar más tarde`});
       });
     });
     //Llamada al api para pasar la setear un usuario
@@ -83,6 +83,11 @@ export const actions = {
   },
   quitandoUsuario({state, commit}, payload){
     commit('USUARIO_OFFSET', payload);
-  },
+  }
+}
 
+export const getters = {
+  anunciosUsuario: state => {
+    return state.usuario.anuncios_usuario;
+  }
 }

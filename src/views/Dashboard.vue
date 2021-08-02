@@ -2,7 +2,7 @@
   <v-container fluid fill-height class="white">
     <v-row>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i">
-        <Tarjeta-anuncio-usuario></Tarjeta-anuncio-usuario>
+        <tarjeta-anuncio-usuario :configuracionTarjeta="configuracionTarjeta" :anuncioUsuario="anuncio"></tarjeta-anuncio-usuario> <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
     <v-dialog v-model="fullAnuncioEstado" fullscreen hide-overlay transition="dialog-bottom-transition">
@@ -20,7 +20,7 @@
               <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey;" tile :height="bodyWH['vMainContenth']" :width="bodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
                   <v-tab-item v-if="anuncioView.Sec_Descripcion">
-                    <v-container fluid style="height: auto; min-height: 61vh;" class="pa-4 pa-lg-8">
+                    <v-container fluid style="height: auto;" class="">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">
@@ -141,12 +141,13 @@
         </v-container>
       </v-card>
     </v-dialog>
-    <!--Venta Anuncio Completa-->
+    <!--Venta Anuncio Completa Llamar aqui tmb el componente así solo lo tenemos en un solo lugar toda la responsividad °u°-->
   </v-container>
 </template>
 
 <script>
 import TarjetaAnuncioUsuario from '@/components/TarjetaAnuncioUsuario';
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'Dashboard',
@@ -286,251 +287,10 @@ export default {
           }
         ]
       },
-      anunciosUsuario: [
-        {
-          Sec_Descripcion: {
-            titulo: 'Lorem ipsum dolor',
-            estado: '1',
-            ciudad: '1',
-            descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-            Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`
-          },
-          Sec_Contacto: [{
-              contacto: '811-000-0000',
-              tipo: {
-                categoria: 'fab',
-                icono: 'whatsapp'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'twitter'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'instagram'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'phone-alt'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'globe'
-              }
-            }
-          ],
-          Sec_Tarifas: [
-            {
-              nombre: 'Lorem 1',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 2',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 3',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            }
-          ],
-          Sec_Imagen: [{
-              nombre: '',
-              url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
-            }
-          ]
-        },
-        {
-          Sec_Descripcion: {
-            titulo: 'Lorem ipsum dolor',
-            estado: '1',
-            ciudad: '1',
-            descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-            Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`
-          },
-          Sec_Contacto: [{
-              contacto: '811-000-0000',
-              tipo: {
-                categoria: 'fab',
-                icono: 'whatsapp'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'twitter'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'instagram'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'phone-alt'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'globe'
-              }
-            }
-          ],
-          Sec_Tarifas: [
-            {
-              nombre: 'Lorem 1',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 2',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 3',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            }
-          ],
-          Sec_Imagen: [{
-              nombre: '',
-              url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
-            }
-          ]
-        },
-        {
-          Sec_Descripcion: {
-            titulo: 'Lorem ipsum dolor',
-            estado: '1',
-            ciudad: '1',
-            descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-            Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`
-          },
-          Sec_Contacto: [{
-              contacto: '811-000-0000',
-              tipo: {
-                categoria: 'fab',
-                icono: 'whatsapp'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'twitter'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fab',
-                icono: 'instagram'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'phone-alt'
-              }
-            },
-            {
-              contacto: 'lorem.ipsum',
-              url: '',
-              tipo: {
-                categoria: 'fa',
-                icono: 'globe'
-              }
-            }
-          ],
-          Sec_Tarifas: [
-            {
-              nombre: 'Lorem 1',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 2',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            },
-            {
-              nombre: 'Lorem 3',
-              precio: 1500,
-              descripcion: 'Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.'
-            }
-          ],
-          Sec_Imagen: [{
-              nombre: '',
-              url: 'https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api'
-            },
-            {
-              nombre: '',
-              url: 'https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api'
-            }
-          ]
-        }
-      ]
     }
   },
   computed: {
+    ...mapGetters(['anunciosUsuario']),
     bodyWH() {
       const {
         sm,
@@ -545,7 +305,7 @@ export default {
       } : {
         'vMainContentw': '58vw',
         'vMainContenth': '70vh',
-        'vTextContent': '40vh',
+        'vTextContent': '40vh', //Con la config de tarjetas anuncioUsuario testear
         'CardTarifaCol': 4
       };
     },
