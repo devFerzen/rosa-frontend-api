@@ -13,7 +13,7 @@
             class="d-flex"
             color="grey lighten-3"
             :height="tarjetaWH['cuerpoAnuncio']">
-            <v-tabs class="d-flex flex-column-reverse" centered show-arrows="false">
+            <v-tabs class="d-flex flex-column-reverse" centered>
               <v-tab-item v-if="OpcionesAnuncio.Descripcion.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
@@ -25,12 +25,12 @@
                   </v-row>
                   <!--Título-->
                   <v-row no-gutters>
-                    <v-col cols="6" md="3">
+                    <v-col xs="6">
                       <div class="text-h7 text-xl-h6 mb-4">
                         Lorem Ipsum
                       </div>
                     </v-col>
-                    <v-col cols="6" md="3">
+                    <v-col xs="6">
                       <div class="text-h7 text-xl-h6">
                         Lorem Ipsum
                       </div>
@@ -96,8 +96,6 @@
 
                           <v-divider class="mx-4"></v-divider>
 
-                          <v-card-title>Lorem Ipsum</v-card-title>
-
                           <v-card-text>
                             <v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
                               <v-chip>5:30PM</v-chip>
@@ -106,12 +104,6 @@
 
                             </v-chip-group>
                           </v-card-text>
-
-                          <v-card-actions>
-                            <v-btn color="deep-purple lighten-2" text>
-                              Lorem
-                            </v-btn>
-                          </v-card-actions>
                         </v-card>
                       </v-slide-item>
 
@@ -177,7 +169,7 @@
               <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'shopping-bag']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <v-tab style="min-width:60px!important;">
+              <v-tab style="min-width:60px!important;" @click="abrirEdicion">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <v-tab style="min-width:60px!important;">
@@ -236,13 +228,18 @@ export default {
   computed: {
     tarjetaWH(){
       const { xs, sm, md } = this.$vuetify.breakpoint;
-      return xs || sm || md ? {carrusel: 560, cuerpoAnuncio: 'auto'} : {carrusel: '62vh', cuerpoAnuncio: '62vh'};
+      return xs || sm || md ? {carrusel: '660px', cuerpoAnuncio: 'auto'} : {carrusel: '62vh', cuerpoAnuncio: '62vh'};
     },
     categoriaSeleccionada(){
       return 1;
     }
   },
-  methods: {},
+  methods: {
+    abrirEdicion(){
+      console.log("vue: abrirEdicion");
+      this.$emit('activandoEdicion', {id: this.anuncioUsuario.id });
+    }
+  },
   created() {},
   mounted() {},
 }

@@ -18,7 +18,6 @@
 
       <v-text-field
         v-model="FormIS.contrasena"
-        :rules="contrasenaRules"
         label="Contraseña"
         required>
       </v-text-field>
