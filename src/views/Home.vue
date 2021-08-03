@@ -54,7 +54,7 @@ import axios from 'axios'
     },
     computed:{
       hayAnuncio(){
-        if(this.id == ''){
+        if(!this.id){
           return false;
         }
         return true;

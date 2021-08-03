@@ -12,7 +12,7 @@
           <v-row align="center" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4" style="min-height: 95vh;">
               <v-carousel height="90vh" class="my-4">
-                <v-carousel-item v-for="(imagen,i) in imagenesCarrusel" :key="i" :src="imagen.url" reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
+                <v-carousel-item v-for="(imagen,i) in anuncioView.Sec_Imagen" :key="i" :src="imagen.url" reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
               </v-carousel>
             </v-col>
             <!--Carrusel-->
@@ -20,7 +20,7 @@
               <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey;" tile :height="bodyWH['vMainContenth']" :width="bodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
                   <v-tab-item v-if="anuncioView.Sec_Descripcion">
-                    <v-container fluid style="height: auto;" class="">
+                    <v-container fluid style="height: auto; min-height: 61vh;" class="">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">
@@ -152,7 +152,9 @@ import {mapGetters} from 'vuex';
 export default {
   name: 'Dashboard',
   props: {
-    fullAnuncioEstado: { type: Boolean, default: false }
+    id: {
+      default: ''
+     }
   },
   components: {
     TarjetaAnuncioUsuario
@@ -291,6 +293,12 @@ export default {
   },
   computed: {
     ...mapGetters(['anunciosUsuario']),
+    fullAnuncioEstado(){
+      if(!this.id){
+        return true;
+      }
+      return true;
+    },
     bodyWH() {
       const {
         sm,
@@ -316,9 +324,7 @@ export default {
     }
   },
   methods: {
-    fullAnuncio_Display() {
-      this.fullAnuncioEstado = true;
-    }
+
   }
 }
 </script>

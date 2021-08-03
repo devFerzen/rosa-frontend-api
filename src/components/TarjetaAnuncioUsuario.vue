@@ -13,7 +13,7 @@
             class="d-flex"
             color="grey lighten-3"
             :height="tarjetaWH['cuerpoAnuncio']">
-            <v-tabs class="d-flex flex-column-reverse">
+            <v-tabs class="d-flex flex-column-reverse" centered show-arrows="false">
               <v-tab-item v-if="OpcionesAnuncio.Descripcion.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
@@ -168,13 +168,20 @@
                 </v-container>
               </v-tab-item>
               <!--Eliminar-->
-              <v-tab
-                v-for="(opcion, key, i) in OpcionesAnuncio"
-                :key="i"
-                v-if=" opcion.permisos "
-                style="height: 52px; min-width: 50px;"
-                >
-                <font-awesome-icon :icon="[opcion.categoria, opcion.icono]" class="tw-redes-icons fa-2x" />
+              <v-tab style="min-width:60px!important;">
+                <font-awesome-icon :icon="['fas', 'home']" class="tw-redes-icons fa-2x" />
+              </v-tab>
+              <v-tab style="min-width:60px!important;">
+                <font-awesome-icon :icon="['fas', 'sync-alt']" class="tw-redes-icons fa-2x" />
+              </v-tab>
+              <v-tab style="min-width:60px!important;">
+                <font-awesome-icon :icon="['fas', 'shopping-bag']" class="tw-redes-icons fa-2x" />
+              </v-tab>
+              <v-tab style="min-width:60px!important;">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="tw-redes-icons fa-2x" />
+              </v-tab>
+              <v-tab style="min-width:60px!important;">
+                <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
             </v-tabs>
 
@@ -198,7 +205,7 @@ export default {
       selectedContactItem: '',
       OpcionesAnuncio:{
         Descripcion: {
-          permisos: false,
+          permisos: true,
           categoria: 'fab',
           icono: 'whatsapp'
         },
