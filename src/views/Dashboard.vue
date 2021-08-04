@@ -4,8 +4,7 @@
       <v-col
         :cols="colsTarjetaUsuario['colsTarjeta']"
         v-for="(anuncio, key, i) in anunciosUsuario"
-        :key="i"
-      >
+        :key="i">
         <tarjeta-anuncio-usuario
           @activandoEdicion="abriendoEdicion"
           v-bind:anuncioUsuario="anuncio"
@@ -14,35 +13,29 @@
       </v-col>
     </v-row>
     <v-dialog
-      v-model="anuncioDialog"
+      v-model="anuncioEditDialog"
       fullscreen
       hide-overlay
       persistent
-      transition="dialog-bottom-transition"
-    >
+      transition="dialog-bottom-transition">
       <v-card height="90vh">
         <v-container fluid>
           <v-row align="center" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4" style="min-height: 95vh">
-              <v-carousel height="90vh" class="my-4">
-                <v-carousel-item
-                  v-for="(imagen, i) in anuncioView.Sec_Imagen"
-                  :key="i"
-                  :src="imagen.url"
-                  reverse-transition="fade-transition"
-                  transition="fade-transition"
-                  height="600px"
-                ></v-carousel-item>
-              </v-carousel>
+              <file-pond
+                ref="refImages"
+                name="filePondImages"
+                itemInsertLocation="after"
+                @init="handleFilePondInit"
+                @processfile="imagenesAnuncioOnProcess"
+                @removefile="imagenesAnuncioOnDelete"
+                :files="AnuncioEditForm.Sec_Imagen"/>
             </v-col>
             <!--Carrusel-->
 
-            <v-col
-              cols="12"
-              md="8"
+            <v-col cols="12" md="8"
               style="min-height: 95vh; max-height: auto"
-              class="d-flex flex-column justify-center align-center"
-            >
+              class="d-flex flex-column justify-center align-center">
               <v-card
                 class="pa-4 pa-lg-2"
                 outlined
@@ -105,17 +98,49 @@
                       <!--Título-->
                       <v-row no-gutters>
                         <v-col>
-                          <v-list shaped>
+                          <v-list>
+                            <v-list-item>
+                              <v-list-item-icon>
+                                <v-autocomplete
+                                  auto-select-first
+                                  :items="tiposContacto"
+                                  item-text="icono"
+                                  item-value="icono"
+                                  v-model="nuevoContacto.tipo"
+                                  style="width:80px;"
+                                  filled>
+                                  <template v-slot:selection="data">
+                                    <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
+                                  </template>
+                                  <template v-slot:item="data">
+                                    <v-list-item-icon>
+                                      <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
+                                    </v-list-item-icon>
+                                  </template>
+                                </v-autocomplete>
+                              </v-list-item-icon>
+
+                              <v-list-item-content>
+                                <v-text-field label="Esribir aquí" v-model="nuevoContacto.contacto">
+                                  <template v-slot:append-outer>
+                                    <v-btn
+                                      elevation="2"
+                                      fab
+                                      text
+                                      tile
+                                      style="height:100%;"
+                                      @click="nuevoContacto">
+                                      <font-awesome-icon class="tw-redes-icons fa-2x" :icon="['fas','plus-square']"></font-awesome-icon>
+                                    </v-btn>
+                                  </template>
+                                </v-text-field>
+                              </v-list-item-content>
+                            </v-list-item>
+
                             <v-list-item-group
                               color="primary"
-                              v-model="selectedContactItem"
-                            >
-                              <v-list-item
-                                v-for="(
-                                  contacto, i
-                                ) in anuncioView.Sec_Contacto"
-                                :key="i"
-                              >
+                              v-model="selectedContactItem">
+                              <v-list-item v-for="(contacto, i) in newContactoList":key="i">
                                 <v-list-item-icon>
                                   <font-awesome-icon
                                     :icon="[
@@ -125,10 +150,11 @@
                                     class="tw-redes-icons fa-2x"
                                   />
                                 </v-list-item-icon>
+
                                 <v-list-item-content>
-                                  <v-list-item-title class="text-body-1">{{
-                                    contacto.contacto
-                                  }}</v-list-item-title>
+                                  <v-list-item-title class="text-body-1">
+                                    {{contacto.contacto }}
+                                  </v-list-item-title>
                                 </v-list-item-content>
                               </v-list-item>
                             </v-list-item-group>
@@ -208,8 +234,7 @@
                       key == 'Sec_Descripcion' ||
                       key == 'Sec_Contacto' ||
                       key == 'Sec_Tarifas'
-                    "
-                  >
+                    ">
                     {{
                       key == "Sec_Descripcion"
                         ? "Descripción"
@@ -219,7 +244,7 @@
                     }}
                   </v-tab>
                 </v-tabs>
-                
+
                 <v-btn
                   class="mx-2"
                   fab
@@ -227,7 +252,7 @@
                   small
                   color="primary"
                   style="float:right"
-                  @click="anuncioDialog=false"
+                  @click="anuncioEditDialog=false"
                 >
                   <font-awesome-icon :icon="['fas','times']"></font-awesome-icon>
                 </v-btn>
@@ -241,204 +266,293 @@
     <!--Venta Anuncio Completa Llamar aqui tmb el componente así solo lo tenemos en un solo lugar toda la responsividad °u°-->
     <v-dialog
       v-model="nuevoContactoDialog"
-      max-width="500px"
-    >
+      max-width="500px">
 
     </v-dialog>
   </v-container>
 </template>
 
 <script>
-import TarjetaAnuncioUsuario from "@/components/TarjetaAnuncioUsuario";
-import { mapGetters } from "vuex";
+  import TarjetaAnuncioUsuario from "@/components/TarjetaAnuncioUsuario";
+  import { mapGetters } from "vuex";
 
-export default {
-  name: "Dashboard",
+  import vueFilePond, { setOptions } from 'vue-filepond'
+  import 'filepond/dist/filepond.min.css'
+  import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
+  import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+  import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+  import FilePondPluginFileMetadata from 'filepond-plugin-file-metadata'
 
-  components: {
-    TarjetaAnuncioUsuario,
-  },
-  data() {
-    return {
-      id: '',
-      selectedContactItem: "",
-      categorias: [
-        {
-          name: "Lorem ipsum",
-          total: 1,
-        },
-        {
-          name: "Lorem ipsum",
-          total: 2,
-        },
-        {
-          name: "Lorem ipsum",
-          total: 1,
-        },
-      ],
-      estadosList: [
-        {
-          id: 1,
-          nombre: "NL",
-        },
-        {
-          id: 2,
-          nombre: "COAH",
-        },
-        {
-          id: 3,
-          nombre: "Q. ROO",
-        },
-        {
-          id: 4,
-          nombre: "JAL",
-        },
-      ],
-      ciudadesList: [
-        {
-          id: 1,
-          nombre: "MTY",
-        },
-        {
-          id: 2,
-          nombre: "SAL",
-        },
-        {
-          id: 3,
-          nombre: "MON",
-        },
-        {
-          id: 4,
-          nombre: "CHI",
-        },
-      ],
-      anuncioView: {
-        Sec_Descripcion: {
-          titulo: "Lorem ipsum dolor",
-          estado: "1",
-          ciudad: "1",
-          descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+  const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImagePreview, FilePondPluginFileMetadata);
+  setOptions({
+      maxFiles: 6,
+      credits: false,
+      allowReorder: true,
+      allowMultiple: true,
+      imagePreviewMaxHeight: 256,
+      maxFileSize: '7MB',
+      itemInsertLocation: 'antes',
+      labelFileLoading: 'Cargando...',
+      labelFileLoadError: 'Error durante carga',
+      labelFileProcessing: 'Cargando...',
+      labelFileProcessingComplete: 'Carga completada',
+      labelFileProcessingAborted: 'Carga cancelada',
+      labelFileProcessingError: 'Error durante carga',
+      labelTapToCancel: 'Tap para cancelar',
+      labelTapToRetry: 'Tap para reintentar',
+      labelTapToUndo: 'Tap para deshacer',
+      labelFileSizeNotAvailable: 'Tamaño no reconocido',
+      labelFileWaitingForSize: 'Verificando',
+      labelInvalidField: 'Archivo no valido',
+      labelIdle:'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>'
+    });
 
-          Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`,
+  export default {
+    name: "Dashboard",
+
+    components: {
+      TarjetaAnuncioUsuario,
+      FilePond
+    },
+    data() {
+      return {
+        id: '',
+        selectedContactItem: "",
+        nuevoContacto: {
+          tipo: '',
+          contacto: ''
         },
-        Sec_Contacto: [
+        tiposContacto: [
+          {categoria: "fab", icono: "whatsapp"},
+          {categoria: "fab", icono: "twitter"},
+          {categoria: "fab", icono: "instagram"},
+          {categoria: "fa", icono: "phone-alt"},
+          {categoria: "fa", icono: "globe"}
+        ],
+        categorias: [
           {
-            contacto: "811-000-0000",
-            tipo: {
-              categoria: "fab",
-              icono: "whatsapp",
-            },
+            name: "Lorem ipsum",
+            total: 1,
           },
           {
-            contacto: "lorem.ipsum",
-            url: "",
-            tipo: {
-              categoria: "fab",
-              icono: "twitter",
-            },
+            name: "Lorem ipsum",
+            total: 2,
           },
           {
-            contacto: "lorem.ipsum",
-            url: "",
-            tipo: {
-              categoria: "fab",
-              icono: "instagram",
-            },
-          },
-          {
-            contacto: "lorem.ipsum",
-            url: "",
-            tipo: {
-              categoria: "fa",
-              icono: "phone-alt",
-            },
-          },
-          {
-            contacto: "lorem.ipsum",
-            url: "",
-            tipo: {
-              categoria: "fa",
-              icono: "globe",
-            },
+            name: "Lorem ipsum",
+            total: 1,
           },
         ],
-        Sec_Tarifas: [
+        estadosList: [
           {
-            nombre: "Lorem 1",
-            precio: 1500,
-            descripcion:
-              "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            id: 1,
+            nombre: "NL",
           },
           {
-            nombre: "Lorem 2",
-            precio: 1500,
-            descripcion:
-              "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            id: 2,
+            nombre: "COAH",
           },
           {
-            nombre: "Lorem 3",
-            precio: 1500,
-            descripcion:
-              "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            id: 3,
+            nombre: "Q. ROO",
+          },
+          {
+            id: 4,
+            nombre: "JAL",
           },
         ],
-        Sec_Imagen: [
+        ciudadesList: [
           {
-            nombre: "",
-            url: "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
+            id: 1,
+            nombre: "MTY",
           },
           {
-            nombre: "",
-            url: "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
+            id: 2,
+            nombre: "SAL",
           },
           {
-            nombre: "",
-            url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
+            id: 3,
+            nombre: "MON",
+          },
+          {
+            id: 4,
+            nombre: "CHI",
           },
         ],
+        anuncioView: {
+          Sec_Descripcion: {
+            titulo: "Lorem ipsum dolor",
+            estado: "1",
+            ciudad: "1",
+            descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+
+            Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`,
+          },
+          Sec_Contacto: [
+            {
+              contacto: "811-000-0000",
+              tipo: {
+                categoria: "fab",
+                icono: "whatsapp",
+              },
+            },
+            {
+              contacto: "lorem.ipsum",
+              url: "",
+              tipo: {
+                categoria: "fab",
+                icono: "twitter",
+              },
+            },
+            {
+              contacto: "lorem.ipsum",
+              url: "",
+              tipo: {
+                categoria: "fab",
+                icono: "instagram",
+              },
+            },
+            {
+              contacto: "lorem.ipsum",
+              url: "",
+              tipo: {
+                categoria: "fa",
+                icono: "phone-alt",
+              },
+            },
+            {
+              contacto: "lorem.ipsum",
+              url: "",
+              tipo: {
+                categoria: "fa",
+                icono: "globe",
+              },
+            },
+          ],
+          Sec_Tarifas: [
+            {
+              nombre: "Lorem 1",
+              precio: 1500,
+              descripcion: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            },
+            {
+              nombre: "Lorem 2",
+              precio: 1500,
+              descripcion: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            },
+            {
+              nombre: "Lorem 3",
+              precio: 1500,
+              descripcion: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+            },
+          ],
+          Sec_Imagen: [
+            {
+              nombre: "",
+              url: "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
+            },
+            {
+              nombre: "",
+              url: "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
+            },
+            {
+              nombre: "",
+              url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
+            },
+          ],
+        },
+        AnuncioEditForm: {
+          Sec_Imagen: [],
+          Sec_Contacto: []
+        },
+        nuevoContactoDialog: false,
+        anuncioEditDialog: false,
+      };
+    },
+    computed: {
+      ...mapGetters(["anunciosUsuario"]),
+      newContactoList() {
+        return this.AnuncioEditForm.Sec_Contacto;
       },
-      nuevoContactoDialog: false,
-      anuncioDialog: false,
-    };
-  },
-  computed: {
-    ...mapGetters(["anunciosUsuario"]),
-    tabContainerClass() {
-      const { sm, xs } = this.$vuetify.breakpoint;
-      return xs || sm ? {tabContainer: 'tabContainerMB'} : {tabContainer: 'tabContainerWEB'};
+      tabContainerClass() {
+        const { sm, xs } = this.$vuetify.breakpoint;
+        return xs || sm ? {tabContainer: 'tabContainerMB'} : {tabContainer: 'tabContainerWEB'};
+      },
+      bodyWH() {
+        const { sm, xs, md } = this.$vuetify.breakpoint;
+        return sm || xs || md
+          ? {
+              vMainContentw: "85vw",
+              vMainContenth: "auto",
+              vTextContent: "auto",
+              CardTarifaCol: 12,
+            }
+          : {
+              vMainContentw: "58vw",
+              vMainContenth: "70vh",
+              vTextContent: "40vh", //Con la config de tarjetas anuncioUsuario testear
+              CardTarifaCol: 4,
+            };
+      },
+      colsTarjetaUsuario() {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
+      },
     },
-    bodyWH() {
-      const { sm, xs, md } = this.$vuetify.breakpoint;
-      return sm || xs || md
-        ? {
-            vMainContentw: "85vw",
-            vMainContenth: "auto",
-            vTextContent: "auto",
-            CardTarifaCol: 12,
-          }
-        : {
-            vMainContentw: "58vw",
-            vMainContenth: "70vh",
-            vTextContent: "40vh", //Con la config de tarjetas anuncioUsuario testear
-            CardTarifaCol: 4,
-          };
+    methods: {
+      nuevoContacto(){
+        console.log("hi");
+        let x = this.nuevoContacto.tipo;
+        let y = this.nuevoContacto.contacto;
+
+        this.AnuncioEditForm.Sec_Contacto.push({x, y});
+      },
+      abriendoEdicion(InfoAnuncio) {
+        this.id = InfoAnuncio.id;
+        this.anuncioEditDialog = true;
+      },
+      handleFilePondInit(){
+        console.log("handleFilePondInit...");
+        console.log("getgiles",this.$refs.refImages.getfiles());
+        this.$refs.refImages.getfiles()
+      },
+      imagenesAnuncioOnProcess(error, file) {
+        console.log("imagenesAnuncioOnProcess...");
+        if(error) {
+          console.log("error onProcess",error);
+          console.log("file in error", file.file);
+          return;
+        }
+
+        let objetoImagen = {
+          nombre_original: file.filename,
+          nombre_werk: JSON.parse(file.serverId)[0],
+          tamano: file.fileSize + '',
+          extension: file.fileExtension,
+          posicion: this.imagenesAnuncio.length,
+          path: 'Anuncio'
+        };
+        setTimeout(function () {
+          console.log("ImageUploadOnProcess->objetoImagen:",objetoImagen);
+        }, 1000);
+      },
     },
-    colsTarjetaUsuario() {
-      const { xs, sm } = this.$vuetify.breakpoint;
-      return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
-    },
-  },
-  methods: {
-    abriendoEdicion(InfoAnuncio) {
-      this.id = InfoAnuncio.id;
-      this.anuncioDialog = true;
-    },
-  },
-};
+  };
 </script>
 
 <style>
-.tw-redes-icons {
-  color: blue;
-}
+  .tw-redes-icons {
+    color: blue;
+  }
+
+  .filepond--root {
+    height: 45em;
+    max-height: 45em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filepond--item {
+    width: calc(45% - 0.5em);
+  }
 </style>
