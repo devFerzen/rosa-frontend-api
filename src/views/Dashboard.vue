@@ -8,17 +8,19 @@
         <tarjeta-anuncio-usuario
           @activandoEdicion="abriendoEdicion"
           v-bind:anuncioUsuario="anuncio"
+          v-bind:OpcionesAnuncio="opciones"
         ></tarjeta-anuncio-usuario>
         <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
+
     <v-dialog
       v-model="anuncioEditDialog"
       fullscreen
       hide-overlay
       persistent
       transition="dialog-bottom-transition">
-      <v-card height="90vh">
+      <v-card height="auto">
         <v-container fluid>
           <v-row align="center" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4" style="min-height: 95vh">
@@ -42,8 +44,7 @@
                 style="background-color: lightgrey"
                 tile
                 :height="bodyWH['vMainContenth']"
-                :width="bodyWH['vMainContentw']"
-              >
+                :width="bodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
                   <v-tab-item v-if="anuncioView.Sec_Descripcion">
                     <v-container
@@ -84,6 +85,8 @@
                       <!--Descripcion-->
                     </v-container>
                   </v-tab-item>
+                  <!--Sec_Descripcion-->
+
                   <v-tab-item v-if="anuncioView.Sec_Contacto">
                     <v-container
                       fluid
@@ -96,47 +99,21 @@
                         </v-col>
                       </v-row>
                       <!--Título-->
+
+                      <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        small
+                        color="primary"
+                        :class="tabContainerClass['secContNew']"
+                        @click="nuevoContactoDialog=true">
+                        <font-awesome-icon :icon="['fas','plus-square']" class="fa-2x"></font-awesome-icon>
+                      </v-btn>
+
                       <v-row no-gutters>
                         <v-col>
                           <v-list>
-                            <v-list-item>
-                              <v-list-item-icon>
-                                <v-autocomplete
-                                  auto-select-first
-                                  :items="tiposContacto"
-                                  item-text="icono"
-                                  item-value="icono"
-                                  v-model="nuevoContacto.tipo"
-                                  style="width:80px;"
-                                  filled>
-                                  <template v-slot:selection="data">
-                                    <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
-                                  </template>
-                                  <template v-slot:item="data">
-                                    <v-list-item-icon>
-                                      <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
-                                    </v-list-item-icon>
-                                  </template>
-                                </v-autocomplete>
-                              </v-list-item-icon>
-
-                              <v-list-item-content>
-                                <v-text-field label="Esribir aquí" v-model="nuevoContacto.contacto">
-                                  <template v-slot:append-outer>
-                                    <v-btn
-                                      elevation="2"
-                                      fab
-                                      text
-                                      tile
-                                      style="height:100%;"
-                                      @click="nuevoContacto">
-                                      <font-awesome-icon class="tw-redes-icons fa-2x" :icon="['fas','plus-square']"></font-awesome-icon>
-                                    </v-btn>
-                                  </template>
-                                </v-text-field>
-                              </v-list-item-content>
-                            </v-list-item>
-
                             <v-list-item-group
                               color="primary"
                               v-model="selectedContactItem">
@@ -164,25 +141,34 @@
                       <!--ContactosList-->
                     </v-container>
                   </v-tab-item>
+                  <!--Sec_Contacto-->
+
                   <v-tab-item v-if="anuncioView.Sec_Tarifas">
                     <v-container
                       fluid
                       class="pa-4 pa-lg-8"
-                      :class="tabContainerClass['tabContainer']"
-                    >
+                      :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">Tarifas</div>
                         </v-col>
                       </v-row>
                       <!--Titulo-->
+
+                      <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        small
+                        color="primary"
+                        :class="tabContainerClass['secTarNew']"
+                        @click="nuevaTarifaDialog=true">
+                        <font-awesome-icon :icon="['fas','plus-square']" class="fa-2x"></font-awesome-icon>
+                      </v-btn>
+
                       <v-container>
                         <v-row align="center" justify="space-around">
-                          <v-col
-                            :cols="bodyWH['CardTarifaCol']"
-                            v-for="(tarifa, i) in anuncioView.Sec_Tarifas"
-                            :key="i"
-                          >
+                          <v-col :cols="bodyWH['CardTarifaCol']" v-for="(tarifa, i) in nuevaTarifaList" :key="i">
                             <v-card>
                               <v-card-text>
                                 <v-row align="center" class="mx-0 mb-2">
@@ -226,6 +212,7 @@
                       </v-container>
                     </v-container>
                   </v-tab-item>
+                  <!--Sec_Tarifas-->
 
                   <v-tab
                     v-for="(anuncio, key, i) in anuncioView"
@@ -252,10 +239,10 @@
                   small
                   color="primary"
                   style="float:right"
-                  @click="anuncioEditDialog=false"
-                >
-                  <font-awesome-icon :icon="['fas','times']"></font-awesome-icon>
+                  @click="anuncioEditDialog=false">
+                  <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
                 </v-btn>
+                <!--Cerrar Modal AnuncioEdit-->
               </v-card>
             </v-col>
             <!--Cuepo-->
@@ -263,12 +250,146 @@
         </v-container>
       </v-card>
     </v-dialog>
-    <!--Venta Anuncio Completa Llamar aqui tmb el componente así solo lo tenemos en un solo lugar toda la responsividad °u°-->
-    <v-dialog
-      v-model="nuevoContactoDialog"
-      max-width="500px">
+    <!--AnuncioEdit Dialog-->
 
+    <v-dialog
+      v-model="nuevaTarifaDialog"
+      max-width="850px">
+      <v-container >
+        <v-card rounded>
+          <v-card-title>
+            <v-avatar size="56">
+              <img
+                alt="user"
+                src="https://cdn.pixabay.com/photo/2020/06/24/19/12/cabbage-5337431_1280.jpg"
+              />
+            </v-avatar>
+            <div class=" text-h4 text-xl-h3 ml-3">
+              Nueva Tarifa
+            </div>
+          </v-card-title>
+          <v-form ref="tarifaEdit">
+            <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-text-field label="Nombre" v-model="nuevaTarifa.nombre" style="margin:9px;"></v-text-field>
+                    <v-text-field label="Precio" v-model="nuevaTarifa.precio" prefix="$" style="margin:9px;"></v-text-field>
+
+                    <v-textarea counter label="Descripción" style="margin:9px;" v-model="nuevaTarifa.descripcion"></v-textarea>
+                  </v-col>
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                class="mx-2"
+                dark
+                color="primary"
+                @click="tarifaNueva">
+                <font-awesome-icon :icon="['fas','save']" class="fa-2x mr-1"></font-awesome-icon> Guardar
+              </v-btn>
+              <v-btn
+                class="mx-2"
+                dark
+                depressed
+                color="error"
+                @click="nuevaTarifaDialog=false">
+                <font-awesome-icon :icon="['fas','times']" class="fa-2x mr-1"></font-awesome-icon> Cancelar
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-container>
     </v-dialog>
+    <!--NuevaTarifa Dialog-->
+
+    <v-dialog
+      v-model="creandoAnuncio"
+      max-width="850px">
+      <v-container >
+        <v-card rounded>
+          <v-card-title>
+            <v-avatar size="56">
+              <img
+                alt="user"
+                src="https://cdn.pixabay.com/photo/2020/06/24/19/12/cabbage-5337431_1280.jpg"
+              />
+            </v-avatar>
+
+            <div class=" text-h4 text-xl-h3 ml-3">
+              Nuevo Contacto
+            </div>
+          </v-card-title>
+
+          <v-form ref="contactoEdit">
+            <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-icon>
+                          <v-autocomplete
+                            auto-select-first
+                            :items="tiposContacto"
+                            item-text="icono"
+                            item-value="icono"
+                            v-model="nuevoContacto.tipo"
+                            style="width:80px;"
+                            filled>
+                            <template v-slot:selection="data">
+                              <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
+                            </template>
+                            <template v-slot:item="data">
+                              <v-list-item-icon>
+                                <font-awesome-icon :icon="[data.item.categoria,data.item.icono]"></font-awesome-icon>
+                              </v-list-item-icon>
+                            </template>
+                          </v-autocomplete>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                          <v-text-field
+                            label="Esribir aquí"
+                            v-model="nuevoContacto.contacto">
+                            <template v-slot:append-outer>
+                              <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                small
+                                color="primary"
+                                @click="contactoNuevo">
+                                <font-awesome-icon :icon="['fas','plus-square']"></font-awesome-icon>
+                              </v-btn>
+                            </template>
+                          </v-text-field>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-col>
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                class="mx-2"
+                dark
+                color="primary"
+                @click="contactoNuevo">
+                <font-awesome-icon :icon="['fas','save']" class="fa-2x mr-1"></font-awesome-icon> Guardar
+              </v-btn>
+              <v-btn
+                class="mx-2"
+                dark
+                depressed
+                color="error"
+                @click="nuevoContactoDialog=false">
+                <font-awesome-icon :icon="['fas','times']" class="fa-2x mr-1"></font-awesome-icon> Cancelar
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-container>
+    </v-dialog>
+    <!--NuevoContacto Dialog-->
   </v-container>
 </template>
 
@@ -309,18 +430,54 @@
 
   export default {
     name: "Dashboard",
-
+    props: ['id'],
     components: {
       TarjetaAnuncioUsuario,
       FilePond
     },
     data() {
       return {
-        id: '',
         selectedContactItem: "",
+        opciones:{
+          Descripcion: {
+            permisos: true,
+            categoria: 'fab',
+            icono: 'whatsapp'
+          },
+          Actualizacion: {
+            permisos: true,
+            categoria: 'fas',
+            icono: 'sync-alt'
+          },
+          Compras: {
+            permisos: true,
+            categoria: 'fas',
+            icono: 'shopping-bag'
+          },
+          Edicion: {
+            permisos: true,
+            categoria: 'fas',
+            icono: 'pencil-alt'
+          },
+          Eliminar: {
+            permisos: true,
+            categoria: 'fas',
+            icono: 'trash-alt'
+          },
+          Preview: {
+            permisos: false,
+            categoria: 'fas',
+            icono: 'trash-alt'
+          }
+        },
         nuevoContacto: {
           tipo: '',
           contacto: ''
+        },
+        nuevaTarifa: {
+          nombre: "",
+          precio: "0.00",
+          descripcion: ""
         },
         tiposContacto: [
           {categoria: "fab", icono: "whatsapp"},
@@ -463,20 +620,33 @@
         },
         AnuncioEditForm: {
           Sec_Imagen: [],
-          Sec_Contacto: []
+          Sec_Contacto: [],
+          Sec_Tarifas: []
         },
+        nuevaTarifaDialog: false,
         nuevoContactoDialog: false,
         anuncioEditDialog: false,
       };
     },
     computed: {
       ...mapGetters(["anunciosUsuario"]),
+      creandoAnuncio() {
+        console.log(`id: ${this.id}`);
+
+        if(!this.id){
+          return false;
+        }
+        return true;
+      },
       newContactoList() {
         return this.AnuncioEditForm.Sec_Contacto;
       },
+      nuevaTarifaList(){
+        return this.AnuncioEditForm.Sec_Tarifas;
+      },
       tabContainerClass() {
         const { sm, xs } = this.$vuetify.breakpoint;
-        return xs || sm ? {tabContainer: 'tabContainerMB'} : {tabContainer: 'tabContainerWEB'};
+        return xs || sm ? { secContNew: 'secContNewMBView', secTarNew: 'secTarNewMBView', tabContainer: 'tabContainerMB'} : { secContNew: 'secContNewWEBView', secTarNew: 'secTarNewWEBView', tabContainer: 'tabContainerWEB'};
       },
       bodyWH() {
         const { sm, xs, md } = this.$vuetify.breakpoint;
@@ -485,13 +655,13 @@
               vMainContentw: "85vw",
               vMainContenth: "auto",
               vTextContent: "auto",
-              CardTarifaCol: 12,
+              CardTarifaCol: 12
             }
           : {
               vMainContentw: "58vw",
               vMainContenth: "70vh",
               vTextContent: "40vh", //Con la config de tarjetas anuncioUsuario testear
-              CardTarifaCol: 4,
+              CardTarifaCol: 4
             };
       },
       colsTarjetaUsuario() {
@@ -499,13 +669,49 @@
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
     },
-    methods: {
-      nuevoContacto(){
-        console.log("hi");
-        let x = this.nuevoContacto.tipo;
-        let y = this.nuevoContacto.contacto;
+    created() {
 
-        this.AnuncioEditForm.Sec_Contacto.push({x, y});
+    },
+    mounted() {
+      console.log({ routeQuery: this.$route.query.id, queryProp: this.id });
+    },
+    methods: {
+      tarifaNueva(){
+        let tarifa = {}
+        //validacion
+
+        tarifa.nombre = this.nuevaTarifa.nombre;
+        tarifa.precio = this.nuevaTarifa.precio;
+        tarifa.descripcion = this.nuevaTarifa.descripcion;
+
+        console.log("tarifaNueva...");
+        console.dir(tarifa);
+
+        if(this.AnuncioEditForm.Sec_Tarifas.length >= 3){
+          //Sistema de Alerts
+          alert("No puedes tener más de tres");
+          return;
+        }
+        this.AnuncioEditForm.Sec_Tarifas.unshift(tarifa);
+        this.nuevaTarifaDialog = false;
+        this.$refs.tarifaEdit.reset();
+      },
+      contactoNuevo() {
+        let contacto = {};
+        //validacion
+
+        contacto.tipo = {
+          categoria: this.tiposContacto.find(t => t.icono == this.nuevoContacto.tipo).categoria,
+          icono: this.nuevoContacto.tipo
+        }
+        contacto.contacto = this.nuevoContacto.contacto;
+
+        console.log("contactoNuevo...");
+        console.dir(contacto);
+
+        this.AnuncioEditForm.Sec_Contacto.unshift(contacto);
+        this.nuevoContactoDialog = false;
+        this.$refs.contactoEdit.reset();
       },
       abriendoEdicion(InfoAnuncio) {
         this.id = InfoAnuncio.id;
@@ -554,5 +760,29 @@
 
   .filepond--item {
     width: calc(45% - 0.5em);
+  }
+
+  .secContNewMBView{
+    position: absolute;
+    top: 1rem;
+    left: 9.5rem;
+  }
+
+  .secContNewWEBView{
+    position: absolute;
+    top: 2rem;
+    left: 10.5rem;
+  }
+
+  .secTarNewMBView{
+    position: absolute;
+    top: 1.5rem;
+    left: 9rem;
+  }
+
+  .secTarNewWEBView{
+    position: absolute;
+    top: 2rem;
+    left: 9rem;
   }
 </style>

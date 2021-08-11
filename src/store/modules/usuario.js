@@ -39,6 +39,13 @@ export const mutations = {
 }
 
 export const actions = {
+  enviandoCorreo({commit}, payload) {
+    return new Promise((resolve, reject) =>{
+      resolve({
+        mensaje: 'Correo enviado correctamente!'
+      });
+    })
+  },
   registrandoUsuario({commit}, payload) {
     return new Promise((resolve, reject) => {
       console.log("registrandoUsuario action...");

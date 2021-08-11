@@ -12,16 +12,24 @@ export default new Vuex.Store({
   },
   state: {
     iniciandoSesion: false,
-    registrandose: false
+    registrandose: false,
+    contactandonos: false
   },
   mutations: {
     REGISTRANDOSE(state,payload) {
       state.registrandose = payload;
       state.iniciandoSesion = false;
+      state.contactandonos= false
     },
     INICIANDO_SESION(state,payload) {
-      state.iniciandoSesion = payload;
       state.registrandose = false;
+      state.iniciandoSesion = payload;
+      state.contactandonos= false
+    },
+    CONTACTANDONOS(state, payload) {
+      state.iniciandoSesion = false;
+      state.registrandose = false;
+      state.contactandonos= payload;
     }
   },
   actions: {
@@ -30,6 +38,9 @@ export default new Vuex.Store({
     },
     activandoInicioSesion({commit}, payload) {
       commit('INICIANDO_SESION',payload);
+    },
+    contactandonos({commit}, payload) {
+      commit('CONTACTANDONOS',payload);
     }
   },
   getters: {}

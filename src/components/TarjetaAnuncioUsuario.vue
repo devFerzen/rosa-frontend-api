@@ -49,16 +49,8 @@
               </v-tab-item>
               <!--Descripcion-->
               <v-tab-item v-if="OpcionesAnuncio.Actualizacion.permisos">
-                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
-                  <v-row no-gutters>
-                    <v-col>
-                      <div class="text-h4 text-xl-h3 mb-4">
-                        Actualziacion
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <!--Título-->
-
+                <v-container style="height: 440px;" class="">
+                  <dashboard-compras></dashboard-compras>
                   <!--Componente de Compra-->
                 </v-container>
               </v-tab-item>
@@ -117,7 +109,7 @@
                   <v-row no-gutters>
                     <v-col>
                       <div class="text-h4 text-xl-h3 mb-4">
-                        Descripción
+                        Edición
                       </div>
                     </v-col>
                   </v-row>
@@ -156,25 +148,68 @@
                     </v-col>
                   </v-row>
                   <!--Título-->
-
                 </v-container>
               </v-tab-item>
               <!--Eliminar-->
-              <v-tab style="min-width:60px!important;">
+              <v-tab-item v-if="OpcionesAnuncio.Preview.permisos">
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <v-row no-gutters>
+                    <v-col>
+                      <div class="text-h4 text-xl-h3 mb-4">
+                        {{anuncioUsuario.Sec_Descripcion.titulo}}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--Título-->
+                  <v-row no-gutters>
+                    <v-col xs="6">
+                      <div class="text-h7 text-xl-h6 mb-4">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                    <v-col xs="6">
+                      <div class="text-h7 text-xl-h6">
+                        Lorem Ipsum
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <!--EstadoCiudad-->
+                  <v-row no-gutters style="overflow: hidden;">
+                    <v-col>
+                      <v-card  flat class="mb-2">
+                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!--Descripcion-->
+                </v-container>
+              </v-tab-item>
+              <!--Preview-->
+
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Descripcion.permisos">
                 <font-awesome-icon :icon="['fas', 'home']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <v-tab style="min-width:60px!important;">
+              <!--Descripcion-->
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Actualizacion.permisos">
                 <font-awesome-icon :icon="['fas', 'sync-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <v-tab style="min-width:60px!important;">
+              <!--Actualizacion-->
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Compras.permisos">
                 <font-awesome-icon :icon="['fas', 'shopping-bag']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <v-tab style="min-width:60px!important;" @click="abrirEdicion">
+              <!--Compras-->
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Edicion.permisos" @click="abrirEdicion">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <v-tab style="min-width:60px!important;">
+              <!--Edicion-->
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Eliminar.permisos">
                 <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
+              <!--Eliminar-->
+              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Preview.permisos" @click="abrirEdicion">
+                <font-awesome-icon :icon="['fas', 'eye']" class="tw-redes-icons fa-2x" />
+              </v-tab>
+              <!--PreView-->
             </v-tabs>
 
           </v-sheet>
@@ -186,43 +221,19 @@
 </template>
 
 <script>
+import DashboardCompras from '@/components/Dashboard-Compras';
 export default {
   name: '',
-  components: {},
+  components: {
+    DashboardCompras
+  },
   props: {
-    anuncioUsuario: { type: Object, default: {} }
+    anuncioUsuario: { type: Object, default: {} },
+    OpcionesAnuncio: { type: Object, default: {} }
   },
   data() {
     return {
       selectedContactItem: '',
-      OpcionesAnuncio:{
-        Descripcion: {
-          permisos: true,
-          categoria: 'fab',
-          icono: 'whatsapp'
-        },
-        Actualizacion: {
-          permisos: true,
-          categoria: 'fas',
-          icono: 'sync-alt'
-        },
-        Compras: {
-          permisos: true,
-          categoria: 'fas',
-          icono: 'shopping-bag'
-        },
-        Edicion: {
-          permisos: true,
-          categoria: 'fas',
-          icono: 'pencil-alt'
-        },
-        Eliminar: {
-          permisos: true,
-          categoria: 'fas',
-          icono: 'trash-alt'
-        }
-      }
-
     }
   },
   computed: {
@@ -240,7 +251,6 @@ export default {
       this.$emit('activandoEdicion', {id: this.anuncioUsuario.id });
     }
   },
-  created() {},
   mounted() {},
 }
 </script>

@@ -10,7 +10,8 @@ import { faStar, faShare, faTimes,
           faPhoneAlt, faEnvelope, faGlobe,
           faTrashAlt, faPencilAlt, faEye,
           faHeart, faDollarSign, faSyncAlt,
-          faShoppingBag, faHome, faPlusSquare
+          faShoppingBag, faHome, faPlusSquare,
+          faSave
         } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookSquare, faApple, faGoogle,
           faInstagram, faWhatsapp, faLinkedin,
@@ -23,6 +24,7 @@ library.add(faStar, faShare, faTimes,
             faTrashAlt, faPencilAlt, faEye,
             faHeart, faDollarSign, faSyncAlt,
             faShoppingBag, faHome, faPlusSquare,
+            faSave,
             faFacebookSquare, faApple, faGoogle,
             faInstagram, faWhatsapp, faLinkedin,
             faTwitter);

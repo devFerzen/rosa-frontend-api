@@ -6,15 +6,16 @@
         :lg="widthComponents.herramientasWidth"
         :class="panelHerramientasClases"
       >
-        <panel-herramientas v-if="!iniciandoSesion && !registrandose" @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
+        <panel-herramientas v-if="!iniciandoSesion && !registrandose && !contactandonos" @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="iniciandoSesion" />
         <registro v-else-if="registrandose" />
+        <contacto v-else-if="contactandonos" />
       </v-col>
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="iniciandoSesion || registrandose" />
+        <espacio-publicitario v-if="iniciandoSesion || registrandose || contactandonos" />
         <sistema-tarjetas
           :fullAnuncioEstado="hayAnuncio"
-          v-else-if="!iniciandoSesion && !registrandose"
+          v-else-if="!iniciandoSesion && !registrandose && !contactandonos"
         />
       </v-col>
     </v-row>
@@ -26,11 +27,12 @@ import PanelHerramientas from "@/components/Panel-Herramientas";
 import SistemaTarjetas from "@/components/Sistema-Tarjetas";
 import InicioSesion from "@/components/Inicio-Sesion";
 import Registro from "@/components/Registro";
+import Contacto from "@/components/Contacto";
 import EspacioPublicitario from "@/components/Espacio-Publicitario";
 import axios from "axios";
 
 export default {
-  name: "Home",
+  name: "Contactanos",
   props: {
     id: {
       default: "",
@@ -42,6 +44,7 @@ export default {
     InicioSesion,
     Registro,
     EspacioPublicitario,
+    Contacto
   },
   data() {
     return {
@@ -66,6 +69,9 @@ export default {
     },
     registrandose() {
       return this.$store.state.registrandose;
+    },
+    contactandonos() {
+      return this.$store.state.contactandonos;
     },
   },
   methods: {
@@ -94,25 +100,28 @@ export default {
       this.widthComponents.sistemaWidth = WidthComponents.sistemaWidth;
     },
   },
+  created() {
+    this.$store.dispatch('contactandonos', true);
+  },
   mounted() {},
 };
 </script>
-<style>
-.panel-herramientas-mbview {
-  position: sticky;
-  height: 24vh;
-  top: 9vh;
-  max-height: calc(24% - 9vh);
-  transform: translateX(0%);
-  z-index: 1;
-}
+  <style>
+  .panel-herramientas-mbview {
+    position: sticky;
+    height: 24vh;
+    top: 9vh;
+    max-height: calc(24% - 9vh);
+    transform: translateX(0%);
+    z-index: 1;
+  }
 
-.panel-herramientas-pcview {
-  position: sticky;
-  height: 100vh;
-  top: 9vh;
-  max-height: calc(100% - 9vh);
-  transform: translateX(0%);
-  z-index: 1;
-}
+  .panel-herramientas-pcview {
+    position: sticky;
+    height: 100vh;
+    top: 9vh;
+    max-height: calc(100% - 9vh);
+    transform: translateX(0%);
+    z-index: 1;
+  }
 </style>

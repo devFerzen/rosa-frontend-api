@@ -13,16 +13,16 @@ export const actions = {
       console.log("creandoAnuncio... payload");
       console.dir(payload);
 
-      if(rootState.usuario.usuario){
+      if(rootState.usuario.token){
+
         if(payload == null){
-          commit('REGISTRANDOSE', true);
-          return reject({
-            mensaje: 'Usuario dirigiendose a creación de un anuncio',
-            activeTo: 'creacionAnuncio'
+          return resolve({
+            mensaje: 'Dirigirlo a dashboard con la ventana de edición abierta!',
+            sendTo: 'Dashboard'
           });
         }
+
         console.log(`payload creandoAnuncio: ${payload}`);
-        //LLamada de api para creacion nuevo anuncio
         commit('NUEVO_ANUNCIO',payload);
         resolve();
       }
@@ -30,7 +30,7 @@ export const actions = {
       commit('REGISTRANDOSE', true);
       return reject({
         mensaje: 'Usuario debe que estar logeado',
-        activeTo: 'registro'
+        sendTo: 'registro'
       });
     });
   }

@@ -199,8 +199,7 @@
       v-model="fullAnuncioEstado"
       fullscreen
       hide-overlay
-      transition="dialog-bottom-transition"
-    >
+      transition="dialog-bottom-transition">
       <v-card height="90vh">
         <v-container fluid>
           <v-row align="center" justify="center" class="fill-height" no-gutters>
@@ -613,7 +612,7 @@ export default {
 }
 
 .tabContainerMB {
-  height: auto; 
+  height: auto;
   min-height: 61vh;
 }
 

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Compras from '../views/Compras.vue'
+import Contactanos from '../views/Contactanos.vue'
 import Dashboard from '../views/Dashboard.vue'
 import About from '../views/About.vue'
 
@@ -18,6 +20,16 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard,
     props: route => ({ id: route.query.q})
+  },
+  {
+    path: '/compras',
+    name: 'compras',
+    component: Compras
+  },
+  {
+    path: '/contactanos',
+    name: 'Contactanos',
+    component: Contactanos
   }
 ]
 

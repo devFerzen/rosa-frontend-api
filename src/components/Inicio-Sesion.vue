@@ -99,7 +99,7 @@ export default {
            console.log("vue iniciandoSesion en éxito...");
            console.dir(result);
            this.$store.dispatch('activandoInicioSesion', false);
-           this.$router.push('Dashboard');
+           this.$router.push('dashboard');
          })
          .catch((error) => {
            console.log("vue iniciandoSesion en error...");

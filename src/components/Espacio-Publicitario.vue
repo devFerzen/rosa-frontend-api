@@ -1,8 +1,9 @@
 <template>
   <v-card
     :height="bodyWH['vMainContenth']"
-    :width="bodyWH['vMainContentw']">
-    HI
+    :width="bodyWH['vMainContentw']"
+    style="border:1px solid red">
+
   </v-card>
 </template>
 
