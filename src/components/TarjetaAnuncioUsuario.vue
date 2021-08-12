@@ -49,58 +49,15 @@
               </v-tab-item>
               <!--Descripcion-->
               <v-tab-item v-if="OpcionesAnuncio.Actualizacion.permisos">
-                <v-container style="height: 440px;" class="">
-                  <dashboard-compras></dashboard-compras>
+                <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
+                  <dashboard-compras tipo="actualizacion"></dashboard-compras>
                   <!--Componente de Compra-->
                 </v-container>
               </v-tab-item>
               <!--Actualizacion-->
               <v-tab-item v-if="OpcionesAnuncio.Compras.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
-                  <v-row no-gutters>
-                    <v-col>
-                      <div class="text-h4 text-xl-h3 mb-4">
-                        Compras
-                      </div>
-                    </v-col>
-                  </v-row>
-
-                  <v-row align="center" justify="center">
-                    <v-slide-group
-                      v-model="categoriaSeleccionada"
-                      mandatory
-                      show-arrows
-                      center-active>
-                      <v-slide-item v-for="(tarifa, i) in anuncioUsuario.Sec_Tarifas" :key="i" v-slot="{active, toggle}">
-                        <v-card
-                          width="210"
-                          class="ma-4"
-                          :color="active ? 'primary' : 'gray lighten-1'"
-                          @click="toggle">
-                          <v-card-text>
-                            <v-row align="center" class="mx-0 mb-2">
-                              <v-card-title>{{ tarifa.nombre }}</v-card-title>
-                              <font-awesome-icon icon="dollar-sign" class="tw-redes-icons" />
-                              <div class="grey--text ml-2">{{ tarifa.precio }}</div>
-                            </v-row>
-                            <div>{{tarifa.descripcion}}</div>
-                          </v-card-text>
-
-                          <v-divider class="mx-4"></v-divider>
-
-                          <v-card-text>
-                            <v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-                              <v-chip>5:30PM</v-chip>
-
-                              <v-chip>7:30PM</v-chip>
-
-                            </v-chip-group>
-                          </v-card-text>
-                        </v-card>
-                      </v-slide-item>
-
-                    </v-slide-group>
-                  </v-row>
+                  <dashboard-compras tipo="paquetes"></dashboard-compras>
                 </v-container>
               </v-tab-item>
               <!--Compras-->
@@ -148,6 +105,26 @@
                     </v-col>
                   </v-row>
                   <!--Título-->
+
+                  <v-row no-gutters>
+                    <v-col cols="12">
+                      <div class="text-h8 text-center">
+                        Estas Seguro de eliminar el anuncio?
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row no-gutters justify="center">
+                    <v-col cols="4" class="mt-12">
+                      <v-btn
+                        depressed
+                        elevation="2"
+                        color="primary"
+                        width="140"
+                        @click="borrarAnuncio(anuncioUsuario.id)">
+                        <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x mr-1" /> Borrar
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-tab-item>
               <!--Eliminar-->
@@ -223,7 +200,7 @@
 <script>
 import DashboardCompras from '@/components/Dashboard-Compras';
 export default {
-  name: '',
+  name: 'tarjeta-anuncio-usuario',
   components: {
     DashboardCompras
   },
@@ -246,12 +223,17 @@ export default {
     }
   },
   methods: {
+    borrarAnuncio(idAnuncio){
+      this.$store.dispatch('activationAlert', {type: 'info', message: `Anuncio # ${idAnuncio} eliminado exitosamente!`});
+    },
     abrirEdicion(){
       console.log("vue: abrirEdicion");
       this.$emit('activandoEdicion', {id: this.anuncioUsuario.id });
     }
   },
-  mounted() {},
+  mounted() {
+
+  },
 }
 </script>
 

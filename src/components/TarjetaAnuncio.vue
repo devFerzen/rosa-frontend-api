@@ -155,7 +155,7 @@
 
 <script>
 export default {
-  name: '',
+  name: 'tarjeta-anuncio',
   components: {},
   props: {
     anuncioUsuario: { type: Object, default: {} }

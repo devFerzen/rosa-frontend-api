@@ -234,6 +234,16 @@
 
                 <v-btn
                   class="mx-2"
+                  dark
+                  color="primary"
+                  style="margin-top: 20px;"
+                  @click="salvandoNuevoAnuncio(false)">
+                  <font-awesome-icon :icon="['fas','save']" style="margin-right:5px;"></font-awesome-icon>Guardar
+                </v-btn>
+                <!--SavingButton-->
+
+                <v-btn
+                  class="mx-2"
                   fab
                   dark
                   small
@@ -242,7 +252,7 @@
                   @click="anuncioEditDialog=false">
                   <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
                 </v-btn>
-                <!--Cerrar Modal AnuncioEdit-->
+                <!--CloseButton-->
               </v-card>
             </v-col>
             <!--Cuepo-->
@@ -303,9 +313,9 @@
     <!--NuevaTarifa Dialog-->
 
     <v-dialog
-      v-model="creandoAnuncio"
+      v-model="nuevoContactoDialog"
       max-width="850px">
-      <v-container >
+      <v-container>
         <v-card rounded>
           <v-card-title>
             <v-avatar size="56">
@@ -429,7 +439,7 @@
     });
 
   export default {
-    name: "Dashboard",
+    name: "dashboard",
     props: ['id'],
     components: {
       TarjetaAnuncioUsuario,
@@ -630,14 +640,6 @@
     },
     computed: {
       ...mapGetters(["anunciosUsuario"]),
-      creandoAnuncio() {
-        console.log(`id: ${this.id}`);
-
-        if(!this.id){
-          return false;
-        }
-        return true;
-      },
       newContactoList() {
         return this.AnuncioEditForm.Sec_Contacto;
       },
@@ -715,12 +717,19 @@
       },
       abriendoEdicion(InfoAnuncio) {
         this.id = InfoAnuncio.id;
+        //Llamada getter para obtener el anuncio
         this.anuncioEditDialog = true;
       },
       handleFilePondInit(){
         console.log("handleFilePondInit...");
         console.log("getgiles",this.$refs.refImages.getfiles());
         this.$refs.refImages.getfiles()
+      },
+      salvandoNuevoAnuncio(isNew){
+        let tipoSalvado = isNew ? 'guardado' : 'editado';
+
+        this.$store.dispatch('activationAlert',{type: 'success', message: `Anuncio ${tipoSalvado} exitosamente!`});
+        this.anuncioEditDialog = false;
       },
       imagenesAnuncioOnProcess(error, file) {
         console.log("imagenesAnuncioOnProcess...");

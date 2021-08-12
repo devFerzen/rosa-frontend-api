@@ -11,13 +11,13 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     props: route => ({ id: route.query.q})
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     component: Dashboard,
     props: route => ({ id: route.query.q})
   },
@@ -28,7 +28,7 @@ const routes = [
   },
   {
     path: '/contactanos',
-    name: 'Contactanos',
+    name: 'contactanos',
     component: Contactanos
   }
 ]

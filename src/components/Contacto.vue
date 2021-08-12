@@ -74,7 +74,7 @@
 <script>
 
   export default {
-    name: 'Contacto',
+    name: 'contacto',
     components: {
     },
     data() {
@@ -105,11 +105,13 @@
           .then((result)=> {
               console.log("enviandoCorreo en éxito...");
               console.dir(result);
+              this.$store.dispatch('activationAlert',{type: 'success', message: `Correo enviado exitosamente!`});
               this.$store.dispatch('contactandonos', false);
           })
           .catch((error)=> {
             //notificar el error al usuario
             console.log(`enviandoCorreo en error...`);
+            this.$store.dispatch('activationAlert',{type: 'error', message: `Problemas al enviar correo!`});
             console.log(error.mensaje);
           });
         }

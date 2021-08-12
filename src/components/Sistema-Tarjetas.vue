@@ -411,7 +411,7 @@
 
 <script>
 export default {
-  name: "Sistema-tarjetas",
+  name: "sistema-tarjetas",
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
   },

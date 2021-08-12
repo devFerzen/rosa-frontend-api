@@ -60,7 +60,7 @@
 import PanelHerramientas from '@/components/Panel-Herramientas'
 
 export default {
-  name: 'InicioSesion',
+  name: 'inicio-sesion',
   props: {
 
   },

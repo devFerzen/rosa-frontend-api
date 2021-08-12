@@ -18,7 +18,7 @@ export const actions = {
         if(payload == null){
           return resolve({
             mensaje: 'Dirigirlo a dashboard con la ventana de edición abierta!',
-            sendTo: 'Dashboard'
+            sendTo: 'dashboard'
           });
         }
 

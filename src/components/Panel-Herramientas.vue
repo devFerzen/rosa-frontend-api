@@ -97,7 +97,7 @@
 
 <script>
   export default {
-    name: 'Panel-Herramientas',
+    name: 'panel-herramientas',
     data: () => ({
       herramientasLoader: false,
       categoriaSeleccionada: 1,

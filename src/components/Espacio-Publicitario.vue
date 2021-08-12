@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'Espacio-Publicitario',
+  name: 'espacio-publicitario',
   data() {
     return {
 

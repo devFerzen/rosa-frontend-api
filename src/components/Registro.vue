@@ -13,7 +13,7 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8">Lorem ipsum</h6>
+      <h6 class="text-h4 text-lg-h4 text-center my-8">Registro</h6>
 
       <v-form ref="registro" v-model="valid" lazy-validation>
         <v-text-field
@@ -68,7 +68,7 @@
 import PanelHerramientas from '@/components/Panel-Herramientas'
 
   export default {
-    name: 'Registro',
+    name: 'registro',
     props:{
 
     },

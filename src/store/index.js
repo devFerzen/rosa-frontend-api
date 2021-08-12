@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as usuario from '@/store/modules/usuario'
 import * as anuncio from '@/store/modules/anuncio'
+import * as alert from '@/store/modules/alert'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     usuario,
-    anuncio
+    anuncio,
+    alert
   },
   state: {
     iniciandoSesion: false,

@@ -229,9 +229,9 @@
   import { mapGetters } from "vuex";
 
   export default {
-    name: "Compras",
+    name: "compras",
     components: {
-      TarjetaAnuncioUsuario      
+      TarjetaAnuncioUsuario
     },
     data() {
       return {

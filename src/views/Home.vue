@@ -30,7 +30,7 @@ import EspacioPublicitario from "@/components/Espacio-Publicitario";
 import axios from "axios";
 
 export default {
-  name: "Home",
+  name: "home",
   props: {
     id: {
       default: "",

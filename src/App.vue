@@ -12,6 +12,7 @@
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
           transition="scale-transition"
           width="40"
+          @click="$router.push({path:'/'}); $store.dispatch('activandoRegistro', false); $store.dispatch('activandoInicioSesion', false);"
         />
       </div>
 
@@ -95,7 +96,7 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4">
 
-          <v-list-item @click="$router.push({path:'/'})">
+          <v-list-item @click="$router.push({path:'/dashboard'})">
             <v-list-item-title class="text-center">Mis Anuncios</v-list-item-title>
           </v-list-item>
           <v-list-item @click="$router.push({path:'/compras'})">
@@ -112,10 +113,20 @@
       </v-list>
       <!--Sidedar List views-->
     </v-navigation-drawer>
-
     <v-main>
       <router-view/>
     </v-main>
+    <v-alert
+      border="bottom"
+      colored-border
+      :type="Alert.type"
+      :value="Alert.isActive"
+      elevation="2"
+      dismissible="true"
+      transition="slide-x-reverse-transition"
+      style="position: absolute; top: 5rem; right: 0; width: 50%; height:65px;">
+      {{Alert.message}}
+    </v-alert>
   </v-app>
 </template>
 
@@ -127,6 +138,11 @@ export default {
   data() {
     return {
       sideDashboard: false
+    }
+  },
+  computed: {
+    Alert() {
+      return this.$store.state.alert.alert;
     }
   },
   methods: {
@@ -143,18 +159,18 @@ export default {
       //luego crear el dashboard click que abrá en si el sidebar
       this.$store.dispatch('creandoAnuncio', null)
       .then((result)=> {
-          if(!!result.sendTo & result.sendTo == "Dashboard") {
+          if(!!result.sendTo & result.sendTo == "dashboard") {
             console.log("creandoAnuncio en éxito...");
             console.log(result);
             //Problemas con el routing que actualize qle query prop
-            this.$router.push({name:'Dashboard', query:{id: '000'}});
+            this.$router.push({name:'dashboard', query:{id: '000'}});
           }
       })
       .catch((error)=> {
         //notificar el error al usuario
         console.log("creandoAnuncio en error...");
         console.log(error.mensaje);
-        this.$router.push({name:'Home'});
+        this.$router.push({name:'home'});
         this.$store.dispatch('activandoRegistro',true);
       });
     }
