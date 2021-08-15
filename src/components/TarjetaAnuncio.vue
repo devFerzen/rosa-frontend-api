@@ -144,7 +144,6 @@
                 }}
               </v-tab>
             </v-tabs>
-
           </v-sheet>
         </v-col>
         <!--Cuepo-->

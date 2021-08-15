@@ -4,7 +4,7 @@
       app
       color="primary"
       dark>
-      <div class="d-flex align-center mx-3">
+      <div class="d-flex align-center mx-3" style="cursor:pointer;">
         <v-img
           alt="Vuetify Logo"
           class="shrink"
@@ -124,7 +124,7 @@
       elevation="2"
       dismissible="true"
       transition="slide-x-reverse-transition"
-      style="position: absolute; top: 5rem; right: 0; width: 50%; height:65px;">
+      style="position: absolute; top: 80px; z-index:2; right: 0; width: 50%; height:65px;">
       {{Alert.message}}
     </v-alert>
   </v-app>

@@ -3,7 +3,8 @@
     "contrasena": "123",
     "numero_telefonico": "83000000",
     "estatus": true,
-    "anuncios_usuario": [{
+    "anuncios_usuario": [
+      {
             "id": 1,
             "Sec_Descripcion": {
                 "titulo": "Lorem ipsum 1",

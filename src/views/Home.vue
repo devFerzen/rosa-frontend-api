@@ -4,18 +4,16 @@
       <v-col
         cols="12"
         :lg="widthComponents.herramientasWidth"
-        :class="panelHerramientasClases"
-      >
+        :class="panelHerramientasClases">
         <panel-herramientas v-if="!iniciandoSesion && !registrandose" @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="iniciandoSesion" />
         <registro v-else-if="registrandose" />
       </v-col>
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
         <espacio-publicitario v-if="iniciandoSesion || registrandose" />
-        <sistema-tarjetas
+        <sistema-tarjetas-descripcion
           :fullAnuncioEstado="hayAnuncio"
-          v-else-if="!iniciandoSesion && !registrandose"
-        />
+          v-else-if="!iniciandoSesion && !registrandose"/>
       </v-col>
     </v-row>
   </v-container>
@@ -23,7 +21,7 @@
 
 <script>
 import PanelHerramientas from "@/components/Panel-Herramientas";
-import SistemaTarjetas from "@/components/Sistema-Tarjetas";
+import SistemaTarjetasDescripcion from "@/components/Sistema-Tarjetas-Descripcion";
 import InicioSesion from "@/components/Inicio-Sesion";
 import Registro from "@/components/Registro";
 import EspacioPublicitario from "@/components/Espacio-Publicitario";
@@ -33,12 +31,12 @@ export default {
   name: "home",
   props: {
     id: {
-      default: "",
+      default: 0,
     },
   },
   components: {
     PanelHerramientas,
-    SistemaTarjetas,
+    SistemaTarjetasDescripcion,
     InicioSesion,
     Registro,
     EspacioPublicitario,
@@ -56,10 +54,7 @@ export default {
   },
   computed: {
     hayAnuncio() {
-      if (!this.id) {
-        return false;
-      }
-      return true;
+      return this.id;
     },
     iniciandoSesion() {
       return this.$store.state.iniciandoSesion;

@@ -1,191 +1,64 @@
 <template>
   <div class="">
     <v-row>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="
-            height: 500px;
-            max-height: 500px;
-            overflow: hidden;
-            position: relative;">
-          <v-img
-            lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
-            min-height="500px"
-            max-height="500px"
-            max-width="100%"
-            position="center center"
-            src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api">
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="height: 500px; max-height: 500px; position: relative">
-          <v-img
-            min-height="500px"
-            max-height="500px"
-            max-width="100%"
-            lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
-            position="center center"
-            src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api">
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="height: 500px; max-height: 500px; overflow: hidden"
-        >
-          <v-img
-            lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
-            min-height="500px"
-            max-height="500px"
-            max-width="100%"
-            position="center center"
-            src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api">
-          </v-img>
-        </v-card>
-      </v-col>
+      <v-col :cols="gridColCard['cardCols']" v-for="(anuncio, key, i) in anunciosBusqueda" :key="i">
+        <v-hover
+          v-slot:default="{ hover }">
+          <v-card
+            class="rounded-xl"
+            style="
+              height: 459px;
+              max-height: 459px;
+              overflow:hidden;">
+              <v-container>
+                <v-expand-transition>
+                  <div v-if="hover">
+                    <div class="text-h5" style="z-index: 1; position: absolute; top:20px; left: 20px; width:auto; max-width:400px; white-space:no-wrap; overflow: hidden; text-overflow:ellipsis;">
+                      {{anuncio.Sec_Descripcion.titulo}}
+                    </div>
+                    <div v-if="hover" style="z-index: 1; position: absolute; top:50px; right:0px; width:70px; height:150px;">
+                      <v-container>
+                        <v-row justify="space-around" align="center">
+                          <v-col cols="auto" >
+                            <v-row no-gutters>
+                              <v-col cols="auto" class="pa-0" @click="accionCorazon(anuncio.id)" style="cursor:pointer;">
+                                <font-awesome-icon :icon="['fas','heart']" class="fa-2x"></font-awesome-icon>
+                              </v-col>
+                              <v-col cols="auto" class="pa-0">
+                                150
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                          <!--heartCounter-->
+                          <v-col cols="auto">
+                            <v-row no-gutters>
+                              <v-col cols="auto" class="pa-0" @click="accionOjo(anuncio.id)" style="cursor:pointer;">
+                                <font-awesome-icon :icon="['fas','eye']" class="fa-2x"></font-awesome-icon>
+                              </v-col>
+                              <v-col cols="auto" class="pa-0">
+                                150
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                          <!--eyeCounter-->
+                        </v-row>
+                      </v-container>
+                    </div>
+                    <div v-if="hover" style="z-index: 1; position: absolute; bottom:38px; left:0px; width:100%; height:100px;">
+                      <mini-tarifas :tarifas="anuncio.Sec_Tarifas"></mini-tarifas>
+                    </div>
+                  </div>
+                </v-expand-transition>
+                <v-row class="fill-height">
+                  <v-carousel :height="tarjetaWH['carrusel']">
+                    <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagen" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
+                  </v-carousel>
+                </v-row>
+              </v-container>
+          </v-card>
 
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="
-            height: 500px;
-            max-height: 500px;
-            overflow: hidden;
-            position: relative;
-          "
-        >
-          <v-img
-            lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
-            max-height="100%"
-            src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="height: 500px; max-height: 500px; position: relative"
-        >
-          <v-img
-            max-height="100%"
-            lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
-            src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="
-            height: 500px;
-            max-height: 500px;
-            overflow: hidden;
-            position: relative;
-          "
-        >
-          <v-img
-            lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
-            max-height="100%"
-            src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
-      </v-col>
+        </v-hover>
 
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="
-            height: 500px;
-            max-height: 500px;
-            overflow: hidden;
-            position: relative;
-          "
-        >
-          <v-img
-            lazy-src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
-            max-height="100%"
-            contain
-            src="https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="height: 500px; max-height: 500px; position: relative"
-        >
-          <v-img
-            max-height="100%"
-            contain
-            lazy-src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
-            src="https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
-      </v-col>
-      <v-col :cols="gridCardWH['cardCols']">
-        <v-card
-          class="rounded-xl"
-          style="
-            height: 500px;
-            max-height: 500px;
-            overflow: hidden;
-            position: relative;
-          "
-        >
-          <v-img
-            lazy-src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
-            max-height="100%"
-            contain
-            src="https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api"
-            style="
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-          </v-img>
-        </v-card>
       </v-col>
     </v-row>
 
@@ -404,8 +277,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import MiniTarifas from '@/components/Mini-Tarifas';
+
 export default {
-  name: "sistema-tarjetas",
+  name: "sistema-tarjetas-descripcion",
+  components: {
+    MiniTarifas
+  },
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
   },
@@ -565,11 +444,16 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["anunciosBusqueda"]),
+    tarjetaWH(){
+      const { sm, xs } = this.$vuetify.breakpoint;
+      return xs || sm ? {carrusel: '459'} : {carrusel: '60vh'};
+    },
     tabContainerClass() {
       const { sm, xs } = this.$vuetify.breakpoint;
       return xs || sm ? {tabContainer: 'tabContainerMB'} : {tabContainer: 'tabContainerWEB'};
     },
-    gridCardWH() {
+    gridColCard() {
       const { sm, xs, md } = this.$vuetify.breakpoint;
 
       return xs || sm ? { cardCols: 12 } : { cardCols: 4 };
@@ -596,21 +480,27 @@ export default {
     fullAnuncio_Display() {
       this.fullAnuncioEstado = true;
     },
+    accionCorazon(id) {
+      this.$store.dispatch('activationAlert', {type: 'success', message: `Lorem Ipsum <3...${id}!`});
+    },
+    accionOjo(id) {
+      this.$store.dispatch('activationAlert', {type: 'success', message: `Lorem Ipsum *.*...${id}!`});
+    }
   },
 };
 </script>
 
 <style>
-.tw-redes-icons {
-  color: blue;
-}
+  .tw-redes-icons {
+    color: blue;
+  }
 
-.tabContainerMB {
-  height: auto;
-  min-height: 61vh;
-}
+  .tabContainerMB {
+    height: auto;
+    min-height: 61vh;
+  }
 
-.tabContainerWEB {
-  height: 61vh;
-}
+  .tabContainerWEB {
+    height: 61vh;
+  }
 </style>

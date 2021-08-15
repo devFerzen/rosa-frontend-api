@@ -179,7 +179,8 @@ import PanelHerramientas from '@/components/Panel-Herramientas'
     methods: {
       registrandoUsuario(){
         if(this.$refs.registro.validate()){
-          this.$store.dispatch('registrandoUsuario',this.FormR)
+          this.$store.dispatch('activationAlert', {type: 'success', message: `Usuario registrado exitosamente!`});
+          /*this.$store.dispatch('registrandoUsuario',this.FormR)
           .then((result)=> {
               console.log("registrandoUsuario en éxito...");
               console.dir(result);
@@ -196,7 +197,7 @@ import PanelHerramientas from '@/components/Panel-Herramientas'
             //notificar el error al usuario
             console.log(`registrandoUsuario en error...`);
             console.log(error.mensaje);
-          });
+          });*/
         }
       }
     }
