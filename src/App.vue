@@ -181,11 +181,5 @@ export default {
 </script>
 
 <style>
-@import './reset.scss'
 
-*,
-*::before,
-*::after {
-box-sizing: border-box;
-}
 </style>

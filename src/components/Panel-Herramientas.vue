@@ -17,7 +17,7 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses['class']">Lorem ipsum dolor</h6>
+      <div class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses['class']">Lorem ipsum dolor</div>
       <v-row no-gutters>
         <v-col order="1" :cols="cols['formSearchField']">
           <v-text-field
