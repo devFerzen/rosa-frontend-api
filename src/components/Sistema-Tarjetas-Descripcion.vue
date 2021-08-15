@@ -447,7 +447,7 @@ export default {
     ...mapGetters(["anunciosBusqueda"]),
     tarjetaWH(){
       const { sm, xs } = this.$vuetify.breakpoint;
-      return xs || sm ? {carrusel: '459'} : {carrusel: '60vh'};
+      return xs || sm ? {carrusel: '459'} : {carrusel: '459'};
     },
     tabContainerClass() {
       const { sm, xs } = this.$vuetify.breakpoint;
