@@ -1,7 +1,8 @@
 <template lang="html">
   <v-card
     flat
-    tile>
+    tile
+    style="border:1px solid red;">
     <v-window
       v-model="tarifaSelected"
       vertical>
@@ -10,8 +11,7 @@
         :key="`card-${i}`">
         <v-card
           color="grey"
-          height="112"
-          >
+          height="100">
           <v-row
             class="fill-height"
             align="center"
@@ -26,17 +26,16 @@
       </v-window-item>
     </v-window>
 
-    <v-card-actions>
+    <v-card-actions style="position:absolute; top:0;">
       <v-btn
         text
-        @click="prev"
-        style="position:absolute; top:0; left:0;">
+        @click="prev">
         prev
       </v-btn>
       <v-btn
         text
         @click="next"
-        style="position:absolute; top:0; right:0;">
+        style="position:absolute; right:-295px;">
         next
       </v-btn>
     </v-card-actions>
