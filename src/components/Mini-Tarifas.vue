@@ -30,12 +30,6 @@
       <v-btn
         text
         @click="prev">
-        prev
-      </v-btn>
-      <v-btn
-        text
-        @click="next"
-        style="position:absolute; right:-295px;">
         next
       </v-btn>
     </v-card-actions>

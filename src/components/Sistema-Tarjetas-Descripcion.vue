@@ -12,11 +12,11 @@
               overflow:hidden;">
               <v-container>
                 <v-expand-transition>
-                  <div>
+                  <div v-if="hover">
                     <div class="text-h5" style="z-index: 1; position: absolute; top:20px; left: 20px; width:auto; max-width:400px; white-space:no-wrap; overflow: hidden; text-overflow:ellipsis;">
                       {{anuncio.Sec_Descripcion.titulo}}
                     </div>
-                    <div style="z-index: 1; position: absolute; top:50px; right:0px; width:70px; height:150px;">
+                    <div v-if="hover" style="z-index: 1; position: absolute; top:50px; right:0px; width:70px; height:150px;">
                       <v-container>
                         <v-row justify="space-around" align="center">
                           <v-col cols="auto" >
@@ -44,7 +44,7 @@
                         </v-row>
                       </v-container>
                     </div>
-                    <div style="z-index: 1; position: absolute; bottom:38px; left:0px; width:100%; height:100px;">
+                    <div v-if="hover" style="z-index: 1; position: absolute; bottom:38px; left:0px; width:100%; height:100px;">
                       <mini-tarifas :tarifas="anuncio.Sec_Tarifas"></mini-tarifas>
                     </div>
                   </div>
