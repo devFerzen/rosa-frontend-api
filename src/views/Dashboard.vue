@@ -761,8 +761,8 @@
   }
 
   .filepond--root {
-    height: 45em;
-    max-height: 45em;
+    height: 35em;
+    max-height: 35em;
     display: flex;
     flex-wrap: wrap;
   }

@@ -23,33 +23,33 @@
           tile
           depressed
           raised
-          width="185"
-          min-width="185"
           class="mr-2 rounded-lg"
+          :class="btnClasses['btnClass']"
           color="light-blue accent-3"
            @click="creandoAnuncio">
           <v-icon>perm_identity</v-icon>
-          <span class="ml-2">Anunciaté</span>
+          <span class="ml-2" :class="btnClasses['span']">Anunciaté</span>
         </v-btn>
 
         <v-btn
           outlined
           color="white"
-          class="mx-3 rounded-lg"
+          class="mx-2 rounded-lg"
+          :class="btnClasses['btnClass']"
           @click="iniciandoSesion"
           v-if="!this.$store.state.usuario.token">
           <v-icon>perm_identity</v-icon>
-          <span>Login Usuario</span>
+          <span class="ml-2" :class="btnClasses['span']">Login Usuario</span>
         </v-btn>
 
         <v-btn
           outlined
           color="white"
-          class="mx-3 rounded-lg"
+          class="mx-2 rounded-lg"
           @click="sideDashboard = !sideDashboard"
           v-else>
           <v-icon>perm_identity</v-icon>
-          <span>Dashboard</span>
+          <span class="ml-2" :class="btnClasses['span']">Dashboard</span>
         </v-btn>
       </v-row>
     </v-app-bar>
@@ -76,8 +76,7 @@
           depressed
           color="white"
           class="ml-auto"
-          @click="sideDashboard = !sideDashboard"
-          >
+          @click="sideDashboard = !sideDashboard">
           <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
         </v-btn>
       </div>
@@ -143,6 +142,10 @@ export default {
   computed: {
     Alert() {
       return this.$store.state.alert.alert;
+    },
+    btnClasses() {
+      const { xs, sm } = this.$vuetify.breakpoint;
+      return xs || sm ? {'span': 'hidden', 'btnClass': 'btn-menu-mbview'} : {'span': '', 'btnClass':'btn-menu-pcview'};
     }
   },
   methods: {
@@ -180,6 +183,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+  .btn-menu-mbview{
 
+  }
+
+  .btn-menu-pcview{
+    width: 185px;
+  }
 </style>

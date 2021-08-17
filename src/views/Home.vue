@@ -1,10 +1,11 @@
 <template>
-  <v-container fluid fill-height class="white">
+  <v-container fluid class="white">
     <v-row align="start" justify="center">
       <v-col
         cols="12"
         :lg="widthComponents.herramientasWidth"
-        :class="panelHerramientasClases">
+        :class="alturaPanelHerramientas"
+        style="z-index:2;">
         <panel-herramientas v-if="!iniciandoSesion && !registrandose" @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="iniciandoSesion" />
         <registro v-else-if="registrandose" />
@@ -34,6 +35,11 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      panelHerramientasClass: ''
+    }
+  },
   components: {
     PanelHerramientas,
     SistemaTarjetasDescripcion,
@@ -48,11 +54,15 @@ export default {
         sistemaWidth: 9,
         _herramientasWidth: 3,
         _sistemaWidth: 9,
-      },
-      panelHerramientasClases: "panel-herramientas-pcview",
+      }
     };
   },
   computed: {
+    alturaPanelHerramientas() {
+      const { xs, sm } = this.$vuetify.breakpoint;
+      this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
+      return this.panelHerramientasClass;
+    },
     hayAnuncio() {
       return this.id;
     },
@@ -78,7 +88,7 @@ export default {
       console.log(`vue: panelMinimizeH => `);
       console.dir(Value);
 
-      this.panelHerramientasClases = Value.panelHerramientasClases;
+      this.panelHerramientasClass = Value.panelHerramientasClass;
     },
     activandoGrid(WidthComponents) {
       console.log(`Vue: activandoGrid =>`);
@@ -99,7 +109,7 @@ export default {
   top: 9vh;
   max-height: calc(24% - 9vh);
   transform: translateX(0%);
-  z-index: 1;
+  z-index: 2;
 }
 
 .panel-herramientas-pcview {
@@ -108,6 +118,6 @@ export default {
   top: 9vh;
   max-height: calc(100% - 9vh);
   transform: translateX(0%);
-  z-index: 1;
+  z-index: 2;
 }
 </style>
