@@ -16,7 +16,7 @@
             class="fill-height"
             align="center"
             justify="center">
-            <div class="text-h1">
+            <div class="text-h4 font-weight-regular">
               {{ tarifa.nombre }}
             </div>
           </v-row>
