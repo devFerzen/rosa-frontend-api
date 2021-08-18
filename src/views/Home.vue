@@ -31,7 +31,7 @@ export default {
   name: "home",
   props: {
     id: {
-      default: 0,
+      default: false,
     },
   },
   components: {

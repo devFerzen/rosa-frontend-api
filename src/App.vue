@@ -93,7 +93,6 @@
 
       <v-list nav dense>
         <v-list-item-group
-          v-model="group"
           active-class="deep-purple--text text--accent-4">
 
           <v-list-item @click="$router.push({path:'/dashboard'})">
@@ -122,7 +121,7 @@
       :type="Alert.type"
       :value="Alert.isActive"
       elevation="2"
-      dismissible="true"
+      dismissible
       transition="slide-x-reverse-transition"
       style="position: absolute; top: 80px; z-index:2; right: 0; width: 50%; height:65px;">
       {{Alert.message}}

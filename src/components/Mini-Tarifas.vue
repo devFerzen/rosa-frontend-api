@@ -16,11 +16,9 @@
             class="fill-height"
             align="center"
             justify="center">
-            <h1
-              style="font-size: 2rem;"
-              class="white--text">
-              Tarifa {{ tarifa.nombre }}
-            </h1>
+            <div class="text-h1">
+              {{ tarifa.nombre }}
+            </div>
           </v-row>
         </v-card>
       </v-window-item>

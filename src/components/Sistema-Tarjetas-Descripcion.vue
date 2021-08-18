@@ -13,9 +13,10 @@
               <v-container>
                 <v-expand-transition>
                   <div v-if="hover">
-                    <div class="text-h5" style="z-index: 1; position: absolute; top:20px; left: 20px; width:auto; max-width:400px; white-space:no-wrap; overflow: hidden; text-overflow:ellipsis;">
+                    <div class="text-h5 d-inline-block text-truncate" style="z-index: 1; position: absolute; top:20px; left: 20px; width:auto; max-width:280px;">
                       {{anuncio.Sec_Descripcion.titulo}}
                     </div>
+                    <!--Titulo-->
                     <div v-if="hover" style="z-index: 1; position: absolute; top:50px; right:0px; width:70px; height:150px;">
                       <v-container>
                         <v-row justify="space-around" align="center">
@@ -30,6 +31,7 @@
                             </v-row>
                           </v-col>
                           <!--heartCounter-->
+
                           <v-col cols="auto">
                             <v-row no-gutters>
                               <v-col cols="auto" class="pa-0" @click="accionOjo(anuncio.id)" style="cursor:pointer;">
@@ -44,23 +46,27 @@
                         </v-row>
                       </v-container>
                     </div>
+                    <!--Like and vistas-->
                     <div v-if="hover" style="z-index: 1; position: absolute; bottom:38px; left:0px; width:100%; height:100px;">
                       <mini-tarifas :tarifas="anuncio.Sec_Tarifas"></mini-tarifas>
                     </div>
+                    <!--mini tarifas-->
                   </div>
                 </v-expand-transition>
+                <!--transición de objetos carrusel-->
+
                 <v-row class="fill-height">
                   <v-carousel :height="tarjetaWH['carrusel']">
                     <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagen" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
                   </v-carousel>
                 </v-row>
+                <!--carrusel-->
               </v-container>
           </v-card>
-
         </v-hover>
-
       </v-col>
     </v-row>
+    <!--grid de tarjetas-->
 
     <v-dialog
       v-model="fullAnuncioEstado"
@@ -87,23 +93,20 @@
               cols="12"
               md="8"
               style="min-height: 95vh; max-height: auto"
-              class="d-flex flex-column justify-center align-center"
-            >
+              class="d-flex flex-column justify-center align-center">
               <v-card
                 class="pa-4 pa-lg-2"
                 outlined
                 style="background-color: lightgrey"
                 tile
                 :height="fullAnuncioBodyWH['vMainContenth']"
-                :width="fullAnuncioBodyWH['vMainContentw']"
-              >
+                :width="fullAnuncioBodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
                   <v-tab-item v-if="anuncioView.Sec_Descripcion">
                     <v-container
                       fluid
                       class="pa-4 pa-lg-8"
-                      :class="tabContainerClass['tabContainer']"
-                    >
+                      :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">Descripción</div>
@@ -126,24 +129,20 @@
                             flat
                             class="mb-2"
                           >
-                            <template
-                              v-for="line in anuncioView.Sec_Descripcion.descripcion.split(
-                                '\n'
-                              )"
-                              >{{ line }}<br
-                            /></template>
+                            <template v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')" >{{ line }}</br></template>
                           </v-card>
                         </v-col>
                       </v-row>
                       <!--Descripcion-->
                     </v-container>
                   </v-tab-item>
+                  <!--tab descripcion-->
+
                   <v-tab-item v-if="anuncioView.Sec_Contacto">
                     <v-container
                       fluid
                       class="pa-4 pa-lg-8"
-                      :class="tabContainerClass['tabContainer']"
-                    >
+                      :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">Contacto</div>
@@ -152,30 +151,18 @@
                       <!--Título-->
                       <v-row no-gutters>
                         <v-col>
-                          <v-list shaped>
+                          <v-list shaped dense>
                             <v-list-item-group
                               color="primary"
-                              v-model="selectedItem"
-                            >
-                              <v-list-item
-                                v-for="(
-                                  contacto, i
-                                ) in anuncioView.Sec_Contacto"
-                                :key="i"
-                              >
+                              v-model="selectedItem">
+                              <v-list-item v-for="(contacto, i) in anuncioView.Sec_Contacto" :key="i" class="my-3">
                                 <v-list-item-icon>
-                                  <font-awesome-icon
-                                    :icon="[
-                                      contacto.tipo.categoria,
-                                      contacto.tipo.icono,
-                                    ]"
-                                    class="tw-redes-icons fa-2x"
-                                  />
+                                  <font-awesome-icon :icon="[contacto.tipo.categoria,contacto.tipo.icono]" class="tw-redes-icons fa-2x"/>
                                 </v-list-item-icon>
                                 <v-list-item-content>
-                                  <v-list-item-title class="text-body-1">{{
-                                    contacto.contacto
-                                  }}</v-list-item-title>
+                                  <v-list-item-title class="text-body-1">
+                                    {{ contacto.contacto }}
+                                  </v-list-item-title>
                                 </v-list-item-content>
                               </v-list-item>
                             </v-list-item-group>
@@ -185,12 +172,13 @@
                       <!--ContactosList-->
                     </v-container>
                   </v-tab-item>
+                  <!--tab contactos-->
+
                   <v-tab-item v-if="anuncioView.Sec_Tarifas">
                     <v-container
                       fluid
                       class="pa-4 pa-lg-8"
-                      :class="tabContainerClass['tabContainer']"
-                    >
+                      :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
                           <div class="text-h4 text-xl-h3 mb-4">Tarifas</div>
@@ -202,18 +190,12 @@
                           <v-col
                             :cols="fullAnuncioBodyWH['CardTarifaCol']"
                             v-for="(tarifa, i) in anuncioView.Sec_Tarifas"
-                            :key="i"
-                          >
+                            :key="i">
                             <v-card>
                               <v-card-text>
                                 <v-row align="center" class="mx-0 mb-2">
-                                  <v-card-title>{{
-                                    tarifa.nombre
-                                  }}</v-card-title>
-                                  <font-awesome-icon
-                                    icon="dollar-sign"
-                                    class="tw-redes-icons"
-                                  />
+                                  <v-card-title>{{ tarifa.nombre }}</v-card-title>
+                                  <font-awesome-icon icon="dollar-sign" class="tw-redes-icons" />
                                   <div class="grey--text ml-2">
                                     {{ tarifa.precio }}
                                   </div>
@@ -222,8 +204,6 @@
                               </v-card-text>
 
                               <v-divider class="mx-4"></v-divider>
-
-                              <v-card-title>Lorem Ipsum</v-card-title>
 
                               <v-card-text>
                                 <v-chip-group
@@ -247,24 +227,27 @@
                       </v-container>
                     </v-container>
                   </v-tab-item>
+                  <!--tab tarifas-->
+
                   <v-tab
-                    v-for="(anuncio, key, i) in anuncioView"
-                    :key="i"
-                    v-if="
-                      key == 'Sec_Descripcion' ||
-                      key == 'Sec_Contacto' ||
-                      key == 'Sec_Tarifas'
-                    "
-                  >
+                    v-for="(anuncio, key, i) in anuncioView.permisos"
+                    :key="i">
                     {{
-                      key == "Sec_Descripcion"
-                        ? "Descripción"
-                        : key == "Sec_Contacto"
-                        ? "Contacto"
-                        : "Tarifas"
+                      anuncio
                     }}
                   </v-tab>
+                  <!--nombre tabs-->
                 </v-tabs>
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="primary"
+                  style="float:right"
+                  @click="fullAnuncioEstado=false">
+                  <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
+                </v-btn>
               </v-card>
             </v-col>
             <!--Cuepo-->
@@ -343,13 +326,15 @@ export default {
         },
       ],
       anuncioView: {
+        categoria: ['Escorts','Masajes Eróticos'],
+        permisos: ['Descripcion', 'Contacto', 'Tarifas'],
         Sec_Descripcion: {
           titulo: "Lorem ipsum dolor",
           estado: "1",
           ciudad: "1",
           descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
 
-          Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`,
+          Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`,
         },
         Sec_Contacto: [
           {
@@ -426,21 +411,7 @@ export default {
             url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
           },
         ],
-      },
-      imagenesCarrusel: [
-        {
-          nombre: "",
-          url: "https://tse2.mm.bing.net/th?id=OIP.8JWM5FjmeBRVLWo-qHrniwHaNK&pid=Api",
-        },
-        {
-          nombre: "",
-          url: "https://tse3.mm.bing.net/th?id=OIP.Nl8tEOZkr5MQY_A5bXgauAHaLG&pid=Api",
-        },
-        {
-          nombre: "",
-          url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
-        },
-      ],
+      }
     };
   },
   computed: {
@@ -484,7 +455,7 @@ export default {
       this.$store.dispatch('activationAlert', {type: 'success', message: `Lorem Ipsum <3...${id}!`});
     },
     accionOjo(id) {
-      this.$store.dispatch('activationAlert', {type: 'success', message: `Lorem Ipsum *.*...${id}!`});
+      this.fullAnuncioEstado = true;
     }
   },
 };

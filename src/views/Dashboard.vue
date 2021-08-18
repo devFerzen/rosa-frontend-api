@@ -8,8 +8,8 @@
         <tarjeta-anuncio-usuario
           @activandoEdicion="abriendoEdicion"
           v-bind:anuncioUsuario="anuncio"
-          v-bind:OpcionesAnuncio="opciones"
-        ></tarjeta-anuncio-usuario>
+          v-bind:OpcionesAnuncio="opciones">
+          </tarjeta-anuncio-usuario>
         <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
@@ -22,8 +22,8 @@
       transition="dialog-bottom-transition">
       <v-card height="auto">
         <v-container fluid>
-          <v-row align="center" justify="center" class="fill-height" no-gutters>
-            <v-col cols="12" md="4" style="min-height: 95vh">
+          <v-row align="start" justify="center" class="fill-height" no-gutters>
+            <v-col cols="12" md="4">
               <file-pond
                 ref="refImages"
                 name="filePondImages"
@@ -117,7 +117,7 @@
                             <v-list-item-group
                               color="primary"
                               v-model="selectedContactItem">
-                              <v-list-item v-for="(contacto, i) in newContactoList":key="i">
+                              <v-list-item v-for="(contacto, i) in newContactoList" :key="i" class="my-3">
                                 <v-list-item-icon>
                                   <font-awesome-icon
                                     :icon="[
@@ -215,21 +215,13 @@
                   <!--Sec_Tarifas-->
 
                   <v-tab
-                    v-for="(anuncio, key, i) in anuncioView"
-                    :key="i"
-                    v-if="
-                      key == 'Sec_Descripcion' ||
-                      key == 'Sec_Contacto' ||
-                      key == 'Sec_Tarifas'
-                    ">
+                    v-for="(anuncio, key, i) in anuncioView.permisos"
+                    :key="i">
                     {{
-                      key == "Sec_Descripcion"
-                        ? "Descripción"
-                        : key == "Sec_Contacto"
-                        ? "Contacto"
-                        : "Tarifas"
+                      anuncio
                     }}
                   </v-tab>
+                  <!--nombre tabs-->
                 </v-tabs>
 
                 <v-btn
@@ -420,7 +412,8 @@
       credits: false,
       allowReorder: true,
       allowMultiple: true,
-      imagePreviewMaxHeight: 256,
+      imagePreviewMaxHeight: 115,
+      imagePreviewHeight: 115,
       maxFileSize: '7MB',
       itemInsertLocation: 'antes',
       labelFileLoading: 'Cargando...',
@@ -547,6 +540,8 @@
           },
         ],
         anuncioView: {
+          categoria: ['Escorts','Masajes Eróticos'],
+          permisos: ['Descripcion', 'Contacto', 'Tarifas'],
           Sec_Descripcion: {
             titulo: "Lorem ipsum dolor",
             estado: "1",
@@ -731,6 +726,10 @@
         this.$store.dispatch('activationAlert',{type: 'success', message: `Anuncio ${tipoSalvado} exitosamente!`});
         this.anuncioEditDialog = false;
       },
+      imagenesAnuncioOnDelete(error,file){
+        console.log("imagenesAnuncioOnDelete...");
+
+      },
       imagenesAnuncioOnProcess(error, file) {
         console.log("imagenesAnuncioOnProcess...");
         if(error) {
@@ -761,8 +760,8 @@
   }
 
   .filepond--root {
-    height: 45em;
-    max-height: 45em;
+    height: 43em;
+    max-height: 43em;
     display: flex;
     flex-wrap: wrap;
   }

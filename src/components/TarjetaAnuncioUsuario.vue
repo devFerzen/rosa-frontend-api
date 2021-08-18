@@ -48,6 +48,7 @@
                 </v-container>
               </v-tab-item>
               <!--Descripcion-->
+
               <v-tab-item v-if="OpcionesAnuncio.Actualizacion.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <dashboard-compras tipo="actualizacion"></dashboard-compras>
@@ -55,12 +56,14 @@
                 </v-container>
               </v-tab-item>
               <!--Actualizacion-->
+
               <v-tab-item v-if="OpcionesAnuncio.Compras.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <dashboard-compras tipo="paquetes"></dashboard-compras>
                 </v-container>
               </v-tab-item>
               <!--Compras-->
+
               <v-tab-item v-if="OpcionesAnuncio.Edicion.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
@@ -95,6 +98,7 @@
                 </v-container>
               </v-tab-item>
               <!--Edicion-->
+
               <v-tab-item v-if="OpcionesAnuncio.Eliminar.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
@@ -128,6 +132,7 @@
                 </v-container>
               </v-tab-item>
               <!--Eliminar-->
+
               <v-tab-item v-if="OpcionesAnuncio.Preview.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
@@ -166,27 +171,27 @@
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Descripcion.permisos">
                 <font-awesome-icon :icon="['fas', 'home']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--Descripcion-->
+              <!--tab Descripcion-->
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Actualizacion.permisos">
                 <font-awesome-icon :icon="['fas', 'sync-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--Actualizacion-->
+              <!--tab Actualizacion-->
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Compras.permisos">
                 <font-awesome-icon :icon="['fas', 'shopping-bag']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--Compras-->
+              <!--tab Compras-->
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Edicion.permisos" @click="abrirEdicion">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--Edicion-->
+              <!--tab Edicion-->
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Eliminar.permisos">
                 <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--Eliminar-->
+              <!--tab Eliminar-->
               <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Preview.permisos" @click="abrirEdicion">
                 <font-awesome-icon :icon="['fas', 'eye']" class="tw-redes-icons fa-2x" />
               </v-tab>
-              <!--PreView-->
+              <!--tab PreView-->
             </v-tabs>
 
           </v-sheet>

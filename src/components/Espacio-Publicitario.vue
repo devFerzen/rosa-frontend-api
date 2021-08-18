@@ -2,7 +2,8 @@
   <v-card
     :height="bodyWH['vMainContenth']"
     :width="bodyWH['vMainContentw']"
-    style="border:1px solid red">
+    style="border:1px solid red"
+    class="mt-2">     
 
   </v-card>
 </template>

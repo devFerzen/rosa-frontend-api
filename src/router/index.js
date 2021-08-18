@@ -4,39 +4,44 @@ import Home from '../views/Home.vue'
 import Compras from '../views/Compras.vue'
 import Contactanos from '../views/Contactanos.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Error404 from '../views/Error404.vue'
 import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home,
-    props: route => ({ id: route.query.q})
-  },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard,
-    props: route => ({ id: route.query.q})
-  },
-  {
-    path: '/compras',
-    name: 'compras',
-    component: Compras
-  },
-  {
-    path: '/contactanos',
-    name: 'contactanos',
-    component: Contactanos
-  }
+const routes = [{
+        path: '/',
+        name: 'home',
+        component: Home,
+        props: route => ({ id: route.query.q })
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: Dashboard,
+        props: route => ({ id: route.query.q })
+    },
+    {
+        path: '/compras',
+        name: 'compras',
+        component: Compras
+    },
+    {
+        path: '/contactanos',
+        name: 'contactanos',
+        component: Contactanos
+    },
+    {
+        path: '*',
+        name: 'error-404',
+        component: Error404
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
 
 export default router
