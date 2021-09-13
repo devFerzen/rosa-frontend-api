@@ -10,12 +10,16 @@
         <inicio-sesion v-else-if="iniciandoSesion" />
         <registro v-else-if="registrandose" />
       </v-col>
+      <!--Panel Herramientas-->
+
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
         <espacio-publicitario v-if="iniciandoSesion || registrandose" />
+        
         <sistema-tarjetas-descripcion
           :fullAnuncioEstado="hayAnuncio"
           v-else-if="!iniciandoSesion && !registrandose"/>
       </v-col>
+      <!--Cuerpo-->
     </v-row>
   </v-container>
 </template>

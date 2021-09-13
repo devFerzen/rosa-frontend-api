@@ -1,8 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import jwt from 'jsonwebtoken'
+import axios from 'axios'
+
 import * as usuario from '@/store/modules/usuario'
 import * as anuncio from '@/store/modules/anuncio'
 import * as alert from '@/store/modules/alert'
+
+const apiClient = axios.create({
+  baseURL: `http://localhost:3000`,
+  withCredentials: false, // This is the default
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  }
+})
 
 Vue.use(Vuex)
 
@@ -15,7 +27,8 @@ export default new Vuex.Store({
   state: {
     iniciandoSesion: false,
     registrandose: false,
-    contactandonos: false,
+    contactandose: false,
+    //Aqui se definen los default de anuncio busqueda
     anunciosBusqueda: [
       {
             "id": 1,
@@ -924,28 +937,73 @@ export default new Vuex.Store({
     REGISTRANDOSE(state,payload) {
       state.registrandose = payload;
       state.iniciandoSesion = false;
-      state.contactandonos= false
+      state.contactandose= false
     },
     INICIANDO_SESION(state,payload) {
       state.registrandose = false;
       state.iniciandoSesion = payload;
-      state.contactandonos= false
+      state.contactandose= false
     },
-    CONTACTANDONOS(state, payload) {
+    CONTACTANDOSE(state, payload) {
       state.iniciandoSesion = false;
       state.registrandose = false;
-      state.contactandonos= payload;
+      state.contactandose= payload;
     }
   },
   actions: {
-    activandoRegistro({commit}, payload) {
-      commit('REGISTRANDOSE',payload);
+    enviandoCorreo({commit}, payload) {
+        return new Promise((resolve, reject) =>{
+            resolve({
+                mensaje: 'Correo enviado correctamente!'
+            });
+        })
     },
-    activandoInicioSesion({commit}, payload) {
-      commit('INICIANDO_SESION',payload);
+    registro({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            console.log("registro action...");
+            apiClient.post('/register', payload)
+            .then((result) => {
+                console.log("result>>>");
+                console.log(result);
+                if(result.data){
+                commit('TOKEN_SET',result.data.token, { root: true });
+                commit('USUARIO_SET',result.data.usuario, { root: true });
+                return resolve(result);
+                }
+                // Mandar notificacion de éxito
+            })
+            .catch((error) => {
+                // Mandar notificacion de error
+                console.log("error axios registro");
+                console.dir(error);
+                return reject({error, mensaje: 'Error al crear el usuario!, Favor de intentar más tarde'});
+            });
+        });
     },
-    contactandonos({commit}, payload) {
-      commit('CONTACTANDONOS',payload);
+    inicioSesion({commit, rootState}, payload) {
+        console.log("inicioSesionUsuario action...");
+        commit('TOKEN_SET', jwt.sign( rootState.usuario.usuario, 'the_secret_key'), { root: true });
+        commit('USUARIO_SET',rootState.usuario, { root: true });
+        return "yes...";
+        /*return new Promise((resolve, reject) => {
+        apiClient.post('/loggear', payload)
+        .then((result) => {
+            if(result.data){
+            commit('TOKEN_SET',result.data.token);
+            commit('USUARIO_SET',result.data.usuario);
+            return resolve(result);
+            }
+        })
+        .catch((e) => {
+            console.log("e axios inicioSesionUsuario");
+            console.dir(e);
+            return reject({e, mensaje: `${e}, Favor de intentar más tarde`});
+        });
+        });*/
+        //Llamada al api para pasar la setear un usuario
+    },
+    cerrandoSesion({state, commit}, payload){
+        commit('USUARIO_OFFSET', payload, { root: true });
     }
   },
   getters: {
