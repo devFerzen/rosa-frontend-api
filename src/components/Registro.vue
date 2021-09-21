@@ -43,8 +43,10 @@
 
 <script>
   import PanelHerramientas from '@/components/Panel-Herramientas'
+  import GeneralMixins from '../mixins/general-mixins.js';
 
   export default {
+    mixins: [GeneralMixins],
     name: 'registro',
     props: {
 
@@ -154,27 +156,28 @@
 
     },
     methods: {
-      registrandoUsuario() {
+      async registrandoUsuario() {
+        let mutateResult;
+
         if (this.$refs.registro.validate()) {
-          this.$store.dispatch('activationAlert', { type: 'success', message: `Usuario registrado exitosamente!` });
-          /*this.$store.dispatch('registro',this.FormR)
-          .then((result)=> {
-              console.log("registrandoUsuario en éxito...");
-              console.dir(result);
-              this.$store.dispatch('panelHerramientasRegistro', false);
-              // open dashboard
-          })
-          .catch((error)=> {
-            if(!!error.activeTo && error.activeTo == 'registro'){
-              this.$store.dispatch('panelHerramientasRegistro',true);
-            }
-            if(!!error.activeTo && error.activeTo == 'creacionAnuncio'){
-              console.log("aqui va el push route para crear Anuncio");
-            }
-            //notificar el error al usuario
-            console.log(`registrandoUsuario en error...`);
-            console.log(error.mensaje);
-          });*/
+          try {
+            console.log("vue registrandoUsuario... validado");
+            console.dir(this.FormR);
+            mutateResult = await this.mixinRegistro(this.FormR)
+          } catch (error) {
+            console.log("vue registrandoUsuario en error...");
+            console.dir(error);
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
+            throw error;
+          }
+
+          console.log("vue registrandoUsuario... mutateResult");
+          console.dir(mutateResult);
+
+          this.$store.dispatch('activationAlert', { type: 'success', message: `Registro con éxito!` });
+          this.$store.dispatch('registro', mutateResult.data.registroUsuario);
+          this.$store.dispatch('panelHerramientasRegistro', false);
+          this.$router.push('dashboard');
         }
       }
     }

@@ -2,14 +2,14 @@
   <v-container fluid fill-height class="white">
     <v-row>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i">
-        <tarjeta-anuncio-usuario @activandoEdicion="abriendoEdicion" v-bind:anuncioUsuario="anuncio"
+        <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio"
           v-bind:OpcionesAnuncio="opciones">
         </tarjeta-anuncio-usuario>
         <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
 
-    <v-dialog v-model="anuncioEditDialog" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
+    <v-dialog v-model="idEditAnuncioDisplay" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
       <v-card height="auto">
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
@@ -76,7 +76,7 @@
                         <v-col>
                           <v-list>
                             <v-list-item-group color="primary" v-model="selectedContactItem">
-                              <v-list-item v-for="(contacto, i) in newContactoList" :key="i" class="my-3">
+                              <v-list-item v-for="(contacto, i) in nuevoContactoList" :key="i" class="my-3">
                                 <v-list-item-icon>
                                   <font-awesome-icon :icon="[
                                       contacto.tipo.categoria,
@@ -167,7 +167,7 @@
                 <!--SavingButton-->
 
                 <v-btn class="mx-2" fab dark small color="primary" style="float:right"
-                  @click="anuncioEditDialog = false">
+                  @click="cerrandoEditAnuncioDisplay()">
                   <font-awesome-icon :icon="['fas', 'times']" class="fa-2x"></font-awesome-icon>
                 </v-btn>
                 <!--CloseButton-->
@@ -328,6 +328,11 @@
 
   export default {
     name: "dashboard",
+    props: {
+      id: {
+        default: false
+      }
+    },
     components: {
       TarjetaAnuncioUsuario,
       FilePond,
@@ -535,7 +540,10 @@
     },
     computed: {
       ...mapGetters(["anunciosUsuario", "idUsuario"]),
-      newContactoList() {
+      idEditAnuncioDisplay() {
+        return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
+      },
+      nuevoContactoList() {
         return this.AnuncioEditForm.Sec_Contacto;
       },
       nuevaTarifaList() {
@@ -575,10 +583,6 @@
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
-    },
-    created() { },
-    mounted() {
-      console.log({ routeQuery: this.$route.query.id, queryProp: this.id });
     },
     methods: {
       tarifaNueva() {
@@ -620,10 +624,14 @@
         this.nuevoContactoDialog = false;
         this.$refs.contactoEdit.reset();
       },
-      abriendoEdicion(InfoAnuncio) {
+
+      abriendoEditAnuncioDisplay(InfoAnuncio) {
         this.id = InfoAnuncio.id;
-        //Llamada getter para obtener el anuncio
-        this.anuncioEditDialog = true;
+        this.$store.dispatch('dashboardEditAnuncioDisplay', this.id);
+      },
+      cerrandoEditAnuncioDisplay() {
+        this.id = null;
+        this.$store.dispatch('dashboardEditAnuncioDisplay', this.id);
       },
       handleFilePondInit() {
         console.log("handleFilePondInit...");

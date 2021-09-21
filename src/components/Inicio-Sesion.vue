@@ -45,8 +45,10 @@
 
 <script>
   import PanelHerramientas from '@/components/Panel-Herramientas'
+  import GeneralMixins from '../mixins/general-mixins.js';
 
   export default {
+    mixins: [GeneralMixins],
     name: 'inicio-sesion',
     props: {
 
@@ -78,20 +80,32 @@
       paraRegistro() {
         this.$store.dispatch('REGISTRANDOSE', true);
       },
-      iniciandoSesion() {
+      /*
+        Descripción: Acción para iniciar sesion con correo y contraseña
+       */
+      async iniciandoSesion() {
+        let mutateResult;
+
         if (this.$refs.inicioSesion.validate()) {
-          console.log("iniciandoSesion...");
-          this.$store.dispatch('inicioSesion', this.FormIS)
-            .then((result) => {
-              console.log("vue iniciandoSesion en éxito...");
-              console.dir(result);
-              this.$store.dispatch('panelHerramientasInicioSesion', false);
-              this.$router.push('dashboard');
-            })
-            .catch((error) => {
-              console.log("vue iniciandoSesion en error...");
-              console.dir(error);
-            });
+          console.log("vue iniciandoSesion... validado");
+          console.dir(this.FormIS);
+          try {
+            mutateResult = await this.mixinInicioSesion(this.FormIS);
+          } catch (error) {
+            console.log("vue iniciandoSesion en error...");
+            //Marcar el mensaje de error
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
+            throw error;
+          }
+
+          console.log("vue iniciandoSesion... mutateResult");
+          console.dir(mutateResult);
+
+          this.$store.dispatch('activationAlert', { type: 'success', message: `Bienvenido...!` });
+          //Pasar a vuex para que guarde la información del usuario.
+          this.$store.dispatch('inicioSesion', mutateResult.data.inicioSesion);
+          this.$store.dispatch('panelHerramientasInicioSesion', false);
+          this.$router.push('dashboard');
         }
       }
     }

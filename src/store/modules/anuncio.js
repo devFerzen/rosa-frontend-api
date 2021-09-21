@@ -1,9 +1,13 @@
 export const state = {
+  dashboardEditAnuncioDisplay : null
 }
 
 export const mutations = {
   NUEVO_ANUNCIO(rootState, payload) {
     rootState.usuario.usuario.anunciosUsuario = payload;
+  },
+  EDITANUNCIO_DISPLAY_ACTION(state, payload) {
+    state.dashboardEditAnuncioDisplay = payload;
   }
 }
 
@@ -13,7 +17,7 @@ export const actions = {
       console.log("creandoAnuncio... payload");
       console.dir(payload);
 
-      if(rootState.usuario.token){
+      if(rootState.usuario.usuario.token){
 
         if(payload == null){
           return resolve({
@@ -30,9 +34,13 @@ export const actions = {
       commit('REGISTRANDOSE', true);
       return reject({
         mensaje: 'Usuario debe que estar logeado',
-        sendTo: 'registro'
+        sendTo: 'home'
       });
     });
+  },
+
+  dashboardEditAnuncioDisplay({commit, state}, payload) {
+    commit('EDITANUNCIO_DISPLAY_ACTION',payload);
   }
 }
 

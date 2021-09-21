@@ -6,6 +6,11 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import Vuetify from 'vuetify/lib'
 
+import VueApollo from 'vue-apollo'
+import ApolloClient from 'apollo-boost'
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faStar, faShare, faTimes,
@@ -33,9 +38,21 @@ library.add(faStar, faShare, faTimes,
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(Vuetify);
 
+Vue.use(VueApollo);
+const cache = new InMemoryCache();
+const client = new ApolloClient({
+  uri: "http://localhost:3000/graphql", //"http://192.168.100.69:3000/graphql",
+  credentials: false,
+  cache
+});
+const apolloProvider = new VueApollo({
+    defaultClient: client,
+})
+
 new Vue({
   router,
   store,
   vuetify,
+  apolloProvider,
   render: h => h(App)
 }).$mount('#app')

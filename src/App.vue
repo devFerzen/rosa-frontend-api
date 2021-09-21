@@ -16,7 +16,7 @@
         <!--Btn Anunciate-->
 
         <v-btn outlined color="white" class="mx-2 rounded-lg" :class="btnClasses['btnClass']" @click="iniciandoSesion"
-          v-if="!this.$store.state.usuario.token">
+          v-if="!this.$store.state.usuario.usuario.token">
           <v-icon>perm_identity</v-icon>
           <span class="ml-2" :class="btnClasses['span']">Login Usuario</span>
         </v-btn>
@@ -109,9 +109,6 @@
       iniciandoSesion() {
         this.$store.dispatch('panelHerramientasInicioSesion', true);
       },
-      usuarioLoggeado() {
-        return this.$store.state.usuario.token;
-      },
       creandoAnuncio() {
         //Si si ha iniciado sesion pero no esta en deashboard hay que dirigirlo
         //hacia allá, si no que abrá el modal
@@ -120,17 +117,18 @@
         this.$store.dispatch('creandoAnuncio', null)
           .then((result) => {
             if (!!result.sendTo && result.sendTo == "dashboard") {
-              console.log("creandoAnuncio en éxito...");
+              console.log("vue creandoAnuncio...");
               console.log(result);
-              //Problemas con el routing que actualize qle query prop
-              this.$router.push({ name: 'dashboard', query: { id: '000' } });
+              this.$router.push({ name: result.sendTo }).catch(err => {
+                console.log("... error");
+              });
+              this.$store.dispatch('dashboardEditAnuncioDisplay', '000');
             }
           })
           .catch((error) => {
-            //notificar el error al usuario
             console.log("creandoAnuncio en error...");
-            console.log(error.mensaje);
-            this.$router.push({ name: 'home' });
+            console.log(error);
+            this.$router.push({ name: result.sendTo }); //Pusheando a Home
             this.$store.dispatch('panelHerramientasRegistro', true);
           });
       }
