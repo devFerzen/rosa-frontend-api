@@ -296,6 +296,8 @@
   import FilePondPluginImagePreview from "filepond-plugin-image-preview";
   import FilePondPluginFileMetadata from "filepond-plugin-file-metadata";
 
+  import UsuarioMixin from '../mixins/usuario-mixins.js';
+
   const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
     FilePondPluginImagePreview,
@@ -328,6 +330,7 @@
 
   export default {
     name: "dashboard",
+    mixins: [UsuarioMixin],
     props: {
       id: {
         default: false
@@ -583,6 +586,18 @@
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
+    },
+    async created() {
+      try {
+        queryResult = await this.mixinActualizarContrasena({contrasenaVieja:'123',contrasenaNueva:'000'});
+      } catch (error) {
+        console.log("vue mixinActualizarContrasena en error...");
+        console.dir(error);
+        this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error mixinActualizarContrasena...>>>>${error.mensaje}` });
+        throw error;
+      }
+      console.log("testing mixinActualizarContrasena");
+      console.dir(queryResult);
     },
     methods: {
       tarifaNueva() {

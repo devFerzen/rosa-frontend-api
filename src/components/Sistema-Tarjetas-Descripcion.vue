@@ -75,11 +75,12 @@
           <v-row align="center" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4" style="min-height: 95vh">
               <v-carousel height="90vh" class="my-4">
-                <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagen" :key="i" :src="imagen.url"
+                <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagenes" :key="i" :src="imagen.url"
                   reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
               </v-carousel>
             </v-col>
             <!--Carrusel-->
+
             <v-col cols="12" md="8" style="min-height: 95vh; max-height: auto"
               class="d-flex flex-column justify-center align-center">
               <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey" tile
@@ -105,8 +106,7 @@
                       <v-row no-gutters style="overflow: hidden">
                         <v-col>
                           <v-card :height="fullAnuncioBodyWH['vTextContent']" flat class="mb-2">
-                            <template v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{ line
-                              }}</br></template>
+                            <template v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{line}}</br></template>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -123,13 +123,14 @@
                         </v-col>
                       </v-row>
                       <!--Título-->
+                      
                       <v-row no-gutters>
                         <v-col>
                           <v-list shaped dense>
                             <v-list-item-group color="primary" v-model="selectedItem">
                               <v-list-item v-for="(contacto, i) in anuncioView.Sec_Contacto" :key="i" class="my-3">
                                 <v-list-item-icon>
-                                  <font-awesome-icon :icon="[contacto.tipo.categoria,contacto.tipo.icono]"
+                                  <font-awesome-icon :icon="[contacto.Tipo.categoria,contacto.Tipo.icono]"
                                     class="tw-redes-icons fa-2x" />
                                 </v-list-item-icon>
                                 <v-list-item-content>
@@ -286,7 +287,7 @@
           },
         ],
         anuncioView: {
-          categoria: ['Escorts', 'Masajes Eróticos'],
+          categorias: ['Escorts', 'Masajes Eróticos'],
           permisos: ['Descripcion', 'Contacto', 'Tarifas'],
           Sec_Descripcion: {
             titulo: "Lorem ipsum dolor",
@@ -299,7 +300,7 @@
           Sec_Contacto: [
             {
               contacto: "811-000-0000",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "whatsapp",
               },
@@ -307,7 +308,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "twitter",
               },
@@ -315,7 +316,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "instagram",
               },
@@ -323,7 +324,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fa",
                 icono: "phone-alt",
               },
@@ -331,11 +332,11 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fa",
                 icono: "globe",
-              },
-            },
+              }
+            }
           ],
           Sec_Tarifas: [
             {

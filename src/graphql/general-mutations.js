@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost';
 
 // Mutate ***
-export const REGISTRO_MUTATE = gql`
+export const REGISTRO_MUTATE = gql `
     mutation registroUsuario ($input: UsuarioInput!){
         registroUsuario(input: $input){
             token,
@@ -22,7 +22,7 @@ export const REGISTRO_MUTATE = gql`
     }
 `;
 
-export const INICIANDO_SESION_MUTATE = gql`
+export const INICIANDO_SESION_MUTATE = gql `
     mutation inicioSesion($correo: String!, $contrasena: String!){
         inicioSesion(correo: $correo, contrasena: $contrasena){
             token,
@@ -43,20 +43,38 @@ export const INICIANDO_SESION_MUTATE = gql`
     }
 `;
 
-export const ME_ENCANTA_MUTATE = gql`
+export const ME_ENCANTA_MUTATE = gql `
     mutation anunciolike($idAnuncio: String!){
         anunciolike(idAnuncio: $idAnuncio)
     }
 `;
 
-export const VER_MUTATE = gql`
+export const VER_MUTATE = gql `
     mutation anuncioVista($idAnuncio: String!){
         anuncioVista(idAnuncio: $idAnuncio)
     }
 `;
 
+export const COMPRAR_VERIFICACIONUSUARIO_MUTATE = gql `
+    mutation compararVerificacionCelular ($input: String!, $id_usuario: String!){
+        compararVerificacionCelular(input: $input, id_usuario: $id_usuario)
+    }
+`;
+
+export const mixinSolicitarRestablecerContrasena = gql `
+    mutation solicitarRestablecerContrasena ($usuario: String!){
+        solicitarRestablecerContrasena(usuario: $usuario)
+    }
+`;
+
+export const mixinRestablecerContrasena = gql `
+    mutation restablecerContrasena ($input: String!, $usuario: String!, $contrasena: String!){
+        restablecerContrasena(input: $input, usuario: $usuario, contrasena: $contrasena)
+    }
+`;
+
 // Query ***
-export const VER_QUERY = gql`
+export const VER_QUERY = gql `
     query queryAnunciosById($ids: [String]){
         queryAnunciosById(ids: $ids){
             id
@@ -92,7 +110,7 @@ export const VER_QUERY = gql`
     } 
 `;
 
-export const BUSQUEDA_QUERY = gql`
+export const BUSQUEDA_QUERY = gql `
     query queryAnuncios($query: QueryAnuncioInput!){
         queryAnuncios(query: $query){
             id

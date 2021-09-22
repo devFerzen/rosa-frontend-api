@@ -25,7 +25,6 @@
   import InicioSesion from "@/components/Inicio-Sesion";
   import Registro from "@/components/Registro";
   import EspacioPublicitario from "@/components/Espacio-Publicitario";
-  import axios from "axios";
 
   export default {
     name: "home",
