@@ -25,14 +25,14 @@
 
     <v-row align="center" justify="space-between" no-gutters>
       <v-col cols="6" class="d-flex">
-        <v-btn text @click="paraRegistro">
+        <v-btn text @click="restablecerContrasena">
           <div class="text-caption grey--text text--lighten-1 text-center" style="text-transform: capitalize;">
             Recuperar contraseña!
           </div>
         </v-btn>
       </v-col>
       <v-col cols="6" class="d-flex">
-        <v-btn text @click="paraRegistro" style="margin-left: auto; margin-right: auto;">
+        <v-btn text @click="abrirRegistro" style="margin-left: auto; margin-right: auto;">
           <div class="text-caption grey--text text--lighten-1 text-center" style="text-transform: capitalize;">
             Registrarte Aquí!
           </div>
@@ -77,7 +77,7 @@
 
     },
     methods: {
-      paraRegistro() {
+      abrirRegistro() {
         this.$store.dispatch('REGISTRANDOSE', true);
       },
       /*
@@ -85,28 +85,44 @@
        */
       async iniciandoSesion() {
         let mutateResult;
+        console.log("vue iniciandoSesion... validado");
+        console.dir(this.FormIS);
 
-        if (this.$refs.inicioSesion.validate()) {
-          console.log("vue iniciandoSesion... validado");
-          console.dir(this.FormIS);
-          try {
-            mutateResult = await this.mixinInicioSesion(this.FormIS);
-          } catch (error) {
-            console.log("vue iniciandoSesion en error...");
-            //Marcar el mensaje de error
-            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
-            throw error;
-          }
-
-          console.log("vue iniciandoSesion... mutateResult");
-          console.dir(mutateResult);
-
-          this.$store.dispatch('activationAlert', { type: 'success', message: `Bienvenido...!` });
-          //Pasar a vuex para que guarde la información del usuario.
-          this.$store.dispatch('inicioSesion', mutateResult.data.inicioSesion);
-          this.$store.dispatch('panelHerramientasInicioSesion', false);
-          this.$router.push('dashboard');
+        if (!this.$refs.inicioSesion.validate()) {
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Favor de validar su información...>>>>` });
+          return;
         }
+
+        try {
+          mutateResult = await this.mixinInicioSesion(this.FormIS);
+        } catch (error) {
+          console.log("vue iniciandoSesion en error...");
+          //Marcar el mensaje de error
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
+          throw error;
+        }
+
+        console.log("vue iniciandoSesion... mutateResult");
+        console.dir(mutateResult);
+
+        this.$store.dispatch('activationAlert', { type: 'success', message: `Bienvenido...!` });
+        //Pasar a vuex para que guarde la información del usuario.
+        this.$store.dispatch('inicioSesion', mutateResult.data.inicioSesion);
+        this.$store.dispatch('panelHerramientasInicioSesion', false);
+        this.$router.push('dashboard');
+      },
+      async restablecerContrasena() {
+        let mutateResult;
+        try {
+          mutateResult = await this.mixinSolicitarRestablecerContrasena("tres@tres.com");
+        } catch (error) {
+          console.log("vue restablecerContrasena en error...");
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al restablecer la contraseña...>>>>${error.mensaje}` });
+          throw error;
+        }
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult}` });
+        this.$store.dispatch('seteandoCorreo', "tres@tres.com");
+        this.$store.dispatch('panelHerramientasVerificacion', true);
       }
     }
   }

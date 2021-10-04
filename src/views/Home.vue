@@ -2,17 +2,20 @@
   <v-container fluid class="white">
     <v-row align="start" justify="center">
       <v-col cols="12" :lg="widthComponents.herramientasWidth" :class="alturaPanelHerramientas" style="z-index:2;">
-        <panel-herramientas v-if="!inicioSesionView && !registrandose" @activandoGrid="activandoGrid"
-          @panelMinimizeH="panelMinimizeH" />
+        <panel-herramientas v-if="!inicioSesionView && !registrandose && !verificandose && !actualizandoContrasena"
+          @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="inicioSesionView" />
         <registro v-else-if="registrandose" />
+        <verificacion v-else-if="verificandose" />
+        <actualizando-contrasena v-else-if="actualizandoContrasena" />
       </v-col>
       <!--Panel Herramientas-->
 
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="inicioSesionView || registrandose" />
+        <espacio-publicitario v-if="inicioSesionView || registrandose || verificandose || actualizandoContrasena" />
 
-        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio" v-else-if="!inicioSesionView && !registrandose" />
+        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
+          v-else-if="!inicioSesionView && !registrandose && !verificandose & !actualizandoContrasena" />
       </v-col>
       <!--Cuerpo-->
     </v-row>
@@ -24,6 +27,8 @@
   import SistemaTarjetasDescripcion from "@/components/Sistema-Tarjetas-Descripcion";
   import InicioSesion from "@/components/Inicio-Sesion";
   import Registro from "@/components/Registro";
+  import Verificacion from "@/components/Verificacion";
+  import ActualizandoContrasena from "@/components/Actualizando-Contrasena";
   import EspacioPublicitario from "@/components/Espacio-Publicitario";
 
   export default {
@@ -43,7 +48,9 @@
       SistemaTarjetasDescripcion,
       InicioSesion,
       Registro,
-      EspacioPublicitario,
+      Verificacion,
+      ActualizandoContrasena,
+      EspacioPublicitario
     },
     data() {
       return {
@@ -69,6 +76,12 @@
       },
       registrandose() {
         return this.$store.state.registrandose;
+      },
+      verificandose() {
+        return this.$store.state.verificandose;
+      },
+      actualizandoContrasena() {
+        return this.$store.state.actualizandoContrasena;
       },
     },
     methods: {
@@ -98,6 +111,9 @@
       },
     },
     mounted() { },
+    created() {
+
+    }
   };
 </script>
 <style>

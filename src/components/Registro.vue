@@ -42,7 +42,6 @@
 </template>
 
 <script>
-  import PanelHerramientas from '@/components/Panel-Herramientas'
   import GeneralMixins from '../mixins/general-mixins.js';
 
   export default {
@@ -50,9 +49,6 @@
     name: 'registro',
     props: {
 
-    },
-    components: {
-      PanelHerramientas,
     },
     data() {
       return {

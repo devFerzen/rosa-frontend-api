@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "apollo-boost": "^0.4.9",
+    "apollo-link-context": "^1.0.20",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",

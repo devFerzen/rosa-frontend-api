@@ -55,7 +55,6 @@
 
       <v-list nav dense>
         <v-list-item-group active-class="deep-purple--text text--accent-4">
-
           <v-list-item @click="$router.push({path:'/dashboard'})">
             <v-list-item-title class="text-center">Mis Anuncios</v-list-item-title>
           </v-list-item>
@@ -68,7 +67,6 @@
           <v-list-item>
             <v-list-item-title class="text-center">Cerrar Sesion</v-list-item-title>
           </v-list-item>
-
         </v-list-item-group>
       </v-list>
       <!--Sidedar List views-->
@@ -87,10 +85,11 @@
 </template>
 
 <script>
+  import UsuarioMixin from './mixins/usuario-mixins.js';
 
   export default {
     name: 'App',
-
+    mixins: ['UsuarioMixin'],
     data() {
       return {
         sideDashboard: false
@@ -110,10 +109,6 @@
         this.$store.dispatch('panelHerramientasInicioSesion', true);
       },
       creandoAnuncio() {
-        //Si si ha iniciado sesion pero no esta en deashboard hay que dirigirlo
-        //hacia allá, si no que abrá el modal
-
-        //luego crear el dashboard click que abrá en si el sidebar
         this.$store.dispatch('creandoAnuncio', null)
           .then((result) => {
             if (!!result.sendTo && result.sendTo == "dashboard") {
@@ -130,6 +125,20 @@
             console.log(error);
             this.$router.push({ name: result.sendTo }); //Pusheando a Home
             this.$store.dispatch('panelHerramientasRegistro', true);
+          });
+      },
+      async actualizandoContrasena() {
+        let queryResult;
+
+        await this.mixinActualizarContrasena({ contrasenaVieja: '123', contrasenaNueva: '000' })
+          .then(result => {
+            console.log("vue mixinActualizarContrasena");
+            console.dir(queryResult); //Cuando no hay id regresa error si pasa por el reject pero pasa como resulto x.X valor undefiend
+          })
+          .catch(error => {
+            console.log("vue mixinActualizarContrasena en error...");
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Llamada mixinActualizarContrasena... >>>>${error.message}` });
+            throw error;
           });
       }
     },

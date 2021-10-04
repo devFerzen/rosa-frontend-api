@@ -56,8 +56,8 @@ export const VER_MUTATE = gql `
 `;
 
 export const COMPRAR_VERIFICACIONUSUARIO_MUTATE = gql `
-    mutation compararVerificacionCelular ($input: String!, $id_usuario: String!){
-        compararVerificacionCelular(input: $input, id_usuario: $id_usuario)
+    mutation compararVerificacionUsuario ($input: String!, $usuario: String!){
+        compararVerificacionUsuario(input: $input, usuario: $usuario)
     }
 `;
 

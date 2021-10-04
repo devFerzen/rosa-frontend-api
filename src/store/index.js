@@ -20,23 +20,45 @@ export default new Vuex.Store({
   state: {
     inicioSesionView: false,
     registrandose: false,
-    contactandose: false    
+    contactandose: false,
+    verificandose: false,
+    actualizandoContrasena: false    
   },
   mutations: {
     REGISTRANDOSE(state,payload) {
       state.registrandose = payload;
       state.inicioSesionView = false;
-      state.contactandose= false
+      state.contactandose = false
+      state.verificandose = false;
+      state.actualizandoContrasena = false;
     },
     INICIANDO_SESION(state,payload) {
       state.registrandose = false;
       state.inicioSesionView = payload;
-      state.contactandose= false
+      state.contactandose = false
+      state.verificandose = false;
+      state.actualizandoContrasena = false;
     },
     CONTACTANDOSE(state, payload) {
       state.inicioSesionView = false;
       state.registrandose = false;
-      state.contactandose= payload;
+      state.contactandose = payload;
+      state.verificandose = false;
+      state.actualizandoContrasena = false;
+    },
+    VERIFICANDOSE(state, payload) {
+      state.inicioSesionView = false;
+      state.registrandose = false;
+      state.contactandose = false;
+      state.verificandose = payload;
+      state.actualizandoContrasena = false;
+    },
+    ACTUALIZANDO_CONTRASENA(state, payload) {
+      state.inicioSesionView = false;
+      state.registrandose = false;
+      state.contactandose = false;
+      state.verificandose = false;
+      state.actualizandoContrasena = payload;
     }
   },
   actions: {
@@ -60,6 +82,12 @@ export default new Vuex.Store({
     },
     cerrandoSesion({state, commit}, payload){
         commit('USUARIO_OFFSET', payload, { root: true });
+    },
+    seteandoCorreo({state, commit}, payload){
+      commit('CORREO_SET', payload, { root: true });
+    },
+    seteandoVerificacionUsuario({state, commit}, payload){
+      commit('VERIFICACION_USUARIO_SET', payload, { root: true });
     }
   },
   getters: {

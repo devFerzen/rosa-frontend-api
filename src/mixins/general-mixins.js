@@ -33,8 +33,9 @@ export default {
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     //${error.networkError.name == "ServerError"}
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
+
                 resolve(mutateResult);
             });
         },
@@ -60,7 +61,7 @@ export default {
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     //${error.networkError.name == "ServerError"} //Query mal escrito, Mutacion mal escrita
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -88,7 +89,7 @@ export default {
                     console.log('Sesion call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -116,7 +117,7 @@ export default {
                     console.log('Sesion verPlus call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -124,35 +125,7 @@ export default {
         },
 
         /**
-         * compararVerificacionUsuario
-         * @param {*} payload Objecto que representa input a comprar y el correo del usuario
-         * @returns 
-         */
-        async compararVerificacionUsuario(payload) {
-            return new Promise(async(resolve, reject) => {
-                let mutateResult;
-                console.log("compararVerificacionUsuario...");
-                try {
-                    mutateResult = this.$apollo.mutate({
-                        mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONUSUARIO_MUTATE,
-                        variables: {
-                            input: payload.input,
-                            usuario: payload.usuario
-                        }
-                    })
-                } catch (error) {
-                    console.log('Sesion call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    reject({ mensaje: `sin éxito!` });
-                }
-                resolve(mutateResult);
-            });
-        },
-
-        /**
-         * mixinSolicitarRestablecerContrasena
+         * mixinSolicitarRestablecerContrasena: Solicita codigo de verificación de usuario en el cuál este será enviado al correo del usuario
          * @param {*} payload correo usuario registrado
          * @returns 
          */
@@ -172,12 +145,40 @@ export default {
                     console.log('Sesion verPlus call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
             });
         },
+
+        /**
+         * compararVerificacionUsuario; Comprar el codigo de verificacion de usuario
+         * @param {*} payload Objecto que representa input a comprar y el correo del usuario
+         * @returns 
+         */
+        async mixinCompararVerificacionUsuario(payload) {
+            return new Promise(async(resolve, reject) => {
+                let mutateResult;
+                console.log("compararVerificacionUsuario...");
+                try {
+                    mutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.COMPRAR_VERIFICACIONUSUARIO_MUTATE,
+                        variables: {
+                            input: payload.input,
+                            usuario: payload.usuario
+                        }
+                    })
+                } catch (error) {
+                    console.log('Sesion call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    //Historial de Errores encontrados 
+                    //${error.networkError.name == "ServerError"}
+                    return reject({ mensaje: `sin éxito!` });
+                }
+                resolve(mutateResult);
+            });
+        },        
 
         /**
          * mixinRestablecerContrasena
@@ -199,10 +200,10 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion verPlus call error...')
+                    console.log('Sesion mixinRestablecerContrasena call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -230,7 +231,7 @@ export default {
                     console.log('Sesion ver call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(queryResult);
                 this.mixinVerPlus(payload);
@@ -262,7 +263,7 @@ export default {
                     console.log('Sesion call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(queryResult);
                 resolve(queryResult);

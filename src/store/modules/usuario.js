@@ -4,7 +4,8 @@ export const state = {
   usuario: {
       "usuario": "",
       "numero_telefonico_verificado": false,
-      "token": ""
+      "token": "",
+      "verificacionUsuario": ""
   },
 }
 
@@ -15,6 +16,15 @@ export const mutations = {
   },
   USUARIO_OFFSET(state) {
     state.usuario = null;
+  },
+  CORREO_SET(state, payload){
+    state.usuario.usuario = payload
+  },
+  CORREO_SET(state, payload){
+    state.usuario.usuario = payload
+  },
+  VERIFICACION_USUARIO_SET(state, payload){
+    state.usuario.verificacionUsuario = payload
   }
 }
 

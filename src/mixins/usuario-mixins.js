@@ -17,7 +17,7 @@ export default {
                 let mutateResult;
                 console.log("mixinActualizarContrasena...");
                 try {
-                    mutateResult = this.$apollo.mutate({
+                    mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.ACTUALIZAR_CONTRASENA_MUTATE,
                         variables: {
                             contrasenaVieja: payload.contrasenaVieja,
@@ -25,12 +25,14 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Server error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     //${error.networkError.name == "ServerError"}
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
+                console.log("mutateResult");
+                console.dir(mutateResult);
                 resolve(mutateResult);
             });
         },
@@ -46,7 +48,7 @@ export default {
                 let mutateResult;
                 console.log("compararVerificacionCelular...");
                 try {
-                    mutateResult = this.$apollo.mutate({
+                    mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,
                         variables: {
                             input: payload.input,
@@ -58,7 +60,7 @@ export default {
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     //${error.networkError.name == "ServerError"}
-                    reject({ mensaje: `sin éxito!` });
+                    return reject({ mensaje: `sin éxito!` });
                 }
                 resolve(mutateResult);
             });

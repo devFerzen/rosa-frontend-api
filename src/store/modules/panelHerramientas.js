@@ -8,7 +8,7 @@ export const mutations = {
   }
 }
 export const actions = {
-    registrandoAnunciosBusqueda({commit},payload){
+    anunciosBusquedaSet({commit},payload){
       commit('ANUNCIOS_BUSQUEDA_SET',payload);
     },
     panelHerramientasRegistro({commit}, payload) {
@@ -19,5 +19,11 @@ export const actions = {
     },
     panelHerramientasContactanos({commit}, payload) {
       commit('CONTACTANDOSE',payload, { root: true });
+    },
+    panelHerramientasVerificacion({commit}, payload) {
+      commit('VERIFICANDOSE',payload, { root: true });
+    },
+    panelHerramientasCambioContraseña({commit}, payload) {
+      commit('ACTUALIZANDO_CONTRASENA',payload, { root: true });
     }
 }

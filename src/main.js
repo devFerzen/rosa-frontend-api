@@ -1,18 +1,23 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
 
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
 import Vuetify from 'vuetify/lib'
 
+import { cerrarSesion } from './utilities/generalUse'
+
 import VueApollo from 'vue-apollo'
-import ApolloClient from 'apollo-boost'
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { setContext } from 'apollo-link-context'
+import ApolloClient from 'apollo-client'
+  import { InMemoryCache } from 'apollo-cache-inmemory'
+  import { HttpLink } from 'apollo-link-http'
+  import { onError } from 'apollo-link-error';
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faStar, faShare, faTimes,
           faPhoneAlt, faEnvelope, faGlobe,
           faTrashAlt, faPencilAlt, faEye,
@@ -39,15 +44,35 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(Vuetify);
 
 Vue.use(VueApollo);
+const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql', credentials: "include" });
 const cache = new InMemoryCache();
-const client = new ApolloClient({
-  uri: "http://localhost:3000/graphql", //"http://192.168.100.69:3000/graphql",
-  credentials: false,
-  cache
-});
-const apolloProvider = new VueApollo({
-    defaultClient: client,
+
+const logoutLink = onError(({ networkError }) => {
+ if (networkError.statusCode === 401) cerrarSesion();
+ if (networkError.statusCode === 489) regeneracionSesion();
 })
+
+//Extraer el token de localstorage a la mejor
+const middlewareLink = setContext((_, { headers }) => {
+  const token = store.state.usuario.usuario.token;
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+const link = middlewareLink.concat(httpLink, logoutLink);
+
+const apolloProvider = new VueApollo({
+    defaultClient: new ApolloClient({
+        link,
+        cache,
+        uri: "http://localhost:3000/graphql", //"http://192.168.100.69:3000/graphql",
+        credentials: 'include'
+        //connectToDevTools: true //ApolloDev browser tool 
+      })
+});
 
 new Vue({
   router,
