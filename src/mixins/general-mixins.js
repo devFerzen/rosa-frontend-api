@@ -8,6 +8,8 @@
  */
 
 import * as GraphqlCalls from '../graphql/general-mutations';
+import { seteandoToken } from '../utilities/generalUse';
+
 
 export default {
     methods: {
@@ -35,7 +37,7 @@ export default {
                     //${error.networkError.name == "ServerError"}
                     return reject({ mensaje: `sin éxito!` });
                 }
-
+                seteandoToken(mutateResult.data.inicioSesion.token);
                 resolve(mutateResult);
             });
         },
@@ -64,6 +66,7 @@ export default {
                     return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
+                seteandoToken(mutateResult.data.registroUsuario.token);
                 resolve(mutateResult);
             });
         },

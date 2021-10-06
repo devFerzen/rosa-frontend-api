@@ -95,7 +95,7 @@
                 }
 
                 console.dir(mutateResult);
-                this.$store.dispatch('panelHerramientasCambioContraseña', false);
+                this.$store.dispatch('panelHerramientasInicioSesion', false);
                 this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult.data.restablecerContrasena}` });
             }
 

@@ -47,9 +47,14 @@ Vue.use(VueApollo);
 const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql', credentials: "include" });
 const cache = new InMemoryCache();
 
-const logoutLink = onError(({ networkError }) => {
- if (networkError.statusCode === 401) cerrarSesion();
- if (networkError.statusCode === 489) regeneracionSesion();
+const logoutLink = onError(({ graphQLErrors, networkError }) => {
+   if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
 })
 
 //Extraer el token de localstorage a la mejor
@@ -62,7 +67,8 @@ const middlewareLink = setContext((_, { headers }) => {
     }
   }
 });
-const link = middlewareLink.concat(httpLink, logoutLink);
+const prelink = logoutLink.concat(httpLink);
+const link = middlewareLink.concat(prelink);
 
 const apolloProvider = new VueApollo({
     defaultClient: new ApolloClient({
