@@ -164,7 +164,7 @@
             console.log("vue registrandoUsuario en error...");
             console.dir(error);
             this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
-            throw error;
+            return;
           }
 
           console.log("vue registrandoUsuario... mutateResult");

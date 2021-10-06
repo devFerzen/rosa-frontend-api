@@ -8,16 +8,16 @@ export default {
     methods: {
 
         /**
-         * mixinActualizarContrasena
+         * mixinContrasenaActualizar
          * @param {*} payload Objecto que representa contraseña vieja y nueva
          * @returns 
          */
-        async mixinActualizarContrasena(payload) {
+        async mixinContrasenaActualizar(payload) {
             return new Promise(async(resolve, reject) => {
-                let mutateResult;
-                console.log("mixinActualizarContrasena...");
+                let MutateResult;
+                console.log("mixinContrasenaActualizar...");
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.ACTUALIZAR_CONTRASENA_MUTATE,
                         variables: {
                             contrasenaVieja: payload.contrasenaVieja,
@@ -31,24 +31,24 @@ export default {
                     //${error.networkError.name == "ServerError"}
                     return reject({ mensaje: `sin éxito!` });
                 }
-                console.log("mutateResult");
-                console.dir(mutateResult);
-                resolve(mutateResult);
+                console.log("MutateResult");
+                console.dir(MutateResult);
+                resolve(MutateResult);
             });
         },
 
 
         /** Refactorizar a que el backend sepa el id del usuario
-         * compararVerificacionCelular
+         * mixinVerificacionCelularComparar
          * @param {*} payload Objecto que representa input a comprar y el id del usuario
          * @returns 
          */
-        async compararVerificacionCelular(payload) {
+        async mixinVerificacionCelularComparar(payload) {
             return new Promise(async(resolve, reject) => {
-                let mutateResult;
+                let MutateResult;
                 console.log("compararVerificacionCelular...");
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,
                         variables: {
                             input: payload.input,
@@ -62,7 +62,7 @@ export default {
                     //${error.networkError.name == "ServerError"}
                     return reject({ mensaje: `sin éxito!` });
                 }
-                resolve(mutateResult);
+                resolve(MutateResult);
             });
         },
 

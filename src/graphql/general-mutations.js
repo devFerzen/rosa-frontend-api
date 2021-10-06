@@ -15,7 +15,36 @@ export const REGISTRO_MUTATE = gql `
                 }
                 contacto
             }
-            anuncios_usuario
+            anuncios_usuario{
+                id
+                Sec_Descripcion{
+                    titulo
+                    estado
+                    ciudad
+                    descripcion
+                    sexo
+                }
+                Sec_Contacto{
+                    contacto
+                    Tipo{
+                        categoria
+                        icono
+                    }
+                }
+                Sec_Tarifas{
+                    nombre
+                    precio
+                    descripcion
+                }
+                Sec_Imagenes{
+                    nombre
+                    url
+                }
+                permisos
+                no_corazones
+                no_vistas
+                verificado
+            }
             terminos_condiciones
             estado
         }
@@ -36,7 +65,36 @@ export const INICIANDO_SESION_MUTATE = gql `
                 }
                 contacto
             }
-            anuncios_usuario
+            anuncios_usuario{
+                id
+                Sec_Descripcion{
+                    titulo
+                    estado
+                    ciudad
+                    descripcion
+                    sexo
+                }
+                Sec_Contacto{
+                    contacto
+                    Tipo{
+                        categoria
+                        icono
+                    }
+                }
+                Sec_Tarifas{
+                    nombre
+                    precio
+                    descripcion
+                }
+                Sec_Imagenes{
+                    nombre
+                    url
+                }
+                permisos
+                no_corazones
+                no_vistas
+                verificado
+            }
             terminos_condiciones
             estado
         }
@@ -61,13 +119,13 @@ export const COMPRAR_VERIFICACIONUSUARIO_MUTATE = gql `
     }
 `;
 
-export const mixinSolicitarRestablecerContrasena = gql `
+export const SOLICITAR_RESTABLECER_CONTRASENA = gql `
     mutation solicitarRestablecerContrasena ($usuario: String!){
         solicitarRestablecerContrasena(usuario: $usuario)
     }
 `;
 
-export const mixinRestablecerContrasena = gql `
+export const RESTABLECER_CONTRASENA = gql `
     mutation restablecerContrasena ($input: String!, $usuario: String!, $contrasena: String!){
         restablecerContrasena(input: $input, usuario: $usuario, contrasena: $contrasena)
     }
@@ -81,8 +139,7 @@ export const VER_QUERY = gql `
             categorias
             permisos
             no_corazones
-            no_vistas
-            verificado
+            no_vistas            
             Sec_Descripcion{
                 titulo
                 estado
@@ -105,7 +162,11 @@ export const VER_QUERY = gql `
             Sec_Imagenes{
                 nombre
                 url
-            }            
+            }
+            Estado{
+                vivo
+            }
+            verificado       
         }
     } 
 `;
@@ -136,6 +197,9 @@ export const BUSQUEDA_QUERY = gql `
             Sec_Imagenes{
                 nombre
                 url
+            }
+            Estado{
+                vivo
             }
             permisos
             no_corazones

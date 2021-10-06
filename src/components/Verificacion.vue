@@ -29,7 +29,6 @@
       </v-row>
     </v-card-text>
 
-
     <v-row align="center" justify="center">
       <v-card-actions>
         <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="verificando"> Enviar
@@ -88,7 +87,7 @@
           console.log("vue verificando en error...");
           console.dir(error);
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al verificar tu códigio...>>>>${error.mensaje}` });
-          throw error;
+          return;
         }
 
         console.dir(mutateResult);

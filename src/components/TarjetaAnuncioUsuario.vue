@@ -4,7 +4,7 @@
       <v-row align="center" justify="center" class="fill-height" no-gutters>
         <v-col cols="12" lg="5">
           <v-carousel :height="tarjetaWH['carrusel']">
-            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagen" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
+            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagenes" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
           </v-carousel>
         </v-col>
         <!--Carrusel-->
@@ -204,8 +204,11 @@
 
 <script>
 import DashboardCompras from '@/components/Dashboard-Compras';
+import AnuncioMixins from '../mixins/anuncio-mixins.js';
+
 export default {
   name: 'tarjeta-anuncio-usuario',
+  mixins: [AnuncioMixins],
   components: {
     DashboardCompras
   },
@@ -228,8 +231,20 @@ export default {
     }
   },
   methods: {
-    borrarAnuncio(idAnuncio){
-      this.$store.dispatch('activationAlert', {type: 'info', message: `Anuncio # ${idAnuncio} eliminado exitosamente!`});
+    async borrarAnuncio(idAnuncio){
+      let MutateResult;
+      try {
+        MutateResult = await this.mixinAnuncioEliminar(idAnuncio);
+      } catch (error) {
+        console.log("vue borrarAnuncio en error...");
+        console.dir(error);
+        this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}` });
+        return;
+      }
+        //Eliminar dicho anuncio del state tmb
+        console.dir(MutateResult);
+        this.$store.dispatch('anuncioEliminar', idAnuncio);
+        this.$store.dispatch('activationAlert', {type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!`});
     },
     abrirEdicion(){
       console.log("vue: abrirEdicion");

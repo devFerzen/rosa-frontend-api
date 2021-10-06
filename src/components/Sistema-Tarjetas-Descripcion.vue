@@ -424,7 +424,7 @@
           console.log("vue accionVer en error...");
           console.dir(error);
           this.$store.dispatch('activationAlert', { type: 'error', message: `Error al dar like al anuncio, favor de intentarlo más tarde!` });
-          throw error;
+          return;
         }
         this.$store.dispatch('activationAlert', { type: 'success', message: `Lorem Ipsum *.*...${idAnuncio}!` });
         this.anuncioView = queryResult.data.queryAnunciosById[0]; //Checar bien los nombres porque no abre
@@ -441,7 +441,7 @@
           console.log("vue accionCorazon en error...");
           console.dir(error);
           this.$store.dispatch('activationAlert', { type: 'error', message: `Error al dar like al anuncio, favor de intentarlo más tarde!` });
-          throw error;
+          return;
         }
         this.$store.dispatch('activationAlert', { type: 'success', message: `Lorem Ipsum <3...${idAnuncio}!` });
       }
@@ -455,7 +455,7 @@
         console.log("vue queryResult(anunciosBusqueda) en error...");
         console.dir(error);
         this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error anunciosBusqueda...>>>>${error.mensaje}` });
-        throw error;
+        return;
       }
       //Seteamos en VUEX la información
       this.anunciosBusqueda = queryResult.data.queryAnuncios;

@@ -99,7 +99,7 @@
           console.log("vue iniciandoSesion en error...");
           //Marcar el mensaje de error
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
-          throw error;
+          return;
         }
 
         console.log("vue iniciandoSesion... mutateResult");
@@ -118,7 +118,7 @@
         } catch (error) {
           console.log("vue restablecerContrasena en error...");
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al restablecer la contraseña...>>>>${error.mensaje}` });
-          throw error;
+          return;
         }
         this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult}` });
         this.$store.dispatch('seteandoCorreo', "tres@tres.com");

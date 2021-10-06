@@ -587,10 +587,6 @@
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
     },
-    async created() {
-
-
-    },
     methods: {
       tarifaNueva() {
         let tarifa = {};
