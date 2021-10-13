@@ -17,7 +17,7 @@
             <v-col cols="12" md="4">
               <file-pond ref="refImages" name="filePondImages" itemInsertLocation="after" @init="handleFilePondInit"
                 @processfile="imagenesAnuncioOnProcess" @removefile="imagenesAnuncioOnDelete"
-                :files="AnuncioEditForm.Sec_Imagen" />
+                :files="FormAE.Sec_Imagen" />
             </v-col>
             <!--Carrusel-->
 
@@ -37,10 +37,10 @@
                       <v-form ref="form_anuncioEdicion">
                         <v-row>
                           <v-col cols="6" md="3">
-                            <v-text-field v-model="" :rules="" clearable required label="Lorem Ipsum"></v-text-field>
+                            <v-text-field clearable required label="Lorem Ipsum"></v-text-field>
                           </v-col>
                           <v-col cols="6" md="3">
-                            <v-text-field v-model="" :rules="" clearable required label="Ipsum Lorem"></v-text-field>
+                            <v-text-field clearable required label="Ipsum Lorem"></v-text-field>
                           </v-col>
                         </v-row>
                       </v-form>
@@ -560,10 +560,10 @@
         return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
       },
       nuevoContactoList() {
-        return this.AnuncioEditForm.Sec_Contacto;
+        return this.FormAE.Sec_Contacto;
       },
       nuevaTarifaList() {
-        return this.AnuncioEditForm.Sec_Tarifas;
+        return this.FormAE.Sec_Tarifas;
       },
       tabContainerClass() {
         const { sm, xs } = this.$vuetify.breakpoint;
@@ -612,12 +612,12 @@
         console.log("tarifaNueva...");
         console.dir(tarifa);
 
-        if (this.AnuncioEditForm.Sec_Tarifas.length >= 3) {
+        if (this.FormAE.Sec_Tarifas.length >= 3) {
           //Sistema de Alerts
           alert("No puedes tener más de tres");
           return;
         }
-        this.AnuncioEditForm.Sec_Tarifas.unshift(tarifa);
+        this.FormAE.Sec_Tarifas.unshift(tarifa);
         this.nuevaTarifaDialog = false;
         this.$refs.tarifaEdit.reset();
       },
@@ -635,7 +635,7 @@
         console.log("contactoNuevo...");
         console.dir(contacto);
 
-        this.AnuncioEditForm.Sec_Contacto.unshift(contacto);
+        this.FormAE.Sec_Contacto.unshift(contacto);
         this.nuevoContactoDialog = false;
         this.$refs.contactoEdit.reset();
       },
@@ -673,7 +673,7 @@
             //Dispatch de alerta al usuario
             this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
             //mandar a la vista indicada o pertenecer ahí mismo sin causar error
-            //this.mixinLlamadaRouter(error.pagina, error.componenteInterno );
+            this.mixinLlamadaRouter(error);
             throw error;
           }
 

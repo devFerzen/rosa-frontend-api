@@ -69,7 +69,7 @@
 
   export default {
     name: 'panel-herramientas',
-    mixisn: [GeneralMixins],
+    mixins: [GeneralMixins],
     data: () => ({
       herramientasLoader: false,
       categoriaSeleccionada: 1,
@@ -122,7 +122,7 @@
           console.log("vue anunciate... en error");
           console.dir(error);
           this.mixinLlamadaRouter(error);
-          throw error;
+          return;
         }
         console.log("vue anunciate...");
         console.dir(DispatchResult);

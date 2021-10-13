@@ -12,7 +12,7 @@
       <v-form ref="inicioSesion" v-model="valid" lazy-validation>
         <v-text-field v-model="FormIS.usuario" :rules="emailRules" label="Correo" required></v-text-field>
 
-        <v-text-field v-model="FormIS.contrasena" label="Contraseña" required>
+        <v-text-field v-model="FormIS.contrasena" :rules="contrasenaRules" label="Contraseña" required>
         </v-text-field>
       </v-form>
     </v-card-text>
@@ -50,9 +50,6 @@
   export default {
     mixins: [GeneralMixins],
     name: 'inicio-sesion',
-    props: {
-
-    },
     components: {
       PanelHerramientas,
     },
@@ -68,9 +65,12 @@
           contrasena: ''
         },
         emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+          v => !!v || 'Correo es requerida',
+          v => /.+@.+\..+/.test(v) || 'Correo es invalido',
         ],
+        contrasenaRules: [
+          v => !!v || 'Contraseña es requerida'
+        ]
       }
     },
     computed: {
@@ -78,13 +78,13 @@
     },
     methods: {
       abrirRegistro() {
-        this.$store.dispatch('REGISTRANDOSE', true);
+        this.$store.dispatch('panelHerramientasRegistro', true);
       },
       /*
         Descripción: Acción para iniciar sesion con correo y contraseña
        */
       async iniciandoSesion() {
-        let mutateResult;
+        let MutateResult;
         console.log("vue iniciandoSesion... validado");
         console.dir(this.FormIS);
 
@@ -94,35 +94,41 @@
         }
 
         try {
-          mutateResult = await this.mixinInicioSesion(this.FormIS);
+          MutateResult = await this.mixinInicioSesion(this.FormIS);
         } catch (error) {
           console.log("vue iniciandoSesion en error...");
-          //Marcar el mensaje de error
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
           return;
         }
 
-        console.log("vue iniciandoSesion... mutateResult");
-        console.dir(mutateResult);
+        console.log("vue iniciandoSesion... MutateResult");
+        console.dir(MutateResult);
 
-        this.$store.dispatch('activationAlert', { type: 'success', message: `Bienvenido...!` });
-        //Pasar a vuex para que guarde la información del usuario.
-        this.$store.dispatch('inicioSesion', mutateResult.data.inicioSesion);
+        this.$store.dispatch('activationAlert', { type: 'success', message: MutateResult.mensaje });
+        this.$store.dispatch('setSesion', MutateResult.data);
         this.$store.dispatch('panelHerramientasInicioSesion', false);
-        this.$router.push('dashboard');
+        this.mixinLlamadaRouter(MutateResult);
       },
       async restablecerContrasena() {
-        let mutateResult;
+        let MutateResult;
+        //Solicitar correo primero
+        if(!this.FormIS.usuario){
+          console.log(`usuario, ${this.FormIS.usuario}`);
+          //Mostrar el error
+          this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de indicar el usuario del cuál desea reinicar la contraseña!` });
+          return;
+        }
+
         try {
-          mutateResult = await this.mixinSolicitarRestablecerContrasena("tres@tres.com");
+          MutateResult = await this.mixinSolicitarRestablecerContrasena(this.FormIS.usuario);
         } catch (error) {
           console.log("vue restablecerContrasena en error...");
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al restablecer la contraseña...>>>>${error.mensaje}` });
           return;
         }
-        this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult}` });
-        this.$store.dispatch('seteandoCorreo', "tres@tres.com");
-        this.$store.dispatch('panelHerramientasVerificacion', true);
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+        this.$store.dispatch('setCorreo', this.FormIS.usuario);
+        this.mixinLlamadaRouter(MutateResult);
       }
     }
   }

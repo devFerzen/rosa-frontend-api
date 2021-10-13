@@ -2,20 +2,20 @@
   <v-container fluid class="white">
     <v-row align="start" justify="center">
       <v-col cols="12" :lg="widthComponents.herramientasWidth" :class="alturaPanelHerramientas" style="z-index:2;">
-        <panel-herramientas v-if="!inicioSesionView && !registrandose && !verificandose && !actualizandoContrasena"
+        <panel-herramientas v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView"
           @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="inicioSesionView" />
-        <registro v-else-if="registrandose" />
-        <verificacion v-else-if="verificandose" />
-        <actualizando-contrasena v-else-if="actualizandoContrasena" />
+        <registro v-else-if="registroView" />
+        <verificacion v-else-if="verificacionView" />
+        <actualizando-contrasena v-else-if="actualizandoContrasenaView" />
       </v-col>
       <!--Panel Herramientas-->
 
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="inicioSesionView || registrandose || verificandose || actualizandoContrasena" />
+        <espacio-publicitario v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView" />
 
         <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
-          v-else-if="!inicioSesionView && !registrandose && !verificandose & !actualizandoContrasena" />
+          v-else-if="!inicioSesionView && !registroView && !verificacionView & !actualizandoContrasenaView" />
       </v-col>
       <!--Cuerpo-->
     </v-row>
@@ -74,14 +74,14 @@
       inicioSesionView() {
         return this.$store.state.inicioSesionView;
       },
-      registrandose() {
-        return this.$store.state.registrandose;
+      registroView() {
+        return this.$store.state.registroView;
       },
-      verificandose() {
-        return this.$store.state.verificandose;
+      verificacionView() {
+        return this.$store.state.verificacionView;
       },
-      actualizandoContrasena() {
-        return this.$store.state.actualizandoContrasena;
+      actualizandoContrasenaView() {
+        return this.$store.state.actualizandoContrasenaView;
       },
     },
     methods: {

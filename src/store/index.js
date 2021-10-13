@@ -11,88 +11,110 @@ import * as panelHerramientas from '@/store/modules/panelHerramientas'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: {
-    usuario,
-    anuncio,
-    alert,
-    panelHerramientas
-  },
-  state: {
-    inicioSesionView: false,
-    registrandose: false,
-    contactandose: false,
-    verificandose: false,
-    actualizandoContrasena: false    
-  },
-  mutations: {
-    REGISTRANDOSE(state,payload) {
-      state.registrandose = payload;
-      state.inicioSesionView = false;
-      state.contactandose = false
-      state.verificandose = false;
-      state.actualizandoContrasena = false;
+    modules: {
+        usuario,
+        anuncio,
+        alert,
+        panelHerramientas
     },
-    INICIANDO_SESION(state,payload) {
-      state.registrandose = false;
-      state.inicioSesionView = payload;
-      state.contactandose = false
-      state.verificandose = false;
-      state.actualizandoContrasena = false;
+    state: {
+        busquedaView: true,
+        registroView: false,
+        inicioSesionView: false,
+        contactoView: false,
+        verificacionView: false,
+        actualizandoContrasenaView: false,
+        tipoVerificacion: ''
     },
-    CONTACTANDOSE(state, payload) {
-      state.inicioSesionView = false;
-      state.registrandose = false;
-      state.contactandose = payload;
-      state.verificandose = false;
-      state.actualizandoContrasena = false;
+    mutations: {
+        BUSQUEDA_VIEW(state, payload) {
+            state.busquedaView = payload;
+            state.registroView = false;
+            state.inicioSesionView = false;
+            state.contactoView = false
+            state.verificacionView = false;
+            state.actualizandoContrasenaView = false;
+        },
+        REGISTRO_VIEW(state, payload) {
+            state.busquedaView = false;
+            state.registroView = payload;
+            state.inicioSesionView = false;
+            state.contactoView = false
+            state.verificacionView = false;
+            state.actualizandoContrasenaView = false;
+        },
+        INICIANDO_SESION_VIEW(state, payload) {
+            state.busquedaView = false;
+            state.registroView = false;
+            state.inicioSesionView = payload;
+            state.contactoView = false
+            state.verificacionView = false;
+            state.actualizandoContrasenaView = false;
+        },
+        CONTACTO_VIEW(state, payload) {
+            state.busquedaView = false;
+            state.registroView = false;
+            state.inicioSesionView = false;
+            state.contactoView = payload;
+            state.verificacionView = false;
+            state.actualizandoContrasenaView = false;
+        },
+        VERIFICACION_VIEW(state, payload) {
+            state.busquedaView = false;
+            state.registroView = false;
+            state.inicioSesionView = false;
+            state.contactoView = false;
+            state.verificacionView = payload;
+            state.actualizandoContrasenaView = false;
+        },
+        ACTUALIZANDO_CONTRASENA(state, payload) {
+            state.busquedaView = false;
+            state.registroView = false;
+            state.inicioSesionView = false;
+            state.contactoView = false;
+            state.verificacionView = false;
+            state.actualizandoContrasenaView = payload;
+        },
+        TIPO_VERIFICACION_SET(state, payload) {
+            state.tipoVerificacion = payload;
+        },
+        TIPO_VERIFICACION_OFFSET(state, payload) {
+            state.tipoVerificacion = '';
+        }
     },
-    VERIFICANDOSE(state, payload) {
-      state.inicioSesionView = false;
-      state.registrandose = false;
-      state.contactandose = false;
-      state.verificandose = payload;
-      state.actualizandoContrasena = false;
+    actions: {
+        enviandoCorreo({ commit }, payload) {
+            return new Promise((resolve, reject) => {
+                resolve({
+                    mensaje: 'Correo enviado correctamente!'
+                });
+            })
+        },
+        registro({ commit }, payload) {
+            commit('USUARIO_SET', payload, { root: true });
+        },
+        setSesion({ commit }, payload) {
+            commit('USUARIO_SET', payload, { root: true });
+        },
+        cerrandoSesion({ state, commit }, payload) {
+            commit('USUARIO_OFFSET', payload, { root: true });
+        },
+        setCorreo({ state, commit }, payload) {
+            commit('CORREO_SET', payload, { root: true });
+        },
+        setVerificacionUsuario({ state, commit }, payload) {
+            commit('VERIFICACION_USUARIO_SET', payload, { root: true });
+        },
+        setTipoVerificacion({ state, commit }, payload) {
+            commit('TIPO_VERIFICACION_SET', payload)
+        },
+        offsetTipoVerificacion({ state, commit }, payload) {
+            commit('TIPO_VERIFICACION_OFFSET', payload)
+        }
     },
-    ACTUALIZANDO_CONTRASENA(state, payload) {
-      state.inicioSesionView = false;
-      state.registrandose = false;
-      state.contactandose = false;
-      state.verificandose = false;
-      state.actualizandoContrasena = payload;
+    getters: {
+        anunciosBusqueda: state => {
+            return state.anunciosBusqueda;
+        }
     }
-  },
-  actions: {
-    enviandoCorreo({commit}, payload) {
-        return new Promise((resolve, reject) =>{
-            resolve({
-                mensaje: 'Correo enviado correctamente!'
-            });
-        })
-    },
-    registro({commit}, payload) {
-        commit('USUARIO_SET', payload, { root: true });
-    },
-    /**
-     * Setea en el vuex la información del usuario.
-     * @param {*} commit 
-     * @param {*} payload Es el state de usuario. 
-     */
-    inicioSesion({commit}, payload) {
-        commit('USUARIO_SET', payload, { root: true });
-    },
-    cerrandoSesion({state, commit}, payload){
-        commit('USUARIO_OFFSET', payload, { root: true });
-    },
-    seteandoCorreo({state, commit}, payload){
-      commit('CORREO_SET', payload, { root: true });
-    },
-    seteandoVerificacionUsuario({state, commit}, payload){
-      commit('VERIFICACION_USUARIO_SET', payload, { root: true });
-    }
-  },
-  getters: {
-    anunciosBusqueda: state => {
-      return state.anunciosBusqueda;
-    }
-  }
 });

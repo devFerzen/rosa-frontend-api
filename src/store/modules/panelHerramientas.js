@@ -3,27 +3,27 @@ export const state = {
 }
 
 export const mutations = {
-  ANUNCIOS_BUSQUEDA_SET(state,payload){
-    state.anunciosBusqueda = payload;
-  }
+    ANUNCIOS_BUSQUEDA_SET(state, payload) {
+        state.anunciosBusqueda = payload;
+    }
 }
 export const actions = {
-    anunciosBusquedaSet({commit},payload){
-      commit('ANUNCIOS_BUSQUEDA_SET',payload);
+    panelHerramientasBusqueda({ commit }, payload) {
+        commit('BUSQUEDA_VIEW', payload);
     },
-    panelHerramientasRegistro({commit}, payload) {
-      commit('REGISTRANDOSE',payload, { root: true });
+    panelHerramientasRegistro({ commit }, payload) {
+        commit('REGISTRO_VIEW', payload, { root: true });
     },
-    panelHerramientasInicioSesion({commit}, payload) {
-      commit('INICIANDO_SESION',payload, { root: true });
+    panelHerramientasInicioSesion({ commit }, payload) {
+        commit('INICIANDO_SESION_VIEW', payload, { root: true });
     },
-    panelHerramientasContactanos({commit}, payload) {
-      commit('CONTACTANDOSE',payload, { root: true });
+    panelHerramientasContactanos({ commit }, payload) {
+        commit('CONTACTO_VIEW', payload, { root: true });
     },
-    panelHerramientasVerificacion({commit}, payload) {
-      commit('VERIFICANDOSE',payload, { root: true });
+    panelHerramientasVerificacion({ commit }, payload) {
+        commit('VERIFICACION_VIEW', payload, { root: true });
     },
-    panelHerramientasCambioContraseña({commit}, payload) {
-      commit('ACTUALIZANDO_CONTRASENA',payload, { root: true });
+    panelHerramientasCambioContraseña({ commit }, payload) {
+        commit('ACTUALIZANDO_CONTRASENA', payload, { root: true });
     }
 }

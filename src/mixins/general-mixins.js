@@ -13,13 +13,14 @@ import { seteandoToken } from '../utilities/generalUse';
 
 
 export default {
-    data(){
+    data() {
         return {
-            MixinResult:{
-                enviarA: '',
+            MixinResult: {
+                pagina: null,
+                componenteInterno: null,
                 mensaje: '',
                 data: null,
-                componenteInterno: null
+                Props: {}
             }
         }
     },
@@ -33,6 +34,7 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinInicioSesion...");
                 let mutateResult;
+
                 try {
                     mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.INICIANDO_SESION_MUTATE,
@@ -44,15 +46,19 @@ export default {
                 } catch (error) {
                     console.log('Sesion call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    reject({ mensaje: `sin éxito!` });
+                    //Historial de Errores encontrados -- ${error.networkError.name == "ServerError"}
+                    //afss duda, todo graphqlError es así, siempre sale uno???
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
                 }
                 seteandoToken(mutateResult.data.inicioSesion.token);
-                resolve(mutateResult);
+                this.MixinResult.pagina = 'dashboard';
+                this.MixinResult.mensaje = 'Bienvenido...!';
+                this.MixinResult.data = mutateResult.data.inicioSesion;
+
+                resolve(this.MixinResult);
             });
         },
-
         /**
          * Mixin Para poder registrarte con tu correo, contraseña y número telefónico
          * @param {*} payload Objecto que representa un correo, contraseña y número telefónico
@@ -71,16 +77,84 @@ export default {
                     });
                 } catch (error) {
                     console.log('Sesion call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"} //Query mal escrito, Mutacion mal escrita
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
                 }
                 console.dir(mutateResult);
+
                 seteandoToken(mutateResult.data.registroUsuario.token);
-                resolve(mutateResult);
+                this.MixinResult.pagina = 'dashboard';
+                this.MixinResult.mensaje = 'Bienvenido...!';
+                this.MixinResult.data = mutateResult.data.registroUsuario;
+                resolve(this.MixinResult);
             });
         },
+        /**
+         * mixinSolicitarRestablecerContrasena: Solicita codigo de verificación de usuario en el cuál este será enviado al correo del usuario
+         * @param {*} payload correo usuario registrado
+         * @returns 
+         */
+        mixinSolicitarRestablecerContrasena(payload) {
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinSolicitarRestablecerContrasena...");
+                let MutateResult;
+
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.SOLICITAR_RESTABLECER_CONTRASENA,
+                        variables: {
+                            usuario: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('Sesion verPlus call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
+                }
+                console.dir(MutateResult);
+
+                this.MixinResult.pagina = 'home';
+                this.MixinResult.componenteInterno = 'panelHerramientasVerificacion';
+                this.MixinResult.mensaje = MutateResult.data.solicitarRestablecerContrasena;
+                this.$store.dispatch('setTipoVerificacion', 'verificacionUsuario');
+                resolve(this.MixinResult);
+            });
+        },
+        /**
+         * compararVerificacionUsuario; Comprar el codigo de verificacion de usuario
+         * @param {*} payload Objecto que representa input a comprar y el correo del usuario
+         * @returns 
+         */
+        async mixinCompararVerificacionUsuario(payload) {
+            return new Promise(async(resolve, reject) => {
+                let mutateResult;
+                console.log("compararVerificacionUsuario...");
+                try {
+                    mutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
+                        variables: {
+                            input: payload.input,
+                            usuario: payload.usuario
+                        }
+                    })
+                } catch (error) {
+                    console.log('Sesion call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
+                }
+
+                this.MixinResult.pagina = 'home';
+                this.MixinResult.componenteInterno = 'panelHerramientasCambioContraseña';
+                this.MixinResult.mensaje = mutateResult.data.compararVerificacionUsuario;
+                resolve(this.MixinResult);
+            });
+        },
+
+
+
+
 
         /**
          * mixinMeEncantaPlus aumenta 1 el conteo de likes del anuncio
@@ -134,62 +208,6 @@ export default {
                     return reject({ mensaje: `sin éxito!` });
                 }
                 console.dir(mutateResult);
-                resolve(mutateResult);
-            });
-        },
-
-        /**
-         * mixinSolicitarRestablecerContrasena: Solicita codigo de verificación de usuario en el cuál este será enviado al correo del usuario
-         * @param {*} payload correo usuario registrado
-         * @returns 
-         */
-        mixinSolicitarRestablecerContrasena(payload) {
-            return new Promise(async(resolve, reject) => {
-                console.log("mixinSolicitarRestablecerContrasena...");
-                let mutateResult;
-
-                try {
-                    mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.SOLICITAR_RESTABLECER_CONTRASENA,
-                        variables: {
-                            usuario: payload
-                        }
-                    });
-                } catch (error) {
-                    console.log('Sesion verPlus call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    return reject({ mensaje: `sin éxito!` });
-                }
-                console.dir(mutateResult);
-                resolve(mutateResult);
-            });
-        },
-
-        /**
-         * compararVerificacionUsuario; Comprar el codigo de verificacion de usuario
-         * @param {*} payload Objecto que representa input a comprar y el correo del usuario
-         * @returns 
-         */
-        async mixinCompararVerificacionUsuario(payload) {
-            return new Promise(async(resolve, reject) => {
-                let mutateResult;
-                console.log("compararVerificacionUsuario...");
-                try {
-                    mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPRAR_MUTATE,
-                        variables: {
-                            input: payload.input,
-                            usuario: payload.usuario
-                        }
-                    })
-                } catch (error) {
-                    console.log('Sesion call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    return reject({ mensaje: `sin éxito!` });
-                }
                 resolve(mutateResult);
             });
         },
@@ -291,14 +309,14 @@ export default {
             console.log("mixinLlamadaRouter");
             console.dir(payload);
             let valorPayload;
-            
+            let params = {};
+
             //mandar a una pagina en especial y si ya esta ahí, hacerlo sin pasar error
-            if(payload.componenteInterno !== undefined){
+            if (payload.componenteInterno != undefined) {
                 valorPayload = payload.componenteInterno === "editAnuncioDisplay" ? '000' : true;
                 this.$store.dispatch(payload.componenteInterno, valorPayload);
             }
-            //Crear un ciclo para agregar los props que pueden ser variable
-            // , params{ nameProp: 'value'} 
+
             this.$router.push({ name: payload.pagina }).catch(error => {});
         }
     }

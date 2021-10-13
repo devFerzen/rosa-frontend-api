@@ -44,10 +44,8 @@
   import GeneralMixins from '../mixins/general-mixins.js';
 
   export default {
-    name: 'contacto',
+    name: 'verificacion',
     mixins: [GeneralMixins],
-    components: {
-    },
     data() {
       return {
         herramientasLoader: false,
@@ -63,12 +61,14 @@
         },
       }
     },
-    computed: {
-
+    computed:{
+      tipoVerificacion() {
+        return this.$store.state.tipoVerificacion;
+      }
     },
     methods: {
       async verificando() {
-        let mutateResult, params;
+        let MutateResult, params;
         console.log("vue verificando...");
 
         if (!this.$refs.verificacion.validate()) {
@@ -82,7 +82,9 @@
             usuario: this.$store.state.usuario.usuario.usuario
           }
           console.dir(params);
-          mutateResult = await this.mixinCompararVerificacionUsuario(params);
+          if(this.tipoVerificacion === 'verificacionUsuario'){
+            MutateResult = await this.mixinCompararVerificacionUsuario(params);
+          }
         } catch (error) {
           console.log("vue verificando en error...");
           console.dir(error);
@@ -90,10 +92,14 @@
           return;
         }
 
-        console.dir(mutateResult);
-        this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult.data.compararVerificacionUsuario}` });
-        this.$store.dispatch('panelHerramientasCambioContraseña', true);
-        this.$store.dispatch('seteandoVerificacionUsuario', params.input);
+        console.dir(MutateResult);
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+        if(this.tipoVerificacion === 'verificacionUsuario'){
+          //Se setea el codigo de verificación para ser usado en la actualización de contraseña
+          this.$store.dispatch('setVerificacionUsuario', params.input);
+        }
+        this.$store.dispatch('offsetTipoVerificacion'); //Se quita el tipo de verificación
+        this.mixinLlamadaRouter(MutateResult);
       }
 
     }

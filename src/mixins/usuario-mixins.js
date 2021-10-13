@@ -44,11 +44,11 @@ export default {
          */
         async mixinVerificacionCelularComparacion(payload) {
             return new Promise(async(resolve, reject) => {
-                let mutateResult;
+                let MutateResult;
                 console.log("mixinVerificacionCelularComparacion...");
                 try {
-                    mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
                         variables: {
                             input: payload.input,
                             id_usuario: payload.id_usuario,
@@ -57,35 +57,19 @@ export default {
                 } catch (error) {
                     console.log('Sesion call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
                 }
-                resolve(mutateResult);
+
+                this.MixinResult.pagina = 'dashboard';
+                this.MixinResult.componenteInterno = 'editAnuncioDisplay';
+                this.MixinResult.mensaje = MutateResult.data.compararVerificacionUsuario;
+                resolve(this.MixinResult);
             });
         },
 
         async mixinVerificacionCelularCreacion(payload) {
-            return new Promise(async(resolve, reject) => {
-                let mutateResult;
-                console.log("mixinVerificacionCelularCreacion...");
-                try {
-                    MutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,
-                        variables: {
-                            input: payload.input,
-                            id_usuario: payload.id_usuario,
-                        }
-                    })
-                } catch (error) {
-                    console.log('Sesion call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    return reject({ mensaje: `sin éxito!` });
-                }
-                resolve(MutateResult);
-            });
+
         },
 
     }

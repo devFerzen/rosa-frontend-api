@@ -32,7 +32,7 @@
     </v-card-text>
 
 
-    <v-row align="center" justify="center">
+    <v-row justify="center">
       <v-card-actions>
         <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="registrandoUsuario">
         </v-btn>
@@ -143,6 +143,12 @@
           v => !!v || 'E-mail is required',
           v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
+        contrasenaRules: [
+          v => !!v || 'Contraseña es requerida'
+        ],
+        celularRules: [
+          v => !!v || 'Contraseña es requerida'
+        ],
         panelCSS: {
           panelCardHeight: '85vh'
         },
@@ -170,10 +176,10 @@
           console.log("vue registrandoUsuario... MutateResult");
           console.dir(MutateResult);
 
-          this.$store.dispatch('activationAlert', { type: 'success', message: `Registro con éxito!` });
-          this.$store.dispatch('registro', MutateResult.data.registroUsuario);
+          this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+          this.$store.dispatch('setSesion', MutateResult.data);
           this.$store.dispatch('panelHerramientasRegistro', false);
-          this.$router.push('dashboard');
+          this.mixinLlamadaRouter(MutateResult);
         }
       }
     }

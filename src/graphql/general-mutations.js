@@ -113,7 +113,7 @@ export const VER_MUTATE = gql `
     }
 `;
 
-export const VERIFICACIONUSUARIO_COMPRAR_MUTATE = gql `
+export const VERIFICACIONUSUARIO_COMPARAR_MUTATE = gql `
     mutation compararVerificacionUsuario ($input: String!, $usuario: String!){
         compararVerificacionUsuario(input: $input, usuario: $usuario)
     }

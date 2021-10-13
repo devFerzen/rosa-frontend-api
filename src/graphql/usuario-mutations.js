@@ -7,7 +7,7 @@ export const ACTUALIZAR_CONTRASENA_MUTATE = gql `
     }
 `;
 
-export const COMPRAR_VERIFICACIONCELULAR_MUTATE = gql `
+export const VERIFICACIONCELULAR_COMPARAR_MUTATE = gql `
     mutation compararVerificacionCelular ($input: String!, $id_usuario: String!){
         compararVerificacionCelular(input: $input, id_usuario: $id_usuario)
     }

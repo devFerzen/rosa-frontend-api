@@ -2,16 +2,16 @@
   <v-container fluid fill-height class="white">
     <v-row align="start" justify="center">
       <v-col cols="12" :lg="widthComponents.herramientasWidth" :class="panelHerramientasClases">
-        <panel-herramientas v-if="!iniciandoSesion && !registrandose && !panelHerramientasContactanos"
+        <panel-herramientas v-if="!iniciandoSesion && !registroView && !panelHerramientasContactanos"
           @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="iniciandoSesion" />
-        <registro v-else-if="registrandose" />
+        <registro v-else-if="registroView" />
         <contacto v-else-if="panelHerramientasContactanos" />
       </v-col>
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="iniciandoSesion || registrandose" />
+        <espacio-publicitario v-if="iniciandoSesion || registroView" />
 
-        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio" v-else-if="!iniciandoSesion && !registrandose" />
+        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio" v-else-if="!iniciandoSesion && !registroView" />
       </v-col>
     </v-row>
   </v-container>
@@ -63,8 +63,8 @@
       iniciandoSesion() {
         return this.$store.state.inicioSesionView;
       },
-      registrandose() {
-        return this.$store.state.registrandose;
+      registroView() {
+        return this.$store.state.registroView;
       },
       panelHerramientasContactanos() {
         return this.$store.state.panelHerramientasContactanos;

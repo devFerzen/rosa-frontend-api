@@ -4,7 +4,7 @@
       <div class="d-flex align-center mx-3" style="cursor:pointer;">
         <v-img alt="Vuetify Logo" class="shrink" contain
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"
-          @click="$router.push({path:'/'}); $store.dispatch('panelHerramientasRegistro', false); $store.dispatch('panelHerramientasInicioSesion', false);" />
+          @click="$router.push({path:'/'}).catch(error=>{}); $store.dispatch('panelHerramientasBusqueda', true);" />
       </div>
 
       <v-row align="center" justify="end">
@@ -119,7 +119,7 @@
           console.log("vue anunciate... en error");
           console.dir(error);
           this.mixinLlamadaRouter(error);
-          throw error;
+          return;
         }
         console.log("vue anunciate...");
         console.dir(DispatchResult);

@@ -18,9 +18,6 @@ export const mutations = {
     CORREO_SET(state, payload) {
         state.usuario.usuario = payload
     },
-    CORREO_SET(state, payload) {
-        state.usuario.usuario = payload
-    },
     VERIFICACION_USUARIO_SET(state, payload) {
         state.usuario.verificacionUsuario = payload
     },
