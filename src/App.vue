@@ -9,7 +9,7 @@
 
       <v-row align="center" justify="end">
         <v-btn tile depressed raised class="mr-2 rounded-lg" :class="btnClasses['btnClass']" color="light-blue accent-3"
-          @click="creandoAnuncio">
+          @click="anunciate">
           <v-icon>perm_identity</v-icon>
           <span class="ml-2" :class="btnClasses['span']">Anunciaté</span>
         </v-btn>
@@ -85,11 +85,12 @@
 </template>
 
 <script>
+  import GeneralMixins from './mixins/general-mixins.js';
   import UsuarioMixin from './mixins/usuario-mixins.js';
 
   export default {
     name: 'App',
-    mixins: ['UsuarioMixin'],
+    mixins: [UsuarioMixin, GeneralMixins],
     data() {
       return {
         sideDashboard: false
@@ -108,24 +109,21 @@
       iniciandoSesion() {
         this.$store.dispatch('panelHerramientasInicioSesion', true);
       },
-      creandoAnuncio() {
-        this.$store.dispatch('creandoAnuncio', null)
-          .then((result) => {
-            if (!!result.sendTo && result.sendTo == "dashboard") {
-              console.log("vue creandoAnuncio...");
-              console.log(result);
-              this.$router.push({ name: result.sendTo }).catch(err => {
-                console.log("... error");
-              });
-              this.$store.dispatch('dashboardEditAnuncioDisplay', '000');
-            }
-          })
-          .catch((error) => {
-            console.log("creandoAnuncio en error...");
-            console.log(error);
-            this.$router.push({ name: result.sendTo }); //Pusheando a Home
-            this.$store.dispatch('panelHerramientasRegistro', true);
-          });
+      async anunciate() {
+        let DispatchResult;
+        console.log("vue anunciate...");
+
+        try {
+          DispatchResult = await this.$store.dispatch('crearAnuncioDisplay', null);
+        } catch (error) {
+          console.log("vue anunciate... en error");
+          console.dir(error);
+          this.mixinLlamadaRouter(error);
+          throw error;
+        }
+        console.log("vue anunciate...");
+        console.dir(DispatchResult);
+        this.mixinLlamadaRouter(DispatchResult);
       },
       async actualizandoContrasena() {
         let queryResult;
@@ -147,10 +145,14 @@
   };
 </script>
 
-<style scoped>
+<style>
   .btn-menu-mbview {}
 
   .btn-menu-pcview {
     width: 185px;
+  }
+
+  .required label::after {
+    content: "*";
   }
 </style>

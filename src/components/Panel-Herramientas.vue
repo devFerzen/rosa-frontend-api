@@ -58,15 +58,18 @@
     <v-row align="center" justify="center" v-show="panelCSS.masFiltros" class="mb-2">
       <v-card-actions>
         <v-btn depressed elevation="2" color="primary" width="120"> Buscar</v-btn>
-        <v-btn depressed outlined color="primary" width="120" @click="creandoAnuncio"> Anunciate</v-btn>
+        <v-btn depressed outlined color="primary" width="120" @click="anunciate"> Anunciate</v-btn>
       </v-card-actions>
     </v-row>
   </v-card>
 </template>
 
 <script>
+  import GeneralMixins from '../mixins/general-mixins.js';
+
   export default {
     name: 'panel-herramientas',
+    mixisn: [GeneralMixins],
     data: () => ({
       herramientasLoader: false,
       categoriaSeleccionada: 1,
@@ -109,20 +112,21 @@
       panelHerramientasRegistro(value) {
         this.$store.dispatch('panelHerramientasRegistro', value);
       },
-      creandoAnuncio() {
-        this.$store.dispatch('creandoAnuncio', this.TestnewAnuncio)
-          .then((result) => {
-            console.log("vista: creandoAnuncio en éxito...");
-            console.log(result);
-            this.$store.dispatch('panelHerramientasRegistro', false);
-          })
-          .catch((error) => {
-            if (!!error.activeTo && error.activeTo == 'registro') {
-              this.$store.dispatch('panelHerramientasRegistro', true);
-            }
-            console.log("vista: creandoAnuncio en error...");
-            console.log(error.mensaje);
-          });
+      async anunciate() {
+        let DispatchResult;
+        console.log("vue anunciate...");
+
+        try {
+          DispatchResult = await this.$store.dispatch('crearAnuncioDisplay', null);
+        } catch (error) {
+          console.log("vue anunciate... en error");
+          console.dir(error);
+          this.mixinLlamadaRouter(error);
+          throw error;
+        }
+        console.log("vue anunciate...");
+        console.dir(DispatchResult);
+        this.mixinLlamadaRouter(DispatchResult);
       },
       showingMasFiltros() {
         this.panelCSS.masFiltros = !this.panelCSS.masFiltros;

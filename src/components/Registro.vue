@@ -9,7 +9,7 @@
     <v-card-text class="pb-0">
       <h6 class="text-h4 text-lg-h4 text-center my-8">Registro</h6>
 
-      <v-form ref="registro" v-model="valid" lazy-validation>
+      <v-form ref="form_registro" v-model="valid" lazy-validation>
         <v-text-field v-model="FormR.usuario" :rules="emailRules" label="Correo" required></v-text-field>
 
         <v-text-field v-model="FormR.contrasena" :rules="contrasenaRules" label="Contraseña" required>
@@ -153,13 +153,13 @@
     },
     methods: {
       async registrandoUsuario() {
-        let mutateResult;
+        let MutateResult;
 
-        if (this.$refs.registro.validate()) {
+        if (this.$refs.form_registro.validate()) {
           try {
             console.log("vue registrandoUsuario... validado");
             console.dir(this.FormR);
-            mutateResult = await this.mixinRegistro(this.FormR)
+            MutateResult = await this.mixinRegistro(this.FormR)
           } catch (error) {
             console.log("vue registrandoUsuario en error...");
             console.dir(error);
@@ -167,11 +167,11 @@
             throw error;
           }
 
-          console.log("vue registrandoUsuario... mutateResult");
-          console.dir(mutateResult);
+          console.log("vue registrandoUsuario... MutateResult");
+          console.dir(MutateResult);
 
           this.$store.dispatch('activationAlert', { type: 'success', message: `Registro con éxito!` });
-          this.$store.dispatch('registro', mutateResult.data.registroUsuario);
+          this.$store.dispatch('registro', MutateResult.data.registroUsuario);
           this.$store.dispatch('panelHerramientasRegistro', false);
           this.$router.push('dashboard');
         }

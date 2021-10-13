@@ -55,13 +55,13 @@ export const VER_MUTATE = gql `
     }
 `;
 
-export const COMPRAR_VERIFICACIONUSUARIO_MUTATE = gql `
+export const VERIFICACIONUSUARIO_COMPRAR_MUTATE = gql `
     mutation compararVerificacionUsuario ($input: String!, $usuario: String!){
         compararVerificacionUsuario(input: $input, usuario: $usuario)
     }
 `;
 
-export const mixinSolicitarRestablecerContrasena = gql `
+export const SOLICITAR_RESTABLECER_CONTRASENA = gql `
     mutation solicitarRestablecerContrasena ($usuario: String!){
         solicitarRestablecerContrasena(usuario: $usuario)
     }

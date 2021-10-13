@@ -8,10 +8,21 @@
  */
 
 import * as GraphqlCalls from '../graphql/general-mutations';
+import * as GraphqlUsuarioCalls from '../graphql/usuario-mutations';
 import { seteandoToken } from '../utilities/generalUse';
 
 
 export default {
+    data(){
+        return {
+            MixinResult:{
+                enviarA: '',
+                mensaje: '',
+                data: null,
+                componenteInterno: null
+            }
+        }
+    },
     methods: {
         /**
          * Mixin Para poder iniciar sesion a un usuario con correo y contraseña
@@ -35,7 +46,7 @@ export default {
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     //${error.networkError.name == "ServerError"}
-                    return reject({ mensaje: `sin éxito!` });
+                    reject({ mensaje: `sin éxito!` });
                 }
                 seteandoToken(mutateResult.data.inicioSesion.token);
                 resolve(mutateResult);
@@ -139,7 +150,7 @@ export default {
 
                 try {
                     mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.mixinSolicitarRestablecerContrasena,
+                        mutation: GraphqlCalls.SOLICITAR_RESTABLECER_CONTRASENA,
                         variables: {
                             usuario: payload
                         }
@@ -166,7 +177,7 @@ export default {
                 console.log("compararVerificacionUsuario...");
                 try {
                     mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.COMPRAR_VERIFICACIONUSUARIO_MUTATE,
+                        mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPRAR_MUTATE,
                         variables: {
                             input: payload.input,
                             usuario: payload.usuario
@@ -271,6 +282,26 @@ export default {
                 console.dir(queryResult);
                 resolve(queryResult);
             });
+        },
+
+        /**
+         * mixinLlamadaRouter: Manda a otra ruta agrega props en caso de haber y hace dispatch para componentes internos .
+         * @param {*} payload Es el Objeto MixinResult 
+         * @returns 
+         */
+        mixinLlamadaRouter(payload) {
+            console.log("mixinLlamadaRouter");
+            console.dir(payload);
+            let valorPayload;
+            
+            //mandar a una pagina en especial y si ya esta ahí, hacerlo sin pasar error
+            if(payload.componenteInterno !== undefined){
+                valorPayload = payload.componenteInterno === "editAnuncioDisplay" ? '000' : true;
+                this.$store.dispatch(payload.componenteInterno, valorPayload);
+            }
+            //Crear un ciclo para agregar los props que pueden ser variable
+            // , params{ nameProp: 'value'} 
+            this.$router.push({ name: payload.pagina }).catch(error => {});
         }
     }
 }

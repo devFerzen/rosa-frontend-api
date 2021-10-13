@@ -37,16 +37,38 @@ export default {
             });
         },
 
-
         /** Refactorizar a que el backend sepa el id del usuario
-         * compararVerificacionCelular
+         * mixinVerificacionCelularComparacion
          * @param {*} payload Objecto que representa input a comprar y el id del usuario
          * @returns 
          */
-        async compararVerificacionCelular(payload) {
+        async mixinVerificacionCelularComparacion(payload) {
             return new Promise(async(resolve, reject) => {
                 let mutateResult;
-                console.log("compararVerificacionCelular...");
+                console.log("mixinVerificacionCelularComparacion...");
+                try {
+                    mutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,
+                        variables: {
+                            input: payload.input,
+                            id_usuario: payload.id_usuario,
+                        }
+                    })
+                } catch (error) {
+                    console.log('Sesion call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    //Historial de Errores encontrados 
+                    //${error.networkError.name == "ServerError"}
+                    return reject({ mensaje: `sin éxito!` });
+                }
+                resolve(mutateResult);
+            });
+        },
+
+        async mixinVerificacionCelularCreacion(payload) {
+            return new Promise(async(resolve, reject) => {
+                let mutateResult;
+                console.log("mixinVerificacionCelularCreacion...");
                 try {
                     mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.COMPRAR_VERIFICACIONCELULAR_MUTATE,

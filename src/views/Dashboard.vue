@@ -5,6 +5,7 @@
         <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio"
           v-bind:OpcionesAnuncio="opciones">
         </tarjeta-anuncio-usuario>
+        <!--Listado de anuncios del usuario -->
         <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
@@ -33,13 +34,13 @@
                         </v-col>
                       </v-row>
                       <!--Título-->
-                      <v-form ref="anuncioEdit">
+                      <v-form ref="form_anuncioEdicion">
                         <v-row>
                           <v-col cols="6" md="3">
-                            <v-text-field label="Lorem Ipsum"></v-text-field>
+                            <v-text-field v-model="" :rules="" clearable required label="Lorem Ipsum"></v-text-field>
                           </v-col>
                           <v-col cols="6" md="3">
-                            <v-text-field label="Ipsum Lorem"></v-text-field>
+                            <v-text-field v-model="" :rules="" clearable required label="Ipsum Lorem"></v-text-field>
                           </v-col>
                         </v-row>
                       </v-form>
@@ -47,7 +48,7 @@
                       <v-row no-gutters style="overflow: hidden">
                         <v-col>
                           <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
-                            <v-form ref="anuncioEdit">
+                            <v-form ref="form_anuncioEdicion">
                               <v-textarea counter label="Descripción"></v-textarea>
                             </v-form>
                           </v-card>
@@ -296,7 +297,9 @@
   import FilePondPluginImagePreview from "filepond-plugin-image-preview";
   import FilePondPluginFileMetadata from "filepond-plugin-file-metadata";
 
-  import UsuarioMixin from '../mixins/usuario-mixins.js';
+  import UsuarioMixins from '../mixins/usuario-mixins.js';
+  import AnuncioMixins from '../mixins/anuncio-mixins.js';
+  import GeneralMixins from '../mixins/general-mixins.js';
 
   const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
@@ -330,7 +333,7 @@
 
   export default {
     name: "dashboard",
-    mixins: [UsuarioMixin],
+    mixins: [UsuarioMixins, AnuncioMixins, GeneralMixins],
     props: {
       id: {
         default: false
@@ -441,6 +444,8 @@
             nombre: "CHI",
           },
         ],
+
+        //Par que se usa Anuncio View, ver su anuncio creado por aquí???
         anuncioView: {
           categoria: ["Escorts", "Masajes Eróticos"],
           permisos: ["Descripcion", "Contacto", "Tarifas"],
@@ -531,7 +536,15 @@
             },
           ],
         },
-        AnuncioEditForm: {
+        //Form de un anuncio nuevo
+        FormAE: {
+          Sec_Descripcion: {
+            titulo: '',
+            estado: '',
+            ciudad: '',
+            descripcion: '',
+            sexo: ''
+          },
           Sec_Imagen: [],
           Sec_Contacto: [],
           Sec_Tarifas: [],
@@ -614,8 +627,7 @@
       },
       contactoNuevo() {
         let contacto = {};
-        //validacion
-
+        //validacion de form
         contacto.tipo = {
           categoria: this.tiposContacto.find(
             (t) => t.icono == this.nuevoContacto.tipo
@@ -631,7 +643,6 @@
         this.nuevoContactoDialog = false;
         this.$refs.contactoEdit.reset();
       },
-
       abriendoEditAnuncioDisplay(InfoAnuncio) {
         this.id = InfoAnuncio.id;
         this.$store.dispatch('dashboardEditAnuncioDisplay', this.id);
@@ -645,14 +656,40 @@
         console.log("getgiles", this.$refs.refImages.getfiles());
         this.$refs.refImages.getfiles();
       },
-      salvandoNuevoAnuncio(isNew) {
-        let tipoSalvado = isNew ? "guardado" : "editado";
+      async salvandoNuevoAnuncio(isNew) {
+        let tipoSalvado = isNew ? "nuevo" : "editado";
+        let MutateResult;
 
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: `Anuncio ${tipoSalvado} exitosamente!`,
-        });
-        this.anuncioEditDialog = false;
+        if (this.$refs.form_anuncioEdicion.validate()) {
+          try {
+            if (tipoSalvado === "nuevo") {
+              MutateResult = await this.mixinAnuncioCrear(this.FormAE);
+            }
+
+            if (tipoSalvado === "editado") {
+              MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+            }
+
+          } catch (error) {
+            console.log("vue salvandoNuevoAnuncio...");
+            //Debe que mandar todo el objeti MixinResult
+            console.dir(error);
+            //Dispatch de alerta al usuario
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+            //mandar a la vista indicada o pertenecer ahí mismo sin causar error
+            //this.mixinLlamadaRouter(error.pagina, error.componenteInterno );
+            throw error;
+          }
+
+          //Debe que mandar todo el objeti MixinResult
+          console.dir(MutateResult);
+          //Dispatch de alerta al usuario
+          this.$store.dispatch("activationAlert", { type: "success", message: `Anuncio ${MutateResult.mensaje} exitosamente!`, });
+          //Dispatch para agregar un nuevo anuncio en la lista del usuario
+          //Esconder el modal de edición de anuncio
+          this.anuncioEditDialog = false;
+        }
+        this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos requeridos!.` });
       },
       imagenesAnuncioOnDelete(error, file) {
         console.log("imagenesAnuncioOnDelete...");

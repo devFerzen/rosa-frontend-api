@@ -5,7 +5,6 @@ import Compras from '../views/Compras.vue'
 import Contactanos from '../views/Contactanos.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Error404 from '../views/Error404.vue'
-import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
