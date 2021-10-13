@@ -128,15 +128,15 @@
       async actualizandoContrasena() {
         let queryResult;
 
-        await this.mixinActualizarContrasena({ contrasenaVieja: '123', contrasenaNueva: '000' })
+        await this.mixinContrasenaActualizar({ contrasenaVieja: '123', contrasenaNueva: '000' })
           .then(result => {
-            console.log("vue mixinActualizarContrasena");
+            console.log("vue mixinContrasenaActualizar");
             console.dir(queryResult); //Cuando no hay id regresa error si pasa por el reject pero pasa como resulto x.X valor undefiend
           })
           .catch(error => {
-            console.log("vue mixinActualizarContrasena en error...");
-            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Llamada mixinActualizarContrasena... >>>>${error.message}` });
-            throw error;
+            console.log("vue mixinContrasenaActualizar en error...");
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Llamada mixinContrasenaActualizar... >>>>${error.message}` });
+            return;
           });
       }
     },

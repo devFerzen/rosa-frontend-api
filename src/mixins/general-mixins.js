@@ -192,7 +192,7 @@ export default {
                 }
                 resolve(mutateResult);
             });
-        },        
+        },
 
         /**
          * mixinRestablecerContrasena
@@ -206,7 +206,7 @@ export default {
 
                 try {
                     mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.mixinRestablecerContrasena,
+                        mutation: GraphqlCalls.RESTABLECER_CONTRASENA,
                         variables: {
                             input: payload.input,
                             usuario: payload.usuario,
@@ -268,9 +268,7 @@ export default {
                     queryResult = await this.$apollo.query({
                         query: GraphqlCalls.BUSQUEDA_QUERY,
                         variables: {
-                            query: {
-                                "estado": "N.L.",
-                            }
+                            query: {}
                         }
                     });
                 } catch (error) {

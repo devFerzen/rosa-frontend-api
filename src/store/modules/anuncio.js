@@ -1,5 +1,5 @@
 export const state = {
-  dashboardEditAnuncioDisplay : null
+    dashboardEditAnuncioDisplay: null
 }
 
 export const mutations = {

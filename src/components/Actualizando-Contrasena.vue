@@ -91,7 +91,7 @@
                     console.log("vue actualizarContrasena en error...");
                     console.dir(error);
                     this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al verificar tu códigio...>>>>${error.mensaje}` });
-                    throw error;
+                    return;
                 }
 
                 console.dir(mutateResult);
