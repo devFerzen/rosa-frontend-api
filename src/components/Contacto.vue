@@ -19,7 +19,6 @@
         <v-textarea counter label="Comentario" v-model="FormC.comentario">
         </v-textarea>
 
-
         <!--Text area para descripcion-->
       </v-form>
     </v-card-text>
@@ -77,19 +76,7 @@
     methods: {
       enviandoCorreo() {
         if (this.$refs.registro.validate()) {
-          this.$store.dispatch('enviandoCorreo', this.FormC)
-            .then((result) => {
-              console.log("enviandoCorreo en éxito...");
-              console.dir(result);
-              this.$store.dispatch('activationAlert', { type: 'success', message: `Correo enviado exitosamente!` });
-              this.$store.dispatch('panelHerramientasContactanos', false);
-            })
-            .catch((error) => {
-              //notificar el error al usuario
-              console.log(`enviandoCorreo en error...`);
-              this.$store.dispatch('activationAlert', { type: 'error', message: `Problemas al enviar correo!` });
-              console.log(error.mensaje);
-            });
+          //llamada back en una tabla de contactanos
         }
       }
     }

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Compras from '../views/Compras.vue'
-import Contactanos from '../views/Contactanos.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Error404 from '../views/Error404.vue'
 
@@ -24,11 +23,6 @@ const routes = [{
         path: '/compras',
         name: 'compras',
         component: Compras
-    },
-    {
-        path: '/contactanos',
-        name: 'contactanos',
-        component: Contactanos
     },
     {
         path: '*',

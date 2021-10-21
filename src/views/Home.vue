@@ -2,20 +2,21 @@
   <v-container fluid class="white">
     <v-row align="start" justify="center">
       <v-col cols="12" :lg="widthComponents.herramientasWidth" :class="alturaPanelHerramientas" style="z-index:2;">
-        <panel-herramientas v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView"
+        <panel-herramientas v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
           @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
         <inicio-sesion v-else-if="inicioSesionView" />
         <registro v-else-if="registroView" />
         <verificacion v-else-if="verificacionView" />
         <actualizando-contrasena v-else-if="actualizandoContrasenaView" />
+        <contactanos v-else-if="contactanosView" />
       </v-col>
       <!--Panel Herramientas-->
 
       <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView" />
+        <espacio-publicitario v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView || contactanosView" />
 
         <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
-          v-else-if="!inicioSesionView && !registroView && !verificacionView & !actualizandoContrasenaView" />
+          v-else-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView" />
       </v-col>
       <!--Cuerpo-->
     </v-row>
@@ -29,6 +30,7 @@
   import Registro from "@/components/Registro";
   import Verificacion from "@/components/Verificacion";
   import ActualizandoContrasena from "@/components/Actualizando-Contrasena";
+  import Contactanos from "@/components/Contacto";
   import EspacioPublicitario from "@/components/Espacio-Publicitario";
 
   export default {
@@ -50,6 +52,7 @@
       Registro,
       Verificacion,
       ActualizandoContrasena,
+      Contactanos,
       EspacioPublicitario
     },
     data() {
@@ -82,6 +85,9 @@
       },
       actualizandoContrasenaView() {
         return this.$store.state.actualizandoContrasenaView;
+      },
+      contactanosView() {
+        return this.$store.state.contactoView;
       },
     },
     methods: {

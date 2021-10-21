@@ -61,7 +61,7 @@
           <v-list-item @click="$router.push({path:'/compras'})">
             <v-list-item-title class="text-center">Compras</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="$router.push({path:'/contactanos'})">
+          <v-list-item @click="contactanos">
             <v-list-item-title class="text-center">Contactanos</v-list-item-title>
           </v-list-item>
           <v-list-item>
@@ -107,7 +107,10 @@
     },
     methods: {
       iniciandoSesion() {
-        this.$store.dispatch('panelHerramientasInicioSesion', true);
+        this.mixinLlamadaRouter({pagina: 'home', componenteInterno: 'panelHerramientasInicioSesion'});
+      },
+      contactanos(){
+        this.mixinLlamadaRouter({pagina: 'home', componenteInterno: 'panelHerramientasContactanos'});
       },
       async anunciate() {
         let DispatchResult;
