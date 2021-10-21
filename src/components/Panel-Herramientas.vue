@@ -121,6 +121,7 @@
         } catch (error) {
           console.log("vue anunciate... en error");
           console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
           this.mixinLlamadaRouter(error);
           return;
         }

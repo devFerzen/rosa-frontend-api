@@ -42,10 +42,11 @@
 
 <script>
   import GeneralMixins from '../mixins/general-mixins.js';
+  import UsuarioMixins from '../mixins/usuario-mixins.js';
 
   export default {
     name: 'verificacion',
-    mixins: [GeneralMixins],
+    mixins: [GeneralMixins, UsuarioMixins],
     data() {
       return {
         herramientasLoader: false,
@@ -61,7 +62,7 @@
         },
       }
     },
-    computed:{
+    computed: {
       tipoVerificacion() {
         return this.$store.state.tipoVerificacion;
       }
@@ -77,13 +78,24 @@
         }
 
         try {
-          params = {
-            input: this.FormV.codigoVerificacion,
-            usuario: this.$store.state.usuario.usuario.usuario
+
+          //Según su tipo de verificación
+          if (this.tipoVerificacion === 'verificacionUsuario') {
+            params = {
+              input: this.FormV.codigoVerificacion,
+              usuario: this.$store.state.usuario.usuario.usuario
+            }
+            console.dir(params);
+
+            MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
           }
-          console.dir(params);
-          if(this.tipoVerificacion === 'verificacionUsuario'){
-            MutateResult = await this.mixinCompararVerificacionUsuario(params);
+
+          if (this.tipoVerificacion === 'verificacionCelular') {
+            params = {
+              input: this.FormV.codigoVerificacion
+            }
+            console.dir(params);
+            MutateResult = await this.mixinVerificacionCelularComparacion(params);
           }
         } catch (error) {
           console.log("vue verificando en error...");
@@ -94,15 +106,40 @@
 
         console.dir(MutateResult);
         this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
-        if(this.tipoVerificacion === 'verificacionUsuario'){
+
+        //Según su tipo de verificación
+        if (this.tipoVerificacion === 'verificacionUsuario') {
           //Se setea el codigo de verificación para ser usado en la actualización de contraseña
           this.$store.dispatch('setVerificacionUsuario', params.input);
         }
+
         this.$store.dispatch('offsetTipoVerificacion'); //Se quita el tipo de verificación
         this.mixinLlamadaRouter(MutateResult);
       }
 
+    },
+    async created() {
+      // AFSS: No mantener viva este componente para que así se puede llamar una y otra vez verificacionCelularCreacion esta manda correo del nuevo codigo
+      let MutateResult;
+      if (this.tipoVerificacion === 'verificacionCelular') {
+        try {
+          //Cambiar a una nueva función esta llamada porque primero debe de validar
+          console.log("created verificacionCelular...")
+          MutateResult = await this.mixinVerificacionCelularCreacion();
+        } catch (error) {
+          console.log("vue created mixinVerificacionCelularCreacion...");
+          //Debe que mandar todo el objeti MixinResult
+          console.dir(error);
+          //Dispatch de alerta al usuario
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+          return;
+        }
+        //funcion correo
+        console.dir(MutateResult);
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+      }
     }
+
   }
 </script>
 <style>

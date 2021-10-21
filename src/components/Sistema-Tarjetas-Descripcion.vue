@@ -106,7 +106,8 @@
                       <v-row no-gutters style="overflow: hidden">
                         <v-col>
                           <v-card :height="fullAnuncioBodyWH['vTextContent']" flat class="mb-2">
-                            <template v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{line}}</br></template>
+                            <template
+                              v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{line}}</br></template>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -123,7 +124,7 @@
                         </v-col>
                       </v-row>
                       <!--Título-->
-                      
+
                       <v-row no-gutters>
                         <v-col>
                           <v-list shaped dense>
@@ -449,6 +450,7 @@
     },
     async created() {
       let queryResult;
+
       try {
         queryResult = await this.mixinBusqueda()
       } catch (error) {

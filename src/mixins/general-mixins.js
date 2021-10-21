@@ -19,8 +19,7 @@ export default {
                 pagina: null,
                 componenteInterno: null,
                 mensaje: '',
-                data: null,
-                Props: {}
+                data: null
             }
         }
     },
@@ -122,14 +121,14 @@ export default {
             });
         },
         /**
-         * compararVerificacionUsuario; Comprar el codigo de verificacion de usuario
+         * mixinVerificacionUsuarioComparacion; Comprar el codigo de verificacion de usuario
          * @param {*} payload Objecto que representa input a comprar y el correo del usuario
          * @returns 
          */
-        async mixinCompararVerificacionUsuario(payload) {
+        mixinVerificacionUsuarioComparacion(payload) {
             return new Promise(async(resolve, reject) => {
                 let mutateResult;
-                console.log("compararVerificacionUsuario...");
+                console.log("mixinVerificacionUsuarioComparacion...");
                 try {
                     mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
@@ -151,7 +150,6 @@ export default {
                 resolve(this.MixinResult);
             });
         },
-
 
 
 
@@ -220,10 +218,10 @@ export default {
         mixinRestablecerContrasena(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinRestablecerContrasena...");
-                let mutateResult;
+                let MutateResult;
 
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.RESTABLECER_CONTRASENA,
                         variables: {
                             input: payload.input,
@@ -232,13 +230,16 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion mixinRestablecerContrasena call error...')
+                    console.log('Sesion call error...');
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
                 }
-                console.dir(mutateResult);
-                resolve(mutateResult);
+                
+                this.MixinResult.pagina = 'home';
+                this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                this.MixinResult.mensaje = MutateResult.data.restablecerContrasena;
+                resolve(this.MixinResult);
             });
         },
 
@@ -280,10 +281,10 @@ export default {
         mixinBusqueda(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinBusqueda...");
-                let queryResult;
+                let QueryResult;
 
                 try {
-                    queryResult = await this.$apollo.query({
+                    QueryResult = await this.$apollo.query({
                         query: GraphqlCalls.BUSQUEDA_QUERY,
                         variables: {
                             query: {}
@@ -295,8 +296,7 @@ export default {
                     //Historial de Errores encontrados 
                     return reject({ mensaje: `sin éxito!` });
                 }
-                console.dir(queryResult);
-                resolve(queryResult);
+                resolve(QueryResult);
             });
         },
 
@@ -306,6 +306,7 @@ export default {
          * @returns 
          */
         mixinLlamadaRouter(payload) {
+
             console.log("mixinLlamadaRouter");
             console.dir(payload);
             let valorPayload;
@@ -313,10 +314,15 @@ export default {
 
             //mandar a una pagina en especial y si ya esta ahí, hacerlo sin pasar error
             if (payload.componenteInterno != undefined) {
+                console.log("llamada componente interno y es ", payload.componenteInterno);
                 valorPayload = payload.componenteInterno === "editAnuncioDisplay" ? '000' : true;
                 this.$store.dispatch(payload.componenteInterno, valorPayload);
             }
 
+            if(!payload.pagina){
+                //fin de llamada
+                return;
+            }
             this.$router.push({ name: payload.pagina }).catch(error => {});
         }
     }

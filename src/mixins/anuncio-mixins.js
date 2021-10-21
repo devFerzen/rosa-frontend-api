@@ -8,8 +8,7 @@ export default {
                 pagina: null,
                 componenteInterno: null,
                 mensaje: '',
-                data: null,
-                Props: {}
+                data: null
             }
         }
     },
@@ -20,40 +19,32 @@ export default {
                 console.log("mixinCrear...");
                 console.dir(payload);
 
-                if (payload.usuario != undefined) {
+                if (!!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'Home';
                     this.MixinResult.componenteInterno = 'Inicio Sesion';
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     //Regresarlo con apertura de registro
-                    reject(this.MixinResult);
                     console.log("no debe que pasar por aquí cuando pase");
+                    reject(this.MixinResult);
+                    return;
                 }
 
-                if (payload.usuarioVerificado != undefined) {
-                    //llamada para mandar a crear el codigo de verificacion de usuario por celular
-                    MutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION,
-                        variables: {
-                            input: payload
-                        }
-                    });
+                //Esto es para doble check porque en si el botón aunciate verifica esto
+                if (!!this.$store.state.usuario.usuario.usuarioVerificado) {
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'Verificacion';
-                    this.MixinResult.Props.tipoVerificacion = 'Celular';
-                    this.MixinResult.mensaje = MutateResult.data.anuncioSolicitarVerificacion;
-                    // en éxito mensaje de disptatch (informativo)
-                    // en error favor de validar su correo e intentarlo de nuevo
-                    //de lo contrario contactar a servicio al cliente (error)
-                    reject(this.MixinResult);
-                    //Regresarlo a apartado de token
+                    this.MixinResult.componenteInterno = 'verificacion';
+                    this.$store.dispatch('setTipoVerificacion', 'verificacionCelular');
+                    resolve(this.MixinResult);
+                    return;
                 }
 
                 //llamada para mutate para crear el anuncio
+
+                this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.mensaje = "Anunció creado con éxito!";
-                //Dispatch para agregarlo en la lista de anuncios del usuario
+                //this.MixinResult.data = MutateResult.data.____;
                 resolve(this.MixinResult);
-                //Regresarlo a Dashboard y aperturarle el modal
             });
         },
         mixinAnuncioEditar(payload) {

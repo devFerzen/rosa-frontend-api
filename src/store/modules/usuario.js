@@ -3,7 +3,8 @@ export const state = {
         "usuario": "",
         "numero_telefonico_verificado": false,
         "token": "",
-        "verificacionUsuario": ""
+        "verificacionUsuario": "",
+        "anuncios_usuario": []
     },
 }
 

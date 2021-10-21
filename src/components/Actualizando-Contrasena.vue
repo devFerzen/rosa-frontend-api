@@ -71,11 +71,11 @@
         },
         methods: {
             async actualizarContrasena() {
-                let mutateResult, params;
+                let MutateResult, params;
                 console.log("vue actualizarContrasena...");
 
                 if (!this.$refs.verificacion.validate()) {
-                    this.$store.dispatch('activationAlert', { type: 'error', message: `>>>código de verificación con error...>>>>` });
+                    this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos!` });
                     return;
                 }
 
@@ -86,17 +86,18 @@
                         contrasena: this.FormAC.nuevaContrasena
                     }
                     console.dir(params);
-                    mutateResult = await this.mixinRestablecerContrasena(params);
+                    MutateResult = await this.mixinRestablecerContrasena(params);
                 } catch (error) {
                     console.log("vue actualizarContrasena en error...");
                     console.dir(error);
+                    this.mixinLlamadaRouter(error);
                     this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al verificar tu códigio...>>>>${error.mensaje}` });
                     return;
                 }
 
-                console.dir(mutateResult);
-                this.$store.dispatch('panelHerramientasInicioSesion', false);
-                this.$store.dispatch('activationAlert', { type: 'success', message: `${mutateResult.data.restablecerContrasena}` });
+                console.dir(MutateResult);
+                this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+                this.mixinLlamadaRouter(MutateResult);
             }
 
         }

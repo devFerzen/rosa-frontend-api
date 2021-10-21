@@ -555,7 +555,7 @@
       };
     },
     computed: {
-      ...mapGetters(["anunciosUsuario", "idUsuario"]),
+      ...mapGetters(["anunciosUsuario", "usuario"]),
       idEditAnuncioDisplay() {
         return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
       },
@@ -682,8 +682,8 @@
           //Dispatch de alerta al usuario
           this.$store.dispatch("activationAlert", { type: "success", message: `Anuncio ${MutateResult.mensaje} exitosamente!`, });
           //Dispatch para agregar un nuevo anuncio en la lista del usuario
-          //Esconder el modal de edición de anuncio
-          this.anuncioEditDialog = false;
+
+          this.anuncioEditDialog = false; //Esconder el modal de edición de anuncio
         }
         this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos requeridos!.` });
       },

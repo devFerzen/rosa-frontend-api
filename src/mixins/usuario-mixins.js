@@ -3,6 +3,8 @@
  */
 
 import * as GraphqlUserCalls from '../graphql/usuario-mutations';
+import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
+
 
 export default {
     methods: {
@@ -12,7 +14,7 @@ export default {
          * @param {*} payload Objecto que representa contraseña vieja y nueva
          * @returns 
          */
-        async mixinContrasenaActualizar(payload) {
+        mixinContrasenaActualizar(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
                 console.log("mixinContrasenaActualizar...");
@@ -37,12 +39,12 @@ export default {
             });
         },
 
-        /** Refactorizar a que el backend sepa el id del usuario
-         * mixinVerificacionCelularComparacion
+        /**
+         * mixinVerificacionCelularComparacion: En cualquier error la vista solo imprime el mensaje
          * @param {*} payload Objecto que representa input a comprar y el id del usuario
          * @returns 
          */
-        async mixinVerificacionCelularComparacion(payload) {
+        mixinVerificacionCelularComparacion(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
                 console.log("mixinVerificacionCelularComparacion...");
@@ -50,8 +52,7 @@ export default {
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
                         variables: {
-                            input: payload.input,
-                            id_usuario: payload.id_usuario,
+                            input: payload.input
                         }
                     })
                 } catch (error) {
@@ -63,13 +64,30 @@ export default {
 
                 this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.componenteInterno = 'editAnuncioDisplay';
-                this.MixinResult.mensaje = MutateResult.data.compararVerificacionUsuario;
+                this.MixinResult.mensaje = MutateResult.data.compararVerificacionCelular;
                 resolve(this.MixinResult);
             });
         },
 
-        async mixinVerificacionCelularCreacion(payload) {
-
+        mixinVerificacionCelularCreacion(payload) {
+            return new Promise(async(resolve, reject)=>{
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION
+                    });
+                } catch (error) {
+                    console.log('Sesion call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    return reject(this.MixinResult);
+                }
+                this.MixinResult.pagina = 'home';
+                this.MixinResult.componenteInterno = 'Verificacion';
+                this.$store.dispatch('setTipoVerificacion', 'verificacionCelular');
+                this.MixinResult.mensaje = MutateResult.data.solicitarVerificacionCelular;
+                resolve(this.MixinResult);
+                return;
+            });
         },
 
     }
