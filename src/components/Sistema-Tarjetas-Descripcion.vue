@@ -57,7 +57,7 @@
 
               <v-row class="fill-height">
                 <v-carousel :height="tarjetaWH['carrusel']">
-                  <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i" :src="imagen.url"
+                  <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i" :src="'http://localhost:3000/uploads/'+imagen.nombre"
                     max-height="100%"></v-carousel-item>
                 </v-carousel>
               </v-row>
@@ -406,7 +406,7 @@
             vTextContent: "40vh",
             CardTarifaCol: 4,
           };
-      },
+      }
     },
     methods: {
       fullAnuncio_Display(payload) {

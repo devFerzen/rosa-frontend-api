@@ -4,7 +4,7 @@
       <v-row align="center" justify="center" class="fill-height" no-gutters>
         <v-col cols="12" lg="5">
           <v-carousel :height="tarjetaWH['carrusel']">
-            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagenes" :key="i" :src="imagen.url"
+            <v-carousel-item v-for="(imagen,i) in imagenesAnuncio" :key="i" :src="imagen.url"
               max-height="100%"></v-carousel-item>
           </v-carousel>
         </v-col>
@@ -229,7 +229,7 @@
       },
       imagenesAnuncio() {
         return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
-          return { url: infoImagen.nombre, options: { type: 'remote' } };
+          return { url: 'http://localhost:3000/uploads/'+infoImagen.nombre, options: { type: 'remote' } };
         });
       }
     },
@@ -250,8 +250,10 @@
         this.$store.dispatch('activationAlert', { type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!` });
       },
       abrirEdicion() {
-        console.log("vue: abrirEdicion");
+        console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id );
         this.$emit('activandoEdicion', { id: this.anuncioUsuario.id });
+
+
       }
     },
     mounted() {

@@ -15,8 +15,8 @@
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4">
-              <file-pond ref="refImages" name="filePondImages" @init="handleFilePondInit"
-                @processfile="imagenesAnuncioOnProcess" :files="FormAE.Sec_Imagenes" />
+              <file-pond ref="refImages" name="imagenesAnuncioEditDisplay" @init="handleFilePondInit"
+                @processfile="imagenesAnuncioOnProcess" :files="imagenesAnuncio" />
             </v-col>
             <!--Carrusel-->
 
@@ -25,22 +25,26 @@
               <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey" tile
                 :height="bodyWH['vMainContenth']" :width="bodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
-                  <v-tab-item v-if="anuncioView.Sec_Descripcion">
+                  <v-tab-item v-if="FormAE.Sec_Descripcion">
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
-                          <div class="text-h4 text-xl-h3 mb-4">Descripción</div>
+                          <v-text-field v-model="FormAE.Sec_Descripcion.titulo" clearable required label="Titulo"></v-text-field>
                         </v-col>
                       </v-row>
                       <!--Título-->
                       <v-form ref="form_anuncioEdicion">
                         <v-row>
                           <v-col cols="6" md="3">
-                            <v-text-field clearable required label="Lorem Ipsum"></v-text-field>
+                            <v-text-field v-model="FormAE.Sec_Descripcion.estado" clearable required label="Estado"></v-text-field>
                           </v-col>
                           <v-col cols="6" md="3">
-                            <v-text-field clearable required label="Ipsum Lorem"></v-text-field>
+                            <v-text-field v-model="FormAE.Sec_Descripcion.ciudad" clearable required label="Ciudad"></v-text-field>
                           </v-col>
+                          <v-col cols="6" md="3">
+                            <v-text-field v-model="FormAE.Sec_Descripcion.sexo" clearable required label="Sexo"></v-text-field>
+                          </v-col>
+
                         </v-row>
                       </v-form>
                       <!--EstadoCiudad-->
@@ -48,7 +52,7 @@
                         <v-col>
                           <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
                             <v-form ref="form_anuncioEdicion">
-                              <v-textarea counter label="Descripción"></v-textarea>
+                              <v-textarea v-model="FormAE.Sec_Descripcion.descripcion" counter label="Descripción"></v-textarea>
                             </v-form>
                           </v-card>
                         </v-col>
@@ -58,7 +62,7 @@
                   </v-tab-item>
                   <!--Sec_Descripcion-->
 
-                  <v-tab-item v-if="anuncioView.Sec_Contacto">
+                  <v-tab-item v-if="FormAE.Sec_Contacto">
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
@@ -76,7 +80,7 @@
                         <v-col>
                           <v-list>
                             <v-list-item-group color="primary" v-model="selectedContactItem">
-                              <v-list-item v-for="(contacto, i) in nuevoContactoList" :key="i" class="my-3">
+                              <v-list-item v-for="(contacto, i) in contactoList" :key="i" class="my-3">
                                 <v-list-item-icon>
                                   <font-awesome-icon :icon="[
                                       contacto.Tipo.categoria,
@@ -99,7 +103,7 @@
                   </v-tab-item>
                   <!--Sec_Contacto-->
 
-                  <v-tab-item v-if="anuncioView.Sec_Tarifas">
+                  <v-tab-item v-if="FormAE.Sec_Tarifas">
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
@@ -115,7 +119,7 @@
 
                       <v-container>
                         <v-row align="center" justify="space-around">
-                          <v-col :cols="bodyWH['CardTarifaCol']" v-for="(tarifa, i) in nuevaTarifaList" :key="i">
+                          <v-col :cols="bodyWH['CardTarifaCol']" v-for="(tarifa, i) in tarifaList" :key="i">
                             <v-card>
                               <v-card-text>
                                 <v-row align="center" class="mx-0 mb-2">
@@ -155,7 +159,7 @@
                   </v-tab-item>
                   <!--Sec_Tarifas-->
 
-                  <v-tab v-for="(anuncio, key, i) in anuncioView.permisos" :key="i">
+                  <v-tab v-for="(anuncio, key, i) in FormAE.permisos" :key="i">
                     {{ anuncio }}
                   </v-tab>
                   <!--nombre tabs-->
@@ -451,99 +455,10 @@
           },
         ],
 
-        //Par que se usa Anuncio View, ver su anuncio creado por aquí???
-        anuncioView: {
-          categoria: ["Escorts", "Masajes Eróticos"],
-          permisos: ["Descripcion", "Contacto", "Tarifas"],
-          Sec_Descripcion: {
-            titulo: "Lorem ipsum dolor",
-            estado: "1",
-            ciudad: "1",
-            descripcion: `Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-            Ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.catch fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.`,
-          },
-          Sec_Contacto: [
-            {
-              contacto: "811-000-0000",
-              Tipo: {
-                categoria: "fab",
-                icono: "whatsapp",
-              },
-            },
-            {
-              contacto: "lorem.ipsum",
-              url: "",
-              Tipo: {
-                categoria: "fab",
-                icono: "twitter",
-              },
-            },
-            {
-              contacto: "lorem.ipsum",
-              url: "",
-              Tipo: {
-                categoria: "fab",
-                icono: "instagram",
-              },
-            },
-            {
-              contacto: "lorem.ipsum",
-              url: "",
-              Tipo: {
-                categoria: "fa",
-                icono: "phone-alt",
-              },
-            },
-            {
-              contacto: "lorem.ipsum",
-              url: "",
-              Tipo: {
-                categoria: "fa",
-                icono: "globe",
-              },
-            },
-          ],
-          Sec_Tarifas: [
-            {
-              nombre: "Lorem 1",
-              precio: 1500,
-              descripcion:
-                "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
-            },
-            {
-              nombre: "Lorem 2",
-              precio: 1500,
-              descripcion:
-                "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
-            },
-            {
-              nombre: "Lorem 3",
-              precio: 1500,
-              descripcion:
-                "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
-            },
-          ],
-          Sec_Imagenes: [
-            {
-              nombre: "",
-              url:
-                "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
-            },
-            {
-              nombre: "",
-              url:
-                "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
-            },
-            {
-              nombre: "",
-              url:
-                "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
-            },
-          ],
-        },
         //Form de un anuncio nuevo
         FormAE: {
+          categoria: ["Escorts", "Masajes Eróticos"],
+          permisos: ["Descripcion", "Contacto", "Tarifas"],
           Sec_Descripcion: {
             titulo: 'titulo test 1',
             estado: 'N.L.',
@@ -555,23 +470,14 @@
           Sec_Contacto: [],
           Sec_Tarifas: [],
         },
-        imagenesAnuncio: [],
         nuevaTarifaDialog: false,
         nuevoContactoDialog: false,
         anuncioEditDialog: false,
       };
     },
     computed: {
-      ...mapGetters(["anunciosUsuario", "usuario"]),
-      idEditAnuncioDisplay() {
-        return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
-      },
-      nuevoContactoList() {
-        return this.FormAE.Sec_Contacto;
-      },
-      nuevaTarifaList() {
-        return this.FormAE.Sec_Tarifas;
-      },
+      ...mapGetters(["anunciosUsuario"]),
+      //CSS Properties
       tabContainerClass() {
         const { sm, xs } = this.$vuetify.breakpoint;
         return xs || sm
@@ -606,6 +512,22 @@
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
+
+      //Anuncio edit display
+      idEditAnuncioDisplay() {
+        return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
+      },
+      contactoList() {
+        return this.FormAE.Sec_Contacto;
+      },
+      tarifaList() {
+        return this.FormAE.Sec_Tarifas;
+      },
+      imagenesAnuncio() {
+        return this.FormAE.Sec_Imagenes.map(function (infoImagen) {
+          return { source: infoImagen.nombre, options: { type: 'remote' } };
+        });
+      }
     },
     methods: {
       tarifaNueva() {
@@ -665,8 +587,15 @@
 
         if (this.$refs.form_anuncioEdicion.validate()) {
           try {
+             //En permisos solo agregarlos si cuenta con información.
+            let posicionPermisoContacto = this.FormAE.permisos.indexOf('Contacto');
+            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoContacto,1) : ''; 
+
+            let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
+            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa,1) : ''; 
+
             if (tipoSalvado === "nuevo") {
-              this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
+              this.FormAE.Sec_Imagenes = this.imagenesAnuncio;             
               MutateResult = await this.mixinAnuncioCrear(this.FormAE);
             }
 
@@ -706,7 +635,7 @@
         }
 
         let objetoImagen = {
-          nombre: JSON.parse(file.serverId)[0] + " " + file.fileExtension,
+          nombre: JSON.parse(file.serverId)[0] + "." + file.fileExtension,
           posicion: this.imagenesAnuncio.length || 0
         };
 
