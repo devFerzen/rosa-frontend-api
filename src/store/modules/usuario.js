@@ -11,19 +11,25 @@ export const state = {
 export const mutations = {
     USUARIO_SET(state, payload) {
         //Verificar si aquí saber su ip? y así agregarlo por default
-        state.usuario = payload
+        state.usuario = payload;
     },
     USUARIO_OFFSET(state) {
         state.usuario = null;
     },
     CORREO_SET(state, payload) {
-        state.usuario.usuario = payload
+        state.usuario.usuario = payload;
+    },
+    CODIGO_VERIFICACION_SET(state,payload){
+        state.usuario.verificacionUsuario = payload;
     },
     VERIFICACION_USUARIO_SET(state, payload) {
-        state.usuario.verificacionUsuario = payload
+        state.usuario.verificacionUsuario = payload;
     },
     CARGA_ANUNCIOS_USUARIO(state, payload) {
-        state.usuario.anuncios_usuario = payload
+        state.usuario.anuncios_usuario = payload;
+    },
+    CARGA_NUEVO_ANUNCIO(state, payload){
+        state.usuario.anuncios_usuario.push(payload);
     }
 }
 
@@ -38,6 +44,9 @@ export const actions = {
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });
+    },
+    anuncioAgregarNuevo({ commit, state}, payload){
+        commit('CARGA_NUEVO_ANUNCIO', payload);
     }
 }
 

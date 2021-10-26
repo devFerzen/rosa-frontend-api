@@ -131,10 +131,9 @@
           //Debe que mandar todo el objeti MixinResult
           console.dir(error);
           //Dispatch de alerta al usuario
-          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
           return;
         }
-        //funcion correo
         console.dir(MutateResult);
         this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
       }

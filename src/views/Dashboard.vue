@@ -15,9 +15,8 @@
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4">
-              <file-pond ref="refImages" name="filePondImages" itemInsertLocation="after" @init="handleFilePondInit"
-                @processfile="imagenesAnuncioOnProcess" @removefile="imagenesAnuncioOnDelete"
-                :files="FormAE.Sec_Imagen" />
+              <file-pond ref="refImages" name="filePondImages" @init="handleFilePondInit"
+                @processfile="imagenesAnuncioOnProcess" :files="FormAE.Sec_Imagenes" />
             </v-col>
             <!--Carrusel-->
 
@@ -80,8 +79,8 @@
                               <v-list-item v-for="(contacto, i) in nuevoContactoList" :key="i" class="my-3">
                                 <v-list-item-icon>
                                   <font-awesome-icon :icon="[
-                                      contacto.tipo.categoria,
-                                      contacto.tipo.icono,
+                                      contacto.Tipo.categoria,
+                                      contacto.Tipo.icono,
                                     ]" class="tw-redes-icons fa-2x" />
                                 </v-list-item-icon>
 
@@ -162,7 +161,7 @@
                   <!--nombre tabs-->
                 </v-tabs>
 
-                <v-btn class="mx-2" dark color="primary" style="margin-top: 20px;" @click="salvandoNuevoAnuncio(false)">
+                <v-btn class="mx-2" dark color="primary" style="margin-top: 20px;" @click="salvandoNuevoAnuncio()">
                   <font-awesome-icon :icon="['fas', 'save']" style="margin-right:5px;"></font-awesome-icon>Guardar
                 </v-btn>
                 <!--SavingButton-->
@@ -242,7 +241,7 @@
                     <v-list-item>
                       <v-list-item-icon>
                         <v-autocomplete auto-select-first :items="tiposContacto" item-text="icono" item-value="icono"
-                          v-model="nuevoContacto.tipo" style="width:80px;" filled>
+                          v-model="nuevoContacto.Tipo" style="width:80px;" filled>
                           <template v-slot:selection="data">
                             <font-awesome-icon :icon="[data.item.categoria, data.item.icono]"></font-awesome-icon>
                           </template>
@@ -327,8 +326,15 @@
     labelFileSizeNotAvailable: "Tamaño no reconocido",
     labelFileWaitingForSize: "Verificando",
     labelInvalidField: "Archivo no valido",
-    labelIdle:
-      'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
+    labelIdle: 'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
+    server: {
+      url: 'http://localhost:3000/',
+      process: {
+        url: 'upload'
+      },
+      load: 'load/',
+      fetch: 'load/'
+    },
   });
 
   export default {
@@ -379,7 +385,7 @@
           },
         },
         nuevoContacto: {
-          tipo: "",
+          Tipo: "",
           contacto: "",
         },
         nuevaTarifa: {
@@ -460,7 +466,7 @@
           Sec_Contacto: [
             {
               contacto: "811-000-0000",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "whatsapp",
               },
@@ -468,7 +474,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "twitter",
               },
@@ -476,7 +482,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fab",
                 icono: "instagram",
               },
@@ -484,7 +490,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fa",
                 icono: "phone-alt",
               },
@@ -492,7 +498,7 @@
             {
               contacto: "lorem.ipsum",
               url: "",
-              tipo: {
+              Tipo: {
                 categoria: "fa",
                 icono: "globe",
               },
@@ -518,7 +524,7 @@
                 "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
             },
           ],
-          Sec_Imagen: [
+          Sec_Imagenes: [
             {
               nombre: "",
               url:
@@ -539,16 +545,17 @@
         //Form de un anuncio nuevo
         FormAE: {
           Sec_Descripcion: {
-            titulo: '',
-            estado: '',
-            ciudad: '',
-            descripcion: '',
-            sexo: ''
+            titulo: 'titulo test 1',
+            estado: 'N.L.',
+            ciudad: 'MTY.',
+            descripcion: 'una desciprcion',
+            sexo: 'm'
           },
-          Sec_Imagen: [],
+          Sec_Imagenes: [],
           Sec_Contacto: [],
           Sec_Tarifas: [],
         },
+        imagenesAnuncio: [],
         nuevaTarifaDialog: false,
         nuevoContactoDialog: false,
         anuncioEditDialog: false,
@@ -606,7 +613,7 @@
         //validacion
 
         tarifa.nombre = this.nuevaTarifa.nombre;
-        tarifa.precio = this.nuevaTarifa.precio;
+        tarifa.precio = parseInt(this.nuevaTarifa.precio);
         tarifa.descripcion = this.nuevaTarifa.descripcion;
 
         console.log("tarifaNueva...");
@@ -624,11 +631,11 @@
       contactoNuevo() {
         let contacto = {};
         //validacion de form
-        contacto.tipo = {
+        contacto.Tipo = {
           categoria: this.tiposContacto.find(
-            (t) => t.icono == this.nuevoContacto.tipo
+            (t) => t.icono == this.nuevoContacto.Tipo
           ).categoria,
-          icono: this.nuevoContacto.tipo,
+          icono: this.nuevoContacto.Tipo,
         };
         contacto.contacto = this.nuevoContacto.contacto;
 
@@ -641,24 +648,25 @@
       },
       abriendoEditAnuncioDisplay(InfoAnuncio) {
         this.id = InfoAnuncio.id;
-        this.$store.dispatch('dashboardEditAnuncioDisplay', this.id);
+        this.$store.dispatch('editAnuncioDisplay', this.id);
       },
       cerrandoEditAnuncioDisplay() {
         this.id = null;
-        this.$store.dispatch('dashboardEditAnuncioDisplay', this.id);
+        this.$store.dispatch('editAnuncioDisplay', this.id);
       },
       handleFilePondInit() {
         console.log("handleFilePondInit...");
         console.log("getgiles", this.$refs.refImages.getfiles());
         this.$refs.refImages.getfiles();
       },
-      async salvandoNuevoAnuncio(isNew) {
-        let tipoSalvado = isNew ? "nuevo" : "editado";
+      async salvandoNuevoAnuncio() {
+        let tipoSalvado = this.idEditAnuncioDisplay === '000' ? "nuevo" : "editado";
         let MutateResult;
 
         if (this.$refs.form_anuncioEdicion.validate()) {
           try {
             if (tipoSalvado === "nuevo") {
+              this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
               MutateResult = await this.mixinAnuncioCrear(this.FormAE);
             }
 
@@ -667,28 +675,27 @@
             }
 
           } catch (error) {
-            console.log("vue salvandoNuevoAnuncio...");
+            console.log("vue salvandoNuevoAnuncio error...");
             //Debe que mandar todo el objeti MixinResult
             console.dir(error);
             //Dispatch de alerta al usuario
-            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
             //mandar a la vista indicada o pertenecer ahí mismo sin causar error
             this.mixinLlamadaRouter(error);
             throw error;
           }
 
-          //Debe que mandar todo el objeti MixinResult
           console.dir(MutateResult);
-          //Dispatch de alerta al usuario
+          this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
           this.$store.dispatch("activationAlert", { type: "success", message: `Anuncio ${MutateResult.mensaje} exitosamente!`, });
-          //Dispatch para agregar un nuevo anuncio en la lista del usuario
-
-          this.anuncioEditDialog = false; //Esconder el modal de edición de anuncio
+          this.cerrandoEditAnuncioDisplay();
+          return;
         }
         this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos requeridos!.` });
       },
       imagenesAnuncioOnDelete(error, file) {
         console.log("imagenesAnuncioOnDelete...");
+        // Quitarlo del arreglo de imagenesAnuncio
       },
       imagenesAnuncioOnProcess(error, file) {
         console.log("imagenesAnuncioOnProcess...");
@@ -699,17 +706,14 @@
         }
 
         let objetoImagen = {
-          nombre_original: file.filename,
-          nombre_werk: JSON.parse(file.serverId)[0],
-          tamano: file.fileSize + "",
-          extension: file.fileExtension,
-          posicion: this.imagenesAnuncio.length,
-          path: "Anuncio",
+          nombre: JSON.parse(file.serverId)[0] + " " + file.fileExtension,
+          posicion: this.imagenesAnuncio.length || 0
         };
-        setTimeout(function () {
-          console.log("ImageUploadOnProcess->objetoImagen:", objetoImagen);
-        }, 1000);
-      },
+
+        console.dir(objetoImagen);
+        this.imagenesAnuncio.push(objetoImagen);
+      }
+
     },
   };
 </script>

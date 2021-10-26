@@ -4,15 +4,14 @@
       <v-row align="center" justify="center" class="fill-height" no-gutters>
         <v-col cols="12" lg="5">
           <v-carousel :height="tarjetaWH['carrusel']">
-            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagenes" :key="i" :src="imagen.url"  max-height="100%"></v-carousel-item>
+            <v-carousel-item v-for="(imagen,i) in anuncioUsuario.Sec_Imagenes" :key="i" :src="imagen.url"
+              max-height="100%"></v-carousel-item>
           </v-carousel>
         </v-col>
         <!--Carrusel-->
+
         <v-col cols="12" lg="7" class="d-flex flex-column justify-center align-center align-stretch">
-          <v-sheet
-            class="d-flex"
-            color="grey lighten-3"
-            :height="tarjetaWH['cuerpoAnuncio']">
+          <v-sheet class="d-flex" color="grey lighten-3" :height="tarjetaWH['cuerpoAnuncio']">
             <v-tabs class="d-flex flex-column-reverse" centered>
               <v-tab-item v-if="OpcionesAnuncio.Descripcion.permisos">
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
@@ -39,8 +38,9 @@
                   <!--EstadoCiudad-->
                   <v-row no-gutters style="overflow: hidden;">
                     <v-col>
-                      <v-card  flat class="mb-2">
-                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      <v-card flat class="mb-2">
+                        <template
+                          v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -89,8 +89,9 @@
                   <!--EstadoCiudad-->
                   <v-row no-gutters style="overflow: hidden;">
                     <v-col>
-                      <v-card  flat class="mb-2">
-                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      <v-card flat class="mb-2">
+                        <template
+                          v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -119,11 +120,7 @@
                   </v-row>
                   <v-row no-gutters justify="center">
                     <v-col cols="4" class="mt-12">
-                      <v-btn
-                        depressed
-                        elevation="2"
-                        color="primary"
-                        width="140"
+                      <v-btn depressed elevation="2" color="primary" width="140"
                         @click="borrarAnuncio(anuncioUsuario.id)">
                         <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x mr-1" /> Borrar
                       </v-btn>
@@ -158,8 +155,9 @@
                   <!--EstadoCiudad-->
                   <v-row no-gutters style="overflow: hidden;">
                     <v-col>
-                      <v-card  flat class="mb-2">
-                        <template v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
+                      <v-card flat class="mb-2">
+                        <template
+                          v-for="line in anuncioUsuario.Sec_Descripcion.descripcion.split('\n')">{{line}}<br></template>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -203,58 +201,63 @@
 </template>
 
 <script>
-import DashboardCompras from '@/components/Dashboard-Compras';
-import AnuncioMixins from '../mixins/anuncio-mixins.js';
+  import DashboardCompras from '@/components/Dashboard-Compras';
+  import AnuncioMixins from '../mixins/anuncio-mixins.js';
 
-export default {
-  name: 'tarjeta-anuncio-usuario',
-  mixins: [AnuncioMixins],
-  components: {
-    DashboardCompras
-  },
-  props: {
-    anuncioUsuario: { type: Object, default: {} },
-    OpcionesAnuncio: { type: Object, default: {} }
-  },
-  data() {
-    return {
-      selectedContactItem: '',
-    }
-  },
-  computed: {
-    tarjetaWH(){
-      const { xs, sm, md } = this.$vuetify.breakpoint;
-      return xs || sm || md ? {carrusel: '660px', cuerpoAnuncio: 'auto'} : {carrusel: '62vh', cuerpoAnuncio: '62vh'};
+  export default {
+    name: 'tarjeta-anuncio-usuario',
+    mixins: [AnuncioMixins],
+    components: {
+      DashboardCompras
     },
-    categoriaSeleccionada(){
-      return 1;
-    }
-  },
-  methods: {
-    async borrarAnuncio(idAnuncio){
-      let MutateResult;
-      try {
-        MutateResult = await this.mixinAnuncioEliminar(idAnuncio);
-      } catch (error) {
-        console.log("vue borrarAnuncio en error...");
-        console.dir(error);
-        this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}` });
-        return;
+    props: {
+      anuncioUsuario: { type: Object, default: {} },
+      OpcionesAnuncio: { type: Object, default: {} }
+    },
+    data() {
+      return {
+        selectedContactItem: '',
       }
+    },
+    computed: {
+      tarjetaWH() {
+        const { xs, sm, md } = this.$vuetify.breakpoint;
+        return xs || sm || md ? { carrusel: '660px', cuerpoAnuncio: 'auto' } : { carrusel: '62vh', cuerpoAnuncio: '62vh' };
+      },
+      categoriaSeleccionada() {
+        return 1;
+      },
+      imagenesAnuncio() {
+        return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
+          return { url: infoImagen.nombre, options: { type: 'remote' } };
+        });
+      }
+    },
+    methods: {
+      async borrarAnuncio(idAnuncio) {
+        let MutateResult;
+        try {
+          MutateResult = await this.mixinAnuncioEliminar(idAnuncio);
+        } catch (error) {
+          console.log("vue borrarAnuncio en error...");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}` });
+          return;
+        }
         //Eliminar dicho anuncio del state tmb
         console.dir(MutateResult);
         this.$store.dispatch('anuncioEliminar', idAnuncio);
-        this.$store.dispatch('activationAlert', {type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!`});
+        this.$store.dispatch('activationAlert', { type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!` });
+      },
+      abrirEdicion() {
+        console.log("vue: abrirEdicion");
+        this.$emit('activandoEdicion', { id: this.anuncioUsuario.id });
+      }
     },
-    abrirEdicion(){
-      console.log("vue: abrirEdicion");
-      this.$emit('activandoEdicion', {id: this.anuncioUsuario.id });
-    }
-  },
-  mounted() {
+    mounted() {
 
-  },
-}
+    },
+  }
 </script>
 
 <style lang='scss' scoped>

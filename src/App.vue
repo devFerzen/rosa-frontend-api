@@ -76,9 +76,9 @@
       <router-view />
     </v-main>
 
-    <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" elevation="2" dismissible
+    <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" elevation="10" dismissible
       transition="slide-x-reverse-transition"
-      style="position: absolute; top: 80px; z-index:2; right: 0; width: 50%; height:65px;">
+      style="position: absolute; top: 80px; z-index:10; right: 0; width: 50%; height:65px;">
       {{Alert.message}}
     </v-alert>
   </v-app>
@@ -107,10 +107,10 @@
     },
     methods: {
       iniciandoSesion() {
-        this.mixinLlamadaRouter({pagina: 'home', componenteInterno: 'panelHerramientasInicioSesion'});
+        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: 'panelHerramientasInicioSesion' });
       },
-      contactanos(){
-        this.mixinLlamadaRouter({pagina: 'home', componenteInterno: 'panelHerramientasContactanos'});
+      contactanos() {
+        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: 'panelHerramientasContactanos' });
       },
       async anunciate() {
         let DispatchResult;

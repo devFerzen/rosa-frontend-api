@@ -10,13 +10,13 @@
       <h6 class="text-h4 text-lg-h4 text-center my-8">Lorem ipsum</h6>
 
       <v-form ref="registro" v-model="valid" lazy-validation>
-        <v-text-field v-model="FormC.para" :rules="emailRules" label="Correo" required>
+        <v-text-field v-model="FormC.correo" :rules="emailRules" label="Correo" required>
         </v-text-field>
 
         <v-text-field v-model="FormC.asunto" label="Titulo" required>
         </v-text-field>
 
-        <v-textarea counter label="Comentario" v-model="FormC.comentario">
+        <v-textarea counter label="Comentario" v-model="FormC.mensaje">
         </v-textarea>
 
         <!--Text area para descripcion-->
@@ -47,19 +47,19 @@
 </template>
 
 <script>
+  import GeneralMixins from '../mixins/general-mixins.js';
 
   export default {
     name: 'contacto',
-    components: {
-    },
+    mixins: [GeneralMixins],
     data() {
       return {
         herramientasLoader: false,
         valid: true,
         FormC: {
-          para: '',
+          correo: '',
           asunto: '',
-          comentario: ''
+          mensaje: ''
         },
         emailRules: [
           v => !!v || 'E-mail is required',
@@ -74,10 +74,25 @@
 
     },
     methods: {
-      enviandoCorreo() {
+      async enviandoCorreo() {
+        let MutateResult;
+
         if (this.$refs.registro.validate()) {
-          //llamada back en una tabla de contactanos
+          try {
+            MutateResult = await this.mixinNuevoCorreoContactanos(this.FormC);
+          } catch (error) {
+            console.log("vue enviandoCorreo...");
+            console.dir(error);
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+            throw error;
+          }
+          console.dir(MutateResult);
+          this.$store.dispatch("activationAlert", { type: "success", message: `${MutateResult.mensaje}` });
+          this.mixinLlamadaRouter(MutateResult);
+          return;
         }
+
+        this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos requeridos!.` });
       }
     }
   }

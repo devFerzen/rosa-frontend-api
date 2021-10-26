@@ -43,11 +43,15 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados -- ${error.networkError.name == "ServerError"}
-                    //afss duda, todo graphqlError es así, siempre sale uno???
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    //afss duda, todo graphqlError es así, siempre sale uno??? no, en errores de servidor no sale esta propiedad
+                    this.MixinResult.mensaje = error.message;
+
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
                 seteandoToken(mutateResult.data.inicioSesion.token);
@@ -75,8 +79,12 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion call error...')
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    console.log('Mutation call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
                 console.dir(mutateResult);
@@ -106,9 +114,12 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion verPlus call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
                 console.dir(MutateResult);
@@ -138,15 +149,52 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
 
                 this.MixinResult.pagina = 'home';
                 this.MixinResult.componenteInterno = 'panelHerramientasCambioContraseña';
                 this.MixinResult.mensaje = mutateResult.data.compararVerificacionUsuario;
+                this.$store.dispatch('CODIGO_VERIFICACION_SET', true);
+                resolve(this.MixinResult);
+            });
+        },
+        /**
+         * mixinNuevoCorreoContactanos; Guarda los comentarios dados por el usuario
+         * @param {*} payload Objecto que representa input...
+         * @returns 
+         */
+        mixinNuevoCorreoContactanos(payload) {
+            return new Promise(async(resolve, reject) => {
+                let mutateResult;
+                console.log("mixinNuevoCorreoContactanos...");
+
+                try {
+                    mutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.NUEVO_CORREO_CONTACTANOS,
+                        variables: {
+                            input: payload
+                        }
+                    })
+                } catch (error) {
+                    console.log('Mutation call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
+                }
+
+                this.MixinResult.pagina = 'home';
+                this.MixinResult.componenteInterno = 'panelHerramientasBusqueda';
+                this.MixinResult.mensaje = mutateResult.data.nuevoContacto;
                 resolve(this.MixinResult);
             });
         },
@@ -172,10 +220,13 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -200,10 +251,13 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion verPlus call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
                 }
                 console.dir(mutateResult);
                 resolve(mutateResult);
@@ -230,9 +284,12 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion call error...');
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
                 
@@ -291,7 +348,7 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados 
                     return reject({ mensaje: `sin éxito!` });

@@ -38,6 +38,7 @@ export const REGISTRO_MUTATE = gql `
                 }
                 Sec_Imagenes{
                     nombre
+                    posicion
                     url
                 }
                 permisos
@@ -88,6 +89,7 @@ export const INICIANDO_SESION_MUTATE = gql `
                 }
                 Sec_Imagenes{
                     nombre
+                    posicion
                     url
                 }
                 permisos
@@ -131,6 +133,12 @@ export const RESTABLECER_CONTRASENA = gql `
     }
 `;
 
+export const NUEVO_CORREO_CONTACTANOS = gql `
+    mutation nuevoContacto($input: ContactanosInput!){
+        nuevoContacto(input: $input)
+    }
+`;
+
 // Query ***
 export const VER_QUERY = gql `
     query queryAnunciosById($ids: [String]){
@@ -161,6 +169,7 @@ export const VER_QUERY = gql `
             }
             Sec_Imagenes{
                 nombre
+                posicion
                 url
             }
             Estado{
@@ -196,6 +205,7 @@ export const BUSQUEDA_QUERY = gql `
             }
             Sec_Imagenes{
                 nombre
+                posicion
                 url
             }
             Estado{

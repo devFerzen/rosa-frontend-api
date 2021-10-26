@@ -16,39 +16,53 @@ export default {
         mixinAnuncioCrear(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
-                console.log("mixinCrear...");
-                console.dir(payload);
+                console.log("mixinAnuncioCrear...");
 
-                if (!!this.$store.state.usuario.usuario.usuario) {
+                if (!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
-                    this.MixinResult.pagina = 'Home';
-                    this.MixinResult.componenteInterno = 'Inicio Sesion';
+                    this.MixinResult.pagina = 'home';
+                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     //Regresarlo con apertura de registro
                     console.log("no debe que pasar por aquí cuando pase");
-                    reject(this.MixinResult);
-                    return;
+                    return reject(this.MixinResult);
                 }
 
                 //Esto es para doble check porque en si el botón aunciate verifica esto
-                if (!!this.$store.state.usuario.usuario.usuarioVerificado) {
+                if (!this.$store.state.usuario.usuario.numero_telefonico_verificado) {
+                    console.log("Usuario no verificado");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'verificacion';
+                    this.MixinResult.componenteInterno = 'panelHerramientasVerificacion';
                     this.$store.dispatch('setTipoVerificacion', 'verificacionCelular');
-                    resolve(this.MixinResult);
-                    return;
+                    return reject(this.MixinResult);
                 }
 
-                //llamada para mutate para crear el anuncio
+                try {
+                    console.dir(payload);
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlAnuncioCalls.NUEVA_ANUNCIO_MUTATE,
+                            variables: {
+                                input: payload
+                            }
+                    });
+                } catch (error) {
+                    console.log('Mutation call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
+                }
 
                 this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.mensaje = "Anunció creado con éxito!";
-                //this.MixinResult.data = MutateResult.data.____;
+                this.MixinResult.data = MutateResult.data.anuncioCreacion;
                 resolve(this.MixinResult);
             });
         },
         mixinAnuncioEditar(payload) {
-
+            console.log("vue mixinAnuncioEditar...");
         }
     }
 }

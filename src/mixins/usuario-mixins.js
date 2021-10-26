@@ -27,11 +27,13 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Server error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    //${error.networkError.name == "ServerError"}
-                    return reject({ mensaje: `sin éxito!` });
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
                 }
                 console.log("MutateResult");
                 console.dir(MutateResult);
@@ -56,9 +58,12 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
 
@@ -71,14 +76,19 @@ export default {
 
         mixinVerificacionCelularCreacion(payload) {
             return new Promise(async(resolve, reject)=>{
+                let MutateResult;
+
                 try {
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION
                     });
                 } catch (error) {
-                    console.log('Sesion call error...')
+                    console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    this.MixinResult.mensaje = error.message;
+                    if(error.graphQLErrors.length > 0){
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
                     return reject(this.MixinResult);
                 }
                 this.MixinResult.pagina = 'home';
