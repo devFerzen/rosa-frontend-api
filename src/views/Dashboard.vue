@@ -15,7 +15,7 @@
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4">
-              <file-pond ref="refImages" name="imagenesAnuncioEditDisplay" @init="handleFilePondInit"
+              <file-pond ref="refImages" name="filePondImages" @init="handleFilePondInit"
                 @processfile="imagenesAnuncioOnProcess" :files="imagenesAnuncio" />
             </v-col>
             <!--Carrusel-->
@@ -29,20 +29,24 @@
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
-                          <v-text-field v-model="FormAE.Sec_Descripcion.titulo" clearable required label="Titulo"></v-text-field>
+                          <v-text-field v-model="FormAE.Sec_Descripcion.titulo" clearable required label="Titulo">
+                          </v-text-field>
                         </v-col>
                       </v-row>
                       <!--Título-->
                       <v-form ref="form_anuncioEdicion">
                         <v-row>
                           <v-col cols="6" md="3">
-                            <v-text-field v-model="FormAE.Sec_Descripcion.estado" clearable required label="Estado"></v-text-field>
+                            <v-text-field v-model="FormAE.Sec_Descripcion.estado" clearable required label="Estado">
+                            </v-text-field>
                           </v-col>
                           <v-col cols="6" md="3">
-                            <v-text-field v-model="FormAE.Sec_Descripcion.ciudad" clearable required label="Ciudad"></v-text-field>
+                            <v-text-field v-model="FormAE.Sec_Descripcion.ciudad" clearable required label="Ciudad">
+                            </v-text-field>
                           </v-col>
                           <v-col cols="6" md="3">
-                            <v-text-field v-model="FormAE.Sec_Descripcion.sexo" clearable required label="Sexo"></v-text-field>
+                            <v-text-field v-model="FormAE.Sec_Descripcion.sexo" clearable required label="Sexo">
+                            </v-text-field>
                           </v-col>
 
                         </v-row>
@@ -52,7 +56,8 @@
                         <v-col>
                           <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
                             <v-form ref="form_anuncioEdicion">
-                              <v-textarea v-model="FormAE.Sec_Descripcion.descripcion" counter label="Descripción"></v-textarea>
+                              <v-textarea v-model="FormAE.Sec_Descripcion.descripcion" counter label="Descripción">
+                              </v-textarea>
                             </v-form>
                           </v-card>
                         </v-col>
@@ -525,7 +530,7 @@
       },
       imagenesAnuncio() {
         return this.FormAE.Sec_Imagenes.map(function (infoImagen) {
-          return { source: infoImagen.nombre, options: { type: 'remote' } };
+          return { source: 'http://localhost:3000/uploads/' + infoImagen.nombre, options: { type: 'remote' } };
         });
       }
     },
@@ -577,9 +582,9 @@
         this.$store.dispatch('editAnuncioDisplay', this.id);
       },
       handleFilePondInit() {
-        console.log("handleFilePondInit...");
-        console.log("getgiles", this.$refs.refImages.getfiles());
-        this.$refs.refImages.getfiles();
+        console.log("handleFilePondInit");
+        console.log("getfile", this.$refs.refImages.getfile());
+        console.log("getfiles", this.$refs.refImages.getfiles());
       },
       async salvandoNuevoAnuncio() {
         let tipoSalvado = this.idEditAnuncioDisplay === '000' ? "nuevo" : "editado";
@@ -587,15 +592,16 @@
 
         if (this.$refs.form_anuncioEdicion.validate()) {
           try {
-             //En permisos solo agregarlos si cuenta con información.
+            //En permisos solo agregarlos si cuenta con información.
             let posicionPermisoContacto = this.FormAE.permisos.indexOf('Contacto');
-            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoContacto,1) : ''; 
+            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoContacto, 1) : '';
 
             let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
-            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa,1) : ''; 
+            this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
+
+            this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
 
             if (tipoSalvado === "nuevo") {
-              this.FormAE.Sec_Imagenes = this.imagenesAnuncio;             
               MutateResult = await this.mixinAnuncioCrear(this.FormAE);
             }
 
@@ -624,10 +630,6 @@
       },
       imagenesAnuncioOnDelete(error, file) {
         console.log("imagenesAnuncioOnDelete...");
-        // Quitarlo del arreglo de imagenesAnuncio
-      },
-      imagenesAnuncioOnProcess(error, file) {
-        console.log("imagenesAnuncioOnProcess...");
         if (error) {
           console.log("error onProcess", error);
           console.log("file in error", file.file);
@@ -636,6 +638,27 @@
 
         let objetoImagen = {
           nombre: JSON.parse(file.serverId)[0] + "." + file.fileExtension,
+          tamano: file.fileSize + '',
+          extension: file.fileExtension,
+          posicion: this.imagenesAnuncio.length || 0
+        };
+
+        console.dir(objetoImagen);
+        // Quitarlo del arreglo de imagenesAnuncio
+      },
+      imagenesAnuncioOnProcess(error, file) {
+        console.log("imagenesAnuncioOnProcess...");
+        if (error) {
+          console.log("error onProcess", error);
+          console.log("file in error", file.file);
+          //Aqui se pone la llamada del error
+          return;
+        }
+
+        let objetoImagen = {
+          nombre: JSON.parse(file.serverId)[0],
+          tamano: file.fileSize + '',
+          extension: file.fileExtension,
           posicion: this.imagenesAnuncio.length || 0
         };
 
