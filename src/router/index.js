@@ -16,8 +16,7 @@ const routes = [{
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: Dashboard,
-        props: route => ({ id: route.query.q })
+        component: Dashboard
     },
     {
         path: '/compras',

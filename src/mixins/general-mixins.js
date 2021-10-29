@@ -33,6 +33,7 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinInicioSesion...");
                 let mutateResult;
+                this.cleanMixinResult();
 
                 try {
                     mutateResult = await this.$apollo.mutate({
@@ -49,11 +50,12 @@ export default {
                     //afss duda, todo graphqlError es así, siempre sale uno??? no, en errores de servidor no sale esta propiedad
                     this.MixinResult.mensaje = error.message;
 
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
                 }
+
                 seteandoToken(mutateResult.data.inicioSesion.token);
                 this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.mensaje = 'Bienvenido...!';
@@ -71,6 +73,8 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinRegistro...");
                 let mutateResult;
+                this.cleanMixinResult();
+
                 try {
                     mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.REGISTRO_MUTATE,
@@ -82,7 +86,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -105,6 +109,7 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinSolicitarRestablecerContrasena...");
                 let MutateResult;
+                this.cleanMixinResult();
 
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -117,7 +122,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -140,6 +145,8 @@ export default {
             return new Promise(async(resolve, reject) => {
                 let mutateResult;
                 console.log("mixinVerificacionUsuarioComparacion...");
+                this.cleanMixinResult();
+
                 try {
                     mutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
@@ -152,7 +159,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -173,6 +180,7 @@ export default {
         mixinNuevoCorreoContactanos(payload) {
             return new Promise(async(resolve, reject) => {
                 let mutateResult;
+                this.cleanMixinResult();
                 console.log("mixinNuevoCorreoContactanos...");
 
                 try {
@@ -186,7 +194,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -223,7 +231,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -254,12 +262,13 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
                 }
                 console.dir(mutateResult);
+
                 resolve(mutateResult);
             });
         },
@@ -273,6 +282,7 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinRestablecerContrasena...");
                 let MutateResult;
+                this.cleanMixinResult();
 
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -287,12 +297,12 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
                 }
-                
+
                 this.MixinResult.pagina = 'home';
                 this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
                 this.MixinResult.mensaje = MutateResult.data.restablecerContrasena;
@@ -312,7 +322,7 @@ export default {
 
                 try {
                     queryResult = await this.$apollo.query({
-                        query: GraphqlCalls.VER_QUERY,
+                        query: GraphqlCalls.ANUNCIO_BYID_QUERY,
                         variables: {
                             ids: payload
                         }
@@ -342,7 +352,7 @@ export default {
 
                 try {
                     QueryResult = await this.$apollo.query({
-                        query: GraphqlCalls.BUSQUEDA_QUERY,
+                        query: GraphqlCalls.ANUNCIOS_QUERY,
                         variables: {
                             query: {}
                         }
@@ -376,11 +386,17 @@ export default {
                 this.$store.dispatch(payload.componenteInterno, valorPayload);
             }
 
-            if(!payload.pagina){
+            if (!payload.pagina) {
                 //fin de llamada
                 return;
             }
             this.$router.push({ name: payload.pagina }).catch(error => {});
+        },
+        cleanMixinResult() {
+            this.MixinResult.pagina = null;
+            this.MixinResult.componenteInterno = null;
+            this.MixinResult.mensaje = '';
+            this.MixinResult.data = null;
         }
     }
 }

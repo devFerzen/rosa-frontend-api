@@ -19,7 +19,7 @@ export const mutations = {
     CORREO_SET(state, payload) {
         state.usuario.usuario = payload;
     },
-    CODIGO_VERIFICACION_SET(state,payload){
+    CODIGO_VERIFICACION_SET(state, payload) {
         state.usuario.verificacionUsuario = payload;
     },
     VERIFICACION_USUARIO_SET(state, payload) {
@@ -28,7 +28,7 @@ export const mutations = {
     CARGA_ANUNCIOS_USUARIO(state, payload) {
         state.usuario.anuncios_usuario = payload;
     },
-    CARGA_NUEVO_ANUNCIO(state, payload){
+    CARGA_NUEVO_ANUNCIO(state, payload) {
         state.usuario.anuncios_usuario.push(payload);
     }
 }
@@ -45,8 +45,28 @@ export const actions = {
             resolve();
         });
     },
-    anuncioAgregarNuevo({ commit, state}, payload){
+    anuncioAgregarNuevo({ commit, state }, payload) {
         commit('CARGA_NUEVO_ANUNCIO', payload);
+    },
+    anuncioEditado({ commit, state }, payload) {
+        return new Promise((resolve, reject) => {
+            console.dir(payload.Sec_Descripcion);
+
+            let newArray = state.usuario.anuncios_usuario.map(function(value) {
+                let returnValue;
+                console.log(typeof value.id, " con ", typeof payload.id);
+                console.log(value.id, " con ", payload.id);
+                if (value.id === payload.id) {
+                    console.log(value.id === payload.id);
+                    return payload;
+                }
+                return value;
+            });
+
+            console.log("vuex anuncioEditado", newArray);
+            commit('CARGA_ANUNCIOS_USUARIO', newArray);
+            resolve();
+        });
     }
 }
 

@@ -12,7 +12,7 @@ export const SOLICITAR_VERIFICACION_ANUNCIO = gql `
     }
 `;
 
-export const NUEVA_ANUNCIO_MUTATE = gql `
+export const NUEVO_ANUNCIO_MUTATE = gql `
     mutation anuncioCreacion($input: AnuncioInput!){
         anuncioCreacion(input: $input){
             id
@@ -49,5 +49,11 @@ export const NUEVA_ANUNCIO_MUTATE = gql `
             no_vistas
             verificado
         }
+    }
+`;
+
+export const EDICION_ANUNCIO_MUTATE = gql `
+    mutation anuncioActualizacion($input: AnuncioInput!){
+        anuncioActualizacion(input: $input)
     }
 `;

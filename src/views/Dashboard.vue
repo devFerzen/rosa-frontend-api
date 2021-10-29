@@ -2,20 +2,19 @@
   <v-container fluid fill-height class="white">
     <v-row>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i">
-        <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio"
-          v-bind:OpcionesAnuncio="opciones">
+        <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio">
         </tarjeta-anuncio-usuario>
         <!--Listado de anuncios del usuario -->
         <!--aqui pasar props para activar vista o desactivar vista-->
       </v-col>
     </v-row>
 
-    <v-dialog v-model="idEditAnuncioDisplay" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
+    <v-dialog v-model="anuncioDisplayState" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
       <v-card height="auto">
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4">
-              <file-pond ref="refImages" name="filePondImages" @init="handleFilePondInit"
+              <file-pond ref="pond" name="filePondImages" @init="handleFilePondInit"
                 @processfile="imagenesAnuncioOnProcess" :files="imagenesAnuncio" />
             </v-col>
             <!--Carrusel-->
@@ -25,7 +24,7 @@
               <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey" tile
                 :height="bodyWH['vMainContenth']" :width="bodyWH['vMainContentw']">
                 <v-tabs class="d-flex flex-column-reverse">
-                  <v-tab-item v-if="FormAE.Sec_Descripcion">
+                  <v-tab-item>
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
@@ -67,7 +66,7 @@
                   </v-tab-item>
                   <!--Sec_Descripcion-->
 
-                  <v-tab-item v-if="FormAE.Sec_Contacto">
+                  <v-tab-item>
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
@@ -108,7 +107,7 @@
                   </v-tab-item>
                   <!--Sec_Contacto-->
 
-                  <v-tab-item v-if="FormAE.Sec_Tarifas">
+                  <v-tab-item>
                     <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
                       <v-row no-gutters>
                         <v-col>
@@ -164,9 +163,9 @@
                   </v-tab-item>
                   <!--Sec_Tarifas-->
 
-                  <v-tab v-for="(anuncio, key, i) in FormAE.permisos" :key="i">
-                    {{ anuncio }}
-                  </v-tab>
+                  <v-tab>Descripción</v-tab>
+                  <v-tab>Contacto</v-tab>
+                  <v-tab>Tarifas</v-tab>
                   <!--nombre tabs-->
                 </v-tabs>
 
@@ -341,67 +340,20 @@
       process: {
         url: 'upload'
       },
-      load: 'load/',
-      fetch: 'load/'
+      load: 'uploads/',
+      fetch: 'uploads/'
     },
   });
 
   export default {
     name: "dashboard",
     mixins: [UsuarioMixins, AnuncioMixins, GeneralMixins],
-    props: {
-      id: {
-        default: false
-      }
-    },
     components: {
       TarjetaAnuncioUsuario,
       FilePond,
     },
     data() {
-      return {
-        selectedContactItem: "",
-        opciones: {
-          Descripcion: {
-            permisos: true,
-            categoria: "fab",
-            icono: "whatsapp",
-          },
-          Actualizacion: {
-            permisos: true,
-            categoria: "fas",
-            icono: "sync-alt",
-          },
-          Compras: {
-            permisos: true,
-            categoria: "fas",
-            icono: "shopping-bag",
-          },
-          Edicion: {
-            permisos: true,
-            categoria: "fas",
-            icono: "pencil-alt",
-          },
-          Eliminar: {
-            permisos: true,
-            categoria: "fas",
-            icono: "trash-alt",
-          },
-          Preview: {
-            permisos: false,
-            categoria: "fas",
-            icono: "trash-alt",
-          },
-        },
-        nuevoContacto: {
-          Tipo: "",
-          contacto: "",
-        },
-        nuevaTarifa: {
-          nombre: "",
-          precio: "0.00",
-          descripcion: "",
-        },
+      return {        
         tiposContacto: [
           { categoria: "fab", icono: "whatsapp" },
           { categoria: "fab", icono: "twitter" },
@@ -462,7 +414,7 @@
 
         //Form de un anuncio nuevo
         FormAE: {
-          categoria: ["Escorts", "Masajes Eróticos"],
+          categorias: ["Escorts", "Masajes Eróticos"],
           permisos: ["Descripcion", "Contacto", "Tarifas"],
           Sec_Descripcion: {
             titulo: 'titulo test 1',
@@ -475,13 +427,25 @@
           Sec_Contacto: [],
           Sec_Tarifas: [],
         },
+        selectedContactItem: "",
+        imagenesAnuncio: [],
         nuevaTarifaDialog: false,
         nuevoContactoDialog: false,
         anuncioEditDialog: false,
+        nuevoContacto: {
+          Tipo: "",
+          contacto: "",
+        },
+        nuevaTarifa: {
+          nombre: "",
+          precio: "0.00",
+          descripcion: "",
+        },
       };
     },
     computed: {
-      ...mapGetters(["anunciosUsuario"]),
+      ...mapGetters(['anunciosUsuario', 'anuncioDisplayState']),
+
       //CSS Properties
       tabContainerClass() {
         const { sm, xs } = this.$vuetify.breakpoint;
@@ -517,22 +481,13 @@
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
-
-      //Anuncio edit display
-      idEditAnuncioDisplay() {
-        return this.$store.state.anuncio.dashboardEditAnuncioDisplay;
-      },
+      
       contactoList() {
         return this.FormAE.Sec_Contacto;
       },
       tarifaList() {
         return this.FormAE.Sec_Tarifas;
       },
-      imagenesAnuncio() {
-        return this.FormAE.Sec_Imagenes.map(function (infoImagen) {
-          return { source: 'http://localhost:3000/uploads/' + infoImagen.nombre, options: { type: 'remote' } };
-        });
-      }
     },
     methods: {
       tarifaNueva() {
@@ -573,21 +528,74 @@
         this.nuevoContactoDialog = false;
         this.$refs.contactoEdit.reset();
       },
-      abriendoEditAnuncioDisplay(InfoAnuncio) {
-        this.id = InfoAnuncio.id;
-        this.$store.dispatch('editAnuncioDisplay', this.id);
+      async abriendoEditAnuncioDisplay(InfoAnuncio) {
+        let MutateResult;
+
+        if(InfoAnuncio.id === '000'){
+          this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
+          return;
+        }
+
+        InfoAnuncio.AnuncioDashboard = true;
+
+        try {
+          MutateResult = await this.mixinBuscarAnuncioId(InfoAnuncio);
+        } catch (error) {
+            console.log("vue abriendoEditAnuncioDisplay error...");
+            console.dir(error);
+            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
+            this.mixinLlamadaRouter(error);
+            throw error;
+        }
+
+        this.formAESet(MutateResult.data);        
+        this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
+      },
+      //Esta función fue para borrar el __typename pero se implemeto otra mejora en el InMemoryCache en mainjs -> esto quiza es una limpia para que no actualice los corazones o otra información
+      formAESet(Anuncio){
+        if('Sec_Descripcion' in Anuncio){
+          this.FormAE.Sec_Descripcion = Anuncio.Sec_Descripcion;
+        }
+
+        if('Sec_Imagenes' in Anuncio){
+          this.imagenesAnuncio = Anuncio.Sec_Imagenes.map(function (infoImagen) {
+            return { 
+              source: infoImagen.nombre, 
+              nombre: infoImagen.nombre, 
+              posicion: infoImagen.posicion, 
+              options: { type: 'local' } };
+          });
+        }
+
+        if('Sec_Contacto' in Anuncio){
+          this.FormAE.Sec_Contacto = Anuncio.Sec_Contacto;
+        }
+
+        if('Sec_Tarifas' in Anuncio){
+          this.FormAE.Sec_Tarifas = Anuncio.Sec_Tarifas;
+        }
+
+        if('categorias' in Anuncio){
+          this.FormAE.categorias = Anuncio.categorias;
+        }
+
+        if('categorias' in Anuncio){
+          this.FormAE.categorias = Anuncio.categorias;
+        }
+
+        if('id' in Anuncio){
+          this.FormAE.id = Anuncio.id;
+        }
+          
       },
       cerrandoEditAnuncioDisplay() {
-        this.id = null;
-        this.$store.dispatch('editAnuncioDisplay', this.id);
+        this.$store.dispatch('editAnuncioDisplay', null);
       },
       handleFilePondInit() {
         console.log("handleFilePondInit");
-        console.log("getfile", this.$refs.refImages.getfile());
-        console.log("getfiles", this.$refs.refImages.getfiles());
       },
       async salvandoNuevoAnuncio() {
-        let tipoSalvado = this.idEditAnuncioDisplay === '000' ? "nuevo" : "editado";
+        let tipoSalvado = this.anuncioDisplayState === '000' ? "nuevo" : "editado";
         let MutateResult;
 
         if (this.$refs.form_anuncioEdicion.validate()) {
@@ -599,7 +607,10 @@
             let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
             this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
 
-            this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
+            //no ocupa volver a regresarlo a la normalidad 
+            this.FormAE.Sec_Imagenes = this.imagenesAnuncio.map(function (infoImagen) {
+              return { nombre: infoImagen.nombre, posicion: infoImagen.posicion };
+            });
 
             if (tipoSalvado === "nuevo") {
               MutateResult = await this.mixinAnuncioCrear(this.FormAE);
@@ -621,8 +632,15 @@
           }
 
           console.dir(MutateResult);
-          this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
-          this.$store.dispatch("activationAlert", { type: "success", message: `Anuncio ${MutateResult.mensaje} exitosamente!`, });
+          if (tipoSalvado === "nuevo") {
+            this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
+          }
+
+          if (tipoSalvado === "editado") {
+            this.$store.dispatch("anuncioEditado",this.FormAE);
+          }
+
+          this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
           this.cerrandoEditAnuncioDisplay();
           return;
         }
@@ -638,8 +656,6 @@
 
         let objetoImagen = {
           nombre: JSON.parse(file.serverId)[0] + "." + file.fileExtension,
-          tamano: file.fileSize + '',
-          extension: file.fileExtension,
           posicion: this.imagenesAnuncio.length || 0
         };
 
@@ -655,12 +671,16 @@
           return;
         }
 
+        console.dir(file);
+
         let objetoImagen = {
           nombre: JSON.parse(file.serverId)[0],
-          tamano: file.fileSize + '',
-          extension: file.fileExtension,
-          posicion: this.imagenesAnuncio.length || 0
-        };
+          posicion: this.imagenesAnuncio.length || 0,
+          source: JSON.parse(file.serverId)[0],
+          options: {
+            type: 'local'
+          }
+        };       
 
         console.dir(objetoImagen);
         this.imagenesAnuncio.push(objetoImagen);

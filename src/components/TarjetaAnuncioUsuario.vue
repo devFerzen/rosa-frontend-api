@@ -12,8 +12,8 @@
 
         <v-col cols="12" lg="7" class="d-flex flex-column justify-center align-center align-stretch">
           <v-sheet class="d-flex" color="grey lighten-3" :height="tarjetaWH['cuerpoAnuncio']">
-            <v-tabs class="d-flex flex-column-reverse" centered>
-              <v-tab-item v-if="OpcionesAnuncio.Descripcion.permisos">
+            <v-tabs class="d-flex flex-column-reverse" centered v-model="activeTab">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
                     <v-col>
@@ -49,7 +49,7 @@
               </v-tab-item>
               <!--Descripcion-->
 
-              <v-tab-item v-if="OpcionesAnuncio.Actualizacion.permisos">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <dashboard-compras tipo="actualizacion"></dashboard-compras>
                   <!--Componente de Compra-->
@@ -57,14 +57,14 @@
               </v-tab-item>
               <!--Actualizacion-->
 
-              <v-tab-item v-if="OpcionesAnuncio.Compras.permisos">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <dashboard-compras tipo="paquetes"></dashboard-compras>
                 </v-container>
               </v-tab-item>
               <!--Compras-->
 
-              <v-tab-item v-if="OpcionesAnuncio.Edicion.permisos">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
                     <v-col>
@@ -100,7 +100,7 @@
               </v-tab-item>
               <!--Edicion-->
 
-              <v-tab-item v-if="OpcionesAnuncio.Eliminar.permisos">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
                     <v-col>
@@ -130,7 +130,7 @@
               </v-tab-item>
               <!--Eliminar-->
 
-              <v-tab-item v-if="OpcionesAnuncio.Preview.permisos">
+              <v-tab-item>
                 <v-container fluid style="height: 440px; overflow:hidden;" class="pa-4 pa-lg-8">
                   <v-row no-gutters>
                     <v-col>
@@ -166,27 +166,27 @@
               </v-tab-item>
               <!--Preview-->
 
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Descripcion.permisos">
+              <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'home']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab Descripcion-->
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Actualizacion.permisos">
+              <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'sync-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab Actualizacion-->
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Compras.permisos">
+              <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'shopping-bag']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab Compras-->
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Edicion.permisos" @click="abrirEdicion">
+              <v-tab style="min-width:60px!important;" @click="abrirEdicion">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab Edicion-->
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Eliminar.permisos">
+              <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab Eliminar-->
-              <v-tab style="min-width:60px!important;" v-if="OpcionesAnuncio.Preview.permisos" @click="abrirEdicion">
+              <v-tab style="min-width:60px!important;">
                 <font-awesome-icon :icon="['fas', 'eye']" class="tw-redes-icons fa-2x" />
               </v-tab>
               <!--tab PreView-->
@@ -211,12 +211,12 @@
       DashboardCompras
     },
     props: {
-      anuncioUsuario: { type: Object, default: {} },
-      OpcionesAnuncio: { type: Object, default: {} }
+      anuncioUsuario: { type: Object, default: {} }
     },
     data() {
       return {
         selectedContactItem: '',
+        tab: 0
       }
     },
     computed: {
@@ -231,6 +231,21 @@
         return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
           return { url: 'http://localhost:3000/uploads/'+infoImagen.nombre, options: { type: 'remote' } };
         });
+      },
+      activeTab: {
+        get(){
+          return this.tab;
+        },
+        set(newValue){
+          if(newValue == 3){
+            console.log(newValue);
+            console.log(typeof newValue);
+            this.tab = 0; // ya no se usan tabs y este no funciona, ver el diseño para agregar los cambios
+          }else{
+            console.log("no paso aqui");
+            this.tab = newValue;
+          }
+        }
       }
     },
     methods: {
@@ -250,10 +265,8 @@
         this.$store.dispatch('activationAlert', { type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!` });
       },
       abrirEdicion() {
-        console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id );
+        console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id );        
         this.$emit('activandoEdicion', { id: this.anuncioUsuario.id });
-
-
       }
     },
     mounted() {

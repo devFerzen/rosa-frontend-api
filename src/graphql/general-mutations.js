@@ -140,7 +140,7 @@ export const NUEVO_CORREO_CONTACTANOS = gql `
 `;
 
 // Query ***
-export const VER_QUERY = gql `
+export const ANUNCIO_BYID_QUERY = gql `
     query queryAnunciosById($ids: [String]){
         queryAnunciosById(ids: $ids){
             id
@@ -180,7 +180,7 @@ export const VER_QUERY = gql `
     } 
 `;
 
-export const BUSQUEDA_QUERY = gql `
+export const ANUNCIOS_QUERY = gql `
     query queryAnuncios($query: QueryAnuncioInput!){
         queryAnuncios(query: $query){
             id

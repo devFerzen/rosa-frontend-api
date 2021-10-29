@@ -17,6 +17,8 @@ export default {
         mixinContrasenaActualizar(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
+                this.cleanMixinResult();
+
                 console.log("mixinContrasenaActualizar...");
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -30,7 +32,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -50,6 +52,8 @@ export default {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
                 console.log("mixinVerificacionCelularComparacion...");
+                this.cleanMixinResult();
+
                 try {
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
@@ -61,7 +65,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -75,8 +79,9 @@ export default {
         },
 
         mixinVerificacionCelularCreacion(payload) {
-            return new Promise(async(resolve, reject)=>{
+            return new Promise(async(resolve, reject) => {
                 let MutateResult;
+                this.cleanMixinResult();
 
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -86,7 +91,7 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
-                    if(error.graphQLErrors.length > 0){
+                    if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
                     return reject(this.MixinResult);
@@ -99,6 +104,12 @@ export default {
                 return;
             });
         },
+        cleanMixinResult() {
+            this.MixinResult.pagina = null;
+            this.MixinResult.componenteInterno = null;
+            this.MixinResult.mensaje = '';
+            this.MixinResult.data = null;
+        }
 
     }
 }
