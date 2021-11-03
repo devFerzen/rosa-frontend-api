@@ -57,3 +57,15 @@ export const EDICION_ANUNCIO_MUTATE = gql `
         anuncioActualizacion(input: $input)
     }
 `;
+
+export const DELETE_ANUNCIO_MUTATE = gql `
+    mutation anuncioEliminacion($id_anuncio: String!){
+        anuncioEliminacion(id_anuncio: $id_anuncio)
+    }
+`;
+
+export const DELETE_IMAGEN_MUTATE = gql `
+    mutation imagenEliminacion($input: String!){
+        imagenEliminacion(input: $input)
+    }
+`;

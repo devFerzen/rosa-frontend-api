@@ -4,8 +4,8 @@
       <v-row align="center" justify="center" class="fill-height" no-gutters>
         <v-col cols="12" lg="5">
           <v-carousel :height="tarjetaWH['carrusel']">
-            <v-carousel-item v-for="(imagen,i) in imagenesAnuncio" :key="i" :src="imagen.url"
-              max-height="100%"></v-carousel-item>
+            <v-carousel-item v-for="(imagen,i) in imagenesAnuncio" :key="i" :src="imagen.url" max-height="100%">
+            </v-carousel-item>
           </v-carousel>
         </v-col>
         <!--Carrusel-->
@@ -121,7 +121,7 @@
                   <v-row no-gutters justify="center">
                     <v-col cols="4" class="mt-12">
                       <v-btn depressed elevation="2" color="primary" width="140"
-                        @click="borrarAnuncio(anuncioUsuario.id)">
+                        @click='borrarAnuncio(anuncioUsuario.id)'>
                         <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-redes-icons fa-2x mr-1" /> Borrar
                       </v-btn>
                     </v-col>
@@ -229,20 +229,17 @@
       },
       imagenesAnuncio() {
         return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
-          return { url: 'http://localhost:3000/uploads/'+infoImagen.nombre, options: { type: 'remote' } };
+          return { url: 'http://localhost:3000/uploads/' + infoImagen.nombre, options: { type: 'remote' } };
         });
       },
       activeTab: {
-        get(){
+        get() {
           return this.tab;
         },
-        set(newValue){
-          if(newValue == 3){
-            console.log(newValue);
-            console.log(typeof newValue);
+        set(newValue) {
+          if (newValue == 3) {
             this.tab = 0; // ya no se usan tabs y este no funciona, ver el diseño para agregar los cambios
-          }else{
-            console.log("no paso aqui");
+          } else {
             this.tab = newValue;
           }
         }
@@ -265,7 +262,7 @@
         this.$store.dispatch('activationAlert', { type: 'success', message: `Anuncio # ${idAnuncio} eliminado exitosamente!` });
       },
       abrirEdicion() {
-        console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id );        
+        console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
         this.$emit('activandoEdicion', { id: this.anuncioUsuario.id });
       }
     },

@@ -122,7 +122,7 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('mixinBuscarAnuncioId Mutation error...');
+                    console.log('mixinAnuncioEditar Mutation error...');
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
                     if (error.graphQLErrors.length > 0) {
@@ -133,6 +133,80 @@ export default {
 
                 this.cleanMixinResult();
                 this.MixinResult.mensaje = MutateResult.data.anuncioActualizacion;
+                resolve(this.MixinResult);
+            });
+        },
+        mixinAnuncioEliminar(payload) {
+            return new Promise(async(resolve, reject) => {
+                let MutateResult;
+                console.log("mixinAnuncioEliminar...");
+
+                if (!this.$store.state.usuario.usuario.usuario) {
+                    console.log("No hay usuario iniciado sesion");
+                    this.MixinResult.pagina = 'home';
+                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
+                    return reject(this.MixinResult);
+                }
+
+                try {
+                    console.dir(payload);
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlAnuncioCalls.DELETE_ANUNCIO_MUTATE,
+                        variables: {
+                            id_anuncio: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('mixinAnuncioEliminar Mutation error...');
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.message;
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
+                }
+
+                this.cleanMixinResult();
+                this.MixinResult.mensaje = MutateResult.data.anuncioEliminacion;
+                resolve(this.MixinResult);
+            });
+        },
+        mixinImagenDelete(payload) {
+            return new Promise(async(resolve, reject) => {
+                let MutateResult;
+                console.log("mixinImagenDelete...");
+
+                if (!this.$store.state.usuario.usuario.usuario) {
+                    console.log("No hay usuario iniciado sesion");
+                    this.MixinResult.pagina = 'home';
+                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
+                    return reject(this.MixinResult);
+                }
+
+                try {
+                    console.dir(payload);
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlAnuncioCalls.DELETE_IMAGEN_MUTATE,
+                        variables: {
+                            input: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('mixinImagenDelete Mutation error...');
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    this.MixinResult.mensaje = error.message;
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                    }
+                    return reject(this.MixinResult);
+                }
+
+                console.log("MutateResult");
+                console.dir(MutateResult);
+
+                this.MixinResult.mensaje = MutateResult.data.imagenEliminacion;
                 resolve(this.MixinResult);
             });
         },

@@ -14,8 +14,8 @@
         <v-container fluid>
           <v-row align="start" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4">
-              <file-pond ref="pond" name="filePondImages" @init="handleFilePondInit"
-                @processfile="imagenesAnuncioOnProcess" :files="imagenesAnuncio" />
+              <file-pond ref="pond" name="filePondImages" @init="handleFilePondInit" :files="imagenesAnuncioFilePond"
+                @processfile="imagenesAnuncioOnProcess" @removefile="imagenesAnuncioOnDelete" />
             </v-col>
             <!--Carrusel-->
 
@@ -341,7 +341,8 @@
         url: 'upload'
       },
       load: 'uploads/',
-      fetch: 'uploads/'
+      fetch: 'uploads/',
+      revert: 'delete/'
     },
   });
 
@@ -353,7 +354,7 @@
       FilePond,
     },
     data() {
-      return {        
+      return {
         tiposContacto: [
           { categoria: "fab", icono: "whatsapp" },
           { categoria: "fab", icono: "twitter" },
@@ -429,6 +430,7 @@
         },
         selectedContactItem: "",
         imagenesAnuncio: [],
+        imagenesAnuncioFilePond: [],
         nuevaTarifaDialog: false,
         nuevoContactoDialog: false,
         anuncioEditDialog: false,
@@ -481,7 +483,7 @@
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? { colsTarjeta: 12 } : { colsTarjeta: 6 };
       },
-      
+
       contactoList() {
         return this.FormAE.Sec_Contacto;
       },
@@ -498,8 +500,8 @@
         tarifa.precio = parseInt(this.nuevaTarifa.precio);
         tarifa.descripcion = this.nuevaTarifa.descripcion;
 
-        console.log("tarifaNueva...");
-        console.dir(tarifa);
+        //console.log("tarifaNueva...");
+        //console.dir(tarifa);
 
         if (this.FormAE.Sec_Tarifas.length >= 3) {
           //Sistema de Alerts
@@ -521,17 +523,18 @@
         };
         contacto.contacto = this.nuevoContacto.contacto;
 
-        console.log("contactoNuevo...");
-        console.dir(contacto);
+        //console.log("contactoNuevo...");
+        //console.dir(contacto);
 
         this.FormAE.Sec_Contacto.unshift(contacto);
         this.nuevoContactoDialog = false;
         this.$refs.contactoEdit.reset();
       },
       async abriendoEditAnuncioDisplay(InfoAnuncio) {
-        let MutateResult;
+        //Activar llamada para correr un componente con el filepond
 
-        if(InfoAnuncio.id === '000'){
+        let MutateResult;
+        if (InfoAnuncio.id === '000') {
           this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
           return;
         }
@@ -541,52 +544,55 @@
         try {
           MutateResult = await this.mixinBuscarAnuncioId(InfoAnuncio);
         } catch (error) {
-            console.log("vue abriendoEditAnuncioDisplay error...");
-            console.dir(error);
-            this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
-            this.mixinLlamadaRouter(error);
-            throw error;
+          console.log("vue abriendoEditAnuncioDisplay error...");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
+          this.mixinLlamadaRouter(error);
+          throw error;
         }
 
-        this.formAESet(MutateResult.data);        
+        this.formAESet(MutateResult.data);
         this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
       },
       //Esta función fue para borrar el __typename pero se implemeto otra mejora en el InMemoryCache en mainjs -> esto quiza es una limpia para que no actualice los corazones o otra información
-      formAESet(Anuncio){
-        if('Sec_Descripcion' in Anuncio){
+      formAESet(Anuncio) {
+
+        if ('Sec_Descripcion' in Anuncio) {
           this.FormAE.Sec_Descripcion = Anuncio.Sec_Descripcion;
         }
 
-        if('Sec_Imagenes' in Anuncio){
-          this.imagenesAnuncio = Anuncio.Sec_Imagenes.map(function (infoImagen) {
-            return { 
-              source: infoImagen.nombre, 
-              nombre: infoImagen.nombre, 
-              posicion: infoImagen.posicion, 
-              options: { type: 'local' } };
-          });
+        if ('Sec_Imagenes' in Anuncio) {
+          //Se seteará con add file
+          for (let Anuncio of Anuncio.Sec_Imagenes) {
+            //console.dir(Anuncio);
+            //no funciona this.$refs.pond.addFil({ source: Anuncio.nombre, options: { type: 'local' } });
+
+            //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar
+            this.imagenesAnuncioFilePond.push({ source: Anuncio.nombre, options: { type: 'local' } });
+          }
+          this.imagenesAnuncio = Anuncio.Sec_Imagenes;
         }
 
-        if('Sec_Contacto' in Anuncio){
+        if ('Sec_Contacto' in Anuncio) {
           this.FormAE.Sec_Contacto = Anuncio.Sec_Contacto;
         }
 
-        if('Sec_Tarifas' in Anuncio){
+        if ('Sec_Tarifas' in Anuncio) {
           this.FormAE.Sec_Tarifas = Anuncio.Sec_Tarifas;
         }
 
-        if('categorias' in Anuncio){
+        if ('categorias' in Anuncio) {
           this.FormAE.categorias = Anuncio.categorias;
         }
 
-        if('categorias' in Anuncio){
+        if ('categorias' in Anuncio) {
           this.FormAE.categorias = Anuncio.categorias;
         }
 
-        if('id' in Anuncio){
+        if ('id' in Anuncio) {
           this.FormAE.id = Anuncio.id;
         }
-          
+
       },
       cerrandoEditAnuncioDisplay() {
         this.$store.dispatch('editAnuncioDisplay', null);
@@ -608,9 +614,7 @@
             this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
 
             //no ocupa volver a regresarlo a la normalidad 
-            this.FormAE.Sec_Imagenes = this.imagenesAnuncio.map(function (infoImagen) {
-              return { nombre: infoImagen.nombre, posicion: infoImagen.posicion };
-            });
+            this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
 
             if (tipoSalvado === "nuevo") {
               MutateResult = await this.mixinAnuncioCrear(this.FormAE);
@@ -631,13 +635,13 @@
             throw error;
           }
 
-          console.dir(MutateResult);
+          //console.dir(MutateResult);
           if (tipoSalvado === "nuevo") {
             this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
           }
 
           if (tipoSalvado === "editado") {
-            this.$store.dispatch("anuncioEditado",this.FormAE);
+            this.$store.dispatch("anuncioEditado", this.FormAE);
           }
 
           this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
@@ -647,7 +651,11 @@
         this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de llenar todos los campos requeridos!.` });
       },
       imagenesAnuncioOnDelete(error, file) {
-        console.log("imagenesAnuncioOnDelete...");
+        let MutateResult;
+
+        console.log("imagenesAnuncioOnDelete... file");
+        console.dir(file);
+
         if (error) {
           console.log("error onProcess", error);
           console.log("file in error", file.file);
@@ -655,12 +663,30 @@
         }
 
         let objetoImagen = {
-          nombre: JSON.parse(file.serverId)[0] + "." + file.fileExtension,
-          posicion: this.imagenesAnuncio.length || 0
+          //AFSS: Esto no se porqué pero salva de que no se borré la imagen...
+          nombre: JSON.parse(file.serverId)[0]
         };
 
-        console.dir(objetoImagen);
-        // Quitarlo del arreglo de imagenesAnuncio
+        try {
+          MutateResult = this.mixinImagenDelete(objetoImagen.nombre);
+          // de ahí eliminar de su state en su array de imagenes anuncio
+
+        } catch (error) {
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
+          this.mixinLlamadaRouter(error);
+          throw error;
+        }
+
+        // AFSS: Desarrollo futuro, remover el valor de su arreglo vuex usuario
+        this.imagenesAnuncio = this.imagenesAnuncio.filter(imagen => {
+          if (imagen.nombre !== objetoImagen.nombre) {
+            return imagen;
+          }
+        });
+        console.dir(MutateResult)
+
+        this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
       },
       imagenesAnuncioOnProcess(error, file) {
         console.log("imagenesAnuncioOnProcess...");
@@ -671,18 +697,16 @@
           return;
         }
 
+        console.log("file");
         console.dir(file);
-
         let objetoImagen = {
           nombre: JSON.parse(file.serverId)[0],
-          posicion: this.imagenesAnuncio.length || 0,
-          source: JSON.parse(file.serverId)[0],
-          options: {
-            type: 'local'
-          }
-        };       
+          posicion: this.imagenesAnuncio.length || 0 //Continuación o Seguimiento inicial
+        };
 
-        console.dir(objetoImagen);
+        //console.log("objetoImagen");
+        //console.dir(objetoImagen);
+
         this.imagenesAnuncio.push(objetoImagen);
       }
 
