@@ -449,18 +449,19 @@
 
     },
     async created() {
-      let queryResult;
+      let QueryResult;
 
       try {
-        queryResult = await this.mixinBusqueda()
+        QueryResult = await this.mixinBusqueda()
       } catch (error) {
-        console.log("vue queryResult(anunciosBusqueda) en error...");
+        console.log("vue QueryResult(anunciosBusqueda) en error...");
         console.dir(error);
         this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error anunciosBusqueda...>>>>${error.mensaje}` });
         return;
       }
       //Seteamos en VUEX la información
-      this.anunciosBusqueda = queryResult.data.queryAnuncios;
+      console.dir(QueryResult);
+      this.anunciosBusqueda = QueryResult.data.queryAnuncios;
     }
   };
 </script>

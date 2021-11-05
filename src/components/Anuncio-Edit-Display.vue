@@ -396,11 +396,19 @@
         },
         data() {
             return {
+                //Hay que hacer un call en state
+                tiposContacto: [
+                    { categoria: "fab", icono: "whatsapp" },
+                    { categoria: "fab", icono: "twitter" },
+                    { categoria: "fab", icono: "instagram" },
+                    { categoria: "fa", icono: "phone-alt" },
+                    { categoria: "fa", icono: "globe" },
+                ],
+
                 //Form de un anuncio nuevo
                 FormAE: this.AnuncioInfo,
                 selectedContactItem: "",
                 imagenesAnuncio: [],
-                imagenesAnuncioFilePond: [],
                 nuevaTarifaDialog: false,
                 nuevoContactoDialog: false,
                 nuevoContacto: {
@@ -412,6 +420,7 @@
                     precio: "0.00",
                     descripcion: "",
                 },
+                imagenesAnuncioFilePond: []
             }
         },
         computed: {
@@ -496,20 +505,19 @@
                 this.$refs.contactoEdit.reset();
             },
             async salvandoNuevoAnuncio() {
-                let tipoSalvado = this.anuncioDisplayState === '000' ? "nuevo" : "editado";
+                let tipoSalvado = this.displayState == '000' ? "nuevo" : "editado";
                 let MutateResult;
 
                 if (this.$refs.form_anuncioEdicion.validate()) {
                     try {
-                        //En permisos solo agregarlos si cuenta con información.
-                        let posicionPermisoContacto = this.FormAE.permisos.indexOf('Contacto');
-                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoContacto, 1) : '';
+                        //En permisos solo agregarlos si cuenta con información. aunque creo que esta de más, quizás se removerá pero en la BD permanecerá para usos diferentes (estos permisos son para mostrar o no si aparecerá este botón...)
+                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(this.FormAE.permisos.indexOf('Contacto'), 1) : '';
+                        this.FormAE.Sec_Tarifas.length == 0 ? this.FormAE.permisos.splice(this.FormAE.permisos.indexOf('Tarifas'), 1) : '';
 
-                        let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
-                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
-
-                        //no ocupa volver a regresarlo a la normalidad 
-                        this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
+                        //no ocupa volver a regresarlo a la normalidad
+                        for(let [i, e] of this.imagenesAnuncio.entries()){
+                            this.FormAE.Sec_Imagenes.push({ posicion: this.imagenesAnuncioFilePond.length + i, nombre: e.nombre });
+                        }
 
                         if (tipoSalvado === "nuevo") {
                             MutateResult = await this.mixinAnuncioCrear(this.FormAE);
@@ -561,15 +569,8 @@
                     return;
                 }
 
-                let objetoImagen = {
-                    //AFSS: Esto no se porqué pero salva de que no se borré la imagen...
-                    nombre: JSON.parse(file.serverId)[0]
-                };
-
                 try {
-                    MutateResult = this.mixinImagenDelete(objetoImagen.nombre);
-                    // de ahí eliminar de su state en su array de imagenes anuncio
-
+                    MutateResult = this.mixinImagenDelete(file.filename);
                 } catch (error) {
                     console.dir(error);
                     this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
@@ -578,13 +579,23 @@
                 }
 
                 // AFSS: Desarrollo futuro, remover el valor de su arreglo vuex usuario
-                this.imagenesAnuncio = this.imagenesAnuncio.filter(imagen => {
-                    if (imagen.nombre !== objetoImagen.nombre) {
-                        return imagen;
-                    }
-                });
-                console.dir(MutateResult)
+                if(this.imagenesAnuncio.length > 0){
+                    this.imagenesAnuncio = this.imagenesAnuncio.filter(imagen => {
+                        if (imagen.nombre !== file.filename) {
+                            return imagen;
+                        }
+                    });
+                }
 
+                if(this.imagenesAnuncioFilePond.length > 0){
+                    this.imagenesAnuncioFilePond = this.imagenesAnuncioFilePond.filter(imagen => {
+                        if (imagen.source !== file.filename) {
+                            return imagen;
+                        }
+                    });
+                }
+
+                console.dir(MutateResult)
                 this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
             },
             imagenesAnuncioOnProcess(error, file) {
@@ -603,10 +614,36 @@
                     posicion: this.imagenesAnuncio.length || 0 //Continuación o Seguimiento inicial
                 };
 
-                //console.log("objetoImagen");
-                //console.dir(objetoImagen);
-
                 this.imagenesAnuncio.push(objetoImagen);
+            },
+            anuncioInfoOffset() {       
+                this.FormAE = {
+                categorias: ["Escorts", "Masajes Eróticos"],
+                permisos: ["Descripcion", "Contacto", "Tarifas"],
+                Sec_Descripcion: {
+                    titulo: 'titulo test 1',
+                    estado: 'N.L.',
+                    ciudad: 'MTY.',
+                    descripcion: 'una desciprcion',
+                    sexo: 'm'
+                },
+                Sec_Imagenes: [],
+                Sec_Contacto: [],
+                Sec_Tarifas: [],
+                }
+            }
+        },
+        created(){
+            if(this.AnuncioInfo.Sec_Imagenes.length > 0 && this.displayState != '000'){
+                console.log("this.AnuncioInfo.Sec_Imagenes");
+                console.dir(this.AnuncioInfo.Sec_Imagenes);
+                //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar, se pasa a renderizar con :key el componente
+                for(let Anuncio of this.AnuncioInfo.Sec_Imagenes){
+                    this.imagenesAnuncioFilePond.push({ source: Anuncio.nombre, options: { type: 'local' } });
+                }
+            } else {
+                this.anuncioInfoOffset();
+                this.imagenesAnuncioFilePond = [];
             }
         }
     }
