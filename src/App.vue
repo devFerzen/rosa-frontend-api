@@ -71,7 +71,7 @@
       </v-list>
       <!--Sidedar List views-->
     </v-navigation-drawer>
-    
+
     <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" dismissible
       transition="slide-x-reverse-transition"
       style="position: absolute; top: 80px; z-index:205; right: 0; width: 50%; height:65px;">
@@ -118,6 +118,7 @@
         console.log("vue anunciate...");
 
         try {
+          this.$store.dispatch('anuncioEditSet', null);
           DispatchResult = await this.$store.dispatch('crearAnuncioDisplay', null);
         } catch (error) {
           console.log("vue anunciate... en error");

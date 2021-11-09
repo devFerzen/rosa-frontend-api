@@ -7,7 +7,7 @@
       </v-col>
     </v-row>
 
-    <anuncio-edit-display :displayState="anuncioDisplayState" :AnuncioInfo="AnuncioInfo" :key="anuncioDisplayState" />
+    <anuncio-edit-display :displayState="anuncioDisplayState" :key="anuncioDisplayState" />
     <!--AnuncioEdit Dialog-->
 
   </v-container>
@@ -31,13 +31,6 @@
     },
     data() {
       return {
-        tiposContacto: [
-          { categoria: "fab", icono: "whatsapp" },
-          { categoria: "fab", icono: "twitter" },
-          { categoria: "fab", icono: "instagram" },
-          { categoria: "fa", icono: "phone-alt" },
-          { categoria: "fa", icono: "globe" },
-        ],
         categorias: [
           {
             name: "Lorem ipsum",
@@ -89,21 +82,6 @@
           },
         ],
 
-        //Form de un anuncio nuevo
-        AnuncioInfo: {
-          categorias: ["Escorts", "Masajes Eróticos"],
-          permisos: ["Descripcion", "Contacto", "Tarifas"],
-          Sec_Descripcion: {
-            titulo: 'titulo test 1',
-            estado: 'N.L.',
-            ciudad: 'MTY.',
-            descripcion: 'una desciprcion',
-            sexo: 'm'
-          },
-          Sec_Imagenes: [],
-          Sec_Contacto: [],
-          Sec_Tarifas: [],
-        }
       };
     },
     computed: {
@@ -136,52 +114,12 @@
           throw error;
         }
 
-        console.dir(MutateResult);
-
-        //Algo pasa en esta funcion que no deja abrir el modal
-        this.anuncioInfoSet(MutateResult.data);
+        console.log("vue buscarAnuncio for edit");
+        console.dir(MutateResult.data);
+        this.$store.dispatch('anuncioEditSet', MutateResult.data);
         this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
       },
-      //Esta función fue para borrar el __typename pero se implemeto otra mejora en el InMemoryCache en mainjs -> esto quiza es una limpia para que no actualice los corazones o otra información
-      anuncioInfoSet(Anuncio) {
 
-        if ('Sec_Descripcion' in Anuncio) {
-          this.AnuncioInfo.Sec_Descripcion = Anuncio.Sec_Descripcion;
-        }
-
-        if ('Sec_Imagenes' in Anuncio) {
-          //Se seteará con add file
-          for (let Anuncio of Anuncio.Sec_Imagenes) {
-            //console.dir(Anuncio);
-            //no funciona this.$refs.pond.addFil({ source: Anuncio.nombre, options: { type: 'local' } });
-
-            //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar
-            this.imagenesAnuncioFilePond.push({ source: Anuncio.nombre, options: { type: 'local' } });
-          }
-          this.imagenesAnuncio = Anuncio.Sec_Imagenes;
-        }
-
-        if ('Sec_Contacto' in Anuncio) {
-          this.AnuncioInfo.Sec_Contacto = Anuncio.Sec_Contacto;
-        }
-
-        if ('Sec_Tarifas' in Anuncio) {
-          this.AnuncioInfo.Sec_Tarifas = Anuncio.Sec_Tarifas;
-        }
-
-        if ('categorias' in Anuncio) {
-          this.AnuncioInfo.categorias = Anuncio.categorias;
-        }
-
-        if ('categorias' in Anuncio) {
-          this.AnuncioInfo.categorias = Anuncio.categorias;
-        }
-
-        if ('id' in Anuncio) {
-          this.AnuncioInfo.id = Anuncio.id;
-        }
-
-      }
     }
   };
 </script>

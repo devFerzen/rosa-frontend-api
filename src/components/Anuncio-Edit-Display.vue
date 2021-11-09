@@ -20,46 +20,48 @@
                                         <v-tab-item>
                                             <v-container fluid class="pa-4 pa-lg-8"
                                                 :class="tabContainerClass['tabContainer']">
-                                                <v-row no-gutters>
-                                                    <v-col>
-                                                        <v-text-field v-model="FormAE.Sec_Descripcion.titulo" clearable
-                                                            required label="Titulo">
-                                                        </v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <!--Título-->
                                                 <v-form ref="form_anuncioEdicion">
+
+                                                    <v-row no-gutters>
+                                                        <v-col>
+                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.titulo"
+                                                                clearable required label="Titulo">
+                                                            </v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <!--Título-->
+
                                                     <v-row>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="FormAE.Sec_Descripcion.estado"
+                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.estado"
                                                                 clearable required label="Estado">
                                                             </v-text-field>
                                                         </v-col>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="FormAE.Sec_Descripcion.ciudad"
+                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.ciudad"
                                                                 clearable required label="Ciudad">
                                                             </v-text-field>
                                                         </v-col>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="FormAE.Sec_Descripcion.sexo"
+                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.sexo"
                                                                 clearable required label="Sexo">
                                                             </v-text-field>
                                                         </v-col>
 
                                                     </v-row>
-                                                </v-form>
-                                                <!--EstadoCiudad-->
-                                                <v-row no-gutters style="overflow: hidden">
-                                                    <v-col>
-                                                        <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
-                                                            <v-form ref="form_anuncioEdicion">
-                                                                <v-textarea v-model="FormAE.Sec_Descripcion.descripcion"
+
+                                                    <!--EstadoCiudad-->
+                                                    <v-row no-gutters style="overflow: hidden">
+                                                        <v-col>
+                                                            <v-card :height="bodyWH['vTextContent']" flat class="mb-2">
+                                                                <v-textarea
+                                                                    v-model="innferFormAE.Sec_Descripcion.descripcion"
                                                                     counter label="Descripción">
                                                                 </v-textarea>
-                                                            </v-form>
-                                                        </v-card>
-                                                    </v-col>
-                                                </v-row>
+                                                            </v-card>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-form>
                                                 <!--Descripcion-->
                                             </v-container>
                                         </v-tab-item>
@@ -201,6 +203,7 @@
             </v-container>
         </v-card>
         <!--Body Anuncio Edit-->
+
         <v-dialog v-model="nuevaTarifaDialog" max-width="850px">
             <v-container>
                 <v-card rounded>
@@ -331,6 +334,8 @@
     import AnuncioMixins from '../mixins/anuncio-mixins.js';
     import GeneralMixins from '../mixins/general-mixins.js';
 
+    import { mapGetters } from 'vuex';
+
     const FilePond = vueFilePond(
         FilePondPluginFileValidateType,
         FilePondPluginImagePreview,
@@ -371,24 +376,7 @@
 
     export default {
         props: {
-            displayState: { type: String },
-            AnuncioInfo: {
-                type: Object,
-                default: {
-                    categorias: ["Escorts", "Masajes Eróticos"],
-                    permisos: ["Descripcion", "Contacto", "Tarifas"],
-                    Sec_Descripcion: {
-                        titulo: 'titulo test 1',
-                        estado: 'N.L.',
-                        ciudad: 'MTY.',
-                        descripcion: 'una desciprcion',
-                        sexo: 'm'
-                    },
-                    Sec_Imagenes: [],
-                    Sec_Contacto: [],
-                    Sec_Tarifas: [],
-                }
-            }
+            displayState: { type: String }
         },
         mixins: [AnuncioMixins, GeneralMixins],
         components: {
@@ -396,9 +384,16 @@
         },
         data() {
             return {
+                tiposContacto: [
+                    { categoria: "fab", icono: "whatsapp" },
+                    { categoria: "fab", icono: "twitter" },
+                    { categoria: "fab", icono: "instagram" },
+                    { categoria: "fa", icono: "phone-alt" },
+                    { categoria: "fa", icono: "globe" },
+                ],
                 //Form de un anuncio nuevo
-                FormAE: this.AnuncioInfo,
                 selectedContactItem: "",
+                innferFormAE: {},
                 imagenesAnuncio: [],
                 imagenesAnuncioFilePond: [],
                 nuevaTarifaDialog: false,
@@ -415,6 +410,7 @@
             }
         },
         computed: {
+            ...mapGetters(['FormAE']),
             //CSS Properties
             tabContainerClass() {
                 const { sm, xs } = this.$vuetify.breakpoint;
@@ -455,7 +451,12 @@
         },
         methods: {
             cerrandoEditAnuncioDisplay() {
+                this.cleanForm();
                 this.$store.dispatch('editAnuncioDisplay', null);
+            },
+            cleanForm() {
+                console.log("cleaning form");
+                this.$refs.form_anuncioEdicion.reset();
             },
             tarifaNueva() {
                 let tarifa = {};
@@ -496,7 +497,7 @@
                 this.$refs.contactoEdit.reset();
             },
             async salvandoNuevoAnuncio() {
-                let tipoSalvado = this.anuncioDisplayState === '000' ? "nuevo" : "editado";
+                let tipoSalvado = this.displayState === '000' ? "nuevo" : "editado";
                 let MutateResult;
 
                 if (this.$refs.form_anuncioEdicion.validate()) {
@@ -508,8 +509,15 @@
                         let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
                         this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
 
-                        //no ocupa volver a regresarlo a la normalidad 
-                        this.FormAE.Sec_Imagenes = this.imagenesAnuncio;
+                        if (this.imagenesAnuncio.length > 0) {
+                            this.FormAE.Sec_Imagenes = this.FormAE.Sec_Imagenes.concat(this.imagenesAnuncio);
+                        }
+
+                        /*Duda afss: console.log("vue this.FormAE");
+                        console.dir(this.FormAE);
+
+                        console.log("vue this.innferFormAE");
+                        console.dir(this.innferFormAE);*/
 
                         if (tipoSalvado === "nuevo") {
                             MutateResult = await this.mixinAnuncioCrear(this.FormAE);
@@ -530,13 +538,13 @@
                         throw error;
                     }
 
-                    //console.dir(MutateResult);
+
                     if (tipoSalvado === "nuevo") {
-                        this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
+                        await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
                     }
 
                     if (tipoSalvado === "editado") {
-                        this.$store.dispatch("anuncioEditado", this.FormAE);
+                        await this.$store.dispatch("anuncioEditado", this.FormAE);
                     }
 
                     this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
@@ -549,7 +557,7 @@
             handleFilePondInit() {
                 console.log("handleFilePondInit");
             },
-            imagenesAnuncioOnDelete(error, file) {
+            async imagenesAnuncioOnDelete(error, file) {
                 let MutateResult;
 
                 console.log("imagenesAnuncioOnDelete... file");
@@ -563,13 +571,11 @@
 
                 let objetoImagen = {
                     //AFSS: Esto no se porqué pero salva de que no se borré la imagen...
-                    nombre: JSON.parse(file.serverId)[0]
+                    nombre: file.filename
                 };
 
                 try {
-                    MutateResult = this.mixinImagenDelete(objetoImagen.nombre);
-                    // de ahí eliminar de su state en su array de imagenes anuncio
-
+                    MutateResult = await this.mixinImagenDelete(objetoImagen.nombre);
                 } catch (error) {
                     console.dir(error);
                     this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
@@ -583,7 +589,14 @@
                         return imagen;
                     }
                 });
-                console.dir(MutateResult)
+
+                this.FormAE.Sec_Imagenes = this.FormAE.Sec_Imagenes.filter(imagen => {
+                    console.log("formAE sec imagenes igual a ", objetoImagen.nombre);
+                    console.dir(imagen)
+                    if (imagen.nombre !== objetoImagen.nombre) {
+                        return imagen;
+                    }
+                });
 
                 this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
             },
@@ -608,6 +621,15 @@
 
                 this.imagenesAnuncio.push(objetoImagen);
             }
+        },
+        created() {
+            if (this.displayState != '000') {
+                this.imagenesAnuncioFilePond = this.FormAE.Sec_Imagenes.map(anuncio => {
+                    return { source: anuncio.nombre, options: { type: 'local' } }
+                });
+            }
+
+            this.innferFormAE = this.FormAE;
         }
     }
 </script>

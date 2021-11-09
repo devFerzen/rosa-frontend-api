@@ -50,20 +50,15 @@ export const actions = {
     },
     anuncioEditado({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
-            console.dir(payload.Sec_Descripcion);
 
             let newArray = state.usuario.anuncios_usuario.map(function(value) {
                 let returnValue;
-                console.log(typeof value.id, " con ", typeof payload.id);
-                console.log(value.id, " con ", payload.id);
                 if (value.id === payload.id) {
-                    console.log(value.id === payload.id);
                     return payload;
                 }
                 return value;
             });
 
-            console.log("vuex anuncioEditado", newArray);
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });

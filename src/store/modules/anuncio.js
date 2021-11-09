@@ -1,10 +1,70 @@
 export const state = {
-    dashboardEditAnuncioDisplay: null
+    dashboardEditAnuncioDisplay: null,
+    AnuncioInfo: {
+        categorias: ["Escorts", "Masajes Eróticos"],
+        permisos: ["Descripcion", "Contacto", "Tarifas"],
+        Sec_Descripcion: {
+            titulo: '',
+            estado: '',
+            ciudad: '',
+            descripcion: '',
+            sexo: ''
+        },
+        Sec_Imagenes: [],
+        Sec_Contacto: [],
+        Sec_Tarifas: [],
+    }
 }
 
 export const mutations = {
     EDIT_ANUNCIO_DISPLAY(state, payload) {
         state.dashboardEditAnuncioDisplay = payload;
+    },
+    ANUNCIO_EDITINFO_SET(state, payload){
+
+        if ('Sec_Descripcion' in payload) {
+          state.AnuncioInfo.Sec_Descripcion = payload.Sec_Descripcion;
+        }
+
+        if ('Sec_Imagenes' in payload) {
+          state.AnuncioInfo.Sec_Imagenes = payload.Sec_Imagenes;
+        }
+
+        if ('Sec_Contacto' in payload) {
+          state.AnuncioInfo.Sec_Contacto = payload.Sec_Contacto;
+        }
+
+        if ('Sec_Tarifas' in payload) {
+          state.AnuncioInfo.Sec_Tarifas = payload.Sec_Tarifas;
+        }
+
+        if ('categorias' in payload) {
+          state.AnuncioInfo.categorias = payload.categorias;
+        }
+
+        if ('categorias' in payload) {
+          state.AnuncioInfo.categorias = payload.categorias;
+        }
+
+        if ('id' in payload) {
+          state.AnuncioInfo.id = payload.id;
+        }
+    },
+    ANUNCIO_EDITINFO_OFFSET(state, payload){
+        state.AnuncioInfo = {
+            categorias: ["Escorts", "Masajes Eróticos"],
+            permisos: ["Descripcion", "Contacto", "Tarifas"],
+            Sec_Descripcion: {
+                titulo: '',
+                estado: '',
+                ciudad: '',
+                descripcion: '',
+                sexo: ''
+            },
+            Sec_Imagenes: [],
+            Sec_Contacto: [],
+            Sec_Tarifas: [],
+        };
     }
 }
 
@@ -31,14 +91,29 @@ export const actions = {
             resolve({ pagina: "dashboard", componenteInterno: "editAnuncioDisplay", mensaje: "" });
         });
     },
-
     editAnuncioDisplay({ commit, state }, payload) {
         commit('EDIT_ANUNCIO_DISPLAY', payload);
+    },
+    anuncioEditSet({ commit, state }, payload) {
+        console.log("anuncioEditSet payload");
+        console.dir(payload);
+        
+        if (payload != undefined || payload !== null) {
+            console.log("anuncio edit set");
+            commit('ANUNCIO_EDITINFO_SET', payload);
+        } else{
+            console.log("anuncio edit offset");
+            commit('ANUNCIO_EDITINFO_OFFSET', null);
+        }
     }
 }
 
 export const getters = {
     anuncioDisplayState: state => {
         return state.dashboardEditAnuncioDisplay;
+    },
+    FormAE: state => {
+        console.log("getterss FormAESet");
+        return state.AnuncioInfo;
     }
 };
