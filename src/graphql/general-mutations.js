@@ -134,8 +134,8 @@ export const RESTABLECER_CONTRASENA = gql `
 `;
 
 export const NUEVO_CORREO_CONTACTANOS = gql `
-    mutation nuevoContacto($input: ContactanosInput!){
-        nuevoContacto(input: $input)
+    mutation nuevoContactoCliente($input: ContactanosInput!){
+        nuevoContactoCliente(input: $input)
     }
 `;
 

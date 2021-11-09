@@ -202,12 +202,10 @@ export default {
 
                 this.MixinResult.pagina = 'home';
                 this.MixinResult.componenteInterno = 'panelHerramientasBusqueda';
-                this.MixinResult.mensaje = mutateResult.data.nuevoContacto;
+                this.MixinResult.mensaje = mutateResult.data.nuevoContactoCliente;
                 resolve(this.MixinResult);
             });
         },
-
-
 
 
         /**
@@ -363,6 +361,7 @@ export default {
                     //Historial de Errores encontrados 
                     return reject({ mensaje: `sin éxito!` });
                 }
+                console.dir(QueryResult);
                 resolve(QueryResult);
             });
         },

@@ -395,7 +395,6 @@
                 selectedContactItem: "",
                 innferFormAE: {},
                 imagenesAnuncio: [],
-                imagenesAnuncioFilePond: [],
                 nuevaTarifaDialog: false,
                 nuevoContactoDialog: false,
                 nuevoContacto: {
@@ -407,6 +406,7 @@
                     precio: "0.00",
                     descripcion: "",
                 },
+                imagenesAnuncioFilePond: []
             }
         },
         computed: {
@@ -502,22 +502,24 @@
 
                 if (this.$refs.form_anuncioEdicion.validate()) {
                     try {
-                        //En permisos solo agregarlos si cuenta con información.
-                        let posicionPermisoContacto = this.FormAE.permisos.indexOf('Contacto');
-                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoContacto, 1) : '';
+                        //En permisos solo agregarlos si cuenta con información. aunque creo que esta de más, quizás se removerá pero en la BD permanecerá para usos diferentes (estos permisos son para mostrar o no si aparecerá este botón...)
+                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(this.FormAE.permisos.indexOf('Contacto'), 1) : '';
+                        this.FormAE.Sec_Tarifas.length == 0 ? this.FormAE.permisos.splice(this.FormAE.permisos.indexOf('Tarifas'), 1) : '';
 
-                        let posicionPermisoTarifa = this.FormAE.permisos.indexOf('Tarifas');
-                        this.FormAE.Sec_Contacto.length == 0 ? this.FormAE.permisos.splice(posicionPermisoTarifa, 1) : '';
-
-                        if (this.imagenesAnuncio.length > 0) {
+                        /*if (this.imagenesAnuncio.length > 0) {
                             this.FormAE.Sec_Imagenes = this.FormAE.Sec_Imagenes.concat(this.imagenesAnuncio);
                         }
 
-                        /*Duda afss: console.log("vue this.FormAE");
+                        Duda afss: console.log("vue this.FormAE");
                         console.dir(this.FormAE);
 
                         console.log("vue this.innferFormAE");
                         console.dir(this.innferFormAE);*/
+
+                        //no ocupa volver a regresarlo a la normalidad
+                        for (let [i, e] of this.imagenesAnuncio.entries()) {
+                            this.FormAE.Sec_Imagenes.push({ posicion: this.imagenesAnuncioFilePond.length + i, nombre: e.nombre });
+                        }
 
                         if (tipoSalvado === "nuevo") {
                             MutateResult = await this.mixinAnuncioCrear(this.FormAE);
@@ -598,6 +600,15 @@
                     }
                 });
 
+                if (this.imagenesAnuncioFilePond.length > 0) {
+                    this.imagenesAnuncioFilePond = this.imagenesAnuncioFilePond.filter(imagen => {
+                        if (imagen.source !== file.filename) {
+                            return imagen;
+                        }
+                    });
+                }
+
+                console.dir(MutateResult)
                 this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
             },
             imagenesAnuncioOnProcess(error, file) {
@@ -616,10 +627,36 @@
                     posicion: this.imagenesAnuncio.length || 0 //Continuación o Seguimiento inicial
                 };
 
-                //console.log("objetoImagen");
-                //console.dir(objetoImagen);
-
                 this.imagenesAnuncio.push(objetoImagen);
+            },
+            anuncioInfoOffset() {
+                this.FormAE = {
+                    categorias: ["Escorts", "Masajes Eróticos"],
+                    permisos: ["Descripcion", "Contacto", "Tarifas"],
+                    Sec_Descripcion: {
+                        titulo: 'titulo test 1',
+                        estado: 'N.L.',
+                        ciudad: 'MTY.',
+                        descripcion: 'una desciprcion',
+                        sexo: 'm'
+                    },
+                    Sec_Imagenes: [],
+                    Sec_Contacto: [],
+                    Sec_Tarifas: [],
+                }
+            }
+        },
+        created() {
+            if (this.AnuncioInfo.Sec_Imagenes.length > 0 && this.displayState != '000') {
+                console.log("this.AnuncioInfo.Sec_Imagenes");
+                console.dir(this.AnuncioInfo.Sec_Imagenes);
+                //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar, se pasa a renderizar con :key el componente
+                for (let Anuncio of this.AnuncioInfo.Sec_Imagenes) {
+                    this.imagenesAnuncioFilePond.push({ source: Anuncio.nombre, options: { type: 'local' } });
+                }
+            } else {
+                this.anuncioInfoOffset();
+                this.imagenesAnuncioFilePond = [];
             }
         },
         created() {

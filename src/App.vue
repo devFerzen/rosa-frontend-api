@@ -71,8 +71,13 @@
       </v-list>
       <!--Sidedar List views-->
     </v-navigation-drawer>
+<<<<<<< HEAD
 
     <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" dismissible
+=======
+    
+    <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" elevation="205" dismissible
+>>>>>>> origin/conections
       transition="slide-x-reverse-transition"
       style="position: absolute; top: 80px; z-index:205; right: 0; width: 50%; height:65px;">
       {{Alert.message}}

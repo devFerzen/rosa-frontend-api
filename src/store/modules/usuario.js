@@ -52,7 +52,6 @@ export const actions = {
         return new Promise((resolve, reject) => {
 
             let newArray = state.usuario.anuncios_usuario.map(function(value) {
-                let returnValue;
                 if (value.id === payload.id) {
                     return payload;
                 }
