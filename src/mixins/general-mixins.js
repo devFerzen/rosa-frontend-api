@@ -48,19 +48,27 @@ export default {
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     //Historial de Errores encontrados -- ${error.networkError.name == "ServerError"}
                     //afss duda, todo graphqlError es así, siempre sale uno??? no, en errores de servidor no sale esta propiedad
-                    this.MixinResult.mensaje = error.message;
 
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        let ErrorResult = JSON.parse(error.graphQLErrors[0].message);
+                        this.MixinResult.componenteInterno = ErrorResult.componenteInterno;
+                        this.MixinResult.pagina = ErrorResult.pagina;
+                        this.MixinResult.mensaje = ErrorResult.mensaje;
                     }
+
+                    if (this.MixinResult.mensaje.indexOf('Haz excedido') >= 0) {
+                        this.$store.dispatch('setCorreo', payload.usuario);
+                        this.$store.dispatch('setTipoVerificacion', 'verificacionUsuario');
+                    }
+
                     return reject(this.MixinResult);
                 }
 
                 seteandoToken(mutateResult.data.inicioSesion.token);
+
                 this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.mensaje = 'Bienvenido...!';
                 this.MixinResult.data = mutateResult.data.inicioSesion;
-
                 resolve(this.MixinResult);
             });
         },
@@ -132,7 +140,7 @@ export default {
                 this.MixinResult.pagina = 'home';
                 this.MixinResult.componenteInterno = 'panelHerramientasVerificacion';
                 this.MixinResult.mensaje = MutateResult.data.solicitarRestablecerContrasena;
-                this.$store.dispatch('setTipoVerificacion', 'verificacionUsuario');
+                this.$store.dispatch('setTipoVerificacion', 'verificacionUsuarioContrasena');
                 resolve(this.MixinResult);
             });
         },
@@ -144,7 +152,6 @@ export default {
         mixinVerificacionUsuarioComparacion(payload) {
             return new Promise(async(resolve, reject) => {
                 let mutateResult;
-                console.log("mixinVerificacionUsuarioComparacion...");
                 this.cleanMixinResult();
 
                 try {
@@ -152,11 +159,12 @@ export default {
                         mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
                         variables: {
                             input: payload.input,
-                            usuario: payload.usuario
+                            usuario: payload.usuario,
+                            clean: payload.clean
                         }
                     })
                 } catch (error) {
-                    console.log('Mutation call error...')
+                    console.log('Mutation call error...');
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
                     this.MixinResult.mensaje = error.message;
                     if (error.graphQLErrors.length > 0) {
@@ -166,9 +174,7 @@ export default {
                 }
 
                 this.MixinResult.pagina = 'home';
-                this.MixinResult.componenteInterno = 'panelHerramientasCambioContraseña';
                 this.MixinResult.mensaje = mutateResult.data.compararVerificacionUsuario;
-                this.$store.dispatch('CODIGO_VERIFICACION_SET', true);
                 resolve(this.MixinResult);
             });
         },

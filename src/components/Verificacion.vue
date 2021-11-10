@@ -80,13 +80,17 @@
         try {
 
           //Según su tipo de verificación
-          if (this.tipoVerificacion === 'verificacionUsuario') {
+          if (this.tipoVerificacion === 'verificacionUsuario' || this.tipoVerificacion === 'verificacionUsuarioContrasena') {
             params = {
               input: this.FormV.codigoVerificacion,
-              usuario: this.$store.state.usuario.usuario.usuario
+              usuario: this.$store.state.usuario.usuario.usuario,
+              clean: false
+            }
+
+            if(this.tipoVerificacion === 'verificacionUsuario'){
+              params.clean = true;
             }
             console.dir(params);
-
             MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
           }
 
@@ -107,19 +111,23 @@
         console.dir(MutateResult);
         this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
 
-        //Según su tipo de verificación
         if (this.tipoVerificacion === 'verificacionUsuario') {
-          //Se setea el codigo de verificación para ser usado en la actualización de contraseña
-          this.$store.dispatch('setVerificacionUsuario', params.input);
+          this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+          this.$store.dispatch('offsetTipoVerificacion');
         }
 
-        this.$store.dispatch('offsetTipoVerificacion'); //Se quita el tipo de verificación
+        if (this.tipoVerificacion === 'verificacionUsuarioContrasena') {
+          this.$store.dispatch('setVerificacionUsuario', params.input);
+          this.MixinResult.componenteInterno = 'panelHerramientasCambioContraseña';
+        }
+
         this.mixinLlamadaRouter(MutateResult);
       }
 
     },
     async created() {
-      // AFSS: No mantener viva este componente para que así se puede llamar una y otra vez verificacionCelularCreacion esta manda correo del nuevo codigo
+
+      // AFSS: No mantener vivo este componente para que así se puede llamar una y otra vez verificacionCelularCreacion esta manda correo del nuevo codigo
       let MutateResult;
       if (this.tipoVerificacion === 'verificacionCelular') {
         try {

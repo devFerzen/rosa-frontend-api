@@ -27,7 +27,7 @@
       <v-col cols="6" class="d-flex">
         <v-btn text @click="restablecerContrasena">
           <div class="text-caption grey--text text--lighten-1 text-center" style="text-transform: capitalize;">
-            Recuperar contraseña!
+            Restablecer contraseña!
           </div>
         </v-btn>
       </v-col>
@@ -97,7 +97,9 @@
           MutateResult = await this.mixinInicioSesion(this.FormIS);
         } catch (error) {
           console.log("vue iniciandoSesion en error...");
+          console.dir(error);
           this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
+          this.mixinLlamadaRouter(error);
           return;
         }
 
@@ -111,10 +113,9 @@
       },
       async restablecerContrasena() {
         let MutateResult;
-        //Solicitar correo primero
+
         if(!this.FormIS.usuario){
           console.log(`usuario, ${this.FormIS.usuario}`);
-          //Mostrar el error
           this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de indicar el usuario del cuál desea reinicar la contraseña!` });
           return;
         }
