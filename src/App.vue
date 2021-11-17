@@ -71,7 +71,7 @@
       </v-list>
       <!--Sidedar List views-->
     </v-navigation-drawer>
-    
+
     <v-alert border="bottom" colored-border :type="Alert.type" :value="Alert.isActive" elevation="205" dismissible
       transition="slide-x-reverse-transition"
       style="position: absolute; top: 80px; z-index:205; right: 0; width: 50%; height:65px;">
@@ -88,6 +88,8 @@
 <script>
   import GeneralMixins from './mixins/general-mixins.js';
   import UsuarioMixin from './mixins/usuario-mixins.js';
+  import { mapGetters } from 'vuex';
+  import * as GraphqlCalls from './graphql/general-mutations';
 
   export default {
     name: 'App',
@@ -98,6 +100,7 @@
       }
     },
     computed: {
+      ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
       Alert() {
         return this.$store.state.alert.alert;
       },
@@ -146,7 +149,38 @@
           });
       }
     },
-    created() {
+    async created() {
+      let QueryEstadosResult;
+
+      if (this.getDdlEstados[0]['no_id'] == 0) {
+        //console.log("correr query en mounted ddlEstado");
+        QueryEstadosResult = await this.mixinDdlGeneral("ddlEstado");
+        await this.$store.dispatch('ddls', { categoria: 'ddlEstado', categorias: QueryEstadosResult.data.queryddlsByCategoria });
+      }
+
+      if (this.getDdlMunicipios[0]['no_id'] == 0) {
+        //console.log("correr query en mounted ddlMunicipios");
+        QueryEstadosResult = await this.mixinDdlGeneral("ddlMunicipios");
+        await this.$store.dispatch('ddls', { categoria: 'ddlMunicipios', categorias: QueryEstadosResult.data.queryddlsByCategoria });
+      }
+
+      if (this.getDdlCategorias[0]['no_id'] == 0) {
+        //console.log("correr query en mounted ddlCategoriaAnuncio");
+        QueryEstadosResult = await this.mixinDdlGeneral("ddlCategoriaAnuncio");
+        await this.$store.dispatch('ddls', { categoria: 'ddlCategoriaAnuncio', categorias: QueryEstadosResult.data.queryddlsByCategoria });
+      }
+
+      if (this.getDdlSexo[0]['no_id'] == 0) {
+        //console.log("correr query en mounted ddlSexo");
+        QueryEstadosResult = await this.mixinDdlGeneral("ddlSexo");
+        await this.$store.dispatch('ddls', { categoria: 'ddlSexo', categorias: QueryEstadosResult.data.queryddlsByCategoria });
+      }
+
+      if (this.getDdlRedesSociales[0]['no_id'] == 0) {
+        //console.log("correr query en mounted ddlRedesSociales");
+        QueryEstadosResult = await this.mixinDdlGeneral("ddlRedesSociales");
+        await this.$store.dispatch('ddls', { categoria: 'ddlRedesSociales', categorias: QueryEstadosResult.data.queryddlsByCategoria });
+      }
     }
   };
 </script>

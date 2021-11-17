@@ -140,6 +140,18 @@ export const NUEVO_CORREO_CONTACTANOS = gql `
 `;
 
 // Query ***
+export const GET_DDL_BYCATEGORIA = gql `
+    query queryddlsByCategoria($categorias: [String]!){
+        queryddlsByCategoria(categorias: $categorias){
+            no_id
+            descripcion
+            icono_icono
+            icono_categoria
+            categoria
+        }
+    }
+`;
+
 export const ANUNCIO_BYID_QUERY = gql `
     query queryAnunciosById($ids: [String]){
         queryAnunciosById(ids: $ids){

@@ -111,10 +111,5 @@ export default new Vuex.Store({
         offsetTipoVerificacion({ state, commit }, payload) {
             commit('TIPO_VERIFICACION_OFFSET', payload)
         }
-    },
-    getters: {
-        anunciosBusqueda: state => {
-            return state.anunciosBusqueda;
-        }
     }
 });

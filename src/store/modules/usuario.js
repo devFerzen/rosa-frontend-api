@@ -30,6 +30,9 @@ export const mutations = {
     },
     CARGA_NUEVO_ANUNCIO(state, payload) {
         state.usuario.anuncios_usuario.push(payload);
+    },
+    NUMERO_TELEFONO_VERIFICADO(state){
+        state.usuario.numero_telefonico_verificado = true;
     }
 }
 
@@ -61,6 +64,9 @@ export const actions = {
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });
+    },
+    numerotelefonicoUsuario({commit, state}, payload){
+        commit('NUMERO_TELEFONO_VERIFICADO');
     }
 }
 

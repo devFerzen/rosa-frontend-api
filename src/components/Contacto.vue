@@ -7,16 +7,16 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8">Lorem ipsum</h6>
+      <h6 class="text-h4 text-lg-h4 text-center my-4s">Lorem ipsum</h6>
 
       <v-form ref="registro" v-model="valid" lazy-validation>
-        <v-text-field v-model="FormC.correo" :rules="emailRules" label="Correo" required>
+        <v-text-field v-model="FormC.correo" :rules="emailRules" label="Correo">
         </v-text-field>
 
         <v-text-field v-model="FormC.asunto" label="Titulo" required>
         </v-text-field>
 
-        <v-textarea counter label="Comentario" v-model="FormC.mensaje">
+        <v-textarea counter label="Comentario" v-model="FormC.mensaje" required>
         </v-textarea>
 
         <!--Text area para descripcion-->
@@ -37,7 +37,7 @@
 
     <v-row align="center" justify="center">
       <v-card-actions>
-        <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="enviandoCorreo"> Enviar
+        <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="correoContacto"> Enviar
         </v-btn>
         <v-btn depressed outlined color="primary" width="140"
           @click="$store.dispatch('panelHerramientasContactanos', false);"> Cancelar</v-btn>
@@ -48,6 +48,8 @@
 
 <script>
   import GeneralMixins from '../mixins/general-mixins.js';
+  import { mapGetters } from 'vuex';
+
 
   export default {
     name: 'contacto',
@@ -59,10 +61,10 @@
         FormC: {
           correo: '',
           asunto: '',
-          mensaje: ''
+          mensaje: '',
+          anuncio: this.getIdAnuncioReportado
         },
         emailRules: [
-          v => !!v || 'E-mail is required',
           v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
         panelCSS: {
@@ -71,17 +73,17 @@
       }
     },
     computed: {
-
+      ...mapGetters["getIdAnuncioReportado"]
     },
     methods: {
-      async enviandoCorreo() {
+      async correoContacto() {
         let MutateResult;
 
         if (this.$refs.registro.validate()) {
           try {
             MutateResult = await this.mixinNuevoCorreoContactanos(this.FormC);
           } catch (error) {
-            console.log("vue enviandoCorreo...");
+            console.log("vue correoContacto...");
             console.dir(error);
             this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error}` });
             throw error;

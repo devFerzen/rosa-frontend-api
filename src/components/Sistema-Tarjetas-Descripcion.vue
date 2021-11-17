@@ -57,8 +57,8 @@
 
               <v-row class="fill-height">
                 <v-carousel :height="tarjetaWH['carrusel']">
-                  <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i" :src="'http://localhost:3000/uploads/'+imagen.nombre"
-                    max-height="100%"></v-carousel-item>
+                  <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i"
+                    :src="'http://localhost:3000/uploads/'+imagen.nombre" max-height="100%"></v-carousel-item>
                 </v-carousel>
               </v-row>
               <!--carrusel-->
@@ -75,8 +75,9 @@
           <v-row align="center" justify="center" class="fill-height" no-gutters>
             <v-col cols="12" md="4" style="min-height: 95vh">
               <v-carousel height="90vh" class="my-4">
-                <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagenes" :key="i" :src="imagen.url"
-                  reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
+                <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagenes" :key="i"
+                  :src="'http://localhost:3000/uploads/'+imagen.nombre" reverse-transition="fade-transition"
+                  transition="fade-transition" height="600px"></v-carousel-item>
               </v-carousel>
             </v-col>
             <!--Carrusel-->
@@ -206,6 +207,10 @@
                 <v-btn class="mx-2" fab dark small color="primary" style="float:right" @click="fullAnuncioEstado=false">
                   <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
                 </v-btn>
+                <v-btn class="mx-2" small text plain raised color="primary" style="float:right"
+                  @click="reportarAnuncio">
+                  Reportar Anuncio!
+                </v-btn>
               </v-card>
             </v-col>
             <!--Cuepo-->
@@ -236,57 +241,7 @@
       return {
         anunciosBusqueda: [],
         selectedItem: "",
-        model: 0,
-        categorias: [
-          {
-            name: "Lorem ipsum",
-            total: 1,
-          },
-          {
-            name: "Lorem ipsum",
-            total: 2,
-          },
-          {
-            name: "Lorem ipsum",
-            total: 1,
-          },
-        ],
-        estadosList: [
-          {
-            id: 1,
-            nombre: "NL",
-          },
-          {
-            id: 2,
-            nombre: "COAH",
-          },
-          {
-            id: 3,
-            nombre: "Q. ROO",
-          },
-          {
-            id: 4,
-            nombre: "JAL",
-          },
-        ],
-        ciudadesList: [
-          {
-            id: 1,
-            nombre: "MTY",
-          },
-          {
-            id: 2,
-            nombre: "SAL",
-          },
-          {
-            id: 3,
-            nombre: "MON",
-          },
-          {
-            id: 4,
-            nombre: "CHI",
-          },
-        ],
+
         anuncioView: {
           categorias: ['Escorts', 'Masajes Eróticos'],
           permisos: ['Descripcion', 'Contacto', 'Tarifas'],
@@ -377,6 +332,7 @@
       };
     },
     computed: {
+      ...mapGetters(["getBusquedaQuery"]),
       tarjetaWH() {
         const { sm, xs } = this.$vuetify.breakpoint;
         return xs || sm ? { carrusel: '459' } : { carrusel: '459' };
@@ -413,6 +369,40 @@
         this.fullAnuncioEstado = payload;
       },
 
+      async aplicaBusqueda() {
+        let QueryResult;
+        try {
+          QueryResult = await this.mixinBusqueda(this.getBusquedaQuery);
+        } catch (error) {
+          console.log("vue aplicaBusqueda: QueryResult(anunciosBusqueda) en error...");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error anunciosBusqueda...>>>>${error.mensaje}` });
+          return;
+        }
+
+        this.anunciosBusqueda = QueryResult.data.queryAnuncios;
+      },
+
+      async reportarAnuncio() {
+        console.log("vue reportarAnuncio ", this.anuncioView.id);
+        //Para activarlo en la página de Contacto
+        //this.$store.dispatch('panelHerramientasContactanos',true);
+        let MutateResult;
+
+        try {
+          MutateResult = await this.mixinNuevoCorreoContactanos({ correo: '', asunto: "Reporte de Anuncio!", mensaje: "Reporte por usuario", anuncio: this.anuncioView.id });
+        } catch (error) {
+          console.log("vue reportarAnuncio...");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error}` });
+          throw error;
+        }
+
+        this.$store.dispatch('anuncioReportado', this.anuncioView.id); //Convertir a nulo una vez que se haya puesto el reporte si esq se hace en otro modal
+        this.$store.dispatch('activationAlert', { type: 'success', message: `Anuncio reportado!, Gracias por su cooperación!!` });
+        this.fullAnuncio_Display(false);
+      },
+
       /*
         accionVer muestra a un usuario un anuncio seleccionado
       */
@@ -420,7 +410,7 @@
         let queryResult;
         try {
           queryResult = await this.mixinVer(idAnuncio);
-          this.fullAnuncio_Display(true); //Si esta abajo no aparece, si esta arriba si... why
+          this.fullAnuncio_Display(true);
         } catch (error) {
           console.log("vue accionVer en error...");
           console.dir(error);
@@ -449,19 +439,14 @@
 
     },
     async created() {
-      let QueryResult;
-
-      try {
-        QueryResult = await this.mixinBusqueda()
-      } catch (error) {
-        console.log("vue QueryResult(anunciosBusqueda) en error...");
-        console.dir(error);
-        this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error anunciosBusqueda...>>>>${error.mensaje}` });
-        return;
+      this.aplicaBusqueda();
+    },
+    watch: {
+      getBusquedaQuery: function (value) {
+        console.log("getBusquedaQuery...");
+        console.dir(value);
+        this.aplicaBusqueda();
       }
-      //Seteamos en VUEX la información
-      console.dir(QueryResult);
-      this.anunciosBusqueda = QueryResult.data.queryAnuncios;
     }
   };
 </script>

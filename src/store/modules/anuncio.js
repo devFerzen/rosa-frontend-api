@@ -1,5 +1,6 @@
 export const state = {
     dashboardEditAnuncioDisplay: null,
+    //Renombrar AnuncioInfo por AnuncioEditInfo
     AnuncioInfo: {
         categorias: ["Escorts", "Masajes Eróticos"],
         permisos: ["Descripcion", "Contacto", "Tarifas"],
@@ -13,13 +14,14 @@ export const state = {
         Sec_Imagenes: [],
         Sec_Contacto: [],
         Sec_Tarifas: [],
-    }
+    },
+    idAnuncioReportado: ''
 }
 
 export const mutations = {
     EDIT_ANUNCIO_DISPLAY(state, payload) {
         state.dashboardEditAnuncioDisplay = payload;
-    },
+    },    
     ANUNCIO_EDITINFO_SET(state, payload){
 
         if ('Sec_Descripcion' in payload) {
@@ -65,6 +67,9 @@ export const mutations = {
             Sec_Contacto: [],
             Sec_Tarifas: [],
         };
+    },
+    ID_ANUNCIOREPORTADO_SET(state, payload){
+        state.idAnuncioReportado = payload;
     }
 }
 
@@ -105,6 +110,9 @@ export const actions = {
             console.log("anuncio edit offset");
             commit('ANUNCIO_EDITINFO_OFFSET', null);
         }
+    },
+    anuncioReportado({ commit, state}, payload){
+        commit('ID_ANUNCIOREPORTADO_SET', payload);
     }
 }
 
@@ -113,7 +121,9 @@ export const getters = {
         return state.dashboardEditAnuncioDisplay;
     },
     FormAE: state => {
-        console.log("getterss FormAESet");
         return state.AnuncioInfo;
+    },
+    getIdAnuncioReportado: state => {
+        return state.idAnuncioReportado;
     }
 };

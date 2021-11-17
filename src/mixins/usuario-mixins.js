@@ -74,6 +74,8 @@ export default {
                 this.MixinResult.pagina = 'dashboard';
                 this.MixinResult.componenteInterno = 'editAnuncioDisplay';
                 this.MixinResult.mensaje = MutateResult.data.compararVerificacionCelular;
+                //Cambio de anuncio verificado en vuex
+                this.$store.dispatch('numerotelefonicoUsuario');
                 resolve(this.MixinResult);
             });
         },

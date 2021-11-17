@@ -10,9 +10,13 @@
 import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlUsuarioCalls from '../graphql/usuario-mutations';
 import { seteandoToken } from '../utilities/generalUse';
+import { mapGetters } from 'vuex';
 
 
 export default {
+    computed: {
+        ...mapGetters["getDdlEstados"]
+    },
     data() {
         return {
             MixinResult: {
@@ -349,16 +353,16 @@ export default {
          * @param {*} payload idAnuncio
          * @returns 
          */
-        mixinBusqueda(payload) {
+        mixinBusqueda(payload = {}) {
             return new Promise(async(resolve, reject) => {
-                console.log("mixinBusqueda...");
+                //console.log("mixinBusqueda...");
                 let QueryResult;
 
                 try {
                     QueryResult = await this.$apollo.query({
                         query: GraphqlCalls.ANUNCIOS_QUERY,
                         variables: {
-                            query: {}
+                            query: payload
                         }
                     });
                 } catch (error) {
@@ -367,9 +371,31 @@ export default {
                     //Historial de Errores encontrados 
                     return reject({ mensaje: `sin éxito!` });
                 }
-                console.dir(QueryResult);
+                //console.dir(QueryResult);
                 resolve(QueryResult);
             });
+        },
+
+        mixinDdlGeneral(categoriasDdls){
+            return new Promise(async(resolve, reject) => {
+                //console.log("mixinDdlGeneral... ",categoriasDdls);
+
+                let QueryResult;
+                
+                try {
+                    QueryResult = await this.$apollo.query({
+                        query: GraphqlCalls.GET_DDL_BYCATEGORIA,
+                        variables: {
+                            categorias: [categoriasDdls]
+                        }
+                    })
+                } catch (error) {
+                    return reject();
+                }
+
+                //console.dir(QueryResult);
+                resolve(QueryResult);
+            });            
         },
 
         /**

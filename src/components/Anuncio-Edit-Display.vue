@@ -33,19 +33,25 @@
 
                                                     <v-row>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.estado"
-                                                                clearable required label="Estado">
-                                                            </v-text-field>
+                                                            <v-select v-model="innferFormAE.Sec_Descripcion.estado"
+                                                                :items="getDdlEstados" :item-text="'descripcion'"
+                                                                :item-value="'descripcion'" label="Estados" outlined
+                                                                class="mb-0">
+                                                            </v-select>
                                                         </v-col>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.ciudad"
-                                                                clearable required label="Ciudad">
-                                                            </v-text-field>
+                                                            <v-select v-model="innferFormAE.Sec_Descripcion.ciudad"
+                                                                :items="getDdlMunicipios" :item-text="'descripcion'"
+                                                                :item-value="'descripcion'" label="Municipios" outlined
+                                                                class="mb-0">
+                                                            </v-select>
                                                         </v-col>
                                                         <v-col cols="6" md="3">
-                                                            <v-text-field v-model="innferFormAE.Sec_Descripcion.sexo"
-                                                                clearable required label="Sexo">
-                                                            </v-text-field>
+                                                            <v-select v-model="innferFormAE.Sec_Descripcion.sexo"
+                                                                :items="getDdlSexo" :item-text="'descripcion'"
+                                                                :item-value="'descripcion'" label="Sexo" outlined
+                                                                class="mb-0">
+                                                            </v-select>
                                                         </v-col>
 
                                                     </v-row>
@@ -410,7 +416,7 @@
             }
         },
         computed: {
-            ...mapGetters(['FormAE']),
+            ...mapGetters(["FormAE", "getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
             //CSS Properties
             tabContainerClass() {
                 const { sm, xs } = this.$vuetify.breakpoint;
