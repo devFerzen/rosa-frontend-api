@@ -49,9 +49,7 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados -- ${error.networkError.name == "ServerError"}
-                    //afss duda, todo graphqlError es así, siempre sale uno??? no, en errores de servidor no sale esta propiedad
+                    console.dir(error);
 
                     if (error.graphQLErrors.length > 0) {
                         let ErrorResult = JSON.parse(error.graphQLErrors[0].message);
@@ -376,12 +374,12 @@ export default {
             });
         },
 
-        mixinDdlGeneral(categoriasDdls){
+        mixinDdlGeneral(categoriasDdls) {
             return new Promise(async(resolve, reject) => {
                 //console.log("mixinDdlGeneral... ",categoriasDdls);
 
                 let QueryResult;
-                
+
                 try {
                     QueryResult = await this.$apollo.query({
                         query: GraphqlCalls.GET_DDL_BYCATEGORIA,
@@ -395,7 +393,7 @@ export default {
 
                 //console.dir(QueryResult);
                 resolve(QueryResult);
-            });            
+            });
         },
 
         /**

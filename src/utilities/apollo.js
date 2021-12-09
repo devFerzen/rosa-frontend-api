@@ -10,6 +10,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { onError } from 'apollo-link-error';
 
+import Cookies from 'js-cookie'
+
 Vue.use(Vuetify);
 
 Vue.use(VueApollo);
@@ -30,7 +32,9 @@ const logoutLink = onError(({ graphQLErrors, networkError }) => {
 
 //Extraer el token de localstorage a la mejor
 const middlewareLink = setContext((_, { headers }) => {
-    const token = store.state.usuario.usuario.token;
+    const token = Cookies.get('refresh-token'); //store.state.usuario.usuario.token;
+    console.log("token ", token);
+
     return {
         headers: {
             ...headers,
@@ -51,4 +55,3 @@ const apolloProvider = new VueApollo({
 });
 
 export default apolloProvider;
-

@@ -16,7 +16,7 @@
         <!--Btn Anunciate-->
 
         <v-btn outlined color="white" class="mx-2 rounded-lg" :class="btnClasses['btnClass']" @click="iniciandoSesion"
-          v-if="!this.$store.state.usuario.usuario.token">
+          v-if="!this.$store.state.usuario.usuario.usuario">
           <v-icon>perm_identity</v-icon>
           <span class="ml-2" :class="btnClasses['span']">Login Usuario</span>
         </v-btn>
