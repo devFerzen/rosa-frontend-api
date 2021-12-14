@@ -111,10 +111,10 @@
     },
     methods: {
       iniciandoSesion() {
-        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: 'panelHerramientasInicioSesion' });
+        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: { panelHerramientasInicioSesion: true } });
       },
       contactanos() {
-        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: 'panelHerramientasContactanos' });
+        this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: { panelHerramientasContactanos: true } });
       },
       async anunciate() {
         let DispatchResult;

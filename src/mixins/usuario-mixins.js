@@ -4,6 +4,7 @@
 
 import * as GraphqlUserCalls from '../graphql/usuario-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
+import ErrorResult from '../utilities/ErrorResult';
 
 
 export default {
@@ -30,16 +31,21 @@ export default {
                     })
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult.mensaje = error.mensaje;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
                 console.log("MutateResult");
                 console.dir(MutateResult);
-                resolve(MutateResult);
+
+                resolve(MutateResult.data.compararVerificacionCelular);
             });
         },
 
@@ -63,20 +69,19 @@ export default {
                     })
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult.mensaje = error.mensaje;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
-                this.MixinResult.pagina = 'dashboard';
-                this.MixinResult.componenteInterno = 'editAnuncioDisplay';
-                this.MixinResult.mensaje = MutateResult.data.compararVerificacionCelular;
-                //Cambio de anuncio verificado en vuex
-                this.$store.dispatch('numerotelefonicoUsuario');
-                resolve(this.MixinResult);
+                resolve(MutateResult.data.compararVerificacionCelular);
             });
         },
 

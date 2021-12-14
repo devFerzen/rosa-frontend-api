@@ -10,6 +10,7 @@
 import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlUsuarioCalls from '../graphql/usuario-mutations';
 import { seteandoToken } from '../utilities/generalUse';
+import ErrorResult from '../utilities/ErrorResult';
 import { mapGetters } from 'vuex';
 
 
@@ -21,7 +22,7 @@ export default {
         return {
             MixinResult: {
                 pagina: null,
-                componenteInterno: null,
+                componenteInterno: {},
                 mensaje: '',
                 data: null
             }
@@ -36,11 +37,11 @@ export default {
         mixinInicioSesion(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinInicioSesion...");
-                let mutateResult;
+                let MutateResult;
                 this.cleanMixinResult();
 
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.INICIANDO_SESION_MUTATE,
                         variables: {
                             correo: payload.usuario,
@@ -52,26 +53,16 @@ export default {
                     console.dir(error);
 
                     if (error.graphQLErrors.length > 0) {
-                        let ErrorResult = JSON.parse(error.graphQLErrors[0].message);
-                        this.MixinResult.componenteInterno = ErrorResult.componenteInterno;
-                        this.MixinResult.pagina = ErrorResult.pagina;
-                        this.MixinResult.mensaje = ErrorResult.mensaje;
-                    }
-
-                    if (this.MixinResult.mensaje.indexOf('Haz excedido') >= 0) {
-                        this.$store.dispatch('setCorreo', payload.usuario);
-                        this.$store.dispatch('setTipoVerificacion', 'verificacionUsuario');
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
 
                     return reject(this.MixinResult);
                 }
-
-                seteandoToken(mutateResult.data.inicioSesion.token);
-
-                this.MixinResult.pagina = 'dashboard';
-                this.MixinResult.mensaje = 'Bienvenido...!';
-                this.MixinResult.data = mutateResult.data.inicioSesion;
-                resolve(this.MixinResult);
+                console.dir(MutateResult);
+                seteandoToken();
+                resolve(MutateResult.data.inicioSesion);
             });
         },
         /**
@@ -82,11 +73,11 @@ export default {
         mixinRegistro(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinRegistro...");
-                let mutateResult;
+                let MutateResult;
                 this.cleanMixinResult();
 
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.REGISTRO_MUTATE,
                         variables: {
                             input: payload
@@ -94,20 +85,21 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult.mensaje = error.mensaje;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
-                console.dir(mutateResult);
+                console.dir(MutateResult);
 
-                seteandoToken(mutateResult.data.registroUsuario.token);
-                this.MixinResult.pagina = 'dashboard';
-                this.MixinResult.mensaje = 'Bienvenido...!';
-                this.MixinResult.data = mutateResult.data.registroUsuario;
-                resolve(this.MixinResult);
+                seteandoToken();
+                resolve(MutateResult.data.registroUsuario);
             });
         },
         /**
@@ -130,22 +122,33 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult.mensaje = error.mensaje;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
                 console.dir(MutateResult);
-
-                this.MixinResult.pagina = 'home';
-                this.MixinResult.componenteInterno = 'panelHerramientasVerificacion';
-                this.MixinResult.mensaje = MutateResult.data.solicitarRestablecerContrasena;
-                this.$store.dispatch('setTipoVerificacion', 'verificacionUsuarioContrasena');
-                resolve(this.MixinResult);
+                resolve(MutateResult.data.solicitarRestablecerContrasena);
             });
         },
+
+
+
+
+
+
+
+
+
+
+
+
         /**
          * mixinVerificacionUsuarioComparacion; Comprar el codigo de verificacion de usuario
          * @param {*} payload Objecto que representa input a comprar y el correo del usuario
@@ -407,19 +410,24 @@ export default {
             console.dir(payload);
             let valorPayload;
             let params = {};
+            let componentesInternos;
 
-            //mandar a una pagina en especial y si ya esta ahí, hacerlo sin pasar error
-            if (payload.componenteInterno != undefined) {
-                console.log("llamada componente interno y es ", payload.componenteInterno);
-                valorPayload = payload.componenteInterno === "editAnuncioDisplay" ? '000' : true;
-                this.$store.dispatch(payload.componenteInterno, valorPayload);
+            //Crear arreglo de objetos
+
+            if (payload.componenteInterno) {
+                for(let componenteInterno in payload.componenteInterno){
+                    this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
+                    break;
+                }                 
             }
 
             if (!payload.pagina) {
-                //fin de llamada
                 return;
             }
-            this.$router.push({ name: payload.pagina }).catch(error => {});
+
+            this.$router.push({ name: payload.pagina }).catch(error => {
+                //this.$router.push({ name: 'no-encontrado' });
+            });
         },
         cleanMixinResult() {
             this.MixinResult.pagina = null;

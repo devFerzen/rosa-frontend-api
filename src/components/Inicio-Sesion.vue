@@ -98,7 +98,7 @@
         } catch (error) {
           console.log("vue iniciandoSesion en error...");
           console.dir(error);
-          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al iniciar sesión...>>>>${error.mensaje}` });
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
           this.mixinLlamadaRouter(error);
           return;
         }
@@ -107,14 +107,12 @@
         console.dir(MutateResult);
 
         this.$store.dispatch('activationAlert', { type: 'success', message: MutateResult.mensaje });
-        this.$store.dispatch('setSesion', MutateResult.data);
-        this.$store.dispatch('panelHerramientasInicioSesion', false);
-        this.mixinLlamadaRouter(MutateResult);
+        //this.mixinLlamadaRouter(MutateResult);
       },
       async restablecerContrasena() {
         let MutateResult;
 
-        if(!this.FormIS.usuario){
+        if (!this.FormIS.usuario) {
           console.log(`usuario, ${this.FormIS.usuario}`);
           this.$store.dispatch('activationAlert', { type: 'error', message: `Favor de indicar el usuario del cuál desea reinicar la contraseña!` });
           return;
@@ -124,11 +122,13 @@
           MutateResult = await this.mixinSolicitarRestablecerContrasena(this.FormIS.usuario);
         } catch (error) {
           console.log("vue restablecerContrasena en error...");
-          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al restablecer la contraseña...>>>>${error.mensaje}` });
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+          this.mixinLlamadaRouter(MutateResult);
           return;
         }
+
         this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
-        this.$store.dispatch('setCorreo', this.FormIS.usuario);
         this.mixinLlamadaRouter(MutateResult);
       }
     }

@@ -86,11 +86,13 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    console.dir(error); // Validar el Objeto
                     this.MixinResult.mensaje = error.message;
                     if (error.graphQLErrors.length > 0) {
                         this.MixinResult.mensaje = error.graphQLErrors[0].message;
                     }
+                    this.MixinResult.pagina = error.pagina;
+                    this.MixinResult.data = error.data;
                     return reject(this.MixinResult);
                 }
 
