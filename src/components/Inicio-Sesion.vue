@@ -107,7 +107,7 @@
         console.dir(MutateResult);
 
         this.$store.dispatch('activationAlert', { type: 'success', message: MutateResult.mensaje });
-        //this.mixinLlamadaRouter(MutateResult);
+        this.mixinLlamadaRouter(MutateResult);
       },
       async restablecerContrasena() {
         let MutateResult;

@@ -33,7 +33,6 @@ const logoutLink = onError(({ graphQLErrors, networkError }) => {
 //Extraer el token de localstorage a la mejor
 const middlewareLink = setContext((_, { headers }) => {
     const token = Cookies.get('refresh-token'); //store.state.usuario.usuario.token;
-    console.log("token ", token);
 
     return {
         headers: {

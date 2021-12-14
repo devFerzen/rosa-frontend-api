@@ -109,7 +109,7 @@
       ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo"]),
       cols() {
         const { lg, sm, md, xs } = this.$vuetify.breakpoint
-        console.log(`vista: lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
+        //console.log(`vista: lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
         return lg ? { formSearchField: 12, formCategoriasField: 12 } : md ? { formSearchField: 5, formCategoriasField: 6 } : sm ? { formSearchField: 5, formCategoriasField: 6 } : { formSearchField: 10, formCategoriasField: 12 };
       },
       cardClasses() {

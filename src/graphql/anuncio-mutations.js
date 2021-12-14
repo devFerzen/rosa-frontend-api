@@ -14,41 +14,7 @@ export const SOLICITAR_VERIFICACION_ANUNCIO = gql `
 
 export const NUEVO_ANUNCIO_MUTATE = gql `
     mutation anuncioCreacion($input: AnuncioInput!){
-        anuncioCreacion(input: $input){
-            id
-            categorias
-            permisos
-            Sec_Descripcion{
-                titulo
-                estado
-                ciudad
-                descripcion
-                sexo
-            }
-            Sec_Contacto{
-                contacto
-                Tipo{
-                    categoria
-                    icono
-                }
-            }
-            Sec_Tarifas{
-                nombre
-                precio
-                descripcion
-            }
-            Sec_Imagenes{
-                nombre
-                posicion
-                url
-            }
-            Estado{
-                vivo
-            }
-            no_corazones
-            no_vistas
-            verificado
-        }
+        anuncioCreacion(input: $input)
     }
 `;
 

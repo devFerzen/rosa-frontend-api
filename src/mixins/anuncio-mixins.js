@@ -1,5 +1,7 @@
 import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
+import ErrorResult from '../utilities/ErrorResult';
+
 
 export default {
     data() {
@@ -60,7 +62,7 @@ export default {
                 if (!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.componenteInterno = { panelHerramientasInicioSesion: true };
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     //Regresarlo con apertura de registro
                     console.log("no debe que pasar por aquí cuando pase");
@@ -71,7 +73,8 @@ export default {
                 if (!this.$store.state.usuario.usuario.numero_telefonico_verificado) {
                     console.log("Usuario no verificado");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'panelHerramientasVerificacion';
+                    this.MixinResult.mensaje = 'Celular registrado aún no esta verificado, Favor de validar el código verificación de celular';
+                    this.MixinResult.componenteInterno = { panelHerramientasVerificacion: true };
                     this.$store.dispatch('setTipoVerificacion', 'verificacionCelular');
                     return reject(this.MixinResult);
                 }
@@ -86,20 +89,18 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Validar el Objeto
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
-                    this.MixinResult.pagina = error.pagina;
-                    this.MixinResult.data = error.data;
+
                     return reject(this.MixinResult);
                 }
 
-                this.MixinResult.pagina = 'dashboard';
-                this.MixinResult.mensaje = "Anunció creado con éxito!";
-                this.MixinResult.data = MutateResult.data.anuncioCreacion;
-                resolve(this.MixinResult);
+                resolve(JSON.parse(MutateResult.data.anuncioCreacion));
             });
         },
         mixinAnuncioEditar(payload) {
@@ -108,9 +109,8 @@ export default {
                 console.log("mixinAnuncioEditar...");
 
                 if (!this.$store.state.usuario.usuario.usuario) {
-                    console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.componenteInterno = { panelHerramientasInicioSesion: true };
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     return reject(this.MixinResult);
                 }
@@ -124,18 +124,20 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('mixinAnuncioEditar Mutation error...');
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
                 this.cleanMixinResult();
-                this.MixinResult.mensaje = MutateResult.data.anuncioActualizacion;
-                resolve(this.MixinResult);
+                resolve(JSON.parse(MutateResult.data.anuncioActualizacion));
             });
         },
         mixinAnuncioEliminar(payload) {
@@ -146,7 +148,7 @@ export default {
                 if (!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.componenteInterno = { panelHerramientasInicioSesion: true };
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     return reject(this.MixinResult);
                 }
@@ -160,18 +162,20 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('mixinAnuncioEliminar Mutation error...');
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
                 this.cleanMixinResult();
-                this.MixinResult.mensaje = MutateResult.data.anuncioEliminacion;
-                resolve(this.MixinResult);
+                resolve(JSON.parse(MutateResult.data.anuncioEliminacion));
             });
         },
         mixinImagenDelete(payload) {
@@ -182,7 +186,7 @@ export default {
                 if (!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'home';
-                    this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
+                    this.MixinResult.componenteInterno = { panelHerramientasInicioSesion: true };
                     this.MixinResult.mensaje = 'Favor de iniciar sesión primero!';
                     return reject(this.MixinResult);
                 }
@@ -196,20 +200,19 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('mixinImagenDelete Mutation error...');
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
-                console.log("MutateResult");
-                console.dir(MutateResult);
-
-                this.MixinResult.mensaje = MutateResult.data.imagenEliminacion;
-                resolve(this.MixinResult);
+                resolve(JSON.parse(MutateResult.data.imagenEliminacion));
             });
         },
         cleanMixinResult() {

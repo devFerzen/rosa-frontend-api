@@ -414,11 +414,10 @@
         } catch (error) {
           console.log("vue accionVer en error...");
           console.dir(error);
-          this.$store.dispatch('activationAlert', { type: 'error', message: `Error al dar like al anuncio, favor de intentarlo más tarde!` });
+          this.$store.dispatch('activationAlert', { type: 'error', message: `Error al tratar de abrir al anuncio, favor de intentarlo más tarde!` });
           return;
         }
-        this.$store.dispatch('activationAlert', { type: 'success', message: `Lorem Ipsum *.*...${idAnuncio}!` });
-        this.anuncioView = queryResult.data.queryAnunciosById[0]; //Checar bien los nombres porque no abre
+        this.anuncioView = queryResult[0]; //Checar bien los nombres porque no abre
       },
 
       /*
@@ -434,7 +433,7 @@
           this.$store.dispatch('activationAlert', { type: 'error', message: `Error al dar like al anuncio, favor de intentarlo más tarde!` });
           return;
         }
-        this.$store.dispatch('activationAlert', { type: 'success', message: `Lorem Ipsum <3...${idAnuncio}!` });
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${queryResult.mensaje}!` });
       }
 
     },

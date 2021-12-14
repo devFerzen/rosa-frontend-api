@@ -14,10 +14,3 @@ export function regeneracionSesion() {
     //seteandoToken(mutateResult.data.)
     //si no pasarlo en blanco y dejamos que shield lo devuelva
 }
-
-//Esto es con un dispatch... verificar si va aquí
-export function seteandoToken (token){
-    if(token){
-        store.state.usuario.usuario.token = token; 
-    }
-}

@@ -96,21 +96,21 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
-                this.MixinResult.pagina = 'home';
-                this.MixinResult.componenteInterno = 'Verificacion';
-                this.$store.dispatch('setTipoVerificacion', 'verificacionCelular');
-                this.MixinResult.mensaje = MutateResult.data.solicitarVerificacionCelular;
-                resolve(this.MixinResult);
-                return;
+
+                resolve(JSON.parse(MutateResult.data.solicitarVerificacionCelular));
             });
         },
+
         cleanMixinResult() {
             this.MixinResult.pagina = null;
             this.MixinResult.componenteInterno = null;

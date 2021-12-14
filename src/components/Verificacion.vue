@@ -136,14 +136,13 @@
           MutateResult = await this.mixinVerificacionCelularCreacion();
         } catch (error) {
           console.log("vue created mixinVerificacionCelularCreacion...");
-          //Debe que mandar todo el objeti MixinResult
           console.dir(error);
-          //Dispatch de alerta al usuario
-          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
           return;
         }
         console.dir(MutateResult);
         this.$store.dispatch('activationAlert', { type: 'success', message: `${MutateResult.mensaje}` });
+        this.mixinLlamadaRouter(MutateResult);
       }
     }
 

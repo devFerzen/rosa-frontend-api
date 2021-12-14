@@ -537,11 +537,8 @@
 
                     } catch (error) {
                         console.log("vue salvandoNuevoAnuncio error...");
-                        //Debe que mandar todo el objeti MixinResult
                         console.dir(error);
-                        //Dispatch de alerta al usuario
                         this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
-                        //mandar a la vista indicada o pertenecer ahí mismo sin causar error
                         this.mixinLlamadaRouter(error);
                         throw error;
                     }

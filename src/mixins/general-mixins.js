@@ -9,7 +9,6 @@
 
 import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlUsuarioCalls from '../graphql/usuario-mutations';
-import { seteandoToken } from '../utilities/generalUse';
 import ErrorResult from '../utilities/ErrorResult';
 import { mapGetters } from 'vuex';
 
@@ -49,20 +48,18 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Mutation call error...')
+                    console.log('Mutation call error...');
                     console.dir(error);
 
                     if (error.graphQLErrors.length > 0) {
                         this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        this.MixinResult = new ErrorResult(error);
                     }
-
                     return reject(this.MixinResult);
                 }
                 console.dir(MutateResult);
-                seteandoToken();
-                resolve(MutateResult.data.inicioSesion);
+                resolve(JSON.parse(MutateResult.data.inicioSesion));
             });
         },
         /**
@@ -98,8 +95,7 @@ export default {
                 }
                 console.dir(MutateResult);
 
-                seteandoToken();
-                resolve(MutateResult.data.registroUsuario);
+                resolve(JSON.parse(MutateResult.data.registroUsuario));
             });
         },
         /**
@@ -128,26 +124,110 @@ export default {
                         this.MixinResult.mensaje = error.mensaje;
                         this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
                     } else {
+                        this.MixinResult = new ErrorResult(error);
+                    }
+
+                    return reject(this.MixinResult);
+                }
+                console.dir(MutateResult);
+                resolve(JSON.parse(MutateResult.data.solicitarRestablecerContrasena));
+            });
+        },
+        /**
+         * mixinMeEncantaPlus aumenta 1 el conteo de likes del anuncio
+         * @param {*} payload idAnuncio
+         * @returns 
+         */
+        mixinMeEncantaPlus(payload) {
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinMeEncantaPlus...");
+                let MutateResult;
+
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.ME_ENCANTA_MUTATE,
+                        variables: {
+                            idAnuncio: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
+                    }
+
+                    return reject(this.MixinResult);
+                }
+
+                resolve(JSON.parse(MutateResult.data.anunciolike));
+            });
+        },
+        /**
+         * mixinVerPlus aumenta 1 el conteo de vistas del anuncio
+         * @param {*} payload idAnuncio
+         * @returns 
+         */
+        mixinVerPlus(payload) {
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinVerPlus...");
+                let MutateResult;
+
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.VER_MUTATE,
+                        variables: {
+                            idAnuncio: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
                         this.MixinResult = new ErrorResult(error)
                     }
 
                     return reject(this.MixinResult);
                 }
                 console.dir(MutateResult);
-                resolve(MutateResult.data.solicitarRestablecerContrasena);
+                resolve(JSON.parse(MutateResult.data.anuncioVista));
             });
         },
 
+        /**
+         * MixinVer extrae un anuncio en particular y aumenta su conteo de vistas.
+         * @param {*} payload idAnuncio
+         * @returns 
+         */
+        mixinVer(payload) {
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinVer...");
+                let queryResult;
 
+                try {
+                    queryResult = await this.$apollo.query({
+                        query: GraphqlCalls.ANUNCIO_BYID_QUERY,
+                        variables: {
+                            ids: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('Sesion ver call error...')
+                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
+                    return reject({ mensaje: `sin éxito!` });
+                }
 
-
-
-
-
-
-
-
-
+                console.dir(queryResult);
+                this.mixinVerPlus(payload);
+                resolve(queryResult.data.queryAnunciosById);
+            });
+        },
 
         /**
          * mixinVerificacionUsuarioComparacion; Comprar el codigo de verificacion de usuario
@@ -156,11 +236,11 @@ export default {
          */
         mixinVerificacionUsuarioComparacion(payload) {
             return new Promise(async(resolve, reject) => {
-                let mutateResult;
+                let MutateResult;
                 this.cleanMixinResult();
 
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
                         variables: {
                             input: payload.input,
@@ -169,18 +249,20 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Mutation call error...');
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
-                this.MixinResult.pagina = 'home';
-                this.MixinResult.mensaje = mutateResult.data.compararVerificacionUsuario;
-                resolve(this.MixinResult);
+                // Ocupa enviarlo a home pagina = 'home';
+                resolve(JSON.parse(MutateResult.data.compararVerificacionUsuario));
             });
         },
         /**
@@ -190,12 +272,12 @@ export default {
          */
         mixinNuevoCorreoContactanos(payload) {
             return new Promise(async(resolve, reject) => {
-                let mutateResult;
+                let MutateResult;
                 this.cleanMixinResult();
                 console.log("mixinNuevoCorreoContactanos...");
 
                 try {
-                    mutateResult = await this.$apollo.mutate({
+                    MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.NUEVO_CORREO_CONTACTANOS,
                         variables: {
                             input: payload
@@ -203,82 +285,18 @@ export default {
                     })
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
-                this.MixinResult.pagina = 'home';
-                this.MixinResult.componenteInterno = 'panelHerramientasBusqueda';
-                this.MixinResult.mensaje = mutateResult.data.nuevoContactoCliente;
-                resolve(this.MixinResult);
-            });
-        },
-
-
-        /**
-         * mixinMeEncantaPlus aumenta 1 el conteo de likes del anuncio
-         * @param {*} payload idAnuncio
-         * @returns 
-         */
-        mixinMeEncantaPlus(payload) {
-            return new Promise(async(resolve, reject) => {
-                console.log("mixinMeEncantaPlus...");
-                let mutateResult;
-
-                try {
-                    mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.ME_ENCANTA_MUTATE,
-                        variables: {
-                            idAnuncio: payload
-                        }
-                    });
-                } catch (error) {
-                    console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
-                    }
-                    return reject(this.MixinResult);
-                }
-                console.dir(mutateResult);
-                resolve(mutateResult);
-            });
-        },
-
-        /**
-         * mixinVerPlus aumenta 1 el conteo de vistas del anuncio
-         * @param {*} payload idAnuncio
-         * @returns 
-         */
-        mixinVerPlus(payload) {
-            return new Promise(async(resolve, reject) => {
-                console.log("mixinVerPlus...");
-                let mutateResult;
-
-                try {
-                    mutateResult = await this.$apollo.mutate({
-                        mutation: GraphqlCalls.VER_MUTATE,
-                        variables: {
-                            idAnuncio: payload
-                        }
-                    });
-                } catch (error) {
-                    console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
-                    }
-                    return reject(this.MixinResult);
-                }
-                console.dir(mutateResult);
-
-                resolve(mutateResult);
+                resolve(JSON.parse(MutateResult.data.nuevoContactoCliente));
             });
         },
 
@@ -304,50 +322,22 @@ export default {
                     });
                 } catch (error) {
                     console.log('Mutation call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
+                    console.dir(error);
+
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
                     }
+
                     return reject(this.MixinResult);
                 }
 
-                this.MixinResult.pagina = 'home';
-                this.MixinResult.componenteInterno = 'panelHerramientasInicioSesion';
-                this.MixinResult.mensaje = MutateResult.data.restablecerContrasena;
-                resolve(this.MixinResult);
+                resolve(JSON.parse(MutateResult.data.restablecerContrasena));
             });
         },
 
-        /**
-         * MixinVer extrae un anuncio en particular y aumenta su conteo de vistas.
-         * @param {*} payload idAnuncio
-         * @returns 
-         */
-        mixinVer(payload) {
-            return new Promise(async(resolve, reject) => {
-                console.log("mixinVer...");
-                let queryResult;
-
-                try {
-                    queryResult = await this.$apollo.query({
-                        query: GraphqlCalls.ANUNCIO_BYID_QUERY,
-                        variables: {
-                            ids: payload
-                        }
-                    });
-                } catch (error) {
-                    console.log('Sesion ver call error...')
-                    console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    //Historial de Errores encontrados 
-                    return reject({ mensaje: `sin éxito!` });
-                }
-                console.dir(queryResult);
-                this.mixinVerPlus(payload);
-                resolve(queryResult);
-
-            });
-        },
+        //Sin Limpia los de abajo
 
         /**
          * mixinBusqueda extrae un número de anuncios bajo algún query en especial.
@@ -408,26 +398,22 @@ export default {
 
             console.log("mixinLlamadaRouter");
             console.dir(payload);
-            let valorPayload;
-            let params = {};
-            let componentesInternos;
 
             //Crear arreglo de objetos
 
             if (payload.componenteInterno) {
-                for(let componenteInterno in payload.componenteInterno){
+                for (let componenteInterno in payload.componenteInterno) {
                     this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
                     break;
-                }                 
+                }
             }
 
-            if (!payload.pagina) {
-                return;
+            if ('pagina' in payload) {
+                this.$router.push({ name: payload.pagina }).catch(error => {
+                    //this.$router.push({ name: 'no-encontrado' });
+                });
             }
 
-            this.$router.push({ name: payload.pagina }).catch(error => {
-                //this.$router.push({ name: 'no-encontrado' });
-            });
         },
         cleanMixinResult() {
             this.MixinResult.pagina = null;
