@@ -13,7 +13,51 @@ export const VERIFICACIONCELULAR_COMPARAR_MUTATE = gql `
     }
 `;
 
-
-
-
 // Query ***
+export const USUARIO_QUERY = gql `{
+    query queryUsuario {
+        usuario,
+        numero_telefonico
+        numero_telefonico_verificado
+        Default_Contactos{
+            Tipo{
+                categoria
+                icono
+            }
+            contacto
+        }
+        anuncios_usuario{
+            id
+            Sec_Descripcion{
+                titulo
+                estado
+                ciudad
+                descripcion
+                sexo
+            }
+            Sec_Contacto{
+                contacto
+                Tipo{
+                    categoria
+                    icono
+                }
+            }
+            Sec_Tarifas{
+                nombre
+                precio
+                descripcion
+            }
+            Sec_Imagenes{
+                nombre
+                posicion
+                url
+            }
+            permisos
+            no_corazones
+            no_vistas
+            verificado
+        }
+        terminos_condiciones
+        estado
+	}
+}`;

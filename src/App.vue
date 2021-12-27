@@ -16,7 +16,7 @@
         <!--Btn Anunciate-->
 
         <v-btn outlined color="white" class="mx-2 rounded-lg" :class="btnClasses['btnClass']" @click="iniciandoSesion"
-          v-if="!this.$store.state.usuario.usuario.usuario">
+          v-if="!usuarioLoggeado">
           <v-icon>perm_identity</v-icon>
           <span class="ml-2" :class="btnClasses['span']">Login Usuario</span>
         </v-btn>
@@ -100,7 +100,7 @@
       }
     },
     computed: {
-      ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
+      ...mapGetters(["usuarioLoggeado","getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
       Alert() {
         return this.$store.state.alert.alert;
       },
@@ -151,6 +151,8 @@
     },
     async created() {
       let QueryEstadosResult;
+
+      await this.$store.dispatch('usuarioIdentificacion');
 
       if (this.getDdlEstados[0]['no_id'] == 0) {
         //console.log("correr query en mounted ddlEstado");

@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import store from '../store'
 
 import Vuetify from 'vuetify/lib'
 
@@ -14,7 +13,6 @@ import Cookies from 'js-cookie'
 
 Vue.use(Vuetify);
 
-Vue.use(VueApollo);
 const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql', credentials: "include" });
 const cache = new InMemoryCache({
     addTypename: false //Borra los __typename de los querys o mutaciones
@@ -32,7 +30,7 @@ const logoutLink = onError(({ graphQLErrors, networkError }) => {
 
 //Extraer el token de localstorage a la mejor
 const middlewareLink = setContext((_, { headers }) => {
-    const token = Cookies.get('refresh-token'); //store.state.usuario.usuario.token;
+    const token = Cookies.get('refresh-token');
 
     return {
         headers: {
@@ -53,4 +51,5 @@ const apolloProvider = new VueApollo({
     })
 });
 
+Vue.use(VueApollo);
 export default apolloProvider;

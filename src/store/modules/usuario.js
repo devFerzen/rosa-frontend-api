@@ -1,8 +1,14 @@
+//import { apolloClient } from 'apollo-boost';
+//import ApolloClient from 'apollo-client' //AFSS: Creo que esta importación es la unica que puede
+
+import apolloProvider from '../../utilities/apollo';
+import * as GraphQLUserCalls from '../../graphql/usuario-mutations';
+import Cookies from 'js-cookie'
+
 export const state = {
     usuario: {
-        "usuario": "",
+        "usuario": null,
         "numero_telefonico_verificado": false,
-        "token": "",
         "verificacionUsuario": "",
         "anuncios_usuario": []
     },
@@ -31,7 +37,7 @@ export const mutations = {
     CARGA_NUEVO_ANUNCIO(state, payload) {
         state.usuario.anuncios_usuario.push(payload);
     },
-    NUMERO_TELEFONO_VERIFICADO(state){
+    NUMERO_TELEFONO_VERIFICADO(state) {
         state.usuario.numero_telefonico_verificado = true;
     }
 }
@@ -65,8 +71,27 @@ export const actions = {
             resolve();
         });
     },
-    numerotelefonicoUsuario({commit, state}, payload){
+    numerotelefonicoUsuario({ commit, state }, payload) {
         commit('NUMERO_TELEFONO_VERIFICADO');
+    },
+    async usuarioIdentificacion({ commit, state }, payload) {
+        let AccionResult;
+
+        const token = Cookies.get('refresh-token');
+        if (!token) {
+            //commit y pasar nulo a usuario
+            console.log("si hay usuario pero no token");
+            await commit('CORREO_SET', null);
+        }
+        //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
+        AccionResult = await apolloProvider.query({
+            query: GraphQLUserCalls.USUARIO_QUERY,
+            variables: {}
+        });
+
+        //Seteo de usuario y anuncios usuario
+        console.log("seteando usuario");
+        await commit('USUARIO_SET', AccionResult);
     }
 }
 
@@ -74,7 +99,7 @@ export const getters = {
     anunciosUsuario: state => {
         return state.usuario.anuncios_usuario;
     },
-    idUsuario: state => {
-        return state.usuario.id;
+    usuarioLoggeado: state => {
+        return state.usuario.usuario;
     }
 }

@@ -1,8 +1,5 @@
-import apolloProvider from '../../utilities/apollo';
-import * as GraphqlCalls from '../../graphql/general-mutations';
-
 export const state = {
-    ddls:[{
+    ddls: [{
         no_id: '0',
         descripcion: '-- sin descripción --',
         icono_icono: '',
@@ -13,10 +10,10 @@ export const state = {
 }
 
 export const mutations = {
-    DDLS_ESTADO_SET(state, payload){
+    DDLS_ESTADO_SET(state, payload) {
         state.ddls = state.ddls.concat(payload.categorias);
     },
-    QUERY_SET(state, payload){
+    QUERY_SET(state, payload) {
         state.busquedaQuery = payload;
     }
 }
@@ -39,10 +36,10 @@ export const actions = {
     panelHerramientasCambioContraseña({ commit }, payload) {
         commit('ACTUALIZANDO_CONTRASENA', payload, { root: true });
     },
-    async ddls({ commit }, payload){
+    async ddls({ commit }, payload) {
         commit('DDLS_ESTADO_SET', payload);
     },
-    querySet({ commit }, payload){
+    querySet({ commit }, payload) {
         commit('QUERY_SET', payload);
     }
 }
@@ -57,7 +54,7 @@ export const getters = {
         let Ddls = [];
         Ddls = state.ddls;
 
-        if(Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlEstado")){
+        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlEstado")) {
             DdlEstados = Ddls.filter(ddl => ddl.categoria == "ddlEstado");
             return DdlEstados;
         }
@@ -73,13 +70,13 @@ export const getters = {
         let Ddls = [];
         Ddls = state.ddls;
 
-        if(Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlMunicipios")){
+        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlMunicipios")) {
             //console.log("...YA hay un ddl con categoria 'ddlMunicipios'.");
             DdlMunicipios = Ddls.filter(ddl => ddl.categoria == "ddlMunicipios");
             //console.dir(DdlMunicipios);
             return DdlMunicipios;
         }
-        
+
         //console.log("...NO hay un ddl con categoria 'ddlMunicipio'.");
         DdlMunicipios = Ddls;
 
@@ -92,13 +89,13 @@ export const getters = {
         let Ddls = [];
         Ddls = state.ddls;
 
-        if(Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlCategoriaAnuncio")){
+        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlCategoriaAnuncio")) {
             //console.log("...YA hay un ddl con categoria 'ddlCategoriaAnuncio'.");
             DdlCategorias = Ddls.filter(ddl => ddl.categoria == "ddlCategoriaAnuncio");
             //console.dir(DdlCategorias);
             return DdlCategorias;
         }
-        
+
         //console.log("...NO hay un ddl con categoria 'ddlMunicipio'.");
         DdlCategorias = Ddls;
 
@@ -111,13 +108,13 @@ export const getters = {
         let Ddls = [];
         Ddls = state.ddls;
 
-        if(Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlSexo")){
+        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlSexo")) {
             //console.log("...YA hay un ddl con categoria 'ddlSexo'.");
             DdlSexo = Ddls.filter(ddl => ddl.categoria == "ddlSexo");
             //console.dir(DdlSexo);
             return DdlSexo;
         }
-        
+
         //console.log("...NO hay un ddl con categoria 'ddlMunicipio'.");
         DdlSexo = Ddls;
 
@@ -130,13 +127,13 @@ export const getters = {
         let Ddls = [];
         Ddls = state.ddls;
 
-        if(Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlRedesSociales")){
+        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlRedesSociales")) {
             //console.log("...YA hay un ddl con categoria 'ddlRedesSociales'.");
             DdlRedesSociales = Ddls.filter(ddl => ddl.categoria == "ddlRedesSociales");
             //console.dir(DdlRedesSociales);
             return DdlRedesSociales;
         }
-        
+
         //console.log("...NO hay un ddl con categoria 'ddlMunicipio'.");
         DdlRedesSociales = Ddls;
 

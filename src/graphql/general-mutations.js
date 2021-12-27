@@ -50,7 +50,7 @@ export const NUEVO_CORREO_CONTACTANOS = gql `
 `;
 
 // Query ***
-export const GET_DDL_BYCATEGORIA = gql `
+export const DDL_BYCATEGORIA_QUERY = gql `
     query queryddlsByCategoria($categorias: [String]!){
         queryddlsByCategoria(categorias: $categorias){
             no_id

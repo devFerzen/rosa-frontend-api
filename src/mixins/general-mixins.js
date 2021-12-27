@@ -375,7 +375,7 @@ export default {
 
                 try {
                     QueryResult = await this.$apollo.query({
-                        query: GraphqlCalls.GET_DDL_BYCATEGORIA,
+                        query: GraphqlCalls.DDL_BYCATEGORIA_QUERY,
                         variables: {
                             categorias: [categoriasDdls]
                         }
