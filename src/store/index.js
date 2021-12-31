@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import jwt from 'jsonwebtoken'
-import axios from 'axios' //quitar axios
 
 import * as usuario from '@/store/modules/usuario'
 import * as anuncio from '@/store/modules/anuncio'
 import * as alert from '@/store/modules/alert'
 import * as panelHerramientas from '@/store/modules/panelHerramientas'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {

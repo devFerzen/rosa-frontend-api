@@ -100,7 +100,7 @@
       }
     },
     computed: {
-      ...mapGetters(["usuarioLoggeado","getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
+      ...mapGetters(["usuarioLoggeado", "getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo", "getDdlRedesSociales"]),
       Alert() {
         return this.$store.state.alert.alert;
       },

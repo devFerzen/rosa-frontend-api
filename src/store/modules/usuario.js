@@ -83,15 +83,21 @@ export const actions = {
             console.log("si hay usuario pero no token");
             await commit('CORREO_SET', null);
         }
+
         //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
-        AccionResult = await apolloProvider.query({
-            query: GraphQLUserCalls.USUARIO_QUERY,
-            variables: {}
-        });
+        try {
+            AccionResult = await apolloProvider.defaultClient.query({
+                query: GraphQLUserCalls.USUARIO_QUERY,
+                variables: {}
+            });
+        } catch (error) {
+            console.table(error);
+            return;
+        }
 
         //Seteo de usuario y anuncios usuario
         console.log("seteando usuario");
-        await commit('USUARIO_SET', AccionResult);
+        await commit('USUARIO_SET', AccionResult.data.queryUsuario);
     }
 }
 
