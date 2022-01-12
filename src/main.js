@@ -35,6 +35,8 @@ import {
     faTwitter
 } from '@fortawesome/free-brands-svg-icons'; // confuso https://www.npmjs.com/package/@fortawesome/vue-fontawesome#using-brand-icons
 
+import "@/assets/global.css"
+
 Vue.config.productionTip = false;
 library.add(faStar, faShare, faTimes,
     faPhoneAlt, faEnvelope, faGlobe,

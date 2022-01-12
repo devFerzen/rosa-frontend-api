@@ -25,6 +25,14 @@ export const mutations = {
     CORREO_SET(state, payload) {
         state.usuario.usuario = payload;
     },
+    USUARIO_RESET(state){
+        state.usuario = {
+            "usuario": null,
+            "numero_telefonico_verificado": false,
+            "verificacionUsuario": "",
+            "anuncios_usuario": []
+        }
+    },
     CODIGO_VERIFICACION_SET(state, payload) {
         state.usuario.verificacionUsuario = payload;
     },
@@ -81,14 +89,17 @@ export const actions = {
         if (!token) {
             //commit y pasar nulo a usuario
             console.log("si hay usuario pero no token");
-            await commit('CORREO_SET', null);
+            await commit('USUARIO_RESET');
+            return;
         }
 
         //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
         try {
             AccionResult = await apolloProvider.defaultClient.query({
                 query: GraphQLUserCalls.USUARIO_QUERY,
-                variables: {}
+                variables: {
+                    input: ''
+                }
             });
         } catch (error) {
             console.table(error);

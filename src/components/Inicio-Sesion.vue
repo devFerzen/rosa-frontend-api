@@ -7,39 +7,36 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8">Lorem ipsum</h6>
+      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">Inicar Sesión</h6>
 
       <v-form ref="inicioSesion" v-model="valid" lazy-validation>
-        <v-text-field v-model="FormIS.usuario" :rules="emailRules" label="Correo" required></v-text-field>
-
-        <v-text-field v-model="FormIS.contrasena" :rules="contrasenaRules" label="Contraseña" required>
+        <v-text-field v-model="FormIS.usuario" :rules="emailRules" label="correo" color="pink" dense filled rounded
+          required>
         </v-text-field>
+
+        <v-text-field v-model="FormIS.contrasena" :rules="contrasenaRules" label="contraseña" color="pink" dense filled
+          rounded required></v-text-field>
       </v-form>
+      <v-row align="center" justify="space-between" no-gutters>
+        <v-col cols="12" class="d-flex">
+          <v-btn plain text @click="abrirRegistro" style="margin-left: auto; margin-right: auto;">
+            <div class="text-caption text--lighten-1 text-center color-rosa" style="text-transform: capitalize;">
+              Registrarte Aquí!
+            </div>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-text>
+
 
     <v-row align="center" justify="center">
       <v-card-actions>
-        <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="iniciandoSesion"></v-btn>
+        <v-btn class="boton-primario background-rosa color-white" elevation="2" width="140" :disabled="!valid"
+          @click="iniciandoSesion" depressed>
+          entrar
+        </v-btn>
       </v-card-actions>
     </v-row>
-
-    <v-row align="center" justify="space-between" no-gutters>
-      <v-col cols="6" class="d-flex">
-        <v-btn text @click="restablecerContrasena">
-          <div class="text-caption grey--text text--lighten-1 text-center" style="text-transform: capitalize;">
-            Restablecer contraseña!
-          </div>
-        </v-btn>
-      </v-col>
-      <v-col cols="6" class="d-flex">
-        <v-btn text @click="abrirRegistro" style="margin-left: auto; margin-right: auto;">
-          <div class="text-caption grey--text text--lighten-1 text-center" style="text-transform: capitalize;">
-            Registrarte Aquí!
-          </div>
-        </v-btn>
-      </v-col>
-    </v-row>
-
   </v-card>
 </template>
 

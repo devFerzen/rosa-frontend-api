@@ -12,7 +12,6 @@ import * as GraphqlUsuarioCalls from '../graphql/usuario-mutations';
 import ErrorResult from '../utilities/ErrorResult';
 import { mapGetters } from 'vuex';
 
-
 export default {
     computed: {
         ...mapGetters["getDdlEstados"]
@@ -62,6 +61,36 @@ export default {
                 resolve(JSON.parse(MutateResult.data.inicioSesion));
             });
         },
+        /**
+         * Mixin Para poder cerrar sesion a un usuario con correo y contraseña
+         * @param {*} payload Objecto que representa un correo y contraseña
+         * @returns 
+         */
+        mixinCerrarSesion(payload) {
+            return new Promise(async(resolve, reject) => {
+                let MutateResult;
+
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                            mutation: GraphqlCalls.CERRAR_SESION_MUTATE,
+                            variables: {}
+                        });
+                } catch (error) {
+                    console.log('Mutation call error...');
+                    console.dir(error);
+    
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error);
+                    }
+                    return reject(this.MixinResult);
+                }
+
+                console.dir(MutateResult);
+                resolve(JSON.parse(MutateResult.data.cerrarSesion));
+            });
+        },   
         /**
          * Mixin Para poder registrarte con tu correo, contraseña y número telefónico
          * @param {*} payload Objecto que representa un correo, contraseña y número telefónico
@@ -395,26 +424,27 @@ export default {
          * @returns 
          */
         mixinLlamadaRouter(payload) {
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinLlamadaRouter");
+                console.dir(payload);
 
-            console.log("mixinLlamadaRouter");
-            console.dir(payload);
+                //Crear arreglo de objetos
 
-            //Crear arreglo de objetos
-
-            if (payload.componenteInterno) {
-                for (let componenteInterno in payload.componenteInterno) {
-                    this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
-                    break;
+                if (payload.componenteInterno) {
+                    for (let componenteInterno in payload.componenteInterno) {
+                        await this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
+                        break;
+                    }
                 }
-            }
 
-            if ('pagina' in payload) {
-                this.$router.push({ name: payload.pagina }).catch(error => {
-                    //this.$router.push({ name: 'no-encontrado' });
-                });
-            }
-
+                if ('pagina' in payload) {
+                    this.$router.push({ name: payload.pagina }).catch(error => {
+                        //this.$router.push({ name: 'no-encontrado' });
+                    });
+                }
+            });
         },
+
         cleanMixinResult() {
             this.MixinResult.pagina = null;
             this.MixinResult.componenteInterno = null;

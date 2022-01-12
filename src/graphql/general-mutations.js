@@ -13,6 +13,12 @@ export const INICIANDO_SESION_MUTATE = gql `
     }
 `;
 
+export const CERRAR_SESION_MUTATE = gql `
+    mutation cerrarSesion($input: String){
+        cerrarSesion(input: $input)
+    }
+`;
+
 export const ME_ENCANTA_MUTATE = gql `
     mutation anunciolike($idAnuncio: String!){
         anunciolike(idAnuncio: $idAnuncio)

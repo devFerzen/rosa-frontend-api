@@ -1,0 +1,55 @@
+:root{
+    --letra: Roboto Slab, DejaVu Serif, Georgia, Times New Roman, sans-serif !important;
+    --rosa: #e0409a;
+    --verde: #9fe676;
+    --beige: #e9b972;
+    --gris: #7d7e80;
+    --gris-inactivo: #d1d1d1;
+}
+
+.boton-primario,
+.boton-secundario {
+  float: left;
+  width: 123px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid var(--e0409a);
+  border-radius: 23px;
+}
+
+.input-formulario {
+  width: 123px;
+  height: 123px;
+}
+
+.background-verde {
+    background: var(--verde)!important;
+}
+
+.background-beige {
+  background: var(--beige)!important;
+}
+
+.background-rosa {
+  background: var(--rosa)!important;
+}
+
+.background-gris {
+  background: var(--gris)!important;
+}
+
+.color-verde-obscuro {
+  color: #51a324!important;
+}
+
+.color-beige-obscuro {
+  color: #5a482d!important;
+}
+
+.color-rosa {
+  color: var(--rosa)!important;
+}
+
+.color-white {
+  color: white!important;
+}

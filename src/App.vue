@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="white" class="hidden-sm-and-down">
       <div class="d-flex align-center mx-3" style="cursor:pointer;">
         <v-img alt="Vuetify Logo" class="shrink" contain
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"
@@ -8,23 +8,21 @@
       </div>
 
       <v-row align="center" justify="end">
-        <v-btn tile depressed raised class="mr-2 rounded-lg" :class="btnClasses['btnClass']" color="light-blue accent-3"
-          @click="anunciate">
-          <v-icon>perm_identity</v-icon>
-          <span class="ml-2" :class="btnClasses['span']">Anunciaté</span>
+        <v-btn color="green" class="mr-2 rounded-lg" :class="btnClasses['btnClass']" @click="anunciate" tile depressed
+          raised rounded>
+          <span :class="btnClasses['span']" style="color:white;">Anunciaté</span>
         </v-btn>
         <!--Btn Anunciate-->
 
-        <v-btn outlined color="white" class="mx-2 rounded-lg" :class="btnClasses['btnClass']" @click="iniciandoSesion"
-          v-if="!usuarioLoggeado">
-          <v-icon>perm_identity</v-icon>
-          <span class="ml-2" :class="btnClasses['span']">Login Usuario</span>
+        <v-btn color="primary" class="mx-2 rounded-lg" :class="btnClasses['btnClass']" @click="iniciandoSesion"
+          depressed tile rounded v-if="!usuarioLoggeado">
+          <span :class="btnClasses['span']" style="color:white;">Login</span>
         </v-btn>
         <!--Btn Login-->
 
-        <v-btn outlined color="white" class="mx-2 rounded-lg" @click="sideDashboard = !sideDashboard" v-else>
-          <v-icon>perm_identity</v-icon>
-          <span class="ml-2" :class="btnClasses['span']">Dashboard</span>
+        <v-btn color="primary" class="mx-2 rounded-lg" :class="btnClasses['btnClass']"
+          @click="sideDashboard = !sideDashboard" depressed tile rounded v-else>
+          <span :class="btnClasses['span']" style="color:white;">Dashboard</span>
         </v-btn>
         <!--Btn Dashboard-->
       </v-row>
@@ -64,7 +62,7 @@
           <v-list-item @click="contactanos">
             <v-list-item-title class="text-center">Contactanos</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click="cerrarSesion">
             <v-list-item-title class="text-center">Cerrar Sesion</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -81,7 +79,6 @@
     <v-main>
       <router-view />
     </v-main>
-
   </v-app>
 </template>
 
@@ -115,6 +112,23 @@
       },
       contactanos() {
         this.mixinLlamadaRouter({ pagina: 'home', componenteInterno: { panelHerramientasContactanos: true } });
+      },
+      async cerrarSesion() {
+        let DispatchResult;
+        try {
+          DispatchResult = await this.mixinCerrarSesion();
+        } catch (error) {
+          console.log("vue anunciate... en error");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+          this.mixinLlamadaRouter(error);
+          return;
+        }
+        console.log("vue cerrar sesion...");
+        console.dir(DispatchResult);
+
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${DispatchResult.mensaje}` });
+        this.mixinLlamadaRouter(DispatchResult);
       },
       async anunciate() {
         let DispatchResult;
@@ -151,8 +165,6 @@
     },
     async created() {
       let QueryEstadosResult;
-
-      await this.$store.dispatch('usuarioIdentificacion');
 
       if (this.getDdlEstados[0]['no_id'] == 0) {
         //console.log("correr query en mounted ddlEstado");
@@ -191,10 +203,39 @@
   .btn-menu-mbview {}
 
   .btn-menu-pcview {
-    width: 185px;
+    width: 110px;
   }
 
   .required label::after {
     content: "*";
+  }
+
+  * {
+    text-transform: none !important;
+  }
+
+  .select609 {
+    font-size: 10px !important;
+    height: 50px;
+  }
+
+  /*******Input Selection*/
+
+  /*select's inner visual box*/
+  .select609>.v-input__control>.v-input__slot {
+    padding: 0 12px;
+  }
+
+  /*select's and text input place-holder label*/
+  .select609>.v-input__control>.v-input__slot>.v-select__slot>.v-label,
+  .select609>.v-input__control>.v-input__slot>.v-text-field__slot input::placeholder {
+    font-size: 11px !important;
+    color: #9fe676;
+  }
+
+  /*item visual view selected label*/
+  .select609>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections>.v-select__selection {
+    font-size: 11px !important;
+    color: #e0409a;
   }
 </style>

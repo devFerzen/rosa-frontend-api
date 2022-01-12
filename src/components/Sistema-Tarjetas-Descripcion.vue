@@ -227,7 +227,6 @@
   import MiniTarifas from '@/components/Mini-Tarifas';
   import GeneralMixins from '../mixins/general-mixins.js';
 
-
   export default {
     name: "sistema-tarjetas-descripcion",
     mixins: [GeneralMixins],

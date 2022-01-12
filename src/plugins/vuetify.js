@@ -11,7 +11,11 @@ export default new Vuetify({
       },
     themes: {
       light: {
-        primary: '#007BFF',
+        pink: '#e0409a',
+        green: '#9fe676',
+        orage: '#e5ae78',
+        grey: '#d7f3c6de',
+        primary: '#e0409a',
         secondary: '#424242',
         accent: '#82B1FF',
         error: '#FF5252',

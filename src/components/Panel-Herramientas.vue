@@ -1,78 +1,93 @@
 <template>
-  <v-card :loading="herramientasLoader" class="mt-2 rounded-xl d-flex flex-column" max-height="85vh"
-    :height="panelCSS.panelCardHeight" min-height="20vh" elevation="2" outlined>
+  <v-card :loading="herramientasLoader" class="mt-2 d-flex flex-column" :height="panelCSS.panelCardHeight"
+    max-height="panelCSS.panelCardMaxHeight" min-height="19vh" color="pink" flat style="border-radius:19px!important">
 
-    <v-system-bar height="30">
+    <v-system-bar height="30" color="pink">
       <v-spacer></v-spacer>
-      <v-btn text icon @click="barAction">
+      <v-btn text icon @click="barActionBtn">
         <span class="material-icons">{{ panelCSS.isMin ? 'maximize': 'minimize'}}</span>
       </v-btn>
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <div class="text-h4 text-lg-h4 text-center my-8" :class="cardClasses['class']">Lorem ipsum</div>
-      <v-row no-gutters>
-        <v-col order="1" :cols="cols['formSearchField']">
-          <v-text-field v-model="busquedaBuscarPor" label="Buscar por" placeholder="Buscar por" outlined></v-text-field>
-        </v-col>
-        <!--Busqueda-->
+      <v-form ref="busqueda" v-model="valid" lazy-validation>
+        <v-row>
+          <v-col order="1" cols="10" style="height:50px;">
+            <v-text-field v-model="busquedaBuscarPor" placeholder="Búsqueda..." class="select609" color="pink"
+              background-color="#f8ffff" filled dense rounded>
+            </v-text-field>
+          </v-col>
+          <!--Busqueda-->
 
-        <v-col cols="2" :class="filterInputClass['class']" :order="columnOrders['formMasFiltros']">
-          <div class="d-flex align-center justify-center">
-            <v-btn text icon @click="showingMasFiltros">
-              <span class="material-icons">maximize</span>
-            </v-btn>
-          </div>
-        </v-col>
-        <!--Icono más filtros-->
+          <v-col cols="2" order="2">
+            <div class="d-flex align-center justify-center">
+              <v-btn text icon @click="showingExtraFiltros">
+                <span class="material-icons">maximize</span>
+              </v-btn>
+            </div>
+          </v-col>
+          <!--Btn Input Extras-->
 
-        <v-col cols="6" class="pr-1" :order="panelCSS.colOrder.estados" v-show="panelCSS.masFiltros">
-          <v-select v-model="busquedaEstado" :items="getDdlEstados" :item-text="'descripcion'"
-            :item-value="'descripcion'" label="Estados" outlined class="mb-0"></v-select>
-        </v-col>
-        <!--Estados-->
+          <v-col cols="6" class="pr-1" :order="panelCSS.colOrder.estados" style="height:50px;" v-show="extraInputView">
+            <v-select v-model="busquedaEstado" :items="getDdlEstados" :item-text="'descripcion'"
+              :item-value="'descripcion'" label="Estado" class="mb-0 select609" filled dense rounded solo single-line
+              :menu-props="{ maxHeight:150, offsetY: false }">
+            </v-select>
+          </v-col>
+          <!--Estados-->
 
-        <v-col cols="6" class="pl-1" :order="panelCSS.colOrder.municipios" v-show="panelCSS.masFiltros">
-          <v-select v-model="busquedaCiudad" :items="getDdlMunicipios" :item-text="'descripcion'"
-            :item-value="'descripcion'" label="Municipios" outlined>
-          </v-select>
-        </v-col>
-        <!--Municipios-->
+          <v-col cols="6" class="pl-1" :order="panelCSS.colOrder.municipios" style="height:50px;"
+            v-show="extraInputView">
+            <v-select v-model="busquedaCiudad" :items="getDdlMunicipios" :item-text="'descripcion'"
+              :item-value="'descripcion'" label="Municipio" class="select609" filled dense rounded solo single-line
+              :menu-props="{ maxHeight:150, offsetY:false }">
+            </v-select>
+          </v-col>
+          <!--Municipios-->
 
-        <v-col :cols="cols['formCategoriasField']" :order="columnOrders['formCategorias']" class="mb-4"
-          v-show="panelCSS.categorizacion">
-          <v-slide-group v-model="busquedaCategorias" mandatory show-arrows center-active>
-            <v-slide-item v-for="categoria in getDdlCategorias" :value="categoria.descripcion" :key="categoria.no_id"
-              v-slot="{active}">
-              <v-card class="mx-2" height="50" width="100" :color="active ? 'primary' : 'grey lighten-1'"
-                @click="onCategoriaClick(categoria.descripcion)">
-                <v-card-text>
-                  <div class="text-body-1">
-                    {{categoria.descripcion}}
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-slide-item>
-          </v-slide-group>
-        </v-col>
+          <v-col cols="12" :order="columnOrders['formCategorias']" class="mb-4" style="height:50px;"
+            v-show="extraInputView">
+            <v-slide-group v-model="busquedaCategorias" mandatory show-arrows center-active>
+              <v-slide-item v-for="categoria in getDdlCategorias" :value="categoria.descripcion" :key="categoria.no_id"
+                v-slot="{active}">
+                <v-card class="mx-2" height="50" width="100" :color="active ? 'primary' : 'grey lighten-1'"
+                  @click="onCategoriaClick(categoria.descripcion)">
+                  <v-card-text>
+                    <div class="text-body-1">
+                      {{categoria.descripcion}}
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-slide-item>
+            </v-slide-group>
+          </v-col>
+          <!--Categorías-->
 
-        <v-col :cols="6" order="6" class="mb-4" v-show="panelCSS.categorizacion">
-          <v-select v-model="busquedaSexo" :items="getDdlSexo" :item-text="'descripcion'" :item-value="'descripcion'"
-            label="Sexo" outlined>
-          </v-select>
-        </v-col>
-        <v-col :cols="6" order="7" class="mb-4" v-show="panelCSS.categorizacion">
-        </v-col>
-        <!--Categorías-->
-      </v-row>
+          <v-col cols="3" :lg="5" :order="panelCSS.colOrder.sexo" class="mb-4" style="height:50px;"
+            v-show="extraInputView">
+            <v-select v-model="busquedaSexo" :items="getDdlSexo" :item-text="'descripcion'" :item-value="'descripcion'"
+              label="Sexo" class="select609" filled dense rounded solo>
+            </v-select>
+          </v-col>
+          <!--sexo-->
+        </v-row>
+      </v-form>
     </v-card-text>
 
-    <v-row align="center" justify="center" v-show="panelCSS.masFiltros" class="mb-2">
-      <v-card-actions>
-        <v-btn depressed elevation="2" color="primary" width="120" @click="buscar"> Buscar</v-btn>
-        <v-btn depressed outlined color="primary" width="120" @click="anunciate"> Anunciate</v-btn>
-      </v-card-actions>
-    </v-row>
+    <!--leer d-flex para quitar el row de aquí o para mover esto hacia abajo y quitar altura-->
+    <!--de ahí minimizar de ahuevo en onscroll en cierta altura...-->
+    <v-card-actions>
+      <v-row align="center" justify="space-around" style="position: relative;">
+        <v-btn depressed outlined rounded color="white" class="panel-herramientas-btnBuscar"
+          :class="btnBuscarMinMaxClass" width="120" @click="buscar">
+          Buscar
+        </v-btn>
+        <v-btn depressed outlined rounded color="white" class="panel-herramientas-btnAnunciate"
+          :class="btnAnunciateMinMaxClass" width="120" @click="anunciate">
+          Anunciate
+        </v-btn>
+      </v-row>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -86,6 +101,7 @@
     mixins: [GeneralMixins],
     data: () => ({
       herramientasLoader: false,
+      valid: true,
       busquedaBuscarPor: '',
       busquedaEstado: '',
       busquedaCiudad: '',
@@ -94,35 +110,43 @@
       busquedaCategorias: "Escorts",
       panelCSS: {
         colOrder: {
-          categorias: 2,
-          municipios: 5,
-          estados: 4
+          estados: 3,
+          municipios: 4,
+          sexo: 5
         },
         headerClass: 'hidden',
         isMin: false,
-        masFiltros: false,
         categorizacion: true,
-        panelCardHeight: '85vh'
+        panelCardHeight: '47vh',
+        panelCardMaxHeight: '45vh'
       },
+      scrollLimitPanel: 310,
+      scrollLivePosition: 0,
+      extraInputView: true
     }),
     computed: {
       ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo"]),
-      cols() {
-        const { lg, sm, md, xs } = this.$vuetify.breakpoint
-        //console.log(`vista: lg: ${lg}, sm: ${sm}, md: ${md}, xs: ${xs}`);
-        return lg ? { formSearchField: 12, formCategoriasField: 12 } : md ? { formSearchField: 5, formCategoriasField: 6 } : sm ? { formSearchField: 5, formCategoriasField: 6 } : { formSearchField: 10, formCategoriasField: 12 };
+      colSize() {
+
+        return {
+          formSearchField: 10,
+          formBtnInputExtra: 2,
+          formCategoriasField: 12,
+          formEstadosField: 6,
+          formMunicipiosField: 6,
+        };
       },
-      cardClasses() {
-        const { sm, md, xs } = this.$vuetify.breakpoint;
-        return sm || md || xs ? { class: this.panelCSS.headerClass } : { class: '' };
+      btnAnunciateMinMaxClass() {
+        const isMin = this.panelCSS.isMin;
+        return isMin ? 'panel-herramientas-btnAnunciateMin' : '';
       },
-      filterInputClass() {
-        const { lg, xl } = this.$vuetify.breakpoint;
-        return lg || xl ? { class: this.panelCSS.headerClass } : { class: '' };
+      btnBuscarMinMaxClass() {
+        const isMin = this.panelCSS.isMin;
+        return isMin ? 'panel-herramientas-btnBuscarMin' : '';
       },
       columnOrders() {
         const { sm, md, xs } = this.$vuetify.breakpoint;
-        return xs ? { formMasFiltros: 2, formCategorias: 3 } : { formMasFiltros: 3, formCategorias: 2 };
+        return xs ? { formCategorias: 5 } : { formCategorias: 5 };
       }
 
     },
@@ -181,49 +205,42 @@
         console.dir(DispatchResult);
         this.mixinLlamadaRouter(DispatchResult);
       },
-      showingMasFiltros() {
-        this.panelCSS.masFiltros = !this.panelCSS.masFiltros;
-        this.panelCSS.categorizacion = window.innerWidth < 601 ? !this.panelCSS.categorizacion : true;
 
-        if (this.panelCSS.masFiltros && window.innerWidth < 1263) {
-          this.panelCardHeight = '50vh';
-        } else {
-          this.panelCardHeight = 'auto';
+      onScroll() {
+        if (window.pageYOffset < 0) {
+          return
         }
+        if (Math.abs(window.pageYOffset - this.scrollLivePosition) < this.scrollLimitPanel) {
+          return
+        }
+        this.extraInputView = window.pageYOffset < this.scrollLivePosition ? true : false;
+        this.scrollLivePosition = window.pageYOffset
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
       },
-      onResizeMasFiltros() {
-        if (window.innerWidth < 1263) {
-          this.panelCSS.masFiltros = false;
-          this.panelCSS.panelCardHeight = 'auto';
-        }
-
-        if (window.innerWidth > 1263) {
-          this.panelCSS.masFiltros = true;
-          this.panelCSS.panelCardHeight = '85vh';
-        }
-
-        if (window.innerWidth < 600) {
-          this.panelCSS.categorizacion = false;
-        }
-
-        if (window.innerWidth >= 600) {
-          this.panelCSS.categorizacion = true;
-        }
+      showingExtraFiltros() {
+        this.extraInputView = !this.extraInputView;
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        //accion para acomodr los bts de accion
       },
-      barAction() {
-        console.log(`vue PanelHerramientas: barAction... isMin ${this.panelCSS.isMin}`);
+      barActionBtn() {
+        console.log(`vue PanelHerramientas: barActionBtn... isMin ${this.panelCSS.isMin}`);
+
         let _busquedaCategorias = this.busquedaCategorias;
+
+        //Resultados para dar a una vista mb
         if (!this.panelCSS.isMin) {
           console.log(`minimizeHerramientas`);
-          this.$emit('activandoGrid', { herramientasWidth: 8, sistemaWidth: 12 });
-          this.$emit('panelMinimizeH', { panelHerramientasClass: 'panel-herramientas-mbview' });
+          this.$emit('activandoGrid', { herramientasWidth: { lg: 5, md: 6, sm: 8 }, sistemaWidth: { lg: 12 } });
+          this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' }); //ver tamaño de height
           this.minimizeHerramientas();
           this.busquedaCategorias = _busquedaCategorias;
           return;
         }
+
+        //Resultados para dar a una vista pc
         console.log(`maximizeHerramientas`);
-        this.$emit('activandoGrid', { herramientasWidth: 3, sistemaWidth: 9 });
-        this.$emit('panelMinimizeH', { panelHerramientasClass: 'panel-herramientas-pcview' });
+        this.$emit('activandoGrid', { herramientasWidth: { lg: 3, md: 6, sm: 8 }, sistemaWidth: { lg: 9 } });
+        this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-pcview' });
         this.maximizeHerramientas();
         this.busquedaCategorias = _busquedaCategorias;
       },
@@ -232,39 +249,33 @@
 
         this.panelCSS.isMin = true;
         this.busquedaCategorias = 0;
-        this.cols['formSearchField'] = xs || sm ? 10 : 4;
-        this.cols['formCategoriasField'] = 6;
-        this.cols['formMasFiltros'] = xs || sm ? 3 : 2;
-        this.cols['formCategorias'] = 3;
-        this.filterInputClass['class'] = '';
-        this.cardClasses['class'] = this.panelCSS.headerClass;
-        //this.$emit('panelMinimizeH', { panelHerramientasClass: 'panel-herramientas-mbview' });
-        this.panelCSS.masFiltros = false;
-        this.panelCSS.panelCardHeight = 'auto';
+        this.colSize['formSearchField'] = 10;
+        this.colSize['formCategoriasField'] = 12;
+        this.colSize['formCategorias'] = 5;
+        //this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' });
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        this.panelCSS.panelCardMaxHeight = '45vh';
       },
       maximizeHerramientas() {
         const { xs, sm } = this.$vuetify.breakpoint;
 
         this.panelCSS.isMin = false;
         this.busquedaCategorias = 0;
-        this.cols['formSearchField'] = xs || sm ? 10 : 12;
-        this.cols['formCategoriasField'] = 12;
-        this.cols['formMasFiltros'] = xs || sm ? 2 : 3;
-        this.cols['formCategorias'] = 2;
-        this.filterInputClass['class'] = this.panelCSS.headerClass;
-        this.cardClasses['class'] = '';
-        //xs||sm? this.$emit('panelMinimizeH', { panelHerramientasClass: 'panel-herramientas-mbview' }) : this.$emit('panelMinimizeH', { panelHerramientasClass: 'panel-herramientas-pcview' });
-        this.panelCSS.masFiltros = true;
-        this.panelCSS.panelCardHeight = '85vh';
+        this.colSize['formSearchField'] = 10;
+        this.colSize['formCategoriasField'] = 12;
+        this.colSize['formCategorias'] = 5;
+        //xs||sm? this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' }) : this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-pcview' });
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        this.panelCSS.panelCardMaxHeight = '45vh';
       }
     },
     async mounted() {
-      this.onResizeMasFiltros()
-      window.addEventListener('resize', this.onResizeMasFiltros, { passive: true });
+      this.scrollLivePosition = window.pageYOffset;
+      window.addEventListener('scroll', this.onScroll);
     },
     beforeDestroy() {
       if (typeof window === 'undefined') return
-      window.removeEventListener('resize', this.onResizeMasFiltros, { passive: true })
+      window.removeEventListener('scroll', this.onScroll)
     },
   }
 </script>
@@ -272,5 +283,29 @@
 <style lang="scss">
   .hidden {
     display: none;
+  }
+
+  .panel-herramientas-btnBuscar {
+    border: 3px solid white !important;
+    background-color: #e5ae78;
+    top: 13px;
+    left: 8px;
+  }
+
+  .panel-herramientas-btnBuscarMin {
+    left: 38px;
+    top: 19px;
+  }
+
+  .panel-herramientas-btnAnunciate {
+    background-color: #9fe676;
+    border: 3px solid white !important;
+    top: 13px;
+    right: 8px;
+  }
+
+  .panel-herramientas-btnAnunciateMin {
+    right: 32px;
+    top: 19px;
   }
 </style>

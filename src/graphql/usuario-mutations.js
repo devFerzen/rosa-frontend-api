@@ -15,7 +15,7 @@ export const VERIFICACIONCELULAR_COMPARAR_MUTATE = gql `
 
 // Query ***
 export const USUARIO_QUERY = gql `
-    query queryUsuario($input: String){
+    query queryUsuario($input: String!){
         queryUsuario(input: $input){
             usuario,
             numero_telefonico

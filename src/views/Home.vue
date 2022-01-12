@@ -1,19 +1,32 @@
 <template>
   <v-container fluid class="white">
-    <v-row align="start" justify="center">
-      <v-col cols="12" :lg="widthComponents.herramientasWidth" :class="alturaPanelHerramientas" style="z-index:2;">
-        <panel-herramientas v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
-          @activandoGrid="activandoGrid" @panelMinimizeH="panelMinimizeH" />
+    <v-row no-gutters aling="center" justify="center">
+      <v-col cols="12" sm="7">
+        <v-card style="height: 80px;" flat>
+          <v-card-title class="center" style="text-align: center; font-size:38px;">Los errores son para encontrarse.
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row align="start" justify="center" style="margin-top: 0;">
+      <v-col cols="12" :lg="WidthComponents.herramientasWidth.lg" :md="WidthComponents.herramientasWidth.md"
+        :sm="WidthComponents.herramientasWidth.sm" :class="alturaPanelHerramientas">
+        <panel-herramientas
+          v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
+          @activandoGrid="activandoGrid" @panelMinClass="panelMinClass" />
         <inicio-sesion v-else-if="inicioSesionView" />
         <registro v-else-if="registroView" />
+
         <verificacion v-else-if="verificacionView" />
         <actualizando-contrasena v-else-if="actualizandoContrasenaView" />
         <contactanos v-else-if="contactanosView" />
       </v-col>
       <!--Panel Herramientas-->
 
-      <v-col cols="12" :lg="widthComponents.sistemaWidth">
-        <espacio-publicitario v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView || contactanosView" />
+      <v-col cols="12" :lg="WidthComponents.sistemaWidth.lg">
+        <espacio-publicitario
+          v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView || contactanosView" />
 
         <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
           v-else-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView" />
@@ -40,11 +53,6 @@
         default: false,
       },
     },
-    data() {
-      return {
-        panelHerramientasClass: ''
-      }
-    },
     components: {
       PanelHerramientas,
       SistemaTarjetasDescripcion,
@@ -57,18 +65,21 @@
     },
     data() {
       return {
-        widthComponents: {
-          herramientasWidth: 3,
-          sistemaWidth: 9,
-          _herramientasWidth: 3,
-          _sistemaWidth: 9,
-        }
+        WidthComponents: {
+          herramientasWidth: {
+            lg: 3,
+            md: 6,
+            sm: 8
+          },
+          sistemaWidth: {
+            lg: 9
+          }
+        },
+        panelHerramientasClass: ''
       };
     },
     computed: {
       alturaPanelHerramientas() {
-        const { xs, sm } = this.$vuetify.breakpoint;
-        this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
         return this.panelHerramientasClass;
       },
       hayAnuncio() {
@@ -91,34 +102,22 @@
       },
     },
     methods: {
-      ampliandoHerramientas() {
-        this.widthComponents.herramientasWidth =
-          this.widthComponents.herramientasWidth !== 12
-            ? 12
-            : this.widthComponents._herramientasWidth;
-        this.widthComponents.sistemaWidth =
-          this.widthComponents.sistemaWidth !== 12
-            ? 12
-            : this.widthComponents._sistemaWidth;
-      },
-      panelMinimizeH(Value) {
-        console.log(`vue: panelMinimizeH => `);
-        console.dir(Value);
-
+      panelMinClass(Value) {
+        console.log(`vue: panelMinClass => `);
+        console.log(Value.panelHerramientasClass);
         this.panelHerramientasClass = Value.panelHerramientasClass;
       },
       activandoGrid(WidthComponents) {
         console.log(`Vue: activandoGrid =>`);
         console.dir(WidthComponents);
 
-        this.widthComponents.herramientasWidth =
-          WidthComponents.herramientasWidth;
-        this.widthComponents.sistemaWidth = WidthComponents.sistemaWidth;
+        this.WidthComponents = WidthComponents;
       },
     },
     mounted() { },
     created() {
-
+      const { xs, sm } = this.$vuetify.breakpoint;
+      this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
     }
   };
 </script>
@@ -134,10 +133,11 @@
 
   .panel-herramientas-pcview {
     position: sticky;
-    height: 100vh;
-    top: 9vh;
-    max-height: calc(100% - 9vh);
+    height: 50vh;
+    top: 24vh;
+    max-height: calc(100% - 24vh);
     transform: translateX(0%);
     z-index: 2;
+    padding-top: 0;
   }
 </style>

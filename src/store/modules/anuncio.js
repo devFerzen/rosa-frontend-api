@@ -81,7 +81,7 @@ export const actions = {
             console.dir(payload);
 
             //Veriricar si hay usuario disponible
-            if (!rootState.usuario.usuario.usuario && !rootState.usuario.usuario.token) {
+            if (!rootState.usuario.usuario.usuario) {
                 reject({ pagina: "home", componenteInterno: "panelHerramientasInicioSesion", mensaje: "Favor de Iniciar sesion o pasar a Registrarse!" });
                 return;
             }
