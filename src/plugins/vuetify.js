@@ -13,7 +13,7 @@ export default new Vuetify({
       light: {
         pink: '#e0409a',
         green: '#9fe676',
-        orage: '#e5ae78',
+        orange: '#e5ae78',
         grey: '#d7f3c6de',
         primary: '#e0409a',
         secondary: '#424242',

@@ -21,8 +21,8 @@
 
           <v-col cols="2" order="2">
             <div class="d-flex align-center justify-center">
-              <v-btn text icon @click="showingExtraFiltros">
-                <span class="material-icons">maximize</span>
+              <v-btn text icon depressed plain tile @click="showingExtraFiltros" color="white" class="panel-herramientas-masFiltros">
+                <font-awesome-icon :icon="['fas','filter']" class="fa-2x"></font-awesome-icon>
               </v-btn>
             </div>
           </v-col>
@@ -45,18 +45,16 @@
           </v-col>
           <!--Municipios-->
 
-          <v-col cols="12" :order="columnOrders['formCategorias']" class="mb-4" style="height:50px;"
+          <v-col cols="12" :order="columnOrders['formCategorias']" style="height:65px; padding-left: 0; padding-right: 0;"
             v-show="extraInputView">
             <v-slide-group v-model="busquedaCategorias" mandatory show-arrows center-active>
               <v-slide-item v-for="categoria in getDdlCategorias" :value="categoria.descripcion" :key="categoria.no_id"
                 v-slot="{active}">
-                <v-card class="mx-2" height="50" width="100" :color="active ? 'primary' : 'grey lighten-1'"
+                <v-card class="mx-1 d-flex align-center justify-center rounded-xl my-1" elevation="1" height="32" width="90" :class="active ? 'input-categoria-active' : 'input-categoria-inactive' "
                   @click="onCategoriaClick(categoria.descripcion)">
-                  <v-card-text>
-                    <div class="text-body-1">
+                    <div class="text-captio text-center" style="font-size: .8rem; line-height: 1rem;">
                       {{categoria.descripcion}}
                     </div>
-                  </v-card-text>
                 </v-card>
               </v-slide-item>
             </v-slide-group>
@@ -120,9 +118,10 @@
         panelCardHeight: '47vh',
         panelCardMaxHeight: '45vh'
       },
-      scrollLimitPanel: 310,
+      scrollLimitPanel: 300,
       scrollLivePosition: 0,
-      extraInputView: true
+      extraInputView: true,
+      extraInputViewUserActivation: false
     }),
     computed: {
       ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo"]),
@@ -207,19 +206,36 @@
       },
 
       onScroll() {
+        const { sm, md, xs } = this.$vuetify.breakpoint;
+        let alturaCajaPanel = '47vh';
+
+        if(sm){
+          alturaCajaPanel = '71vh';
+        }
+
         if (window.pageYOffset < 0) {
           return
         }
-        if (Math.abs(window.pageYOffset - this.scrollLivePosition) < this.scrollLimitPanel) {
+        if (Math.abs(window.pageYOffset - this.scrollLivePosition) < this.scrollLimitPanel || this.extraInputViewUserActivation) {
+          console.log("aqui acabo a la verga00");
           return
         }
+        
         this.extraInputView = window.pageYOffset < this.scrollLivePosition ? true : false;
         this.scrollLivePosition = window.pageYOffset
-        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : alturaCajaPanel;
       },
       showingExtraFiltros() {
+        const { sm, md, xs } = this.$vuetify.breakpoint;
+        let alturaCajaPanel = '47vh';
+
+        if(sm){
+          alturaCajaPanel = '71vh';
+        }
+
         this.extraInputView = !this.extraInputView;
-        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        this.extraInputViewUserActivation = !this.extraInputView ? false : true;
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : alturaCajaPanel;
         //accion para acomodr los bts de accion
       },
       barActionBtn() {
@@ -245,7 +261,13 @@
         this.busquedaCategorias = _busquedaCategorias;
       },
       minimizeHerramientas() {
-        const { xs, sm } = this.$vuetify.breakpoint;
+        const { sm, md, xs } = this.$vuetify.breakpoint;
+        let alturaCajaPanel = '47vh';
+
+        if(sm){
+          alturaCajaPanel = '71vh';
+        }
+        
 
         this.panelCSS.isMin = true;
         this.busquedaCategorias = 0;
@@ -253,11 +275,18 @@
         this.colSize['formCategoriasField'] = 12;
         this.colSize['formCategorias'] = 5;
         //this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' });
-        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : alturaCajaPanel;
         this.panelCSS.panelCardMaxHeight = '45vh';
       },
       maximizeHerramientas() {
         const { xs, sm } = this.$vuetify.breakpoint;
+        let alturaCajaPanel = '47vh';
+        let alturaCajaPanelMax = '45vh';
+
+        if(sm){
+          alturaCajaPanel = '71vh';
+          alturaCajaPanelMax = '71vh';
+        }
 
         this.panelCSS.isMin = false;
         this.busquedaCategorias = 0;
@@ -265,8 +294,8 @@
         this.colSize['formCategoriasField'] = 12;
         this.colSize['formCategorias'] = 5;
         //xs||sm? this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' }) : this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-pcview' });
-        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : '47vh';
-        this.panelCSS.panelCardMaxHeight = '45vh';
+        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : alturaCajaPanel;
+        this.panelCSS.panelCardMaxHeight = alturaCajaPanelMax;
       }
     },
     async mounted() {
@@ -292,6 +321,14 @@
     left: 8px;
   }
 
+  .panel-herramientas-masFiltros {
+    box-shadow: none!important;
+  }
+
+  .panel-herramientas-filtroActivo{
+    background-color: red;
+  }
+
   .panel-herramientas-btnBuscarMin {
     left: 38px;
     top: 19px;
@@ -308,4 +345,27 @@
     right: 32px;
     top: 19px;
   }
+
+  .input-categoria-active{
+    color:white!important;
+    background-color: #e994c496!important;
+  }
+
+  .input-categoria-inactive{
+    color:#9fe676!important;
+    background-color: white;
+  }
+
+  .v-slide-group__prev>.v-icon,
+  .v-slide-group__next>.v-icon{
+    font-size: 2rem;
+    color: #e994c496;
+  }
+
+  .v-slide-group__prev>.v-icon .v-icon--disabled,
+  .v-slide-group__next>.v-icon .v-icon--disabled{
+    font-size: 2rem;
+    color: #e994c496;
+  }
+
 </style>

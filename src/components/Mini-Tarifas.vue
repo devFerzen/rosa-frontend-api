@@ -1,8 +1,7 @@
 <template lang="html">
   <v-card
     flat
-    tile
-    style="border:1px solid red;">
+    tile>
     <v-window
       v-model="tarifaSelected"
       vertical>
@@ -10,8 +9,8 @@
         v-for="(tarifa, i) in tarifas"
         :key="`card-${i}`">
         <v-card
-          color="grey"
-          height="100">
+          height="150"
+          color="blue">
           <v-row
             class="fill-height"
             align="center"

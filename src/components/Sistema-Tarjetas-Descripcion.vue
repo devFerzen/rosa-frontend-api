@@ -3,65 +3,116 @@
     <v-row>
       <v-col :cols="gridColCard['cardCols']" v-for="(anuncio, key, i) in anunciosBusqueda" :key="i">
         <v-hover v-slot:default="{ hover }">
-          <v-card class="rounded-xl" style="
+          <v-card class="rounded-xl" flat style="
               height: 459px;
               max-height: 459px;
-              overflow:hidden;">
-            <v-container>
+              overflow:hidden;"
+              :class="hover ? 'anuncioHover' : ''">
+            <v-container style="padding: 0;">
               <v-expand-transition>
-                <div v-if="hover">
-                  <div class="text-h5 d-inline-block text-truncate"
-                    style="z-index: 1; position: absolute; top:20px; left: 20px; width:auto; max-width:280px;">
-                    {{anuncio.Sec_Descripcion.titulo}}
-                  </div>
-                  <!--Titulo-->
-                  <div v-if="hover"
-                    style="z-index: 1; position: absolute; top:50px; right:0px; width:70px; height:150px;">
-                    <v-container>
-                      <v-row justify="space-around" align="center">
-                        <v-col cols="auto">
-                          <v-row no-gutters>
-                            <v-col cols="auto" class="pa-0" @click="accionCorazon(anuncio.id)" style="cursor:pointer;">
-                              <font-awesome-icon :icon="['fas','heart']" class="fa-2x"></font-awesome-icon>
-                            </v-col>
-                            <v-col cols="auto" class="pa-0">
-                              150
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                        <!--heartCounter-->
+                <div v-if="hover">                                    
 
-                        <v-col cols="auto">
-                          <v-row no-gutters>
-                            <v-col cols="auto" class="pa-0" @click="accionVer(anuncio.id)" style="cursor:pointer;">
-                              <font-awesome-icon :icon="['fas','eye']" class="fa-2x"></font-awesome-icon>
-                            </v-col>
-                            <v-col cols="auto" class="pa-0">
-                              150
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                        <!--eyeCounter-->
-                      </v-row>
-                    </v-container>
+                  <div style="z-index: 2; position: absolute; top:2px; right:0px; width:70px; height:150px;">
+                    <v-list two-line style="background: none!important;">
+                      <v-list-item class="red--text font-weight-black text-center">
+                        <v-list-item-content>
+                          <v-list-item-title @click="accionCorazon(anuncio.id)" style="cursor:pointer;">
+                            <font-awesome-icon :icon="['fas','heart']" class="fa-2x" color="red"></font-awesome-icon>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="black--text font-weight-black" v-text="150"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-list-item class="black--text font-weight-black text-center">
+                        <v-list-item-content>
+                          <v-list-item-title @click="accionVer(anuncio.id)" style="cursor:pointer;">
+                              <font-awesome-icon :icon="['fas','eye']" class="fa-2x" color="black"></font-awesome-icon>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="black--text font-weight-black" v-text="100"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
                   </div>
                   <!--Like and vistas-->
-                  <div v-if="hover"
-                    style="z-index: 1; position: absolute; bottom:38px; left:0px; width:100%; height:100px;">
-                    <mini-tarifas :tarifas="anuncio.Sec_Tarifas"></mini-tarifas>
-                  </div>
-                  <!--mini tarifas-->
+                  
+                  <row
+                    no-gutters
+                    class="glass-info-card d-flex align-start"
+                    style="width:100%; max-height:160px; height:160px;">
+                    <v-col>
+                      <div class="text-h3 text-lg-h5 font-weight-black text-truncate text-capitalize"
+                        style="color:white; overflow: hidden;">
+                        {{anuncio.Sec_Descripcion.titulo}}
+                      </div>
+                      <p class="text-caption text-justify"  style="color:white; max-height: 80px; overflow: hidden; margin-bottom: 28px;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum ut iure soluta nam quia tenetur quibusdam saepe et cupiditate, libero minima quiLorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum ut iure soluta nam quia tenetur quibusdam saepe et cupiditate, libero minima officiis impedit fugiat voluptates nisi consequatur inventore? Dignissimos.</p>                      
+                    </v-col>
+                  </row> 
+                  
+                  <v-btn x-small raised rounded color="primary" style="z-index:10!important; position: absolute; bottom: 8px; left:18px;"
+                    @click="accionVer(anuncio.id)">
+                    Ver Más
+                  </v-btn>
+                  <!--Campo descripcion-->
+                </div>
+                <!--vista hover contenido-->
+
+                <div style="z-index: 1; position: absolute; top:15px; right:0px; width:70px; height:150px;">
+                    <v-list two-line style="background: none!important;">
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title class="black--text font-weight-regular text-center text--secondary">
+                            <font-awesome-icon :icon="['fas','heart']" class="fa-2x"></font-awesome-icon>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="black--text font-weight-regular text-center" v-text="150"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title class="black--text font-weight-regular text-center text--secondary">
+                              <font-awesome-icon :icon="['fas','eye']" class="fa-2x"></font-awesome-icon>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="black--text font-weight-regular text-center" v-text="100"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>                    
                 </div>
               </v-expand-transition>
-              <!--transición de objetos carrusel-->
+              <!--Contenido de Hover-->
 
-              <v-row class="fill-height">
-                <v-carousel :height="tarjetaWH['carrusel']">
-                  <v-carousel-item v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i"
-                    :src="'http://localhost:3000/uploads/'+imagen.nombre" max-height="100%"></v-carousel-item>
-                </v-carousel>
+              <v-row class="fill-height" no-gutters>
+                <v-col style="background-color:blue;">
+                  <v-carousel :height="tarjetaWH['carrusel']" id="carouselImgAnuncio">
+                    <template v-slot:prev="{ on, attrs }">
+                      <v-btn
+                        fab
+                        color="pink"
+                        large
+                        plain
+                        v-on="on"
+                        v-ripple="false"
+                        id="idPrevNext">
+                        <font-awesome-icon :icon="['fa','caret-left']" size="lg"></font-awesome-icon>
+                      </v-btn>
+                    </template>
+                    <template v-slot:next="{ on, attrs }">
+                      <v-btn
+                        fab
+                        depressed
+                        plain
+                        text
+                        color="pink"
+                        large
+                        v-on="on"
+                        v-ripple="false"
+                        id="idPrevNext">
+                        <font-awesome-icon :icon="['fa','caret-right']" size="lg"></font-awesome-icon>
+                      </v-btn>
+                    </template>
+                    <v-carousel-item active-class="anuncio-imagenes-dots" v-for="(imagen,i) in anuncio.Sec_Imagenes" :key="i"
+                      :src="'http://localhost:3000/uploads/'+imagen.nombre" max-height="100%"></v-carousel-item>
+                  </v-carousel>
+                </v-col>
               </v-row>
-              <!--carrusel-->
+              <!--acciones botones carrusel-->
             </v-container>
           </v-card>
         </v-hover>
@@ -70,9 +121,53 @@
     <!--grid de tarjetas-->
 
     <v-dialog v-model="fullAnuncioEstado" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card height="90vh">
+      <v-sheet color="darken-2" v-if="!anuncioView.Estado.vivo">
+        <v-row no-gutters>
+          <v-col>
+            <v-skeleton-loader
+              class="mx-auto"
+              width="500"
+              height="50vh"
+              type="image"
+              light="true"
+              tile
+              style="background: #df6dad"
+            ></v-skeleton-loader>
+          </v-col>
+          <v-col>
+            <v-skeleton-loader
+              class="mx-auto"
+              width="500"
+              height="50vh"
+              tile
+              type="list-item-avatar-three-line, list-item-three-line, list-item-two-line, divider, table-tfoot"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row no-gutters justify="center" align="center">
+          <v-col>
+            <v-skeleton-loader
+              class="mx-auto"
+              width="500"
+              height="50vh"
+              style="background: #df6dad"
+              type="image"
+            ></v-skeleton-loader>
+          </v-col>
+          <v-col>
+             <v-skeleton-loader
+              class="mx-auto"
+              width="500"
+              type="actions"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <!--Skeletoo vacío-->
+      </v-sheet>  
+
+      <v-card :height="fullAnuncioMbView" v-if="anuncioView.Estado.vivo">
         <v-container fluid>
-          <v-row align="center" justify="center" class="fill-height" no-gutters>
+          <v-row align="center" justify="center" class="fill-height" no-gutters style="background: white;" :style="{ 'margin-bottom': marginMbView + 'px' }">
             <v-col cols="12" md="4" style="min-height: 95vh">
               <v-carousel height="90vh" class="my-4">
                 <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagenes" :key="i"
@@ -82,147 +177,114 @@
             </v-col>
             <!--Carrusel-->
 
-            <v-col cols="12" md="8" style="min-height: 95vh; max-height: auto"
+            <v-col cols="12" md="8" style="min-height: 95vh; max-height: auto;"
               class="d-flex flex-column justify-center align-center">
-              <v-card class="pa-4 pa-lg-2" outlined style="background-color: lightgrey" tile
+              <v-card class="pa-4 pa-lg-2" flat
                 :height="fullAnuncioBodyWH['vMainContenth']" :width="fullAnuncioBodyWH['vMainContentw']">
-                <v-tabs class="d-flex flex-column-reverse">
-                  <v-tab-item v-if="anuncioView.Sec_Descripcion">
-                    <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
-                      <v-row no-gutters>
-                        <v-col>
-                          <div class="text-h4 text-xl-h3 mb-4">Descripción</div>
-                        </v-col>
-                      </v-row>
-                      <!--Título-->
-                      <v-row no-gutters>
-                        <v-col cols="6" md="3">
-                          <div class="text-h7 text-xl-h6 mb-4">Lorem Ipsum</div>
-                        </v-col>
-                        <v-col cols="6" md="3">
-                          <div class="text-h7 text-xl-h6">Lorem Ipsum</div>
-                        </v-col>
-                      </v-row>
-                      <!--EstadoCiudad-->
-                      <v-row no-gutters style="overflow: hidden">
-                        <v-col>
-                          <v-card :height="fullAnuncioBodyWH['vTextContent']" flat class="mb-2">
-                            <template
-                              v-for="line in anuncioView.Sec_Descripcion.descripcion.split('\n')">{{line}}</br></template>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                      <!--Descripcion-->
-                    </v-container>
-                  </v-tab-item>
-                  <!--tab descripcion-->
 
-                  <v-tab-item v-if="anuncioView.Sec_Contacto">
-                    <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
-                      <v-row no-gutters>
-                        <v-col>
-                          <div class="text-h4 text-xl-h3 mb-4">Contacto</div>
-                        </v-col>
-                      </v-row>
-                      <!--Título-->
+                  <v-card-title>
+                    <v-list class="full-anuncio-titlelist" :class="fullAnunciotitleWeb">
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title class="text-h4">{{ anuncioView.Sec_Descripcion.titulo }}</v-list-item-title>
+                          <v-list-item-subtitle class="subtitle-2 text--secondary">{{ anuncioView.Sec_Descripcion.ciudad }}, {{anuncioView.Sec_Descripcion.estado }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-row align="center" justify="end">
+                          <v-btn fab text depressed plain small @click="accionCorazon(anuncio.id)">
+                            <font-awesome-icon :icon="['fas','heart']" class="fa-2x" color="red"></font-awesome-icon>
+                          </v-btn>
+                        </v-row> 
+                      </v-list-item>
+                    </v-list>
+                  </v-card-title>
 
-                      <v-row no-gutters>
-                        <v-col>
-                          <v-list shaped dense>
-                            <v-list-item-group color="primary" v-model="selectedItem">
-                              <v-list-item v-for="(contacto, i) in anuncioView.Sec_Contacto" :key="i" class="my-3">
-                                <v-list-item-icon>
-                                  <font-awesome-icon :icon="[contacto.Tipo.categoria,contacto.Tipo.icono]"
-                                    class="tw-redes-icons fa-2x" />
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                  <v-list-item-title class="text-body-1">
-                                    {{ contacto.contacto }}
-                                  </v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list-item-group>
-                          </v-list>
-                        </v-col>
-                      </v-row>
-                      <!--ContactosList-->
-                    </v-container>
-                  </v-tab-item>
-                  <!--tab contactos-->
+                  <v-card-subtitle class="pb-0">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident veritatis natus, nisi magni illo beatae suscipit voluptatum? Adipisci voluptatibus doloremque autem mollitia.
+                  </v-card-subtitle>
 
-                  <v-tab-item v-if="anuncioView.Sec_Tarifas">
-                    <v-container fluid class="pa-4 pa-lg-8" :class="tabContainerClass['tabContainer']">
-                      <v-row no-gutters>
-                        <v-col>
-                          <div class="text-h4 text-xl-h3 mb-4">Tarifas</div>
-                        </v-col>
-                      </v-row>
-                      <!--Titulo-->
-                      <v-container>
-                        <v-row align="center" justify="space-around">
-                          <v-col :cols="fullAnuncioBodyWH['CardTarifaCol']"
-                            v-for="(tarifa, i) in anuncioView.Sec_Tarifas" :key="i">
-                            <v-card>
-                              <v-card-text>
-                                <v-row align="center" class="mx-0 mb-2">
-                                  <v-card-title>{{ tarifa.nombre }}</v-card-title>
-                                  <font-awesome-icon icon="dollar-sign" class="tw-redes-icons" />
-                                  <div class="grey--text ml-2">
-                                    {{ tarifa.precio }}
-                                  </div>
-                                </v-row>
-                                <div>{{ tarifa.descripcion }}</div>
-                              </v-card-text>
+                  <v-card-text class="pa-0">
+                    <v-row align="center" justify="center" no-gutters>
+                      <v-btn text depressed plain v-ripple="false" @click="reveal = !reveal">
+                        Descripción
+                      </v-btn>
+                     
+                      <v-btn text depressed plain v-ripple="false" @click="reveal = !reveal" class="ml-2">
+                        Tarifas
+                      </v-btn>
+                    </v-row>
+                  </v-card-text>
+                  <!--Header Anuncio-->
+                
+                  <v-expand-x-transition>
+                    <v-card-text v-if="reveal" class="full-anuncio-seccion" :class="fullAnuncioSeccionWeb">
+                      
+                    </v-card-text>
+                    <!--Tarifas-->
 
-                              <v-divider class="mx-4"></v-divider>
+                    <v-card-text class="full-anuncio-seccion" :class="fullAnuncioSeccionWeb">                      
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti doloribus qui similique impedit. Reiciendis et cumque odit, officiis atque omnis, quasi numquam repudiandae id rem itaque architecto ipsam facere cum.
+                    </v-card-text>
+                    <!--Descripción-->
+                  </v-expand-x-transition>
+                  <!--Cuerpo Anuncio-->
 
-                              <v-card-text>
-                                <v-chip-group active-class="deep-purple accent-4 white--text" column>
-                                  <v-chip>5:30PM</v-chip>
+                  <v-card-actions style="float:right">
+                    <v-btn class="mx-2" small text plain raised color="primary"
+                      @click="reportarAnuncio">
+                      Reportar Anuncio!
+                    </v-btn>
 
-                                  <v-chip>7:30PM</v-chip>
-                                </v-chip-group>
-                              </v-card-text>
+                    <v-btn class="mx-2" fab dark small color="primary" @click="fullAnuncioEstado=false">
+                      <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
+                    </v-btn>
+                  </v-card-actions>
+                  <!--Acciones Anuncio-->
 
-                              <v-card-actions>
-                                <v-btn color="deep-purple lighten-2" text>
-                                  Lorem
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-container>
-                  </v-tab-item>
-                  <!--tab tarifas-->
 
-                  <v-tab v-for="(anuncio, key, i) in anuncioView.permisos" :key="i">
-                    {{
-                    anuncio
-                    }}
-                  </v-tab>
-                  <!--nombre tabs-->
-                </v-tabs>
-                <v-btn class="mx-2" fab dark small color="primary" style="float:right" @click="fullAnuncioEstado=false">
-                  <font-awesome-icon :icon="['fas','times']" class="fa-2x"></font-awesome-icon>
-                </v-btn>
-                <v-btn class="mx-2" small text plain raised color="primary" style="float:right"
-                  @click="reportarAnuncio">
-                  Reportar Anuncio!
-                </v-btn>
-              </v-card>
+                  <v-bottom-navigation
+                    :fixed="navegacionMbView"
+                    v-model="contactBottomNav"
+                    dark grow color="pink">
+                    <v-btn v-for="(contacto, key, i) in anuncioView.Sec_Contacto" :key="i" primary>
+                      <span>Video</span>
+                      <font-awesome-icon :icon="[anuncioView.Sec_Contacto[key].Tipo.categoria, anuncioView.Sec_Contacto[key].Tipo.icono]">
+                      </font-awesome-icon>
+                    </v-btn>
+                  </v-bottom-navigation>
+                  <!--Inferior Anuncio-->
+                </v-card>
             </v-col>
             <!--Cuepo-->
           </v-row>
+
         </v-container>
       </v-card>
+        <!--Cuerpo Anuncio-->
     </v-dialog>
     <!--Venta Anuncio Completa-->
   </div>
 </template>
 
 <script>
+  /*
+  
+    Issues:
+    1.- Posible issue en traspaso de estilos hacia un futuro carrusel children.
+  */
   import { mapGetters } from 'vuex';
   import MiniTarifas from '@/components/Mini-Tarifas';
   import GeneralMixins from '../mixins/general-mixins.js';
@@ -238,12 +300,21 @@
     },
     data() {
       return {
+        reveal: false,
+        contactBottomNav:0,
+        limitScrollPosition: 310,
         anunciosBusqueda: [],
         selectedItem: "",
-
+        fullAnuncioCss:{
+          seccion: '',
+          list: ''
+        },
         anuncioView: {
           categorias: ['Escorts', 'Masajes Eróticos'],
           permisos: ['Descripcion', 'Contacto', 'Tarifas'],
+          Estado:{
+            vivo: true
+          },
           Sec_Descripcion: {
             titulo: "Lorem ipsum dolor",
             estado: "1",
@@ -357,10 +428,30 @@
           }
           : {
             vMainContentw: "58vw",
-            vMainContenth: "70vh",
+            vMainContenth: "90vh",
             vTextContent: "40vh",
             CardTarifaCol: 4,
           };
+      },
+      fullAnunciotitleWeb(){
+        let { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? '' : 'full-anuncio-titlelist-web';
+      },
+      fullAnuncioSeccionWeb(){
+        let { xs, sm } = this.$vuetify.breakpoint;
+
+        return xs || sm ? '' : 'full-anuncio-seccion-web';
+      },
+      navegacionMbView(){
+          const { md, sm, xs } = this.$vuetify.breakpoint;
+          
+          return xs || sm || md || Math.abs(window.pageYOffset - this.limitScrollPosition) < this.limitScrollPosition ? true : false;
+      },
+      fullAnuncioMbView(){
+        return !!this.navegacionMbView ? 'auto' : '90vh';
+      },
+      marginMbView(){
+        return !!this.navegacionMbView ? '50' : '0';
       }
     },
     methods: {
@@ -416,7 +507,9 @@
           this.$store.dispatch('activationAlert', { type: 'error', message: `Error al tratar de abrir al anuncio, favor de intentarlo más tarde!` });
           return;
         }
-        this.anuncioView = queryResult[0]; //Checar bien los nombres porque no abre
+        console.log("se esta imprimiendo en modal el sig anuncio");
+        console.dir(queryResult[0]);
+        this.anuncioView = queryResult[0];
       },
 
       /*
@@ -437,6 +530,10 @@
 
     },
     async created() {
+      const { xs, sm } = this.$vuetify.breakpoint;
+      this.fullAnuncioCss.list = xs || sm ? '' : 'full-anuncio-titlelist-web';
+      this.fullAnuncioCss.seccion = xs || sm ? '' : 'full-anuncio-seccion-web';
+      
       this.aplicaBusqueda();
     },
     watch: {
@@ -450,16 +547,81 @@
 </script>
 
 <style>
+  .full-anuncio-seccion{
+    min-height: 250px;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .full-anuncio-seccion-web{
+    max-height: 240px;
+  }
+
+  .full-anuncio-titlelist{
+    background-color: transparent!important;
+  }
+
+  .full-anuncio-titlelist-web{
+    width: 60vw;
+  }
+
+  .v-skeleton-loader__image{
+    height: 50vh;
+  }
+
   .tw-redes-icons {
     color: blue;
   }
 
   .tabContainerMB {
-    height: auto;
     min-height: 61vh;
+    height: auto;
   }
 
   .tabContainerWEB {
     height: 61vh;
   }
+
+  .anuncioHover{
+    border:6px solid #e0409a!important;
+  }
+
+  #carouselImgAnuncio .v-carousel__controls{
+    background: none!important;
+    z-index: 3!important;
+  }
+
+  .anuncio-imagenes-dots {
+    color: #e0409a!important;
+  }
+
+  .v-window__prev, .v-window__next{
+    background: none;
+    margin:0;
+  }
+
+  .v-window__prev>.v-btn,
+  .v-window__prev>.v-btn{
+    font-size: 2rem;
+    color: #e994c496;
+  }
+
+  .v-window__next>.v-btn,
+  .v-window__next>.v-btn{
+    font-size: 2rem;
+    color: #e994c496;
+  }
+
+  /* From https://css.glass */
+  .glass-info-card{
+    background: rgba(255, 255, 255, 0.46);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 2; 
+    position: absolute; 
+    bottom: 0px; 
+  }
+
 </style>
