@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="herramientasLoader" class="rounded-xl d-flex flex-column" max-height="85vh"
+  <v-card :loading="herramientasLoader" class="rounded-xl d-flex flex-column" max-height="82vh"
     :height="panelCSS.panelCardHeight" min-height="20vh" elevation="2" outlined>
 
     <v-system-bar height="30">
@@ -55,7 +55,7 @@
         herramientasLoader: false,
         valid: true,
         panelCSS: {
-          panelCardHeight: '85vh'
+          panelCardHeight: '82vh'
         },
         FormIS: {
           usuario: '',
@@ -103,8 +103,8 @@
         console.log("vue iniciandoSesion... MutateResult");
         console.dir(MutateResult);
 
-        this.$store.dispatch('activationAlert', { type: 'success', message: MutateResult.mensaje });
         this.mixinLlamadaRouter(MutateResult);
+        this.$store.dispatch('activationAlert', { type: 'success', message: MutateResult.mensaje });
       },
       async restablecerContrasena() {
         let MutateResult;

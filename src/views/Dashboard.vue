@@ -119,6 +119,10 @@
         this.$store.dispatch('anuncioEditSet', MutateResult.data);
         this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
       },
+    },
+    created(){
+      console.log(`anuncios: `);
+      console.table(this.anunciosUsuario);
     }
   };
 </script>

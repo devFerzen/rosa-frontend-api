@@ -1,7 +1,6 @@
 <template>
   <v-card :loading="herramientasLoader" class="mt-2 d-flex flex-column" :height="panelCSS.panelCardHeight"
     max-height="panelCSS.panelCardMaxHeight" min-height="19vh" color="pink" flat style="border-radius:19px!important">
-
     <v-system-bar height="30" color="pink">
       <v-spacer></v-spacer>
       <v-btn text icon @click="barActionBtn">
@@ -72,8 +71,6 @@
       </v-form>
     </v-card-text>
 
-    <!--leer d-flex para quitar el row de aquí o para mover esto hacia abajo y quitar altura-->
-    <!--de ahí minimizar de ahuevo en onscroll en cierta altura...-->
     <v-card-actions>
       <v-row align="center" justify="space-around" style="position: relative;">
         <v-btn depressed outlined rounded color="white" class="panel-herramientas-btnBuscar"
@@ -118,10 +115,10 @@
         panelCardHeight: '47vh',
         panelCardMaxHeight: '45vh'
       },
-      scrollLimitPanel: 300,
-      scrollLivePosition: 0,
+      scrollLimitOpened: -1,
+      scrollLimitClosed: 800,
       extraInputView: true,
-      extraInputViewUserActivation: false
+      extraInputViewUserActivation: ''
     }),
     computed: {
       ...mapGetters(["getDdlEstados", "getDdlMunicipios", "getDdlCategorias", "getDdlSexo"]),
@@ -208,22 +205,13 @@
       onScroll() {
         const { sm, md, xs } = this.$vuetify.breakpoint;
         let alturaCajaPanel = '47vh';
-
-        if(sm){
-          alturaCajaPanel = '71vh';
-        }
-
-        if (window.pageYOffset < 0) {
-          return
-        }
-        if (Math.abs(window.pageYOffset - this.scrollLivePosition) < this.scrollLimitPanel || this.extraInputViewUserActivation) {
-          console.log("aqui acabo a la verga00");
-          return
-        }
         
-        this.extraInputView = window.pageYOffset < this.scrollLivePosition ? true : false;
-        this.scrollLivePosition = window.pageYOffset
-        this.panelCSS.panelCardHeight = !this.extraInputView ? 'auto' : alturaCajaPanel;
+        if (this.extraInputViewUserActivation !== '') {
+          return
+        }
+
+        this.extraInputView = window.pageYOffset > this.scrollLimitClosed ? false : window.pageYOffset < this.scrollLimitClosed && window.pageYOffset > this.scrollLimitOpened ? true : false ;
+        this.panelCSS.panelCardHeight = window.pageYOffset > this.scrollLimitClosed ? 'auto' : alturaCajaPanel;
       },
       showingExtraFiltros() {
         const { sm, md, xs } = this.$vuetify.breakpoint;
@@ -247,7 +235,8 @@
         if (!this.panelCSS.isMin) {
           console.log(`minimizeHerramientas`);
           this.$emit('activandoGrid', { herramientasWidth: { lg: 5, md: 6, sm: 8 }, sistemaWidth: { lg: 12 } });
-          this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' }); //ver tamaño de height
+          this.$emit('panelMinClass', { panelHerramientasClass: 'panel-herramientas-mbview' });
+
           this.minimizeHerramientas();
           this.busquedaCategorias = _busquedaCategorias;
           return;
@@ -298,8 +287,7 @@
         this.panelCSS.panelCardMaxHeight = alturaCajaPanelMax;
       }
     },
-    async mounted() {
-      this.scrollLivePosition = window.pageYOffset;
+    async mounted() {    
       window.addEventListener('scroll', this.onScroll);
     },
     beforeDestroy() {

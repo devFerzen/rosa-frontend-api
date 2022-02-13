@@ -1,5 +1,5 @@
 export const state = {
-    dashboardEditAnuncioDisplay: null,
+    dashboardEditAnuncioDisplay: '000',
     //Renombrar AnuncioInfo por AnuncioEditInfo
     AnuncioInfo: {
         categorias: ["Escorts", "Masajes Eróticos"],

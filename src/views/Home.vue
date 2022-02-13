@@ -1,21 +1,21 @@
 <template>
-  <v-container fluid class="white">
-    <v-row no-gutters aling="center" justify="center">
+  <v-container fluid color="white" :class="{containerMbview: cssPanelHerramientas === 'panel-herramientas-mbview'}">
+    <v-row no-gutters aling="center" justify="center" v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView">
       <v-col cols="12" sm="7">
         <v-card style="height: 80px;" flat>
-          <v-card-title class="center" style="text-align: center; font-size:38px;">Los errores son para encontrarse.
+          <v-card-title class="center" style="justify-content: center; font-size:38px;">Los errores son para encontrarse.
           </v-card-title>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-row align="start" justify="center" style="margin-top: 0;">
+    <v-row align="start" justify="center">
       <v-col cols="12" :lg="WidthComponents.herramientasWidth.lg" :md="WidthComponents.herramientasWidth.md"
-        :sm="WidthComponents.herramientasWidth.sm" :class="alturaPanelHerramientas">
+        :sm="WidthComponents.herramientasWidth.sm" :class="[cssPanelHerramientas, mbViewTop, correccionAlturaWbView]">
         <panel-herramientas
           v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
-          @activandoGrid="activandoGrid" @panelMinClass="panelMinClass" />
-        <inicio-sesion v-else-if="inicioSesionView" />
+          @activandoGrid="activandoGrid" @panelMinClass="panelMinClass" style="margin-top: 0!important;" />
+        <inicio-sesion v-else-if="inicioSesionView" class="panel-inicioSesion-pcview" />
         <registro v-else-if="registroView" />
 
         <verificacion v-else-if="verificacionView" />
@@ -75,15 +75,21 @@
             lg: 9
           }
         },
-        panelHerramientasClass: ''
+        panelHerramientasClass: '',
+        mbViewTop: ''
       };
     },
     computed: {
-      alturaPanelHerramientas() {
+      cssPanelHerramientas() {
+        const { xs, sm, md } = this.$vuetify.breakpoint;
+        this.panelHerramientasClass = xs || sm || md ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
         return this.panelHerramientasClass;
       },
       hayAnuncio() {
         return this.id;
+      },
+      correccionAlturaWbView(){
+        return this.inicioSesionView || this.registroView ? 'panelHerramientas-IS-correccion' : '';
       },
       inicioSesionView() {
         return this.$store.state.inicioSesionView;
@@ -100,44 +106,66 @@
       contactanosView() {
         return this.$store.state.contactoView;
       },
+      mbViewTopClass(){
+        const { xs, sm, md } = this.$vuetify.breakpoint;
+        this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
+        return this.panelHerramientasClass;
+      }
     },
     methods: {
       panelMinClass(Value) {
         console.log(`vue: panelMinClass => `);
+
         console.log(Value.panelHerramientasClass);
         this.panelHerramientasClass = Value.panelHerramientasClass;
+        this.mbViewTop = this.panelHerramientasClass === 'panel-herramientas-mbview' ? 'activarTop0' : '';
       },
       activandoGrid(WidthComponents) {
         console.log(`Vue: activandoGrid =>`);
         console.dir(WidthComponents);
-
         this.WidthComponents = WidthComponents;
       },
-    },
-    mounted() { },
-    created() {
-      const { xs, sm } = this.$vuetify.breakpoint;
-      this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
     }
   };
 </script>
 <style>
+
+  .containerMbview {
+    padding-right: 0; 
+    padding-left: 0;
+  }
+
   .panel-herramientas-mbview {
     position: sticky;
-    height: 24vh;
-    top: 9vh;
-    max-height: calc(24% - 9vh);
+    top: 0vh;
+    height: 47vh;
     transform: translateX(0%);
-    z-index: 2;
+    z-index: 6;
+    padding-top: 0;
   }
 
   .panel-herramientas-pcview {
     position: sticky;
-    height: 50vh;
     top: 24vh;
-    max-height: calc(100% - 24vh);
+    height: 47vh;
     transform: translateX(0%);
-    z-index: 2;
+    z-index: 6;
     padding-top: 0;
+  }
+
+  .panel-inicioSesion-pcview {
+    height: 47vh;
+    transform: translateX(0%);
+    z-index: 6;
+    padding-top: 0;
+  }
+
+  .activarTop0{
+    top: 0!important;
+  }
+
+  .panelHerramientas-IS-correccion{
+    top: 0!important;
+    margin-top: 20px;
   }
 </style>

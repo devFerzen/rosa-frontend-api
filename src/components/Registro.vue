@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="herramientasLoader" class="mt-2 rounded-xl d-flex flex-column" max-height="85vh"
+  <v-card :loading="herramientasLoader" class="rounded-xl d-flex flex-column" max-height="82vh"
     :height="panelCSS.panelCardHeight" min-height="20vh" elevation="2" outlined>
 
     <v-system-bar height="30">
@@ -7,23 +7,27 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h4 text-center my-8">Registro</h6>
+      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">Registro</h6>
 
       <v-form ref="form_registro" v-model="valid" lazy-validation>
-        <v-text-field v-model="FormR.usuario" :rules="emailRules" label="Correo" required></v-text-field>
-
-        <v-text-field v-model="FormR.contrasena" :rules="contrasenaRules" label="Contraseña" required>
+        <v-text-field v-model="FormR.usuario" :rules="emailRules" label="Correo" dense filled rounded
+          required>
         </v-text-field>
 
-        <v-text-field v-model="FormR.numero_telefonico" :rules="celularRules" label="Celular" required>
+        <v-text-field v-model="FormR.contrasena" :rules="contrasenaRules" label="Contraseña" dense filled rounded
+          required>
+        </v-text-field>
+
+        <v-text-field v-model="FormR.numero_telefonico" :rules="celularRules" label="Celular" dense filled rounded
+          required>
         </v-text-field>
       </v-form>
     </v-card-text>
 
-    <v-card-text>
-      <v-row align="left" justify="center">
+    <v-card-text class="py-0">
+      <v-row align="left" justify="center" no-gutters>
         <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1">
+          <div class="text-caption text--lighten-1">
             Lorem ipsum dolor sit amet. Velit esse cillum dolore. Excepteur sint occaecat cupidatat non proident, sunt
             in culpa qui officia deserunt mollit anim id est laborum.
           </div>
@@ -35,6 +39,7 @@
     <v-row justify="center">
       <v-card-actions>
         <v-btn depressed elevation="2" color="primary" width="140" :disabled="!valid" @click="registrandoUsuario">
+          registrarse
         </v-btn>
       </v-card-actions>
     </v-row>
@@ -70,7 +75,7 @@
           v => !!v || 'Contraseña es requerida'
         ],
         panelCSS: {
-          panelCardHeight: '85vh'
+          panelCardHeight: '82vh'
         },
       }
     },

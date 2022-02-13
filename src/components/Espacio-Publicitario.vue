@@ -28,7 +28,7 @@ export default {
         'vMainContenth': 'auto'
       } : {
         'vMainContentw': '72vw',
-        'vMainContenth': '85vh'
+        'vMainContenth': '82vh'
       };
     }
   },
