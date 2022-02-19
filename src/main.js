@@ -26,7 +26,9 @@ import {
     faSave,
     faCaretLeft,
     faCaretRight,
-    faFilter
+    faFilter,
+    faEllipsisV,
+    faBars
 } from '@fortawesome/free-solid-svg-icons'
 import {
     faFacebookSquare,
@@ -46,7 +48,8 @@ library.add(faStar, faShare, faTimes,
     faTrashAlt, faPencilAlt, faEye,
     faHeart, faDollarSign, faSyncAlt,
     faShoppingBag, faHome, faPlusSquare,
-    faSave,faCaretLeft, faCaretRight,faFilter,
+    faSave,faCaretLeft, faCaretRight,
+    faFilter, faEllipsisV, faBars,
     faFacebookSquare, faApple, faGoogle,
     faInstagram, faWhatsapp, faLinkedin,
     faTwitter);

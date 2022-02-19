@@ -153,7 +153,7 @@
                     :height="tarjetaWH['carruselH']"
                     id="carouselImgAnuncio"
                   >
-                    <template v-slot:prev="{ on, attrs }">
+                    <template v-slot:prev="{ on }">
                       <v-btn
                         fab
                         color="pink"
@@ -169,7 +169,7 @@
                         ></font-awesome-icon>
                       </v-btn>
                     </template>
-                    <template v-slot:next="{ on, attrs }">
+                    <template v-slot:next="{ on }">
                       <v-btn
                         fab
                         depressed

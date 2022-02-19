@@ -7,7 +7,7 @@
       </v-col>
     </v-row>
 
-    <anuncio-edit-display :displayState="anuncioDisplayState" :key="anuncioDisplayState" />
+    <anuncio-edit-display :displayState="false" :key="anuncioDisplayState" />
     <!--AnuncioEdit Dialog-->
 
   </v-container>
