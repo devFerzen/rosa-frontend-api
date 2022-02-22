@@ -118,5 +118,8 @@ export const getters = {
     },
     usuarioLoggeado: state => {
         return state.usuario.usuario;
+    },
+    Usuario: state => {
+        return state.usuario;
     }
 }

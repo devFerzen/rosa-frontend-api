@@ -120,7 +120,9 @@
                   height="fit-content"
                 >
                   <div
-                    v-if=" anuncioUsuario.Sec_Tarifas.length == 0 || nuevaTarifaView "
+                    v-if="
+                      anuncioUsuario.Sec_Tarifas.length == 0 || nuevaTarifaView
+                    "
                   >
                     <div
                       class="
@@ -130,7 +132,13 @@
                         py-1
                       "
                     >
-                      Nueva Tarifa
+                      {{
+                        `${
+                          nuevaTarifa.accion == "creacion"
+                            ? "Nueva"
+                            : "Actualizando"
+                        } Tarifa`
+                      }}
                     </div>
                     <!--titulo-->
 
@@ -190,36 +198,54 @@
                       <!--Nueva Tarifa Inputs-->
 
                       <v-card-actions>
-                        <v-btn
-                          class="mx-2"
-                          dark
-                          color="primary"
-                          @click="salvadoDeTarifa"
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'save']"
-                            class="fa-2x mr-1"
-                          ></font-awesome-icon>
-                          Guardar
-                        </v-btn>
-                        <v-btn
-                          class="mx-2"
-                          dark
-                          color="error"
-                          @click="cancelarSalvado"
-                          v-if="anuncioUsuario.Sec_Tarifas.length > 0"
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'times']"
-                            class="fa-2x mr-1"
-                          ></font-awesome-icon>
-                          Cancelar
-                        </v-btn>
+                        <v-hover v-slot="{ hover }">
+                          <v-btn
+                            color="green"
+                            class="mx-2 rounded-lg"
+                            @click="salvadoDeTarifa"
+                            tile
+                            outlined
+                            raised
+                            rounded
+                          >
+                            <font-awesome-icon
+                              :icon="['fas', 'save']"
+                              class="fa-2x mr-1"
+                            ></font-awesome-icon>
+                            <v-expand-x-transition>
+                              <div v-show="hover">Guardar</div>
+                            </v-expand-x-transition>
+                          </v-btn>
+                        </v-hover>
+                        <!--guardar tarifa-->
+
+                        <v-hover v-slot="{ hover }">
+                          <v-btn
+                            color="primary"
+                            class="mx-2 rounded-lg"
+                            @click="cancelarSalvado"
+                            depressed
+                            outlined
+                            tile
+                            rounded
+                            v-if="anuncioUsuario.Sec_Tarifas.length > 0"
+                          >
+                            <font-awesome-icon
+                              :icon="['fas', 'times']"
+                              class="fa-2x mr-1"
+                            ></font-awesome-icon>
+                            <v-expand-x-transition>
+                              <div v-show="hover">Cancelar</div>
+                            </v-expand-x-transition>
+                          </v-btn>
+                        </v-hover>
+                        <!--cancelar tarifa-->
                       </v-card-actions>
                       <!--Nueva Tarifa Acciones-->
                     </v-form>
                   </div>
                   <!--Nueva creacion tarifa-->
+
                   <div v-else>
                     <div
                       v-for="(tarifa, i) in tarifasAnuncio"
@@ -272,7 +298,7 @@
                       </v-row>
                       <!--Divider-->
 
-                      <div style="position: absolute; top: 15%; right: 0px">
+                      <div style="position: absolute; bottom: 10px; right: 15%">
                         <v-btn
                           fab
                           icon
@@ -286,7 +312,9 @@
                           ></font-awesome-icon>
                         </v-btn>
                       </div>
-                      <div style="position: absolute; bottom: 10%; right: 0px">
+                      <div
+                        style="position: absolute; bottom: 10px; right: 15px"
+                      >
                         <v-btn
                           fab
                           icon
@@ -315,74 +343,380 @@
                 <v-sheet
                   fluid
                   elevation="6"
-                  class="rounded-xl mb-2"
-                  width="400"
+                  class="rounded-xl my-2"
+                  width="350"
                   height="fit-content"
                 >
-                  CONTACOTS!
+                  <div
+                    v-if="
+                      Usuario.Default_Contactos.length == 0 || nuevoContactoView
+                    "
+                  >
+                    <div
+                      class="
+                        text-h6
+                        green-font
+                        text-weight-black text-center
+                        py-1
+                      "
+                    >
+                      {{
+                        `${
+                          nuevoContacto.accion == "creacion"
+                            ? "Nuevo"
+                            : "Actualizando"
+                        } Contacto`
+                      }}
+                    </div>
+                    <!--titulo-->
+
+                    <v-form ref="contactoEdit">
+                      <v-card-text class="px-0 py-0">
+                        <v-row class="pt-6 pt-md-2" no-gutters>
+                          <v-col cols="2" class="mx-1">
+                            <v-select
+                              v-model="nuevoContacto.Tipo"
+                              :items="tiposContacto"
+                              item-text="icono"
+                              item-value="icono"
+                            >
+                              <template v-slot:selection="data">
+                                <font-awesome-icon
+                                  :icon="[data.item.categoria, data.item.icono]"
+                                >
+                                </font-awesome-icon>
+                              </template>
+                              <template v-slot:item="data">
+                                <font-awesome-icon
+                                  :icon="[data.item.categoria, data.item.icono]"
+                                >
+                                </font-awesome-icon>
+                              </template>
+                            </v-select>
+                          </v-col>
+
+                          <v-col cols="9">
+                            <v-text-field
+                              label="url..."
+                              v-model="nuevoContacto.contacto"
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <!-- Input nuevo contacto-->
+                      </v-card-text>
+                      <!--Cuerpo form nuevo contacto-->
+
+                      <v-card-actions>
+                        <v-hover v-slot="{ hover }">
+                          <v-btn
+                            color="green"
+                            class="mx-2 rounded-lg"
+                            @click="salvadoDeContacto"
+                            tile
+                            outlined
+                            raised
+                            rounded
+                          >
+                            <font-awesome-icon
+                              :icon="['fas', 'save']"
+                              class="fa-2x mr-1"
+                            ></font-awesome-icon>
+                            <v-expand-x-transition>
+                              <div v-show="hover">Guardar</div>
+                            </v-expand-x-transition>
+                          </v-btn>
+                        </v-hover>
+
+                        <v-hover v-slot="{ hover }">
+                          <v-btn
+                            color="primary"
+                            class="mx-2 rounded-lg"
+                            @click="cancelarSalvado"
+                            depressed
+                            outlined
+                            tile
+                            rounded
+                            v-if="contactosUsuario.length > 0"
+                          >
+                            <font-awesome-icon
+                              :icon="['fas', 'times']"
+                              class="fa-2x mr-1"
+                            ></font-awesome-icon>
+                            <v-expand-x-transition>
+                              <div v-show="hover">Cancelar</div>
+                            </v-expand-x-transition>
+                          </v-btn>
+                        </v-hover>
+                      </v-card-actions>
+                      <!--acciones nuevo contacto-->
+                    </v-form>
+                    <!--Form nuevo contacto-->
+                  </div>
+                  <!--Nueva creacion contacto-->
+
+                  <div v-else>
+                    <div
+                      class="
+                        text-h6
+                        green-font
+                        text-weight-black text-center
+                        py-1
+                      "
+                    >
+                      Contactos Disponibles
+                    </div>
+                    <!--titulo-->
+
+                    <v-row
+                      align="start"
+                      justify="center"
+                      no-gutters
+                      style="height: 220px; max-height: auto"
+                    >
+                      <v-col>
+                        <div class="d-flex flex-column">
+                          <v-card
+                            v-for="(contacto, i) in contactosUsuario"
+                            :key="i"
+                            flat
+                          >
+                            <v-hover v-slot="{ hover }">
+                              <v-sheet
+                                :style="{
+                                  'background-color': !hover ? 'white' : 'pink',
+                                }"
+                                shaped
+                                :elevation="!hover ? 0 : 4"
+                                class="mb-2"
+                              >
+                                <v-list
+                                  color="transparent"
+                                  :dense="hover ? false : true"
+                                >
+                                  <v-list-item>
+                                    <v-list-item-avatar
+                                      :color="
+                                        tiposContacto.find(
+                                          (tipoContacto) =>
+                                            tipoContacto.icono ==
+                                            contacto.Tipo.icono
+                                        )['color']
+                                      "
+                                    >
+                                      <font-awesome-icon
+                                        :icon="[
+                                          contacto.Tipo.categoria,
+                                          contacto.Tipo.icono,
+                                        ]"
+                                        class="fa-2x"
+                                        color="white"
+                                      />
+                                    </v-list-item-avatar>
+
+                                    <v-list-item-action class="mx-0">
+                                      <v-switch
+                                        v-model="contactosSeleccionados"
+                                        color="primary"
+                                        :value="i"
+                                      ></v-switch>
+                                    </v-list-item-action>
+
+                                    <v-list-item-content class="ml-2">
+                                      <v-list-item-title
+                                        :style="{
+                                          color: hover ? 'white' : 'black',
+                                        }"
+                                      >
+                                        {{ contacto.contacto }}
+                                      </v-list-item-title>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                </v-list>
+                                <!--cuerpo contacto -->
+
+                                <div
+                                  style="
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: 10%;
+                                  "
+                                >
+                                  <v-btn
+                                    fab
+                                    icon
+                                    small
+                                    depressed
+                                    color="error"
+                                    @click="eliminarContacto(i)"
+                                  >
+                                    <font-awesome-icon
+                                      :icon="['fas', 'trash-alt']"
+                                    ></font-awesome-icon>
+                                  </v-btn>
+                                </div>
+                                <div
+                                  style="
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: 0;
+                                  "
+                                >
+                                  <v-btn
+                                    fab
+                                    icon
+                                    small
+                                    depressed
+                                    color="blue"
+                                    @click="editarContacto(i)"
+                                  >
+                                    <font-awesome-icon
+                                      :icon="['fas', 'pencil-alt']"
+                                    ></font-awesome-icon>
+                                  </v-btn>
+                                </div>
+                                <!--Acciones Listado contactos-->
+                              </v-sheet>
+                            </v-hover>
+                          </v-card>
+                          <!--list contactos-->
+                        </div>
+                      </v-col>
+                    </v-row>
+                    <!--Seccion Listado Contactos-->
+                  </div>
+                  <!--Contactos list-->
                 </v-sheet>
               </v-card-text>
-              <!--Contacto-->
+              <!--v-card Contacto-->
 
-              <v-card-text
-                class="full-anuncio-seccion pb-1"
-                :class="fullAnuncioSeccionWeb"
-              >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Corrupti doloribus qui similique
-                impedit. Reiciendis et cumque odit, officiis atque omnis, quasi
-                numquam repudiandae id rem itaque architecto ipsam facere cum.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti doloribus qui similique impedit. Reiciendis et cumque
-                odit, officiis atque omnis, quasi numquam repudiandae id rem
-                itaque architecto ipsam facere cum.
+              <v-card-text class="pb-1">
+                <v-expand-x-transition>
+                  <v-sheet
+                    fluid
+                    elevation="6"
+                    class="rounded-xl my-2 full-anuncio-seccion"
+                    width="350"
+                    :class="fullAnuncioSeccionWeb"
+                    v-show="edicionDescripcion"
+                  >
+                    <v-form ref="descripcionEdit">
+                      <v-select
+                        v-model="nuevaDescripcion.sexo"
+                        :items="getDdlSexo"
+                        :item-text="'descripcion'"
+                        :item-value="'descripcion'"
+                        filled
+                        rounded
+                        dense
+                      >
+                      </v-select>
+
+                      <v-select
+                        v-model="nuevaDescripcion.descripcion"
+                        :items="getDdlCategorias"
+                        :item-text="'descripcion'"
+                        :item-value="'descripcion'"
+                        filled
+                        rounded
+                        dense
+                        small-chips
+                        multiple
+                      >
+                      </v-select>
+
+                      <v-select
+                        v-model="nuevaDescripcion.estado"
+                        :items="getDdlEstados"
+                        :item-text="'descripcion'"
+                        :item-value="'descripcion'"
+                        filled
+                        rounded
+                        dense
+                        single-line
+                      >
+                      </v-select>
+
+                      <v-select
+                        v-model="nuevaDescripcion.ciudad"
+                        :items="getDdlMunicipios"
+                        :item-text="'descripcion'"
+                        :item-value="'descripcion'"
+                        filled
+                        rounded
+                        dense
+                        single-line
+                      >
+                      </v-select>
+
+                      <v-text-field
+                        v-model="nuevaDescripcion.titulo"
+                        placeholder="Titulo..."
+                        color="pink"
+                        filled
+                        dense
+                        rounded
+                      >
+                      </v-text-field>
+
+                      <v-hover v-slot="{ hover }">
+                        <v-btn
+                          color="green"
+                          class="ml-4 mr-2 mb-3 rounded-lg"
+                          @click="salvadoDeTarifa"
+                          tile
+                          outlined
+                          raised
+                          rounded
+                        >
+                          <font-awesome-icon
+                            :icon="['fas', 'save']"
+                            class="fa-2x mr-1"
+                          ></font-awesome-icon>
+                          <v-expand-x-transition>
+                            <div v-show="hover">Guardar</div>
+                          </v-expand-x-transition>
+                        </v-btn>
+                      </v-hover>
+                      <!--guardar descripcion-->
+
+                      <v-hover v-slot="{ hover }">
+                        <v-btn
+                          color="primary"
+                          class="mx-2 mb-3 rounded-lg"
+                          @click="cancelarSalvado"
+                          depressed
+                          outlined
+                          tile
+                          rounded
+                          v-if="anuncioUsuario.Sec_Tarifas.length > 0"
+                        >
+                          <font-awesome-icon
+                            :icon="['fas', 'times']"
+                            class="fa-2x mr-1"
+                          ></font-awesome-icon>
+                          <v-expand-x-transition>
+                            <div v-show="hover">Cancelar</div>
+                          </v-expand-x-transition>
+                        </v-btn>
+                      </v-hover>
+                      <!--cancelar descripcion-->
+                    </v-form>
+                  </v-sheet>
+                </v-expand-x-transition>
+                <v-sheet
+                  fluid
+                  elevation="6"
+                  class="rounded-xl my-2 full-anuncio-seccion"
+                  :class="fullAnuncioSeccionWeb"
+                  width="350"
+                  height="92%"
+                  v-show="!edicionDescripcion"
+                >
+                  {{ anuncioUsuario.Sec_Descripcion.descripcion }}
+                </v-sheet>
               </v-card-text>
-              <!--Descripción-->
+              <!--v-card Descripción-->
             </v-expand-x-transition>
             <!--Cuerpo Anuncio (descripcion y tarifas)-->
 
@@ -419,25 +753,45 @@
                 </template>
                 <!--Main btn anuncio setup-->
 
-                <v-btn fab small text outlined plain color="green">
-                  <font-awesome-icon
-                    :icon="['fas', 'pencil-alt']"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </v-btn>
-                <v-btn fab small text outlined plain color="green">
-                  <font-awesome-icon
-                    :icon="['fas', 'shopping-bag']"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </v-btn>
-                <v-btn fab small text outlined color="green">
-                  <font-awesome-icon
-                    :icon="['fas', 'trash-alt']"
-                    @click="borrarAnuncio(anuncioUsuario.id)"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </v-btn>
+                <v-hover v-slot="{ hover }">
+                  <v-btn fab small plain color="green" @click="editarAnuncio">
+                    <div class="d-flex flex-column align-center">
+                      <font-awesome-icon
+                        :icon="['fas', 'pencil-alt']"
+                        class="fa-2x"
+                      ></font-awesome-icon>
+                      <v-expand-transition>
+                        <span class="mt-2" v-show="hover">editar</span>
+                      </v-expand-transition>
+                    </div>
+                  </v-btn>
+                </v-hover>
+
+                <v-hover v-slot="{ hover }">
+                  <v-btn fab small plain color="green">
+                    <div class="d-flex flex-column align-center">
+                      <font-awesome-icon
+                        :icon="['fas', 'shopping-bag']"
+                        class="fa-2x"
+                      ></font-awesome-icon>
+                      <v-expand-transition>
+                        <span class="mt-2" v-show="hover">compras</span>
+                      </v-expand-transition>
+                    </div>
+                  </v-btn>
+                </v-hover>
+
+                <v-hover v-slot="{ hover }">
+                  <v-btn fab small plain color="green" @click="borrarAnuncio()">
+                    <div class="d-flex flex-column align-center">
+                      <font-awesome-icon
+                        :icon="['fas', 'trash-alt']"
+                        class="fa-2x"
+                      ></font-awesome-icon>
+                      <span class="mt-2" v-show="hover">borrar</span>
+                    </div>
+                  </v-btn>
+                </v-hover>
               </v-speed-dial>
               <!--crear el speed-dial-->
             </div>
@@ -453,6 +807,7 @@
 <script>
 import DashboardCompras from "@/components/Dashboard-Compras";
 import AnuncioMixins from "../mixins/anuncio-mixins.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "tarjeta-anuncio-usuario",
@@ -470,11 +825,33 @@ export default {
       revealTarifa: false,
       anuncioConfigViewBtns: false,
       anuncioConfigInputsView: false,
+      nuevaDescripcion: {
+        ciudad: "",
+        estado: "",
+        descripcion: "",
+        sexo: "",
+        categoria: [],
+        titulo: "",
+        subtitulo: "",
+      },
+      tiposCategoriasAnuncio: [""],
+      tiposContacto: [
+        { categoria: "fab", icono: "whatsapp", color: "green" },
+        { categoria: "fab", icono: "twitter", color: "light-blue" },
+        { categoria: "fab", icono: "instagram", color: "red" },
+        { categoria: "fa", icono: "phone-alt", color: "amber" },
+        { categoria: "fa", icono: "globe", color: "blue" },
+      ],
       nuevoContacto: {
+        accion: "creacion",
+        idPosicion: 0,
         Tipo: "",
         contacto: "",
       },
+      active: false,
+      contactosSeleccionados: [],
       nuevaTarifa: {
+        accion: "creacion",
         idPosicion: 0,
         nombre: "",
         precio: "",
@@ -483,6 +860,13 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      "Usuario",
+      "getDdlEstados",
+      "getDdlMunicipios",
+      "getDdlCategorias",
+      "getDdlSexo",
+    ]),
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
@@ -508,15 +892,45 @@ export default {
     tarifasAnuncio() {
       return this.anuncioUsuario.Sec_Tarifas;
     },
-    nuevaTarifaView(){
+    contactosUsuario() {
+      return this.Usuario.Default_Contactos;
+    },
+    edicionDescripcion() {
       return this.anuncioConfigInputsView;
-    }
+    },
+    nuevaTarifaView() {
+      return this.anuncioConfigInputsView;
+    },
+    nuevoContactoView() {
+      return this.anuncioConfigInputsView;
+    },
+    backgroundIconosRedes(icono) {
+      let answer;
+      switch (icono) {
+        case "whatsapp":
+          answer = "green";
+          break;
+        case "twitter":
+          answer = "light-blue";
+          break;
+        case "instagram":
+          answer = "red";
+          break;
+        case "phone-alt":
+          answer = "amber";
+          break;
+        case "globe":
+          answer = "blue";
+          break;
+      }
+      return answer;
+    },
   },
   methods: {
-    async borrarAnuncio(idAnuncio) {
+    async borrarAnuncio() {
       let MutateResult;
       try {
-        MutateResult = await this.mixinAnuncioEliminar(idAnuncio);
+        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario.id);
       } catch (error) {
         console.log("vue borrarAnuncio en error...");
         console.dir(error);
@@ -534,13 +948,18 @@ export default {
         message: `Anuncio # ${idAnuncio} eliminado exitosamente!`,
       });
     },
+    editarAnuncio() {
+      this.habilitarEdicionesAnuncio(true);
+    },
     //abrirEdicion PASARA abrir mejor un modal con un componente de compras
     abrirEdicion() {
       console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
       this.$emit("activandoEdicion", { id: this.anuncioUsuario.id });
     },
-    habilitarEdicionesAnuncio() {
-      this.anuncioConfigInputsView = false;
+
+    //Activa los inputs o forms para editar en la tarjeta
+    habilitarEdicionesAnuncio(value = true) {
+      this.anuncioConfigInputsView = value;
     },
     activacionesSecciones(seccion = "revealDesc") {
       switch (seccion) {
@@ -578,10 +997,7 @@ export default {
       tarifa.precio = parseInt(this.nuevaTarifa.precio);
       tarifa.descripcion = this.nuevaTarifa.descripcion;
 
-      //console.log("salvadoDeTarifa...");
-      //console.dir(tarifa);
-
-      if (this.nuevaTarifa.idPosicion == 0) {
+      if (this.nuevaTarifa.accion == "creacion") {
         //agrega la nueva tarifa
         this.anuncioUsuario.Sec_Tarifas.push(tarifa);
       } else {
@@ -594,21 +1010,87 @@ export default {
       }
 
       this.anuncioConfigInputsView = false;
+      this.limpiarTarifaForm();
+    },
+    limpiarTarifaForm() {
       this.$refs.tarifaEdit.reset();
+
+      this.nuevaTarifa.idPosicion = 0;
+      this.nuevaTarifa.nombre = "";
+      this.nuevaTarifa.precio = "";
+      this.nuevaTarifa.descripcion = "";
+      this.nuevaTarifa.accion = "creacion";
     },
     editarTarifa(idPosicion) {
       this.anuncioConfigInputsView = true;
-      
+
+      this.nuevaTarifa.idPosicion = idPosicion;
+      this.nuevaTarifa.nombre =
+        this.anuncioUsuario.Sec_Tarifas[idPosicion].nombre;
+      this.nuevaTarifa.precio =
+        this.anuncioUsuario.Sec_Tarifas[idPosicion].precio;
+      this.nuevaTarifa.descripcion =
+        this.anuncioUsuario.Sec_Tarifas[idPosicion].descripcion;
+      this.nuevaTarifa.accion = "actualizacion";
     },
     eliminarTarifa(idPosicion) {
-      console.table(this.anuncioUsuario.Sec_Tarifas.splice(
-          idPosicion,
-          1
-        ));
+      console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
+    },
+    salvadoDeContacto() {
+      let contacto = {};
+
+      //validacion
+      if (this.contactosUsuario.length >= 5) {
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `No puedes tener más de 5 contactos !!!`,
+        });
+        return;
+      }
+
+      contacto.Tipo = this.nuevoContacto.nuevoContacto;
+      contacto.contacto = this.nuevoContacto.contacto;
+
+      if (this.nuevoContacto.accion == "creacion") {
+        //Crear un action vuex para agregar un nuevo contacto
+        this.anuncioUsuario.Sec_Tarifas.push(contacto);
+      } else {
+        //Crear un action vuex para agregar un editar un contacto
+        this.anuncioUsuario.Sec_Tarifas.splice(
+          this.nuevaTarifa.idPosicion,
+          1,
+          contacto
+        );
+      }
+
+      this.anuncioConfigInputsView = false;
+      this.limpiarContactoForm();
+    },
+    limpiarContactoForm() {
+      this.$refs.contactoEdit.reset();
+
+      this.nuevoContacto.idPosicion = 0;
+      this.nuevoContacto.accion = "creacion";
+      this.nuevoContacto.Tipo = {
+        categoria: "",
+        icono: "",
+      };
+      this.nuevoContacto.contacto = "";
+    },
+    editarContacto(idPosicion) {
+      this.anuncioConfigInputsView = true;
+
+      this.nuevoContacto.idPosicion = idPosicion;
+      this.nuevoContacto.Tipo = this.contactosUsuario[idPosicion].Tipo;
+      this.nuevoContacto.contacto = this.contactosUsuario[idPosicion].contacto;
+      this.nuevoContacto.accion = "actualizacion";
+    },
+    eliminarContacto(idPosicion) {
+      //Crear accion para editar un contacto (que sea igual que el de arriba pero diferente parametro)
+      //console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
     },
     cancelarSalvado() {
       this.anuncioConfigInputsView = false;
-
     },
   },
 };
@@ -617,14 +1099,14 @@ export default {
 <style lang="scss" scoped>
 .full-anuncio-seccion {
   height: auto;
-  min-height: 200px;
+  min-height: 290px;
   overflow-y: auto;
   line-height: 18px;
 }
 
 .full-anuncio-seccion-web {
-  height: 280px;
-  max-height: 280px;
+  height: 290px;
+  max-height: auto;
 }
 
 .v-textarea textarea {
