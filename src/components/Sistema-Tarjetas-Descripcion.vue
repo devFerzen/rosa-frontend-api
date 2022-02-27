@@ -5,81 +5,100 @@
         :cols="gridColCard['cardCols']"
         v-for="(anuncio, key, i) in anunciosBusqueda"
         :key="i"
+        class="px-0 px-sm-2"
       >
         <v-hover v-slot:default="{ hover }">
           <v-card
             class="rounded-xl"
             flat
-            style="overflow:hidden;"
+            style="overflow: hidden"
             :class="hover ? 'anuncioHover' : ''"
             :height="tarjetaWH['carruselH']"
             :width="tarjetaWH['carruselW']"
           >
-            <v-container style="padding: 0;">
+            <v-container style="padding: 0">
               <v-expand-transition>
                 <div v-if="hover">
                   <div
-                    style="z-index: 2; position: absolute; top:2px; right:0px; width:70px; height:150px;">
-                    <v-list two-line style="background: none!important;">
-                      <v-list-item
-                        class="red--text font-weight-black text-center"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title
-                            @click="accionCorazon(anuncio.id)"
-                            style="cursor:pointer;"
-                          >
-                            <font-awesome-icon
-                              :icon="['fas', 'heart']"
-                              class="fa-2x"
-                              color="red"
-                            ></font-awesome-icon>
-                          </v-list-item-title>
-                          <v-list-item-subtitle
-                            class="white--text font-weight-black"
-                            v-text="150"
-                          ></v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-list-item
-                        class="white--text font-weight-black text-center"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title
-                            @click="accionVer(anuncio.id)"
-                            style="cursor:pointer;"
-                          >
-                            <font-awesome-icon
-                              :icon="['fas', 'eye']"
-                              class="fa-2x"
-                              color="white"
-                            ></font-awesome-icon>
-                          </v-list-item-title>
-                          <v-list-item-subtitle
-                            class="white--text font-weight-black"
-                            v-text="100"
-                          ></v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
+                    style="
+                      z-index: 2;
+                      position: absolute;
+                      top: 2px;
+                      right: 0px;
+                      width: 70px;
+                      height: 150px;
+                    "
+                  >
+                    <v-list two-line style="background: none !important">
+                      <v-hover v-slot:default="{ hover }">
+                        <v-list-item
+                          class="red--text font-weight-black text-center"
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title
+                              @click="accionCorazon(anuncio.id)"
+                              style="cursor: pointer"
+                            >
+                              <font-awesome-icon
+                                :icon="['fas', 'heart']"
+                                class="fa-2x"
+                                :color="hover ? 'red' : 'white'"
+                              ></font-awesome-icon>
+                            </v-list-item-title>
+                            <v-list-item-subtitle
+                              class="white--text font-weight-black"
+                              v-text="150"
+                            ></v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-hover>
+                      <v-hover v-slot:default="{ hover }">
+                        <v-list-item
+                          class="white--text font-weight-black text-center"
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title
+                              @click="accionVer(anuncio.id)"
+                              style="cursor: pointer"
+                            >
+                              <font-awesome-icon
+                                :icon="['fas', 'eye']"
+                                class="fa-2x"
+                                :color="hover ? 'cyan' : 'white'"
+                              ></font-awesome-icon>
+                            </v-list-item-title>
+                            <v-list-item-subtitle
+                              class="white--text font-weight-black"
+                              v-text="100"
+                            ></v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-hover>
                     </v-list>
                   </div>
                   <!--Like and vistas-->
 
                   <row
                     no-gutters
-                    class="glass-info-card d-flex align-start"
-                    style="width:100%; max-height:160px; height:160px;"
+                    class="glass-infoCard d-flex align-start"
                   >
                     <v-col>
                       <div
-                        class="text-h4 text-lg-h5 font-weight-black text-truncate text-capitalize"
-                        style="color:black; overflow: hidden;"
+                        class="
+                          text-h4 text-lg-h5
+                          font-weight-black
+                          text-truncate text-capitalize
+                        "
+                        style="color: black; overflow: hidden"
                       >
                         {{ anuncio.Sec_Descripcion.titulo }}
                       </div>
                       <p
-                        class="text-caption text-justify"
-                        style="color:white; max-height: 80px; overflow: hidden; margin-bottom: 28px; line-height: 13px;"
+                        class="
+                          text-caption text-justify
+                          anuncio-textDescripcion
+                        "                          
+                        :class="anuncioTextDescMobile"
                       >
                         Lorem ipsum dolor sit, amet consectetur adipisicing
                         elit. Dolorum ut iure soluta nam quia tenetur quibusdam
@@ -91,29 +110,46 @@
                       </p>
                     </v-col>
                   </row>
+                  <!--Campo descripcion-->
 
                   <v-btn
                     small
                     raised
                     rounded
                     color="primary"
-                    style="z-index:5!important; position: absolute; bottom: 8px; left:10px;"
+                    style="
+                      z-index: 5 !important;
+                      position: absolute;
+                      bottom: 8px;
+                      left: 10px;
+                    "
                     @click="accionVer(anuncio.id)"
                   >
                     Ver Más
                   </v-btn>
-                  <!--Campo descripcion-->
+                  <!--Botón ver más-->
                 </div>
                 <!--vista hover contenido-->
 
                 <div
-                  style="z-index: 1; position: absolute; top:15px; right:0px; width:70px; height:150px;"
+                  style="
+                    z-index: 1;
+                    position: absolute;
+                    top: 15px;
+                    right: 0px;
+                    width: 70px;
+                    height: 150px;
+                  "
                 >
-                  <v-list two-line style="background: none!important;">
+                  <v-list two-line style="background: none !important">
                     <v-list-item>
                       <v-list-item-content>
                         <v-list-item-title
-                          class="black--text font-weight-regular text-center text--secondary"
+                          class="
+                            black--text
+                            font-weight-regular
+                            text-center text--secondary
+                          "
                         >
                           <font-awesome-icon
                             :icon="['fas', 'heart']"
@@ -126,10 +162,15 @@
                         ></v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item>
                       <v-list-item-content>
                         <v-list-item-title
-                          class="black--text font-weight-regular text-center text--secondary"
+                          class="
+                            black--text
+                            font-weight-regular
+                            text-center text--secondary
+                          "
                         >
                           <font-awesome-icon
                             :icon="['fas', 'eye']"
@@ -144,11 +185,12 @@
                     </v-list-item>
                   </v-list>
                 </div>
+                <!--vista corazón y ojo-->
               </v-expand-transition>
               <!--Contenido de Hover-->
 
               <v-row class="fill-height" no-gutters>
-                <v-col style="background-color:blue;">
+                <v-col style="background-color: blue">
                   <v-carousel
                     :height="tarjetaWH['carruselH']"
                     id="carouselImgAnuncio"
@@ -261,7 +303,7 @@
             justify="center"
             class="fill-height"
             no-gutters
-            style="background: white;"
+            style="background: white"
             :style="{ 'margin-bottom': marginMbView + 'px' }"
           >
             <v-col cols="12" md="4" style="min-height: 95vh">
@@ -281,7 +323,7 @@
             <v-col
               cols="12"
               md="8"
-              style="min-height: 95vh; max-height: auto;"
+              style="min-height: 95vh; max-height: auto"
               class="d-flex flex-column justify-center align-center"
             >
               <v-card
@@ -422,7 +464,7 @@
                           <v-col cols="8">
                             <v-divider
                               color="pink"
-                              style="border-width: revert;"
+                              style="border-width: revert"
                             ></v-divider>
                           </v-col>
                         </v-row>
@@ -497,7 +539,7 @@
                 </v-expand-x-transition>
                 <!--Cuerpo Anuncio (descripcion y tarifas)-->
 
-                <v-card-actions style="float:right">
+                <v-card-actions style="float: right">
                   <v-btn
                     class="mx-2"
                     small
@@ -530,8 +572,8 @@
                   :fixed="navegacionMbView"
                   v-model="contactBottomNav"
                   color="pink"
-                  style="border-radius: 30px;"
-                  :class="{'fullAnuncio-navBottom-web': !navegacionMbView}"
+                  style="border-radius: 30px"
+                  :class="{ 'fullAnuncio-navBottom-web': !navegacionMbView }"
                 >
                   <v-btn
                     v-for="(contacto, key, i) in anuncioView.Sec_Contacto"
@@ -547,7 +589,8 @@
                       :icon="[
                         anuncioView.Sec_Contacto[key].Tipo.categoria,
                         anuncioView.Sec_Contacto[key].Tipo.icono,
-                      ]">
+                      ]"
+                    >
                     </font-awesome-icon>
                   </v-btn>
                 </v-bottom-navigation>
@@ -672,18 +715,15 @@ export default {
         Sec_Imagen: [
           {
             nombre: "",
-            url:
-              "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
+            url: "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
           },
           {
             nombre: "",
-            url:
-              "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
+            url: "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
           },
           {
             nombre: "",
-            url:
-              "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
+            url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
           },
         ],
       },
@@ -694,8 +734,8 @@ export default {
     tarjetaWH() {
       const { sm, xs } = this.$vuetify.breakpoint;
       return xs || sm
-        ? { carruselH: "750" }
-        : { carruselH: "500", carruselW: "600" };
+        ? { carruselH: "520" }
+        : { carruselH: "600", carruselW: "600" };
     },
     gridColCard() {
       const { sm, xs, md } = this.$vuetify.breakpoint;
@@ -727,6 +767,11 @@ export default {
       let { xs, sm } = this.$vuetify.breakpoint;
 
       return xs || sm ? "" : "full-anuncio-seccion-web";
+    },
+    anuncioTextDescMobile(){
+      let { xs, sm } = this.$vuetify.breakpoint;
+      return xs || sm ? "anuncio-textDescripcion-mb" : "";
+
     },
     navegacionMbView() {
       const { md, sm, xs } = this.$vuetify.breakpoint;
@@ -853,7 +898,7 @@ export default {
     this.aplicaBusqueda();
   },
   watch: {
-    getBusquedaQuery: function(value) {
+    getBusquedaQuery: function (value) {
       console.log("getBusquedaQuery...");
       console.dir(value);
       this.aplicaBusqueda();
@@ -874,8 +919,9 @@ export default {
   max-height: 270px;
 }
 
-.fullAnuncio-navBottom-web{
-  width: 500px!important; margin-left:auto;
+.fullAnuncio-navBottom-web {
+  width: 500px !important;
+  margin-left: auto;
 }
 
 .full-anuncio-titlelist {
@@ -901,6 +947,19 @@ export default {
 
 .anuncioHover {
   border: 6px solid #e0409a !important;
+}
+
+.anuncio-textDescripcion {
+  color: white;
+  max-height: 70px;
+  overflow: hidden;
+  margin-bottom: 45px;
+  line-height: 14px!important;
+}
+
+.anuncio-textDescripcion-mb {
+  max-height: 63px;
+  line-height: 13px!important;
 }
 
 #carouselImgAnuncio .v-carousel__controls {
@@ -931,7 +990,7 @@ export default {
 }
 
 /* From https://css.glass */
-.glass-info-card {
+.glass-infoCard {
   background: rgba(255, 255, 255, 0.46);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
@@ -940,5 +999,9 @@ export default {
   z-index: 2;
   position: absolute;
   bottom: 0px;
+  width: 100%; 
+  max-height: 160px; 
+  height: 160px
 }
+
 </style>

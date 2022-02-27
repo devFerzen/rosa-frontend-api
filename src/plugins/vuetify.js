@@ -11,8 +11,7 @@ export default new Vuetify({
       },
     themes: {
       light: {
-        pink: '#e0409A',
-        red: '#E47AB6',
+        pink: '#e47ab6',
         green: '#9fe676',
         orange: '#e5ae78',
         grey: '#d7f3c6de',

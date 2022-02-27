@@ -1,8 +1,20 @@
 <template>
   <v-card width="750">
     <v-container fluid class="py-0 pl-0">
-      <v-row class="fill-height" no-gutters>
-        <v-col cols="12" lg="5">
+      <v-row class="" no-gutters>
+        <v-col cols="12" lg="5" v-if="edicionView">
+          <v-card flat class="pa-0" style="height: 460px; overflow-y: hidden">
+            <file-pond
+              ref="pond"
+              name="filePondImages"
+              @init="handleFilePondInit"
+              :files="imagenesAnuncioFilePond"
+              @processfile="imagenesAnuncioOnProcess"
+              @removefile="imagenesAnuncioOnDelete"
+            />
+          </v-card>
+        </v-col>
+        <v-col cols="12" lg="5" v-else>
           <v-carousel :height="tarjetaWH['carrusel']">
             <v-carousel-item
               v-for="(imagen, i) in imagenesAnuncio"
@@ -13,6 +25,7 @@
             </v-carousel-item>
           </v-carousel>
         </v-col>
+
         <!--Carrusel-->
 
         <v-col cols="12" lg="7">
@@ -21,8 +34,77 @@
             flat
             :height="tarjetaWH['cuerpoAnuncio']"
           >
-            <v-card-title class="pt-0">
-              <v-container class="pa-0">
+            <v-card-title class="pt-0" :class="{ 'pb-0': edicionView }">
+              <v-expand-x-transition>
+                <v-container class="pa-0" v-show="edicionView">
+                  <v-form ref="descripcionEdit">
+                    <v-row no-gutters>
+                      <v-col cols="10">
+                        <v-text-field
+                          v-model="anuncioUsuario.Sec_Descripcion.titulo"
+                          color="pink"
+                          label="Titulo"
+                          filled
+                          outlined
+                          dense
+                          rounded
+                        >
+                        </v-text-field>
+                        <!--input titulo-->
+                      </v-col>
+                    </v-row>
+
+                    <v-row no-gutters justify="space-between">
+                      <v-col cols="6">
+                        <v-select
+                          v-model="anuncioUsuario.Sec_Descripcion.estado"
+                          :items="getDdlEstados"
+                          :item-text="'descripcion'"
+                          :item-value="'descripcion'"
+                          filled
+                          label="Estados"
+                          outlined
+                          rounded
+                          dense
+                        >
+                          <template v-slot:selection="{ item }">
+                            <span v-if="item.descripcion.length"
+                              >{{ item.descripcion.slice(0, 11) }}...</span
+                            >
+                            <span v-else>item.descripcion</span>
+                          </template>
+                        </v-select>
+                        <!--input estados-->
+                      </v-col>
+
+                      <v-col class="ml-2">
+                        <v-select
+                          v-model="anuncioUsuario.Sec_Descripcion.ciudad"
+                          :items="getDdlMunicipios"
+                          :item-text="'descripcion'"
+                          :item-value="'descripcion'"
+                          filled
+                          label="Municipios"
+                          outlined
+                          rounded
+                          dense
+                        >
+                          <template v-slot:selection="{ item }">
+                            <span v-if="item.descripcion.length"
+                              >{{ item.descripcion.slice(0, 10) }}...</span
+                            >
+                            <span v-else>item.descripcion</span>
+                          </template>
+                        </v-select>
+                        <!--input municipios-->
+                      </v-col>
+                    </v-row>
+                  </v-form>
+                </v-container>
+                <!--Input View-->
+              </v-expand-x-transition>
+
+              <v-container class="pa-0" v-show="!edicionView">
                 <v-row no-gutters class="align-end">
                   <v-col cols="10">
                     <div class="text-h4 text-md-h6 text-truncate">
@@ -60,10 +142,11 @@
                 </v-row>
                 <!--Ciudad y estado-->
               </v-container>
+              <!--Normal View-->
             </v-card-title>
             <!--Titulo principal-->
 
-            <v-card-text class="pa-0 pb-2">
+            <v-card-text class="pa-0 pb-2" v-show="!edicionView">
               <v-row align="center" justify="center" no-gutters>
                 <v-btn
                   depressed
@@ -223,7 +306,7 @@
                           <v-btn
                             color="primary"
                             class="mx-2 rounded-lg"
-                            @click="cancelarSalvado"
+                            @click="cancelarSalvado('revealTarifa')"
                             depressed
                             outlined
                             tile
@@ -432,7 +515,7 @@
                           <v-btn
                             color="primary"
                             class="mx-2 rounded-lg"
-                            @click="cancelarSalvado"
+                            @click="cancelarSalvado('revealContacto')"
                             depressed
                             outlined
                             tile
@@ -590,7 +673,7 @@
               </v-card-text>
               <!--v-card Contacto-->
 
-              <v-card-text class="pb-1">
+              <v-card-text class="pb-1" :class="{ 'pt-0': edicionView }">
                 <v-expand-x-transition>
                   <v-sheet
                     fluid
@@ -598,120 +681,141 @@
                     class="rounded-xl my-2 full-anuncio-seccion"
                     width="350"
                     :class="fullAnuncioSeccionWeb"
-                    v-show="edicionDescripcion"
+                    v-show="edicionView"
                   >
-                    <v-form ref="descripcionEdit">
-                      <v-select
-                        v-model="nuevaDescripcion.sexo"
-                        :items="getDdlSexo"
-                        :item-text="'descripcion'"
-                        :item-value="'descripcion'"
-                        filled
-                        rounded
-                        dense
-                      >
-                      </v-select>
+                    <v-container
+                      class="d-flex flex-column"
+                      style="height: 286px"
+                    >
+                      <v-form ref="descripcionEdit">
+                        <v-row no-gutters class="align-start">
+                          <v-col cols="5">
+                            <v-select
+                              v-model="anuncioUsuario.Sec_Descripcion.sexo"
+                              :items="getDdlSexo"
+                              :item-text="'descripcion'"
+                              :item-value="'descripcion'"
+                              filled
+                              outlined
+                              label="Sexo"
+                              rounded
+                              dense
+                            >
+                              <template v-slot:selection="{ item }">
+                                <span v-if="item.descripcion === 'femenino'"
+                                  >femn.</span
+                                >
+                                <span v-else>masc.</span>
+                              </template>
+                            </v-select>
+                            <!--input sexo-->
+                          </v-col>
+                          <v-col cols class="ml-2">
+                            <v-select
+                              v-model="anuncioUsuario.categorias"
+                              :items="getDdlCategorias"
+                              :item-text="'descripcion'"
+                              :item-value="'descripcion'"
+                              filled
+                              outlined
+                              label="Categorias"
+                              rounded
+                              dense
+                              small-chips
+                              multiple
+                            >
+                              <template v-slot:selection="{ index }">
+                                <span v-if="index === 0" class="text-caption"
+                                  >( +{{ anuncioUsuario.categorias.length }} )
+                                  ...</span
+                                >
+                              </template>
+                            </v-select>
+                            <!--input categorias-->
+                          </v-col>
+                        </v-row>
+                        <v-row no-gutters>
+                          <v-col>
+                            <v-textarea
+                              :value="anuncioUsuario.Sec_Descripcion.descripcion"
+                              outlined
+                              label="Descripción"
+                              rows="4"
+                            >
+                            </v-textarea>
+                          </v-col>
+                        </v-row>
+                        <!--Input descripcion-->
+                      </v-form>
 
-                      <v-select
-                        v-model="nuevaDescripcion.descripcion"
-                        :items="getDdlCategorias"
-                        :item-text="'descripcion'"
-                        :item-value="'descripcion'"
-                        filled
-                        rounded
-                        dense
-                        small-chips
-                        multiple
-                      >
-                      </v-select>
-
-                      <v-select
-                        v-model="nuevaDescripcion.estado"
-                        :items="getDdlEstados"
-                        :item-text="'descripcion'"
-                        :item-value="'descripcion'"
-                        filled
-                        rounded
-                        dense
-                        single-line
-                      >
-                      </v-select>
-
-                      <v-select
-                        v-model="nuevaDescripcion.ciudad"
-                        :items="getDdlMunicipios"
-                        :item-text="'descripcion'"
-                        :item-value="'descripcion'"
-                        filled
-                        rounded
-                        dense
-                        single-line
-                      >
-                      </v-select>
-
-                      <v-text-field
-                        v-model="nuevaDescripcion.titulo"
-                        placeholder="Titulo..."
-                        color="pink"
-                        filled
-                        dense
-                        rounded
-                      >
-                      </v-text-field>
-
-                      <v-hover v-slot="{ hover }">
-                        <v-btn
-                          color="green"
-                          class="ml-4 mr-2 mb-3 rounded-lg"
-                          @click="salvadoDeTarifa"
-                          tile
-                          outlined
-                          raised
-                          rounded
+                      <v-row no-gutters class="align-end">
+                        <v-col
+                          class="d-flex justify-center"
+                          style="height: 60px"
                         >
-                          <font-awesome-icon
-                            :icon="['fas', 'save']"
-                            class="fa-2x mr-1"
-                          ></font-awesome-icon>
-                          <v-expand-x-transition>
-                            <div v-show="hover">Guardar</div>
-                          </v-expand-x-transition>
-                        </v-btn>
-                      </v-hover>
-                      <!--guardar descripcion-->
+                          <v-hover v-slot="{ hover }">
+                            <v-btn
+                              color="green"
+                              class="ml-4 mr-2 mb-3 rounded-lg"
+                              @click="salvadoDeTarifa"
+                              tile
+                              outlined
+                              raised
+                              rounded
+                            >
+                              <font-awesome-icon
+                                :icon="['fas', 'save']"
+                                class="fa-2x mr-1"
+                              ></font-awesome-icon>
+                              <v-expand-x-transition>
+                                <div v-show="hover">Guardar</div>
+                              </v-expand-x-transition>
+                            </v-btn>
+                          </v-hover>
+                          <!--guardar descripcion-->
+                        </v-col>
+                        <!--guardar descripcion-->
 
-                      <v-hover v-slot="{ hover }">
-                        <v-btn
-                          color="primary"
-                          class="mx-2 mb-3 rounded-lg"
-                          @click="cancelarSalvado"
-                          depressed
-                          outlined
-                          tile
-                          rounded
-                          v-if="anuncioUsuario.Sec_Tarifas.length > 0"
+                        <v-col
+                          class="d-flex justify-center"
+                          style="height: 60px"
                         >
-                          <font-awesome-icon
-                            :icon="['fas', 'times']"
-                            class="fa-2x mr-1"
-                          ></font-awesome-icon>
-                          <v-expand-x-transition>
-                            <div v-show="hover">Cancelar</div>
-                          </v-expand-x-transition>
-                        </v-btn>
-                      </v-hover>
-                      <!--cancelar descripcion-->
-                    </v-form>
+                          <v-hover v-slot="{ hover }">
+                            <v-btn
+                              color="primary"
+                              class="mx-2 mb-3 rounded-lg"
+                              @click="cancelarSalvado('revealDesc')"
+                              depressed
+                              outlined
+                              tile
+                              rounded
+                            >
+                              <font-awesome-icon
+                                :icon="['fas', 'times']"
+                                class="fa-2x mr-1"
+                              ></font-awesome-icon>
+                              <v-expand-x-transition>
+                                <div v-show="hover">Cancelar</div>
+                              </v-expand-x-transition>
+                            </v-btn>
+                          </v-hover>
+                          <!--cancelar descripcion-->
+                        </v-col>
+                      </v-row>
+                      <!--botones-->
+                    </v-container>
                   </v-sheet>
                 </v-expand-x-transition>
+                <!--Form descripcion-->
+
                 <v-sheet
                   fluid
                   elevation="6"
-                  class="rounded-xl my-2 full-anuncio-seccion"
+                  class="rounded-xl my-2 pa-3 full-anuncio-seccion"
                   :class="fullAnuncioSeccionWeb"
                   width="350"
-                  height="92%"
-                  v-show="!edicionDescripcion"
+                  height="90%"
+                  v-show="!edicionView"
                 >
                   {{ anuncioUsuario.Sec_Descripcion.descripcion }}
                 </v-sheet>
@@ -754,7 +858,7 @@
                 <!--Main btn anuncio setup-->
 
                 <v-hover v-slot="{ hover }">
-                  <v-btn fab small plain color="green" @click="editarAnuncio">
+                  <v-btn fab small plain color="green" @click="habilitarEdicionesAnuncio">
                     <div class="d-flex flex-column align-center">
                       <font-awesome-icon
                         :icon="['fas', 'pencil-alt']"
@@ -805,15 +909,62 @@
 </template>
 
 <script>
+import vueFilePond, { setOptions } from "vue-filepond";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileMetadata from "filepond-plugin-file-metadata";
+
 import DashboardCompras from "@/components/Dashboard-Compras";
 import AnuncioMixins from "../mixins/anuncio-mixins.js";
 import { mapGetters } from "vuex";
+
+const FilePond = vueFilePond(
+  FilePondPluginFileValidateType,
+  FilePondPluginImagePreview,
+  FilePondPluginFileMetadata
+);
+setOptions({
+  maxFiles: 6,
+  credits: false,
+  allowReorder: true,
+  allowMultiple: true,
+  imagePreviewMaxHeight: 80,
+  imagePreviewHeight: 80,
+  maxFileSize: "7MB",
+  itemInsertLocation: "antes",
+  labelFileLoading: "Cargando...",
+  labelFileLoadError: "Error durante carga",
+  labelFileProcessing: "Cargando...",
+  labelFileProcessingComplete: "Carga completada",
+  labelFileProcessingAborted: "Carga cancelada",
+  labelFileProcessingError: "Error durante carga",
+  labelTapToCancel: "Tap para cancelar",
+  labelTapToRetry: "Tap para reintentar",
+  labelTapToUndo: "Tap para deshacer",
+  labelFileSizeNotAvailable: "Tamaño no reconocido",
+  labelFileWaitingForSize: "Verificando",
+  labelInvalidField: "Archivo no valido",
+  labelIdle:
+    'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
+  server: {
+    url: "http://localhost:3000/",
+    process: {
+      url: "upload",
+    },
+    load: "uploads/",
+    fetch: "uploads/",
+    revert: "delete/",
+  },
+});
 
 export default {
   name: "tarjeta-anuncio-usuario",
   mixins: [AnuncioMixins],
   components: {
     DashboardCompras,
+    FilePond,
   },
   props: {
     anuncioUsuario: { type: Object, default: {} },
@@ -824,16 +975,10 @@ export default {
       revealContact: false,
       revealTarifa: false,
       anuncioConfigViewBtns: false,
-      anuncioConfigInputsView: false,
-      nuevaDescripcion: {
-        ciudad: "",
-        estado: "",
-        descripcion: "",
-        sexo: "",
-        categoria: [],
-        titulo: "",
-        subtitulo: "",
-      },
+      anuncioEdicionInputsView: false,
+      anuncioTarifaInputsView:false,
+      anuncioContactoInputsView:false,
+      imagenesAnuncioFilePond: [],
       tiposCategoriasAnuncio: [""],
       tiposContacto: [
         { categoria: "fab", icono: "whatsapp", color: "green" },
@@ -882,6 +1027,7 @@ export default {
       return xs || sm ? "" : "full-anuncio-seccion-web";
     },
     imagenesAnuncio() {
+      //verificar los created del template anuncio edit display
       return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
         return {
           url: "http://localhost:3000/uploads/" + infoImagen.nombre,
@@ -895,14 +1041,14 @@ export default {
     contactosUsuario() {
       return this.Usuario.Default_Contactos;
     },
-    edicionDescripcion() {
-      return this.anuncioConfigInputsView;
+    edicionView() {
+      return this.anuncioEdicionInputsView;
     },
     nuevaTarifaView() {
-      return this.anuncioConfigInputsView;
+      return this.anuncioTarifaInputsView;
     },
     nuevoContactoView() {
-      return this.anuncioConfigInputsView;
+      return this.anuncioContactoInputsView;
     },
     backgroundIconosRedes(icono) {
       let answer;
@@ -927,6 +1073,16 @@ export default {
     },
   },
   methods: {
+        
+    //abrirEdicion PASARA abrir mejor un modal con un componente de compras
+    abrirEdicion() {
+      console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
+      this.$emit("activandoEdicion", { id: this.anuncioUsuario.id });
+    },
+
+    //Activa los inputs forms para editar la descripcion de la tarjeta
+    
+    //------Cruds
     async borrarAnuncio() {
       let MutateResult;
       try {
@@ -948,40 +1104,7 @@ export default {
         message: `Anuncio # ${idAnuncio} eliminado exitosamente!`,
       });
     },
-    editarAnuncio() {
-      this.habilitarEdicionesAnuncio(true);
-    },
-    //abrirEdicion PASARA abrir mejor un modal con un componente de compras
-    abrirEdicion() {
-      console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
-      this.$emit("activandoEdicion", { id: this.anuncioUsuario.id });
-    },
 
-    //Activa los inputs o forms para editar en la tarjeta
-    habilitarEdicionesAnuncio(value = true) {
-      this.anuncioConfigInputsView = value;
-    },
-    activacionesSecciones(seccion = "revealDesc") {
-      switch (seccion) {
-        case "revealDesc":
-          this.revealDesc = true;
-          this.revealTarifa = false;
-          this.revealContact = false;
-          break;
-        case "revealTarifa":
-          this.revealDesc = false;
-          this.revealTarifa = true;
-          this.revealContact = false;
-          break;
-        case "revealContacto":
-          this.revealDesc = false;
-          this.revealTarifa = false;
-          this.revealContact = true;
-          break;
-        default:
-          break;
-      }
-    },
     salvadoDeTarifa() {
       let tarifa = {};
       //validacion
@@ -1009,7 +1132,7 @@ export default {
         );
       }
 
-      this.anuncioConfigInputsView = false;
+      this.anuncioTarifaInputsView = false;
       this.limpiarTarifaForm();
     },
     limpiarTarifaForm() {
@@ -1022,8 +1145,6 @@ export default {
       this.nuevaTarifa.accion = "creacion";
     },
     editarTarifa(idPosicion) {
-      this.anuncioConfigInputsView = true;
-
       this.nuevaTarifa.idPosicion = idPosicion;
       this.nuevaTarifa.nombre =
         this.anuncioUsuario.Sec_Tarifas[idPosicion].nombre;
@@ -1032,6 +1153,7 @@ export default {
       this.nuevaTarifa.descripcion =
         this.anuncioUsuario.Sec_Tarifas[idPosicion].descripcion;
       this.nuevaTarifa.accion = "actualizacion";
+      this.anuncioTarifaInputsView = true;
     },
     eliminarTarifa(idPosicion) {
       console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
@@ -1063,7 +1185,7 @@ export default {
         );
       }
 
-      this.anuncioConfigInputsView = false;
+      this.anuncioContactoInputsView = false;
       this.limpiarContactoForm();
     },
     limpiarContactoForm() {
@@ -1078,20 +1200,158 @@ export default {
       this.nuevoContacto.contacto = "";
     },
     editarContacto(idPosicion) {
-      this.anuncioConfigInputsView = true;
-
       this.nuevoContacto.idPosicion = idPosicion;
       this.nuevoContacto.Tipo = this.contactosUsuario[idPosicion].Tipo;
       this.nuevoContacto.contacto = this.contactosUsuario[idPosicion].contacto;
       this.nuevoContacto.accion = "actualizacion";
+      this.anuncioContactoInputsView = true;
     },
     eliminarContacto(idPosicion) {
       //Crear accion para editar un contacto (que sea igual que el de arriba pero diferente parametro)
       //console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
     },
-    cancelarSalvado() {
-      this.anuncioConfigInputsView = false;
+
+    //------Acciones Anuncio
+    cancelarSalvado(seccion) {
+      switch (seccion) {
+        case 'revealTarifa':
+          this.anuncioTarifaInputsView = false;
+          this.limpiarTarifaForm();
+          break;
+        case 'revealContacto':
+          this.anuncioContactoInputsView = false;
+          this.limpiarContactoForm();
+          break;
+        default:
+          this.anuncioEdicionInputsView = false;
+          break;
+      }
+      this.anuncioEdicionInputsView = false;
     },
+    habilitarEdicionesAnuncio(value = true) {
+      this.activacionesSecciones('revealDesc');
+      this.anuncioEdicionInputsView = value;
+    },
+    activacionesSecciones(seccion = "revealDesc") {
+      switch (seccion) {
+        case "revealDesc":
+          this.revealDesc = true;
+          this.revealTarifa = false;
+          this.revealContact = false;
+          break;
+        case "revealTarifa":
+          this.revealDesc = false;
+          this.revealTarifa = true;
+          this.revealContact = false;
+          break;
+        case "revealContacto":
+          this.revealDesc = false;
+          this.revealTarifa = false;
+          this.revealContact = true;
+          break;
+        default:
+          break;
+      }
+    },
+
+    //FilePondMethods
+    handleFilePondInit() {
+      console.log("handleFilePondInit");
+    },
+    async imagenesAnuncioOnDelete(error, file) {
+      let MutateResult;
+
+      console.log("imagenesAnuncioOnDelete... file");
+      console.dir(file);
+
+      if (error) {
+        console.log("error onProcess", error);
+        console.log("file in error", file.file);
+        return;
+      }
+
+      let objetoImagen = {
+        //AFSS: Esto no se porqué pero salva de que no se borré la imagen...
+        nombre: file.filename,
+      };
+
+      try {
+        MutateResult = await this.mixinImagenDelete(objetoImagen.nombre);
+      } catch (error) {
+        console.dir(error);
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `>>>Error al registrar...>>>>${error}`,
+        });
+        this.mixinLlamadaRouter(error);
+        throw error;
+      }
+
+      // AFSS: Desarrollo futuro, remover el valor de su arreglo vuex usuario
+      this.imagenesAnuncio = this.imagenesAnuncio.filter((imagen) => {
+        if (imagen.nombre !== objetoImagen.nombre) {
+          return imagen;
+        }
+      });
+
+      /*this.FormAE.Sec_Imagenes = this.FormAE.Sec_Imagenes.filter((imagen) => {
+        console.log("formAE sec imagenes igual a ", objetoImagen.nombre);
+        console.dir(imagen);
+        if (imagen.nombre !== objetoImagen.nombre) {
+          return imagen;
+        }
+      });
+
+      if (this.imagenesAnuncioFilePond.length > 0) {
+        this.imagenesAnuncioFilePond = this.imagenesAnuncioFilePond.filter(
+          (imagen) => {
+            if (imagen.source !== file.filename) {
+              return imagen;
+            }
+          }
+        );
+      }
+
+      console.dir(MutateResult);
+      this.$store.dispatch("activationAlert", {
+        type: "success",
+        message: MutateResult.mensaje,
+      });*/
+    },
+    imagenesAnuncioOnProcess(error, file) {
+      console.log("imagenesAnuncioOnProcess...");
+      if (error) {
+        console.log("error onProcess", error);
+        console.log("file in error", file.file);
+        //Aqui se pone la llamada del error
+        return;
+      }
+
+      console.log("file");
+      console.dir(file);
+      let objetoImagen = {
+        nombre: JSON.parse(file.serverId)[0],
+        posicion: this.imagenesAnuncio.length || 0, //Continuación o Seguimiento inicial
+      };
+
+      //checar este variable hay que hacer push pero a lo que esta dentro de esa variable
+      this.imagenesAnuncio.push(objetoImagen);
+    },
+  },
+  created() {
+    if (this.imagenesAnuncio.length > 0) {
+      console.log("this.imagenesAnuncio");
+      console.dir(this.imagenesAnuncio);
+      //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar, se pasa a renderizar con :key el componente
+      for (let Anuncio of this.imagenesAnuncio) {
+        this.imagenesAnuncioFilePond.push({
+          source: Anuncio.nombre,
+          options: { type: "local" },
+        });
+      }
+    } else {
+      this.imagenesAnuncioFilePond = [];
+    }
   },
 };
 </script>

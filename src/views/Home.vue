@@ -2,8 +2,8 @@
   <v-container fluid color="white" :class="{containerMbview: cssPanelHerramientas === 'panel-herramientas-mbview'}">
     <v-row no-gutters aling="center" justify="center" v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView">
       <v-col cols="12" sm="7">
-        <v-card style="height: 80px;" flat>
-          <v-card-title class="center" style="justify-content: center; font-size:38px;">Los errores son para encontrarse.
+        <v-card style="height: 120px;" flat>
+          <v-card-title class="text-center text-h3 text-md-h2" style="justify-content: center;">Los errores son para encontrarse.
           </v-card-title>
         </v-card>
       </v-col>
@@ -138,7 +138,7 @@
   .panel-herramientas-mbview {
     position: sticky;
     top: 0vh;
-    height: 47vh;
+    height: auto;
     transform: translateX(0%);
     z-index: 6;
     padding-top: 0;
@@ -147,7 +147,7 @@
   .panel-herramientas-pcview {
     position: sticky;
     top: 24vh;
-    height: 47vh;
+    height: auto;
     transform: translateX(0%);
     z-index: 6;
     padding-top: 0;
