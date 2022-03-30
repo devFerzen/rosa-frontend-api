@@ -30,7 +30,9 @@ import {
     faEllipsisV,
     faBars,
     faUser,
-    faBullhorn
+    faBullhorn,
+    faArrowLeft,
+    faArrowRight
 } from '@fortawesome/free-solid-svg-icons'
 import {
     faFacebookSquare,
@@ -51,6 +53,7 @@ library.add(faStar, faShare, faTimes,
     faHeart, faDollarSign, faSyncAlt,
     faShoppingBag, faHome, faPlusSquare,
     faSave,faCaretLeft, faCaretRight,
+    faArrowLeft, faArrowRight,
     faFilter, faEllipsisV, faBars, 
     faUser, faBullhorn,
     faFacebookSquare, faApple, faGoogle,

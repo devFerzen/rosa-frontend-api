@@ -118,7 +118,7 @@
 
         if (this.tipoVerificacion === 'verificacionUsuarioContrasena') {
           this.$store.dispatch('setVerificacionUsuario', params.input);
-          this.MixinResult.componenteInterno = 'panelHerramientasCambioContraseña';
+          this.MixinResult.componenteInterno = 'panelHerramientasCambioContrasena';
         }
 
         this.mixinLlamadaRouter(MutateResult);

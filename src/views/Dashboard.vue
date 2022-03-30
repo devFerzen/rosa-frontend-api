@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height class="white">
-    <v-row>
-      <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i">
+    <v-row no-gutters>
+      <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i" style="margin-top: 9px;">
         <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio">
         </tarjeta-anuncio-usuario>
       </v-col>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import TarjetaAnuncioUsuario from "@/components/TarjetaAnuncioUsuario";
+  import TarjetaAnuncioUsuario from "@/components/Sistema-Tarjeta-Usuario";
   import AnuncioEditDisplay from "@/components/Anuncio-Edit-Display";
 
   import { mapGetters } from "vuex";

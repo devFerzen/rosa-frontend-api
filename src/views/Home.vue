@@ -1,17 +1,17 @@
 <template>
-  <v-container fluid color="white" :class="{containerMbview: cssPanelHerramientas === 'panel-herramientas-mbview'}">
+  <v-container fluid color="white" :class="{'container-mbview': cssPanelHerramientas === 'panel-herramientas-mbview'}">
     <v-row no-gutters aling="center" justify="center" v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView">
-      <v-col cols="12" sm="7">
+      <v-col cols="12">
         <v-card style="height: 120px;" flat>
-          <v-card-title class="text-center text-h3 text-md-h2" style="justify-content: center;">Los errores son para encontrarse.
+          <v-card-title class="text-center text-h4 text-md-h2 font-weight-bold" style="justify-content: center;">Los errores son para encontrarse.
           </v-card-title>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-row align="start" justify="center">
-      <v-col cols="12" :lg="WidthComponents.herramientasWidth.lg" :md="WidthComponents.herramientasWidth.md"
-        :sm="WidthComponents.herramientasWidth.sm" :class="[cssPanelHerramientas, mbViewTop, correccionAlturaWbView]">
+    <v-row align="start" justify="space-between" no-gutters>
+      <v-col cols="12" :sm="WidthComponents.herramientasWidth.sm" :md="WidthComponents.herramientasWidth.lg" class="pr-3"
+         :class="[cssPanelHerramientas, mbViewTop, correccionAlturaWbView]">
         <panel-herramientas
           v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
           @activandoGrid="activandoGrid" @panelMinClass="panelMinClass" style="margin-top: 0!important;" />
@@ -24,12 +24,12 @@
       </v-col>
       <!--Panel Herramientas-->
 
-      <v-col cols="12" :lg="WidthComponents.sistemaWidth.lg">
+      <v-col cols="12" :md="WidthComponents.sistemaWidth.lg">
         <espacio-publicitario
-          v-if="inicioSesionView || registroView || verificacionView || actualizandoContrasenaView || contactanosView" />
+          v-if=" actualizandoContrasenaView || contactanosView" />
 
         <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
-          v-else-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView" />
+          v-else-if="!actualizandoContrasenaView && !contactanosView" />
       </v-col>
       <!--Cuerpo-->
     </v-row>
@@ -130,7 +130,7 @@
 </script>
 <style>
 
-  .containerMbview {
+  .container-mbview {
     padding-right: 0; 
     padding-left: 0;
   }
@@ -141,7 +141,8 @@
     height: auto;
     transform: translateX(0%);
     z-index: 6;
-    padding-top: 0;
+    padding-right: 9px!important;
+    padding-left: 9px!important;
   }
 
   .panel-herramientas-pcview {

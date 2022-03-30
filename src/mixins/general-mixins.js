@@ -87,7 +87,10 @@ export default {
                     return reject(this.MixinResult);
                 }
 
+
+
                 console.dir(MutateResult);
+                this.$store.dispatch('cerrarSesion');
                 resolve(JSON.parse(MutateResult.data.cerrarSesion));
             });
         },   
@@ -429,7 +432,6 @@ export default {
                 console.dir(payload);
 
                 //Crear arreglo de objetos
-
                 if (payload.componenteInterno) {
                     for (let componenteInterno in payload.componenteInterno) {
                         await this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);

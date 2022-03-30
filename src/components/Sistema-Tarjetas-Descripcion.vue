@@ -78,10 +78,7 @@
                   </div>
                   <!--Like and vistas-->
 
-                  <row
-                    no-gutters
-                    class="glass-infoCard d-flex align-start"
-                  >
+                  <row class="glass-infoCard d-flex align-start">
                     <v-col>
                       <div
                         class="
@@ -97,7 +94,7 @@
                         class="
                           text-caption text-justify
                           anuncio-textDescripcion
-                        "                          
+                        "
                         :class="anuncioTextDescMobile"
                       >
                         Lorem ipsum dolor sit, amet consectetur adipisicing
@@ -297,7 +294,7 @@
       </v-sheet>
 
       <v-card :height="fullAnuncioMbView" v-if="anuncioView.Estado.vivo">
-        <v-container fluid>
+        <v-container fluid class="px-0 py-0 pr-1 pr-md-0">
           <v-row
             align="center"
             justify="center"
@@ -327,23 +324,33 @@
               class="d-flex flex-column justify-center align-center"
             >
               <v-card
-                class="pa-4 pa-lg-2"
+                class="pa-2 pa-lg-2"
                 flat
                 :height="fullAnuncioBodyWH['vMainContenth']"
                 :width="fullAnuncioBodyWH['vMainContentw']"
               >
-                <v-card-title>
-                  <v-container>
+                <v-card-title class="pa-0">
+                  <v-container class="px-0">
                     <v-row no-gutters>
                       <v-col>
                         <v-card tile flat>
                           <v-row no-gutters>
-                            <v-col cols="10">
-                              <div class="text-h4">
+                            <v-col cols="12" md="10">
+                              <div
+                                class="
+                                  text-h5 text-md-h3 text-capitalize
+                                  font-weight-bold
+                                "
+                              >
                                 {{ anuncioView.Sec_Descripcion.titulo }}
                               </div>
                             </v-col>
-                            <v-col cols="2" align="center">
+                            <v-col
+                              cols="2"
+                              align="start"
+                              justify="start"
+                              :order="fullAnuncioheadersOrder['iconoCorazon']"
+                            >
                               <div class="body-2">
                                 <v-btn
                                   fab
@@ -361,26 +368,29 @@
                                 </v-btn>
                               </div>
                             </v-col>
-                          </v-row>
-                        </v-card>
-                        <v-row>
-                          <v-col>
-                            <div class="body-2 pl-6">
+                            <v-col
+                              cols="10"
+                              md="12"
+                              align="start"
+                              class="font-weight-medium pl-6"
+                              style="align-items: center"
+                            >
                               {{ anuncioView.Sec_Descripcion.ciudad }},
                               {{ anuncioView.Sec_Descripcion.estado }}
-                            </div>
-                          </v-col>
-                        </v-row>
+                            </v-col>
+                          </v-row>
+                        </v-card>
                       </v-col>
                     </v-row>
                   </v-container>
                 </v-card-title>
 
-                <v-card-subtitle class="pb-0">
+                <v-card-subtitle class="px-0">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Provident veritatis natus, nisi magni illo beatae suscipit
                   voluptatum? Adipisci voluptatibus doloremque autem mollitia.
                 </v-card-subtitle>
+                <!--Subtitulo anuncio-->
 
                 <v-card-text class="pa-0">
                   <v-row align="center" justify="center" no-gutters>
@@ -389,9 +399,13 @@
                       rounded
                       v-ripple="false"
                       @click="revealDesc = true"
-                      :class="{ 'suave-pink-font': revealDesc }"
-                      small
-                      width="100"
+                      class="subtitle-2"
+                      :class="{
+                        'suave-pink-font': revealDesc,
+                        'subtitle-1': revealDesc,
+                      }"
+                      :small="revealDesc ? false : true"
+                      width="130"
                     >
                       descripción
                     </v-btn>
@@ -401,16 +415,20 @@
                       rounded
                       v-ripple="false"
                       @click="revealDesc = false"
-                      class="ml-2"
-                      small
-                      :class="{ 'suave-pink-font': !revealDesc }"
-                      width="100"
+                      class="ml-2 subtitle-2"
+                      :class="{
+                        'suave-pink-font': !revealDesc,
+                        'subtitle-1': !revealDesc,
+                      }"
+                      :small="!revealDesc ? false : true"
+                      width="130"
+                      v-if="anuncioView.Sec_Tarifas.length > 0"
                     >
                       tarifas
                     </v-btn>
                   </v-row>
                 </v-card-text>
-                <!--Header Anuncio-->
+                <!--Tabs secciones anuncio-->
 
                 <v-expand-x-transition>
                   <v-card-text
@@ -432,16 +450,16 @@
                         <v-row
                           align="center"
                           justify="center"
-                          class="pt-6"
+                          class="pt-6 mb-2"
                           no-gutters
                         >
                           <v-col cols></v-col>
-                          <v-col cols="5" align="center">
+                          <v-col cols="8" md="6" align="center">
                             <div class="text-h6 font-weight-bold">
                               {{ tarifa.nombre }}
                             </div>
                           </v-col>
-                          <v-col cols="3" align="center">
+                          <v-col cols="3" md="3" align="center">
                             <div
                               class="subtitle-1 green-font text-weight-black"
                             >
@@ -453,15 +471,15 @@
                         </v-row>
                         <v-row no-gutters>
                           <v-col> </v-col>
-                          <v-col cols="7" align="start">
-                            <div class="body-2 text-center">
+                          <v-col cols="12" md="8" align="start">
+                            <div class="body-2 text-justify">
                               {{ tarifa.descripcion }}
                             </div>
                           </v-col>
                           <v-col> </v-col>
                         </v-row>
                         <v-row justify="center">
-                          <v-col cols="8">
+                          <v-col cols="10" md="7">
                             <v-divider
                               color="pink"
                               style="border-width: revert"
@@ -474,66 +492,77 @@
                   <!--Tarifas-->
 
                   <v-card-text
-                    class="full-anuncio-seccion"
+                    class="full-anuncio-seccion px-1 d-flex justify-center"
                     :class="fullAnuncioSeccionWeb"
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Corrupti doloribus qui similique impedit. Reiciendis et
-                    cumque odit, officiis atque omnis, quasi numquam repudiandae
-                    id rem itaque architecto ipsam facere cum. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Corrupti doloribus
-                    qui similique impedit. Reiciendis et cumque odit, officiis
-                    atque omnis, quasi numquam repudiandae id rem itaque
-                    architecto ipsam facere cum. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Corrupti doloribus qui
-                    similique impedit. Reiciendis et cumque odit, officiis atque
-                    omnis, quasi numquam repudiandae id rem itaque architecto
-                    ipsam facere cum. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Corrupti doloribus qui similique impedit.
-                    Reiciendis et cumque odit, officiis atque omnis, quasi
-                    numquam repudiandae id rem itaque architecto ipsam facere
-                    cum. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Corrupti doloribus qui similique impedit. Reiciendis
-                    et cumque odit, officiis atque omnis, quasi numquam
-                    repudiandae id rem itaque architecto ipsam facere cum. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-                    doloribus qui similique impedit. Reiciendis et cumque odit,
-                    officiis atque omnis, quasi numquam repudiandae id rem
-                    itaque architecto ipsam facere cum. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Corrupti doloribus qui
-                    similique impedit. Reiciendis et cumque odit, officiis atque
-                    omnis, quasi numquam repudiandae id rem itaque architecto
-                    ipsam facere cum. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Corrupti doloribus qui similique impedit.
-                    Reiciendis et cumque odit, officiis atque omnis, quasi
-                    numquam repudiandae id rem itaque architecto ipsam facere
-                    cum. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Corrupti doloribus qui similique impedit. Reiciendis
-                    et cumque odit, officiis atque omnis, quasi numquam
-                    repudiandae id rem itaque architecto ipsam facere cum. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-                    doloribus qui similique impedit. Reiciendis et cumque odit,
-                    officiis atque omnis, quasi numquam repudiandae id rem
-                    itaque architecto ipsam facere cum. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Corrupti doloribus qui
-                    similique impedit. Reiciendis et cumque odit, officiis atque
-                    omnis, quasi numquam repudiandae id rem itaque architecto
-                    ipsam facere cum. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Corrupti doloribus qui similique impedit.
-                    Reiciendis et cumque odit, officiis atque omnis, quasi
-                    numquam repudiandae id rem itaque architecto ipsam facere
-                    cum. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Corrupti doloribus qui similique impedit. Reiciendis
-                    et cumque odit, officiis atque omnis, quasi numquam
-                    repudiandae id rem itaque architecto ipsam facere cum. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-                    doloribus qui similique impedit. Reiciendis et cumque odit,
-                    officiis atque omnis, quasi numquam repudiandae id rem
-                    itaque architecto ipsam facere cum. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Corrupti doloribus qui
-                    similique impedit. Reiciendis et cumque odit, officiis atque
-                    omnis, quasi numquam repudiandae id rem itaque architecto
-                    ipsam facere cum.
+                    <v-sheet
+                      fluid
+                      elevation="6"
+                      class="px-4 px-lg-8 py-6 rounded-xl"
+                      width="650"
+                      height="fit-content"
+                    >
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Corrupti doloribus qui similique impedit. Reiciendis et
+                      cumque odit, officiis atque omnis, quasi numquam
+                      repudiandae id rem itaque architecto ipsam facere cum.
+                    </v-sheet>
                   </v-card-text>
                   <!--Descripción-->
                 </v-expand-x-transition>
@@ -572,27 +601,79 @@
                   :fixed="navegacionMbView"
                   v-model="contactBottomNav"
                   color="pink"
-                  style="border-radius: 30px"
-                  :class="{ 'fullAnuncio-navBottom-web': !navegacionMbView }"
+                  style="border-radius: 30px 30px 0 0; height: 72px!important;"
+                  :class="{
+                    'fullAnuncio-navBottom-web': !navegacionMbView,
+                  }"
+                  active-class="ejemplo"
                 >
-                  <v-btn
-                    v-for="(contacto, key, i) in anuncioView.Sec_Contacto"
-                    :key="i"
-                    color="green"
-                    depressed
-                    rounded
-                    icon
-                    text
+                  <v-sheet
+                    class="pa-0 fullAnuncio-navBottom-web"
+                    style="background: transparent"
                   >
-                    <font-awesome-icon
-                      class="fa-2x"
-                      :icon="[
-                        anuncioView.Sec_Contacto[key].Tipo.categoria,
-                        anuncioView.Sec_Contacto[key].Tipo.icono,
-                      ]"
-                    >
-                    </font-awesome-icon>
-                  </v-btn>
+                    <v-row no-gutters>
+                      <v-col style="height: 68px" class="d-flex justify-start">
+                        <v-btn color="pink" rounded icon>
+                          <font-awesome-icon
+                            class="fa-2x"
+                            :icon="['fa', 'arrow-left']"
+                          >
+                          </font-awesome-icon>
+                        </v-btn>
+                      </v-col>
+                      <!--left btn-->
+
+                      <v-col
+                        v-for="(contacto, key, i) in anuncioView.Sec_Contacto"
+                        :key="i"
+                        v-show="anuncioView.Sec_Contacto.length > 0"
+                        class="d-flex justify-center"
+                        style="height: 68px; width: 62px"
+                      >
+                        <v-btn
+                          color="green"
+                          depressed
+                          rounded
+                          icon
+                          style="min-width: 60px !important"
+                        >
+                          <font-awesome-icon
+                            class="fa-2x"
+                            :icon="[
+                              anuncioView.Sec_Contacto[key].Tipo.categoria,
+                              anuncioView.Sec_Contacto[key].Tipo.icono,
+                            ]"
+                          >
+                          </font-awesome-icon>
+                        </v-btn>
+                      </v-col>
+                      <!--list contactos cycle-->
+
+                      <v-col
+                        v-if="anuncioView.Sec_Contacto.length == 0"
+                        class="d-flex align-center justify-center"
+                      >
+                        <v-img
+                          max-width="100"
+                          max-height="50"
+                          contain
+                          :src="require('../assets/logos/logoH_1x.png')"
+                        ></v-img>
+                      </v-col>
+                      <!--brand image H-->
+
+                      <v-col style="height: 68px" class="d-flex justify-end">
+                        <v-btn color="pink" depressed rounded icon>
+                          <font-awesome-icon
+                            class="fa-2x"
+                            :icon="['fa', 'arrow-right']"
+                          >
+                          </font-awesome-icon>
+                        </v-btn>
+                      </v-col>
+                      <!--rigth btn-->
+                    </v-row>
+                  </v-sheet>
                 </v-bottom-navigation>
                 <!--Inferior Anuncio-->
               </v-card>
@@ -715,15 +796,18 @@ export default {
         Sec_Imagen: [
           {
             nombre: "",
-            url: "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
+            url:
+              "https://tse4.mm.bing.net/th?id=OIP.4ge4xFDqi-g5CsoZ3cdunwHaLH&pid=Api",
           },
           {
             nombre: "",
-            url: "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
+            url:
+              "https://tse1.explicit.bing.net/th?id=OIP.jF81v_wLUP6MEpMD9mDo-wHaKB&pid=Api",
           },
           {
             nombre: "",
-            url: "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
+            url:
+              "https://tse2.mm.bing.net/th?id=OIP.o8NGR0z2j5kgMMP3eL-hAgHaFn&pid=Api",
           },
         ],
       },
@@ -747,7 +831,7 @@ export default {
 
       return sm || xs || md
         ? {
-            vMainContentw: "85vw",
+            vMainContentw: "92vw",
             vMainContenth: "auto",
             vTextContent: "auto",
             CardTarifaCol: 12,
@@ -759,6 +843,10 @@ export default {
             CardTarifaCol: 4,
           };
     },
+    fullAnuncioheadersOrder() {
+      let { xs } = this.$vuetify.breakpoint;
+      return xs ? { iconoCorazon: 1 } : { iconoCorazon: 0 };
+    },
     fullAnunciotitleWeb() {
       let { xs, sm } = this.$vuetify.breakpoint;
       return xs || sm ? "" : "full-anuncio-titlelist-web";
@@ -768,19 +856,16 @@ export default {
 
       return xs || sm ? "" : "full-anuncio-seccion-web";
     },
-    anuncioTextDescMobile(){
+    anuncioTextDescMobile() {
       let { xs, sm } = this.$vuetify.breakpoint;
       return xs || sm ? "anuncio-textDescripcion-mb" : "";
-
     },
     navegacionMbView() {
       const { md, sm, xs } = this.$vuetify.breakpoint;
 
-      return xs ||
-        sm ||
-        md ||
-        Math.abs(window.pageYOffset - this.limitScrollPosition) <
-          this.limitScrollPosition
+      return xs || sm;
+      Math.abs(window.pageYOffset - this.limitScrollPosition) <
+      this.limitScrollPosition
         ? true
         : false;
     },
@@ -898,7 +983,7 @@ export default {
     this.aplicaBusqueda();
   },
   watch: {
-    getBusquedaQuery: function (value) {
+    getBusquedaQuery: function(value) {
       console.log("getBusquedaQuery...");
       console.dir(value);
       this.aplicaBusqueda();
@@ -915,13 +1000,17 @@ export default {
 }
 
 .full-anuncio-seccion-web {
-  height: 270px;
-  max-height: 270px;
+  height: 50vh !important;
+  max-height: 50vh !important;
 }
 
 .fullAnuncio-navBottom-web {
   width: 500px !important;
   margin-left: auto;
+}
+
+.ejemplo {
+  border-bottom: 3px solid #e47ab6;
 }
 
 .full-anuncio-titlelist {
@@ -954,12 +1043,12 @@ export default {
   max-height: 70px;
   overflow: hidden;
   margin-bottom: 45px;
-  line-height: 14px!important;
+  line-height: 14px !important;
 }
 
 .anuncio-textDescripcion-mb {
   max-height: 63px;
-  line-height: 13px!important;
+  line-height: 13px !important;
 }
 
 #carouselImgAnuncio .v-carousel__controls {
@@ -999,9 +1088,8 @@ export default {
   z-index: 2;
   position: absolute;
   bottom: 0px;
-  width: 100%; 
-  max-height: 160px; 
-  height: 160px
+  width: 100%;
+  max-height: 160px;
+  height: 160px;
 }
-
 </style>

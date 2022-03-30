@@ -1,8 +1,8 @@
 <template>
   <v-card width="750">
-    <v-container fluid class="py-0 pl-0">
+    <v-container fluid class="pa-0">
       <v-row class="" no-gutters>
-        <v-col cols="12" lg="5" v-if="edicionView">
+        <v-col cols="12" md="6" v-if="edicionView">
           <v-card flat class="pa-0" style="height: 460px; overflow-y: hidden">
             <file-pond
               ref="pond"
@@ -14,8 +14,11 @@
             />
           </v-card>
         </v-col>
-        <v-col cols="12" lg="5" v-else>
-          <v-carousel :height="tarjetaWH['carrusel']">
+        <v-col cols="12" md="6" v-else>
+          <v-carousel
+            :height="tarjetaWH['carruselH']"
+            style="border-radius: 8px;"
+          >
             <v-carousel-item
               v-for="(imagen, i) in imagenesAnuncio"
               :key="i"
@@ -28,48 +31,50 @@
 
         <!--Carrusel-->
 
-        <v-col cols="12" lg="7">
-          <v-card
-            class="pa-4 pa-lg-2"
-            flat
-            :height="tarjetaWH['cuerpoAnuncio']"
-          >
-            <v-card-title class="pt-0" :class="{ 'pb-0': edicionView }">
+        <v-col cols="12" md="6">
+          <v-card class="pa-1" flat :height="tarjetaWH['cuerpoAnuncioH']">
+            <v-card-title class="pt-0" :class="{ 'pa-0': edicionView }">
               <v-expand-x-transition>
                 <v-container class="pa-0" v-show="edicionView">
                   <v-form ref="descripcionEdit">
                     <v-row no-gutters>
-                      <v-col cols="10">
+                      <v-col cols="12">
                         <v-text-field
                           v-model="anuncioUsuario.Sec_Descripcion.titulo"
                           color="pink"
+                          background-color="#f8ffff"
                           label="Titulo"
                           filled
-                          outlined
                           dense
                           rounded
+                          outlined
+                          single-line
                         >
                         </v-text-field>
                         <!--input titulo-->
                       </v-col>
                     </v-row>
-
-                    <v-row no-gutters justify="space-between">
-                      <v-col cols="6">
+                    <v-row
+                      no-gutters
+                      style="position: relative; top: -13px;"
+                    >
+                      <v-col cols="7" class="mr-2">
                         <v-select
                           v-model="anuncioUsuario.Sec_Descripcion.estado"
+                          :menu-props="{ top: false, offsetY: true }"
                           :items="getDdlEstados"
                           :item-text="'descripcion'"
                           :item-value="'descripcion'"
                           filled
-                          label="Estados"
-                          outlined
-                          rounded
                           dense
+                          rounded
+                          solo
+                          outlined
+                          label="Estados"
                         >
                           <template v-slot:selection="{ item }">
                             <span v-if="item.descripcion.length"
-                              >{{ item.descripcion.slice(0, 11) }}...</span
+                              >{{ item.descripcion.slice(0, 9) }}...</span
                             >
                             <span v-else>item.descripcion</span>
                           </template>
@@ -77,21 +82,23 @@
                         <!--input estados-->
                       </v-col>
 
-                      <v-col class="ml-2">
+                      <v-col cols>
                         <v-select
                           v-model="anuncioUsuario.Sec_Descripcion.ciudad"
+                          :menu-props="{ top: false, offsetY: true }"
                           :items="getDdlMunicipios"
                           :item-text="'descripcion'"
                           :item-value="'descripcion'"
                           filled
                           label="Municipios"
                           outlined
+                          solo
                           rounded
                           dense
                         >
                           <template v-slot:selection="{ item }">
                             <span v-if="item.descripcion.length"
-                              >{{ item.descripcion.slice(0, 10) }}...</span
+                              >{{ item.descripcion.slice(0, 3) }}...</span
                             >
                             <span v-else>item.descripcion</span>
                           </template>
@@ -101,8 +108,8 @@
                     </v-row>
                   </v-form>
                 </v-container>
-                <!--Input View-->
               </v-expand-x-transition>
+              <!--Input Form AnuncioView-->
 
               <v-container class="pa-0" v-show="!edicionView">
                 <v-row no-gutters class="align-end">
@@ -146,7 +153,7 @@
             </v-card-title>
             <!--Titulo principal-->
 
-            <v-card-text class="pa-0 pb-2" v-show="!edicionView">
+            <v-card-text class="pa-0" v-show="!edicionView">                      
               <v-row align="center" justify="center" no-gutters>
                 <v-btn
                   depressed
@@ -159,19 +166,21 @@
                 >
                   descripción
                 </v-btn>
+                <!--Btn Descripción-->
 
                 <v-btn
                   depressed
                   rounded
                   v-ripple="false"
                   @click="activacionesSecciones('revealTarifa')"
-                  class="ml-2"
+                  class="ml-2 mb-1"
                   small
                   :class="{ 'suave-pink-font': revealTarifa }"
                   width="100"
                 >
                   tarifas
                 </v-btn>
+                <!--Btn Tarifas-->
 
                 <v-btn
                   depressed
@@ -185,6 +194,7 @@
                 >
                   contacto
                 </v-btn>
+                <!--Btn Contacto-->
               </v-row>
             </v-card-text>
             <!--acciones de tabs-->
@@ -200,7 +210,7 @@
                   elevation="6"
                   class="rounded-xl my-2"
                   width="350"
-                  height="fit-content"
+                  height="fit-content"                  
                 >
                   <div
                     v-if="
@@ -459,6 +469,7 @@
                           <v-col cols="2" class="mx-1">
                             <v-select
                               v-model="nuevoContacto.Tipo"
+                              :menu-props="{ top: false, offsetY: true }"
                               :items="tiposContacto"
                               item-text="icono"
                               item-value="icono"
@@ -673,13 +684,16 @@
               </v-card-text>
               <!--v-card Contacto-->
 
-              <v-card-text class="pb-1" :class="{ 'pt-0': edicionView }">
+              <v-card-text
+                class="px-0 px-md-2"
+                :class="{ 'edicionCSS': edicionView }"
+              >
                 <v-expand-x-transition>
                   <v-sheet
                     fluid
                     elevation="6"
                     class="rounded-xl my-2 full-anuncio-seccion"
-                    width="350"
+                    width="auto"
                     :class="fullAnuncioSeccionWeb"
                     v-show="edicionView"
                   >
@@ -692,14 +706,16 @@
                           <v-col cols="5">
                             <v-select
                               v-model="anuncioUsuario.Sec_Descripcion.sexo"
+                              :menu-props="{ top: false, offsetY: true }"
                               :items="getDdlSexo"
                               :item-text="'descripcion'"
                               :item-value="'descripcion'"
                               filled
-                              outlined
-                              label="Sexo"
-                              rounded
                               dense
+                              rounded
+                              outlined
+                              solo
+                              label="Sexo"
                             >
                               <template v-slot:selection="{ item }">
                                 <span v-if="item.descripcion === 'femenino'"
@@ -710,9 +726,12 @@
                             </v-select>
                             <!--input sexo-->
                           </v-col>
+                          <!--sexo input-->
+
                           <v-col cols class="ml-2">
                             <v-select
                               v-model="anuncioUsuario.categorias"
+                              :menu-props="{ top: false, offsetY: true }"
                               :items="getDdlCategorias"
                               :item-text="'descripcion'"
                               :item-value="'descripcion'"
@@ -722,6 +741,7 @@
                               rounded
                               dense
                               small-chips
+                              solo
                               multiple
                             >
                               <template v-slot:selection="{ index }">
@@ -737,7 +757,9 @@
                         <v-row no-gutters>
                           <v-col>
                             <v-textarea
-                              :value="anuncioUsuario.Sec_Descripcion.descripcion"
+                              :value="
+                                anuncioUsuario.Sec_Descripcion.descripcion
+                              "
                               outlined
                               label="Descripción"
                               rows="4"
@@ -813,7 +835,7 @@
                   elevation="6"
                   class="rounded-xl my-2 pa-3 full-anuncio-seccion"
                   :class="fullAnuncioSeccionWeb"
-                  width="350"
+                  width="auto"
                   height="90%"
                   v-show="!edicionView"
                 >
@@ -825,7 +847,7 @@
             <!--Cuerpo Anuncio (descripcion y tarifas)-->
 
             <div
-              style="position: sticky; bottom: 0"
+              style="position: -webkit-sticky; position: sticky; bottom: 0"
               class="d-flex flex-row-reverse"
             >
               <v-speed-dial
@@ -858,7 +880,13 @@
                 <!--Main btn anuncio setup-->
 
                 <v-hover v-slot="{ hover }">
-                  <v-btn fab small plain color="green" @click="habilitarEdicionesAnuncio">
+                  <v-btn
+                    fab
+                    small
+                    plain
+                    color="green"
+                    @click="habilitarEdicionesAnuncio"
+                  >
                     <div class="d-flex flex-column align-center">
                       <font-awesome-icon
                         :icon="['fas', 'pencil-alt']"
@@ -976,8 +1004,8 @@ export default {
       revealTarifa: false,
       anuncioConfigViewBtns: false,
       anuncioEdicionInputsView: false,
-      anuncioTarifaInputsView:false,
-      anuncioContactoInputsView:false,
+      anuncioTarifaInputsView: false,
+      anuncioContactoInputsView: false,
       imagenesAnuncioFilePond: [],
       tiposCategoriasAnuncio: [""],
       tiposContacto: [
@@ -1015,8 +1043,8 @@ export default {
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
-        ? { carrusel: "660px", cuerpoAnuncio: "auto" }
-        : { carrusel: "500px", cuerpoAnuncio: "500px" };
+        ? { carruselH: "500px", cuerpoAnuncioH: "auto" }
+        : { carruselH: "500px", cuerpoAnuncioH: "500px" };
     },
     categoriaSeleccionada() {
       return 1;
@@ -1028,7 +1056,7 @@ export default {
     },
     imagenesAnuncio() {
       //verificar los created del template anuncio edit display
-      return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
+      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
         return {
           url: "http://localhost:3000/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
@@ -1073,7 +1101,6 @@ export default {
     },
   },
   methods: {
-        
     //abrirEdicion PASARA abrir mejor un modal con un componente de compras
     abrirEdicion() {
       console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
@@ -1081,7 +1108,7 @@ export default {
     },
 
     //Activa los inputs forms para editar la descripcion de la tarjeta
-    
+
     //------Cruds
     async borrarAnuncio() {
       let MutateResult;
@@ -1146,12 +1173,15 @@ export default {
     },
     editarTarifa(idPosicion) {
       this.nuevaTarifa.idPosicion = idPosicion;
-      this.nuevaTarifa.nombre =
-        this.anuncioUsuario.Sec_Tarifas[idPosicion].nombre;
-      this.nuevaTarifa.precio =
-        this.anuncioUsuario.Sec_Tarifas[idPosicion].precio;
-      this.nuevaTarifa.descripcion =
-        this.anuncioUsuario.Sec_Tarifas[idPosicion].descripcion;
+      this.nuevaTarifa.nombre = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].nombre;
+      this.nuevaTarifa.precio = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].precio;
+      this.nuevaTarifa.descripcion = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].descripcion;
       this.nuevaTarifa.accion = "actualizacion";
       this.anuncioTarifaInputsView = true;
     },
@@ -1214,11 +1244,11 @@ export default {
     //------Acciones Anuncio
     cancelarSalvado(seccion) {
       switch (seccion) {
-        case 'revealTarifa':
+        case "revealTarifa":
           this.anuncioTarifaInputsView = false;
           this.limpiarTarifaForm();
           break;
-        case 'revealContacto':
+        case "revealContacto":
           this.anuncioContactoInputsView = false;
           this.limpiarContactoForm();
           break;
@@ -1229,7 +1259,7 @@ export default {
       this.anuncioEdicionInputsView = false;
     },
     habilitarEdicionesAnuncio(value = true) {
-      this.activacionesSecciones('revealDesc');
+      this.activacionesSecciones("revealDesc");
       this.anuncioEdicionInputsView = value;
     },
     activacionesSecciones(seccion = "revealDesc") {
@@ -1359,17 +1389,22 @@ export default {
 <style lang="scss" scoped>
 .full-anuncio-seccion {
   height: auto;
-  min-height: 290px;
+  min-height: 270px !important;
   overflow-y: auto;
   line-height: 18px;
 }
 
 .full-anuncio-seccion-web {
-  height: 290px;
-  max-height: auto;
+  height: 270px !important;
 }
 
 .v-textarea textarea {
   line-height: 1.35rem !important;
+}
+
+.edicionCSS{
+  position: relative; 
+  top: -30px;
+  padding-top: 0px;
 }
 </style>

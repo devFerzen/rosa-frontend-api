@@ -225,7 +225,7 @@
 </template>
 
 <script>
-  import TarjetaAnuncioUsuario from "@/components/TarjetaAnuncioUsuario";
+  import TarjetaAnuncioUsuario from "@/components/Sistema-Tarjeta-Usuario";
   import { mapGetters } from "vuex";
 
   export default {

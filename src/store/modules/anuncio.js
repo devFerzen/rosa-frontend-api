@@ -82,18 +82,18 @@ export const actions = {
 
             //Veriricar si hay usuario disponible
             if (!rootState.usuario.usuario.usuario) {
-                reject({ pagina: "home", componenteInterno: "panelHerramientasInicioSesion", mensaje: "Favor de Iniciar sesion o pasar a Registrarse!" });
+                reject({ pagina: "home", componenteInterno: {panelHerramientasInicioSesion: true}, mensaje: "Favor de Iniciar sesion o pasar a Registrarse!" });
                 return;
             }
 
             if (!rootState.usuario.usuario.numero_telefonico_verificado) {
                 //Indicar el tipo de veritifacion y enviarlo ahí como no son estay alive si vuelve picarle a anunciate este vuelve a solicitar un codigo de verificación
                 commit('TIPO_VERIFICACION_SET', 'verificacionCelular')
-                return reject({ pagina: "home", componenteInterno: "panelHerramientasVerificacion", mensaje: "Favor de verificar el número de celular de la cuenta!" });
+                return reject({ pagina: "home", componenteInterno: {panelHerramientasVerificacion: true}, mensaje: "Favor de verificar el número de celular de la cuenta!" });
             }
 
             //Apertura de nuevo anuncio
-            resolve({ pagina: "dashboard", componenteInterno: "editAnuncioDisplay", mensaje: "" });
+            resolve({ pagina: "dashboard", componenteInterno: {editAnuncioDisplay: true}, mensaje: "" });
         });
     },
     editAnuncioDisplay({ commit, state }, payload) {

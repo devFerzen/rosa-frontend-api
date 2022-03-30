@@ -33,7 +33,7 @@ export const actions = {
     panelHerramientasVerificacion({ commit }, payload) {
         commit('VERIFICACION_VIEW', payload, { root: true });
     },
-    panelHerramientasCambioContraseña({ commit }, payload) {
+    panelHerramientasCambioContrasena({ commit }, payload) {
         commit('ACTUALIZANDO_CONTRASENA', payload, { root: true });
     },
     async ddls({ commit }, payload) {

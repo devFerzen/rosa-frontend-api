@@ -82,6 +82,9 @@ export const actions = {
     numerotelefonicoUsuario({ commit, state }, payload) {
         commit('NUMERO_TELEFONO_VERIFICADO');
     },
+    cerrarSesion({commit, state}, payload){
+        commit('USUARIO_OFFSET', {});
+    },
     async usuarioIdentificacion({ commit, state }, payload) {
         let AccionResult;
 

@@ -31,6 +31,7 @@
             <span
               style="color: white; min-width: 70px"
               v-if="btnClasses['span'] != 'hidden' || hover"
+              class="mr-1"
               >Anunciaté
             </span>
             <font-awesome-icon
@@ -42,10 +43,11 @@
           </v-btn>
         </v-hover>
         <!--Btn Anunciate-->
+
         <v-hover v-slot:default="{ hover }">
           <v-btn
             color="primary"
-            class="mx-2 rounded-xl"
+            class="mx-2 mr-8 rounded-xl"
             :class="btnClasses['btnClass']"
             @click="iniciandoSesion"
             depressed
@@ -68,11 +70,12 @@
 
           <v-btn
             color="primary"
-            class="mx-2 rounded-lg"
+            class="mx-2 mr-8 rounded-xl"
             :class="btnClasses['btnClass']"
             @click="sideDashboard = !sideDashboard"
-            depressed
             tile
+            depressed
+            raised
             rounded
             v-else
           >
@@ -93,18 +96,19 @@
       </v-row>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="sideDashboard" absolute bottom temporary>
-      <div class="d-flex flex-row mb-8">
-        <div>
+    <v-navigation-drawer v-model="sideDashboard" absolute temporary>
+      <div class="d-flex flex-row mb-8 ml-3 mr-1 mt-3">
+        <!--<div>
           <v-img
             alt="Vuetify Logo"
             class="shrink"
             contain
-            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+            :src="require('./assets/logos/logo_1x.png')"
             transition="scale-transition"
             width="40"
           />
-        </div>
+        </div>-->
+
         <v-btn
           fab
           small
@@ -121,16 +125,23 @@
       </div>
       <!--Sidedar Header-->
 
-      <div class="text-h5 text-xl-h6 mb-1 font-weight-bold text-center">
-        Lorem Ipsum
+      <div class="d-flex justify-center">
+        <v-img
+            alt="Vuetify Logo"
+            class="shrink"
+            contain
+            :src="require('./assets/logos/logoH_1x.png')"
+            transition="scale-transition"
+            width="150"
+          />
       </div>
       <!--Sidedar Tile-->
 
-      <div class="subtitle-1 text-center mb-8">Lorem Ipsum</div>
-      <!--Sidedar Subtile-->
+      <!--<div class="subtitle-1 text-center mb-8">Lorem Ipsum</div>
+      Sidedar Subtile-->
 
       <v-list nav dense>
-        <v-list-item-group active-class="deep-purple--text text--accent-4">
+        <v-list-item-group active-class="text--accent-4" color="primary" v-model="selectedItem">
           <v-list-item @click="$router.push({ path: '/dashboard' })">
             <v-list-item-title class="text-center"
               >Mis Anuncios</v-list-item-title
@@ -139,7 +150,10 @@
           <v-list-item @click="$router.push({ path: '/compras' })">
             <v-list-item-title class="text-center">Compras</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="contactanos">
+          <v-list-item @click="cambiarContraViewState">
+            <v-list-item-title class="text-center">Cambiar Contraseña</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="contactanosViewState">
             <v-list-item-title class="text-center"
               >Contactanos</v-list-item-title
             >
@@ -193,6 +207,7 @@ export default {
   data() {
     return {
       sideDashboard: false,
+      selectedItem: 0,
     };
   },
   computed: {
@@ -221,7 +236,13 @@ export default {
         componenteInterno: { panelHerramientasInicioSesion: true },
       });
     },
-    contactanos() {
+    cambiarContraViewState(){
+      this.mixinLlamadaRouter({
+        pagina: "home",
+        componenteInterno: { panelHerramientasCambioContrasena: true }
+      })
+    },
+    contactanosViewState() {
       this.mixinLlamadaRouter({
         pagina: "home",
         componenteInterno: { panelHerramientasContactanos: true },
@@ -229,6 +250,7 @@ export default {
     },
     async cerrarSesion() {
       let DispatchResult;
+
       try {
         DispatchResult = await this.mixinCerrarSesion();
       } catch (error) {
@@ -241,6 +263,7 @@ export default {
         this.mixinLlamadaRouter(error);
         return;
       }
+
       console.log("vue cerrar sesion...");
       console.dir(DispatchResult);
 
@@ -248,6 +271,7 @@ export default {
         type: "success",
         message: `${DispatchResult.mensaje}`,
       });
+
       this.mixinLlamadaRouter(DispatchResult);
     },
     async anunciate() {

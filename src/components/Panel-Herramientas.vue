@@ -161,7 +161,7 @@
           <!--Categorías-->
 
           <v-col
-            cols="3"
+            cols="5"
             :lg="4"
             :order="panelCSS.colOrder.sexo"
             class="mb-4"
@@ -170,6 +170,7 @@
           >
             <v-select
               v-model="busquedaSexo"
+              :menu-props="{ top: false, offsetY: true }"
               :items="getDdlSexo"
               :item-text="'descripcion'"
               :item-value="'descripcion'"
