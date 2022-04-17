@@ -82,7 +82,7 @@
     computed: {
       cssPanelHerramientas() {
         const { xs, sm, md } = this.$vuetify.breakpoint;
-        this.panelHerramientasClass = xs || sm || md ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
+        this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
         return this.panelHerramientasClass;
       },
       hayAnuncio() {
@@ -114,8 +114,8 @@
     },
     methods: {
       panelMinClass(Value) {
+        /*Funcion solo la usa el componente panel de herramientas. para extenderlo hacia arriba*/
         console.log(`vue: panelMinClass => `);
-
         console.log(Value.panelHerramientasClass);
         this.panelHerramientasClass = Value.panelHerramientasClass;
         this.mbViewTop = this.panelHerramientasClass === 'panel-herramientas-mbview' ? 'activarTop0' : '';
@@ -147,7 +147,7 @@
 
   .panel-herramientas-pcview {
     position: sticky;
-    top: 24vh;
+    top: 12vh;
     height: auto;
     transform: translateX(0%);
     z-index: 6;

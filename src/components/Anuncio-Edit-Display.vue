@@ -400,7 +400,7 @@
                 //Form de un anuncio nuevo
                 selectedContactItem: "",
                 innferFormAE: {},
-                imagenesAnuncio: [],
+                imagenesAnuncio: [], //Investigar como se alimenta aqui, posible error porque este es el que controla un ciclo para guardar las imagenes, hacer test de guardado de tarigdas.
                 nuevaTarifaDialog: false,
                 nuevoContactoDialog: false,
                 nuevoContacto: {
@@ -545,10 +545,12 @@
 
 
                     if (tipoSalvado === "nuevo") {
+                        //Funcion de back end para guardar nuevo
                         await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
                     }
 
                     if (tipoSalvado === "editado") {
+                        //Funcion de backend para guardar
                         await this.$store.dispatch("anuncioEditado", this.FormAE);
                     }
 
@@ -634,7 +636,7 @@
             },
             anuncioInfoOffset() {
                 this.FormAE = {
-                    categorias: ["Escorts", "Masajes Eróticos"],
+                    categorias: [""],
                     permisos: ["Descripcion", "Contacto", "Tarifas"],
                     Sec_Descripcion: {
                         titulo: 'titulo test 1',

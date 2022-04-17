@@ -47,7 +47,7 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.log('Mutation call error...');
+                    console.log('Mutation error...');
                     console.dir(error);
 
                     if (error.graphQLErrors.length > 0) {
@@ -57,6 +57,7 @@ export default {
                     }
                     return reject(this.MixinResult);
                 }
+                
                 console.dir(MutateResult);
                 resolve(JSON.parse(MutateResult.data.inicioSesion));
             });
@@ -69,6 +70,7 @@ export default {
         mixinCerrarSesion(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
+                console.log(`Mixin Cerrar Sesion`);
 
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -268,8 +270,12 @@ export default {
          */
         mixinVerificacionUsuarioComparacion(payload) {
             return new Promise(async(resolve, reject) => {
-                let MutateResult;
+                let MutateResult, validandoUsuarioTKN;
                 this.cleanMixinResult();
+
+                //No lo creaba
+                validandoUsuarioTKN = await this.$store.dispatch('validandoUsuario');
+                console.log(`payload input  ${payload.input}`);
 
                 try {
                     MutateResult = await this.$apollo.mutate({
@@ -340,6 +346,7 @@ export default {
         mixinRestablecerContrasena(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinRestablecerContrasena...");
+                console.dir(payload);
                 let MutateResult;
                 this.cleanMixinResult();
 
@@ -429,21 +436,21 @@ export default {
         mixinLlamadaRouter(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinLlamadaRouter");
-                console.dir(payload);
-
-                //Crear arreglo de objetos
-                if (payload.componenteInterno) {
-                    for (let componenteInterno in payload.componenteInterno) {
-                        await this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
-                        break;
-                    }
-                }
 
                 if ('pagina' in payload) {
+                    console.log(`Haciendo push a ${payload.pagina}`);
                     this.$router.push({ name: payload.pagina }).catch(error => {
                         //this.$router.push({ name: 'no-encontrado' });
                     });
                 }
+
+                //Crear arreglo de objetos
+                if (payload.componenteInterno) {
+                    for (let componenteInterno in payload.componenteInterno) {
+                        console.log(`Haciendo dispatch a ${componenteInterno} con ${payload.componenteInterno[componenteInterno]}`);
+                        await this.$store.dispatch(componenteInterno, payload.componenteInterno[componenteInterno]);
+                    }
+                }                
             });
         },
 

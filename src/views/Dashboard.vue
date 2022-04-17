@@ -2,7 +2,7 @@
   <v-container fluid fill-height class="white">
     <v-row no-gutters>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i" style="margin-top: 9px;">
-        <tarjeta-anuncio-usuario @activandoEdicion="abriendoEditAnuncioDisplay" v-bind:anuncioUsuario="anuncio">
+        <tarjeta-anuncio-usuario v-bind:anuncioUsuario="anuncio">
         </tarjeta-anuncio-usuario>
       </v-col>
     </v-row>
@@ -93,32 +93,6 @@
     },
     methods: {
 
-      async abriendoEditAnuncioDisplay(InfoAnuncio) {
-        //Activar llamada para correr un componente con el filepond
-
-        let MutateResult;
-        if (InfoAnuncio.id === '000') {
-          this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
-          return;
-        }
-
-        InfoAnuncio.AnuncioDashboard = true;
-
-        try {
-          MutateResult = await this.mixinBuscarAnuncioId(InfoAnuncio);
-        } catch (error) {
-          console.log("vue abriendoEditAnuncioDisplay error...");
-          console.dir(error);
-          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
-          this.mixinLlamadaRouter(error);
-          throw error;
-        }
-
-        console.log("vue buscarAnuncio for edit");
-        console.dir(MutateResult.data);
-        this.$store.dispatch('anuncioEditSet', MutateResult.data);
-        this.$store.dispatch('editAnuncioDisplay', InfoAnuncio.id);
-      },
     },
     created(){
       console.log(`anuncios: `);

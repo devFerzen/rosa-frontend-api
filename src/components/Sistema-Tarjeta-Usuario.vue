@@ -54,10 +54,7 @@
                         <!--input titulo-->
                       </v-col>
                     </v-row>
-                    <v-row
-                      no-gutters
-                      style="position: relative; top: -13px;"
-                    >
+                    <v-row no-gutters style="position: relative; top: -13px;">
                       <v-col cols="7" class="mr-2">
                         <v-select
                           v-model="anuncioUsuario.Sec_Descripcion.estado"
@@ -153,7 +150,7 @@
             </v-card-title>
             <!--Titulo principal-->
 
-            <v-card-text class="pa-0" v-show="!edicionView">                      
+            <v-card-text class="pa-0" v-show="!edicionView">
               <v-row align="center" justify="center" no-gutters>
                 <v-btn
                   depressed
@@ -210,7 +207,7 @@
                   elevation="6"
                   class="rounded-xl my-2"
                   width="350"
-                  height="fit-content"                  
+                  height="fit-content"
                 >
                   <div
                     v-if="
@@ -414,7 +411,7 @@
                           small
                           depressed
                           color="blue"
-                          @click="editarTarifa(i)"
+                          @click="prepararEditTarifa(i)"
                         >
                           <font-awesome-icon
                             :icon="['fas', 'pencil-alt']"
@@ -686,7 +683,7 @@
 
               <v-card-text
                 class="px-0 px-md-2"
-                :class="{ 'edicionCSS': edicionView }"
+                :class="{ edicionCSS: edicionView }"
               >
                 <v-expand-x-transition>
                   <v-sheet
@@ -779,7 +776,7 @@
                             <v-btn
                               color="green"
                               class="ml-4 mr-2 mb-3 rounded-lg"
-                              @click="salvadoDeTarifa"
+                              @click="salvadoDeDescripcion('editando')"
                               tile
                               outlined
                               raised
@@ -1006,7 +1003,6 @@ export default {
       anuncioEdicionInputsView: false,
       anuncioTarifaInputsView: false,
       anuncioContactoInputsView: false,
-      imagenesAnuncioFilePond: [],
       tiposCategoriasAnuncio: [""],
       tiposContacto: [
         { categoria: "fab", icono: "whatsapp", color: "green" },
@@ -1039,6 +1035,7 @@ export default {
       "getDdlMunicipios",
       "getDdlCategorias",
       "getDdlSexo",
+      "FormAE"
     ]),
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
@@ -1061,6 +1058,17 @@ export default {
           url: "http://localhost:3000/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
+      });
+    },
+    imagenesAnuncioFilePond() {
+      //verificar los created del template anuncio edit display
+      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+        if(!!infoImagen.nombre){
+          return {
+            source: infoImagen.nombre,
+            options: { type: "local" },
+          }
+        }
       });
     },
     tarifasAnuncio() {
@@ -1101,39 +1109,11 @@ export default {
     },
   },
   methods: {
-    //abrirEdicion PASARA abrir mejor un modal con un componente de compras
-    abrirEdicion() {
-      console.log("vue: abrirEdicion para el anuncio", this.anuncioUsuario.id);
-      this.$emit("activandoEdicion", { id: this.anuncioUsuario.id });
-    },
-
-    //Activa los inputs forms para editar la descripcion de la tarjeta
-
-    //------Cruds
-    async borrarAnuncio() {
-      let MutateResult;
-      try {
-        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario.id);
-      } catch (error) {
-        console.log("vue borrarAnuncio en error...");
-        console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}`,
-        });
-        return;
-      }
-      //Eliminar dicho anuncio del state tmb
-      console.dir(MutateResult);
-      this.$store.dispatch("anuncioEliminar", idAnuncio);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `Anuncio # ${idAnuncio} eliminado exitosamente!`,
-      });
-    },
-
+    //-----Crud Tarifas
     salvadoDeTarifa() {
       let tarifa = {};
+      console.log("salvadoDeTarifa");
+
       //validacion
       if (this.anuncioUsuario.Sec_Tarifas.length >= 3) {
         this.$store.dispatch("activationAlert", {
@@ -1159,8 +1139,16 @@ export default {
         );
       }
 
-      this.anuncioTarifaInputsView = false;
-      this.limpiarTarifaForm();
+      this.editarAnuncio().then((success)=>{
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${success.mensaje}` });
+      })
+      .catch((error)=>{
+        console.dir("error porque pasas por aqui");
+        console.dir(error);
+        this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+      });
+
+      this.cancelarSalvado('revealTarifa');
     },
     limpiarTarifaForm() {
       this.$refs.tarifaEdit.reset();
@@ -1171,7 +1159,7 @@ export default {
       this.nuevaTarifa.descripcion = "";
       this.nuevaTarifa.accion = "creacion";
     },
-    editarTarifa(idPosicion) {
+    prepararEditTarifa(idPosicion) {
       this.nuevaTarifa.idPosicion = idPosicion;
       this.nuevaTarifa.nombre = this.anuncioUsuario.Sec_Tarifas[
         idPosicion
@@ -1183,11 +1171,20 @@ export default {
         idPosicion
       ].descripcion;
       this.nuevaTarifa.accion = "actualizacion";
-      this.anuncioTarifaInputsView = true;
     },
     eliminarTarifa(idPosicion) {
-      console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
+      let MutateResult;
+      this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
+      
+      this.editarAnuncio().then((success)=>{
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${success.mensaje}` });
+      })
+      .catch((error)=>{
+        this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+      });
     },
+
+    //-----Crud Contactos
     salvadoDeContacto() {
       let contacto = {};
 
@@ -1215,8 +1212,14 @@ export default {
         );
       }
 
-      this.anuncioContactoInputsView = false;
-      this.limpiarContactoForm();
+      this.editarAnuncio().then((success)=>{
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${success.mensaje}` });
+      })
+      .catch((error)=>{
+        this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+      });
+
+      this.cancelarSalvado('revealContacto');
     },
     limpiarContactoForm() {
       this.$refs.contactoEdit.reset();
@@ -1230,18 +1233,79 @@ export default {
       this.nuevoContacto.contacto = "";
     },
     editarContacto(idPosicion) {
+      let MutateResult;
+
       this.nuevoContacto.idPosicion = idPosicion;
       this.nuevoContacto.Tipo = this.contactosUsuario[idPosicion].Tipo;
       this.nuevoContacto.contacto = this.contactosUsuario[idPosicion].contacto;
       this.nuevoContacto.accion = "actualizacion";
       this.anuncioContactoInputsView = true;
+
+      MutateResult = this.editarAnuncio().then((success)=>{
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${success.mensaje}` });
+      })
+      .catch((error)=>{
+        this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+      });
+      
+      this.cancelarSalvado('revealContacto');
     },
     eliminarContacto(idPosicion) {
-      //Crear accion para editar un contacto (que sea igual que el de arriba pero diferente parametro)
-      //console.table(this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1));
+      let MutateResult;
+      
+      this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
+      MutateResult = this.editarAnuncio().then((success)=>{
+        this.$store.dispatch('activationAlert', { type: 'success', message: `${success.mensaje}` });
+      })
+      .catch((error)=>{
+        this.$store.dispatch('activationAlert', { type: 'error', message: `${error.mensaje}` });
+      });
+    },
+
+    //-----Crud Descripcion
+    async salvadoDeDescripcion(tipoSalvado){
+      let MutateResult;
+      console.log(`vue salvadoDeDescripcion... ${tipoSalvado}`);
+
+      try {
+        /*for (let [i, e] of this.imagenesAnuncio.entries()) {
+          console.log("this.imagenesAnuncio.entries()");
+          this.FormAE.Sec_Imagenes.push({ posicion: this.imagenesAnuncioFilePond.length + i, nombre: e.nombre });
+        }*/
+  
+        if (tipoSalvado === "nuevo") {
+            MutateResult = await this.mixinAnuncioCrear(this.FormAE);
+        }
+  
+        if (tipoSalvado === "editando") {
+            MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+        }
+      } catch (error) {
+          console.log("Error...");
+          console.dir(error);
+          this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
+          this.mixinLlamadaRouter(error);
+          throw error;
+      }
+
+      //Actualizar Vuex
+      if (tipoSalvado === "nuevo") {
+          //Funcion de back end para guardar nuevo
+          await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
+      }
+
+      if (tipoSalvado === "editando") {
+          //Funcion de backend para guardar
+          await this.$store.dispatch("anuncioEditado", this.FormAE);
+      }
+
+      
+      this.$store.dispatch("activationAlert", { type: "success", message: MutateResult.mensaje });
+      this.cancelarSalvado();
     },
 
     //------Acciones Anuncio
+
     cancelarSalvado(seccion) {
       switch (seccion) {
         case "revealTarifa":
@@ -1256,12 +1320,27 @@ export default {
           this.anuncioEdicionInputsView = false;
           break;
       }
+
+      this.$store.dispatch('anuncioEditSet');
       this.anuncioEdicionInputsView = false;
     },
-    habilitarEdicionesAnuncio(value = true) {
-      this.activacionesSecciones("revealDesc");
-      this.anuncioEdicionInputsView = value;
+    
+    //Habilita la apertura del anuncio y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
+    async habilitarEdicionesAnuncio() {
+      this.activacionesSecciones("revelDesc");
+      console.log(`idAnuncio: ${this.anuncioUsuario._id}, anuncioEdicionInputsViewAction ${true}`)
+      
+      try {
+        await this.mixinAnuncioSetFormAE({ id: this.anuncioUsuario._id });
+      } catch (error) {
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `${error.mensaje}`,
+        });
+      }
+      this.anuncioEdicionInputsView = true;
     },
+    
     activacionesSecciones(seccion = "revealDesc") {
       switch (seccion) {
         case "revealDesc":
@@ -1283,7 +1362,46 @@ export default {
           break;
       }
     },
+    
+    async borrarAnuncio() {
+      let MutateResult;
+      try {
+        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario.id);
+      } catch (error) {
+        console.log("vue borrarAnuncio en error...");
+        console.dir(error);
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}`,
+        });
+        return;
+      }
+      //Eliminar dicho anuncio del state tmb
+      console.dir(MutateResult);
+      this.$store.dispatch("anuncioEliminar", idAnuncio);
+      this.$store.dispatch('anuncioEditSet');
+      this.$store.dispatch("activationAlert", {
+        type: "success",
+        message: `Anuncio # ${idAnuncio} eliminado exitosamente!`,
+      });
+    },
 
+    editarAnuncio(){
+      return new Promise(async(resolve, reject) => {
+        let MutateResult;
+  
+        try {
+          MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+        } catch (error) {
+          console.log("Error editarAnuncio...");
+          this.mixinLlamadaRouter(error);
+          return reject(error);
+        }
+
+        console.dir(MutateResult);
+        return resolve(MutateResult);
+      });
+    },
     //FilePondMethods
     handleFilePondInit() {
       console.log("handleFilePondInit");
@@ -1311,7 +1429,7 @@ export default {
         console.dir(error);
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `>>>Error al registrar...>>>>${error}`,
+          message: `>>>Error al registrar...>>>>${error.mensaje}`,
         });
         this.mixinLlamadaRouter(error);
         throw error;
@@ -1372,12 +1490,15 @@ export default {
     if (this.imagenesAnuncio.length > 0) {
       console.log("this.imagenesAnuncio");
       console.dir(this.imagenesAnuncio);
+
       //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar, se pasa a renderizar con :key el componente
       for (let Anuncio of this.imagenesAnuncio) {
-        this.imagenesAnuncioFilePond.push({
-          source: Anuncio.nombre,
-          options: { type: "local" },
-        });
+        if(!!Anuncio.nombre){
+          this.imagenesAnuncioFilePond.push({
+            source: Anuncio.nombre,
+            options: { type: "local" },
+          });
+        }
       }
     } else {
       this.imagenesAnuncioFilePond = [];
@@ -1402,8 +1523,8 @@ export default {
   line-height: 1.35rem !important;
 }
 
-.edicionCSS{
-  position: relative; 
+.edicionCSS {
+  position: relative;
   top: -30px;
   padding-top: 0px;
 }

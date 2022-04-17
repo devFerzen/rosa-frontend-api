@@ -45,7 +45,7 @@ export default {
                 console.log("MutateResult");
                 console.dir(MutateResult);
 
-                resolve(MutateResult.data.compararVerificacionCelular);
+                resolve(JSON.parse(MutateResult.data.compararVerificacionCelular));
             });
         },
 
@@ -81,7 +81,7 @@ export default {
                     return reject(this.MixinResult);
                 }
 
-                resolve(MutateResult.data.compararVerificacionCelular);
+                resolve(JSON.parse(MutateResult.data.compararVerificacionCelular));
             });
         },
 

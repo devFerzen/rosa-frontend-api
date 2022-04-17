@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 
 export const state = {
     usuario: {
-        "usuario": null,
+        "usuario": '',
         "numero_telefonico_verificado": false,
         "verificacionUsuario": "",
         "anuncios_usuario": []
@@ -20,17 +20,18 @@ export const mutations = {
         state.usuario = payload;
     },
     USUARIO_OFFSET(state) {
-        state.usuario = null;
+        state.usuario = '';
+        state.anuncios_usuario = new Array();
     },
     CORREO_SET(state, payload) {
         state.usuario.usuario = payload;
     },
     USUARIO_RESET(state){
         state.usuario = {
-            "usuario": null,
+            "usuario": '',
             "numero_telefonico_verificado": false,
             "verificacionUsuario": "",
-            "anuncios_usuario": []
+            "anuncios_usuario": new Array()
         }
     },
     CODIGO_VERIFICACION_SET(state, payload) {
@@ -46,7 +47,7 @@ export const mutations = {
         state.usuario.anuncios_usuario.push(payload);
     },
     NUMERO_TELEFONO_VERIFICADO(state) {
-        state.usuario.numero_telefonico_verificado = true;
+        state.usuario.numero_telefonico_verificado = payload;
     }
 }
 
@@ -79,11 +80,26 @@ export const actions = {
             resolve();
         });
     },
+    anuncioUsuarioById({state}, payload){
+        return state.usuario.anuncios_usuario.filter(function(Anuncio){
+            if(Anuncio._id === payload){
+                return Anuncio;
+            }
+        })
+    },
     numerotelefonicoUsuario({ commit, state }, payload) {
-        commit('NUMERO_TELEFONO_VERIFICADO');
+        commit('NUMERO_TELEFONO_VERIFICADO', payload);
     },
     cerrarSesion({commit, state}, payload){
         commit('USUARIO_OFFSET', {});
+    },
+    validandoUsuario({commit}, payload){
+        const token = Cookies.get('auth-token');
+        if (!token) {
+            return false;
+        }
+
+        return token;
     },
     async usuarioIdentificacion({ commit, state }, payload) {
         let AccionResult;
@@ -120,7 +136,7 @@ export const getters = {
         return state.usuario.anuncios_usuario;
     },
     usuarioLoggeado: state => {
-        return state.usuario.usuario;
+        return !!state.usuario.usuario;
     },
     Usuario: state => {
         return state.usuario;

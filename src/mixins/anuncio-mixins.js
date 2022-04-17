@@ -2,7 +2,6 @@ import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
 import ErrorResult from '../utilities/ErrorResult';
 
-
 export default {
     data() {
         return {
@@ -15,6 +14,29 @@ export default {
         }
     },
     methods: {
+        
+        mixinAnuncioSetFormAE(Params){
+            return new Promise(async(resolve, reject) => {
+                console.log("mixinAnuncioSetFormAE", Params.id);
+
+                let Resultado;
+                if(!Params.id){
+                    console.log(`Sin id`);
+                    this.MixinResult.mensaje = 'No se detecto Anuncio. Favor de Iniciar Sesion nuevamente y intentarlo de nuevo, o comunicarse con servicio al cliente.';
+                    return reject(this.MixinResult);
+                }
+
+                Resultado = await this.$store.dispatch('anuncioUsuarioById', Params.id);
+                if(Resultado.length === 0){
+                    //Aqui debe de agregar que cierre sesion
+                    console.log(`Sin Anuncio Asignado`);
+                    return reject({mensaje: "Anuncio no encontrado. Favor de Iniciar Sesion nuevamente y intentarlo de nuevo, o comunicarse con servicio al cliente."});
+                }
+
+                await this.$store.dispatch('anuncioEditSet', Resultado[0]);
+                return resolve({});
+            });
+        },
         mixinBuscarAnuncioId(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;

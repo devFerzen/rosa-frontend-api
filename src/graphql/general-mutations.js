@@ -32,7 +32,7 @@ export const VER_MUTATE = gql `
 `;
 
 export const VERIFICACIONUSUARIO_COMPARAR_MUTATE = gql `
-    mutation compararVerificacionUsuario ($input: String!, $usuario: String!, $clean: Boolean!){
+    mutation compararVerificacionUsuario ($input: String, $usuario: String!, $clean: Boolean!){
         compararVerificacionUsuario(input: $input, usuario: $usuario, clean: $clean)
     }
 `;
@@ -44,7 +44,7 @@ export const SOLICITAR_RESTABLECER_CONTRASENA = gql `
 `;
 
 export const RESTABLECER_CONTRASENA = gql `
-    mutation restablecerContrasena ($input: String!, $usuario: String!, $contrasena: String!){
+    mutation restablecerContrasena ($input: String, $usuario: String!, $contrasena: String!){
         restablecerContrasena(input: $input, usuario: $usuario, contrasena: $contrasena)
     }
 `;

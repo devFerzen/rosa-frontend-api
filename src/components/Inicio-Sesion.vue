@@ -131,6 +131,7 @@ export default {
       } catch (error) {
         console.log("vue iniciandoSesion en error...");
         console.dir(error);
+        
         this.$store.dispatch("activationAlert", {
           type: "error",
           message: `${error.mensaje}`,

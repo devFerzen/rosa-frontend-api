@@ -127,6 +127,8 @@ export default {
         type: "success",
         message: `${MutateResult.mensaje}`,
       });
+      
+      this.mixinCerrarSesion();
       this.mixinLlamadaRouter(MutateResult);
     },
   },

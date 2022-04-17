@@ -2,7 +2,7 @@ export const state = {
     dashboardEditAnuncioDisplay: '000',
     //Renombrar AnuncioInfo por AnuncioEditInfo
     AnuncioInfo: {
-        categorias: ["Escorts", "Masajes Eróticos"],
+        categorias: [],
         permisos: ["Descripcion", "Contacto", "Tarifas"],
         Sec_Descripcion: {
             titulo: '',
@@ -48,13 +48,13 @@ export const mutations = {
           state.AnuncioInfo.categorias = payload.categorias;
         }
 
-        if ('id' in payload) {
-          state.AnuncioInfo.id = payload.id;
+        if ('_id' in payload) {
+          state.AnuncioInfo.id = payload._id;
         }
     },
     ANUNCIO_EDITINFO_OFFSET(state, payload){
         state.AnuncioInfo = {
-            categorias: ["Escorts", "Masajes Eróticos"],
+            categorias: [],
             permisos: ["Descripcion", "Contacto", "Tarifas"],
             Sec_Descripcion: {
                 titulo: '',
