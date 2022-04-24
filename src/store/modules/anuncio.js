@@ -9,7 +9,7 @@ export const state = {
             estado: '',
             ciudad: '',
             descripcion: '',
-            sexo: ''
+            sexo: 0
         },
         Sec_Imagenes: [],
         Sec_Contacto: [],
@@ -52,6 +52,9 @@ export const mutations = {
           state.AnuncioInfo.id = payload._id;
         }
     },
+    ANUNCIO_EDITSEC_CONTACTO_SET(state, payload){
+        state.AnuncioInfo.Sec_Contacto = payload;
+    },
     ANUNCIO_EDITINFO_OFFSET(state, payload){
         state.AnuncioInfo = {
             categorias: [],
@@ -61,7 +64,7 @@ export const mutations = {
                 estado: '',
                 ciudad: '',
                 descripcion: '',
-                sexo: ''
+                sexo: 0
             },
             Sec_Imagenes: [],
             Sec_Contacto: [],
@@ -99,11 +102,14 @@ export const actions = {
     editAnuncioDisplay({ commit, state }, payload) {
         commit('EDIT_ANUNCIO_DISPLAY', payload);
     },
+    anuncioEditContactoSet({ commit }, payload){
+        commit('ANUNCIO_EDITSEC_CONTACTO_SET',payload);
+    },
     anuncioEditSet({ commit, state }, payload) {
         console.log("anuncioEditSet payload");
         console.dir(payload);
         
-        if (payload != undefined || payload !== null) {
+        if (payload != undefined) {
             console.log("anuncio edit set");
             commit('ANUNCIO_EDITINFO_SET', payload);
         } else{
@@ -117,7 +123,7 @@ export const actions = {
 }
 
 export const getters = {
-    anuncioDisplayState: state => {
+    anuncioPreView: state => {
         return state.dashboardEditAnuncioDisplay;
     },
     FormAE: state => {
