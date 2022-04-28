@@ -55,6 +55,12 @@ export const NUEVO_CORREO_CONTACTANOS = gql `
     }
 `;
 
+export const EDICION_DEFAULT_CONTACTOS = gql `
+    mutation actualizacionDefaultContactos($input: [SecContactoInput]!){
+        actualizacionDefaultContactos(input: $input)
+    }
+`;
+
 // Query ***
 export const DDL_BYCATEGORIA_QUERY = gql `
     query queryddlsByCategoria($categorias: [String]!){

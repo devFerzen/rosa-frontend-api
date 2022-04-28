@@ -43,6 +43,9 @@ export const mutations = {
     CARGA_ANUNCIOS_USUARIO(state, payload) {
         state.usuario.anuncios_usuario = payload;
     },
+    CARGA_CONTACTOS_USUARIO(state, payload) {
+        state.usuario.Default_Contactos = payload;
+    },
     CARGA_NUEVO_ANUNCIO(state, payload) {
         state.usuario.anuncios_usuario.push(payload);
     },
@@ -79,6 +82,11 @@ export const actions = {
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });
+    },
+    contactoEditado({commit, state}, payload){
+        console.log(`payload`);
+        console.dir(payload);
+        commit('CARGA_CONTACTOS_USUARIO', payload);
     },
     anuncioUsuarioById({state}, payload){
         return state.usuario.anuncios_usuario.filter(function(Anuncio){

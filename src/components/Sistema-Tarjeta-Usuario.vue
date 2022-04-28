@@ -136,9 +136,7 @@
                   height="fit-content"
                 >
                   <div
-                    v-if="
-                      anuncioUsuario.Sec_Tarifas.length == 0 || nuevaTarifaView
-                    "
+                    v-if="nuevaTarifaView"
                   >
                     <div
                       class="
@@ -288,7 +286,7 @@
 
                       <div
                         style="position: absolute; bottom: 10px; right: 15%"
-                        v-show="!!FormAE.id"
+                        v-show="!!FormAE.id && edicionView"
                       >
                         <v-btn
                           fab
@@ -336,8 +334,7 @@
                   height="fit-content"
                 >
                   <div
-                    v-if="
-                      Usuario.Default_Contactos.length == 0 || nuevoContactoView
+                    v-if=" nuevoContactoView
                     "
                   >
                     <div
@@ -366,8 +363,9 @@
                               v-model="nuevoContacto.Tipo"
                               :menu-props="{ top: false, offsetY: true }"
                               :items="tiposContacto"
-                              item-text="icono"
+                              item-text="categoria"
                               item-value="icono"
+                              return-object
                             >
                               <template v-slot:selection="data">
                                 <font-awesome-icon
@@ -1112,13 +1110,13 @@ export default {
       }
 
       this.editarAnuncio()
-      .then((success) => {
+      .then(async (success) => {
         this.$store.dispatch("activationAlert", {
           type: "success",
           message: `${success.mensaje}`,
         });
-        //Este no tiene guardado hacia el objeto Usuario Padre... este tendra el de creacion y update al padre como Contacto
-        
+
+        await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
         this.cancelarSalvado();
       })
       .catch((error) => {
@@ -1148,26 +1146,33 @@ export default {
     },
     eliminarTarifa(idPosicion) {
       let MutateResult;
+      
       this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
 
       this.editarAnuncio()
-        .then((success) => {
+        .then(async (success) => {
           this.$store.dispatch("activationAlert", {
             type: "success",
             message: `${success.mensaje}`,
           });
+
+          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
+        this.cancelarSalvado();
         })
         .catch((error) => {
           this.$store.dispatch("activationAlert", {
             type: "error",
             message: `${error.mensaje}`,
-          });
         });
+      });
+
     },
 
-    //-----Crud Contactos
-    salvadoDeContacto() {
+    //Accion de editar o crear un Contacto
+    async salvadoDeContacto() {
+      console.log(`salvadoDeContacto`);
       let contacto = {};
+      let newDefaulContactos = [];
 
       //validacion
       if (this.contactosUsuario.length >= 5) {
@@ -1178,52 +1183,81 @@ export default {
         return;
       }
 
-      contacto.Tipo = this.nuevoContacto.nuevoContacto;
+      //Setear valores
+      contacto.Tipo = {
+        categoria: this.nuevoContacto.Tipo.categoria,
+        icono: this.nuevoContacto.Tipo.icono
+      };
       contacto.contacto = this.nuevoContacto.contacto;
+      console.dir(contacto);
 
       if (this.nuevoContacto.accion == "creacion") {
-        this.anuncioUsuario.Sec_Contacto.push(contacto);
+        this.anuncioUsuario.Sec_Contacto.push({contacto: contacto.contacto});
+
+        //Preparar array para actualizado de Defaul_Contactos
+        newDefaulContactos = this.contactosUsuario;
+        newDefaulContactos.push(contacto);
+        
       } else {
         this.anuncioUsuario.Sec_Contacto.splice(
           this.nuevoContacto.idPosicion,
           1,
-          contacto
+          {contacto: contacto.contacto}
         );
+        
+        //Preparar array para actualizado de Defaul_Contactos
+        for (let contactoUsuarioLoop = 0; contactoUsuarioLoop < this.contactosUsuario.length; contactoUsuarioLoop++) {
+          if(this.nuevoContacto.idPosicion == contactoUsuarioLoop){
+            newDefaulContactos.push(contacto);
+          }else{
+            newDefaulContactos.push(this.contactosUsuario[contactoUsuarioLoop]);
+          }
+        }
       }
 
-      //Añadir el que guarde tmb en los vuex???
-      //Edite los contactos en el usuario
+      //Preparando la base vuex de FormAE para la edicion del anuncio
+      await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
 
       this.editarAnuncio()
-      .then((success) => {
+      .then(async (success) => {
         this.$store.dispatch("activationAlert", {
           type: "success",
           message: `${success.mensaje}`,
         });
+       
+        this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Defaul Contacto
+        
+        await this.mixinActualizarDefaultContactos(newDefaulContactos)
+        .catch((error)=>{
+          this.$store.dispatch("activationAlert", {
+            type: "error",
+            message: `${error.mensaje}`,
+          });
+        });
+        
         this.cancelarSalvado();
       })
       .catch((error) => {
+        console.log(`Editar Anuncio`);
+        console.dir(error);
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `${error.mensaje}`,
+          message: `${error.mensaje == "" ? 'Error al editar el anuncio' : error.mensaje}`,
         });
       });
 
-      //Hacer llamada para modificar los contactos default del usuario y el VUEX (este dejalo al final para 
-      //ver si actualiza el usuario.Default_Contactos) aqui
-        
     },
     //Manda a guardar dentro de AnuncioInfo
     salvandoEdicionContacto(){
       return new Promise((resolve, reject)=>{
         let newArrayContactoAnuncio = [];
   
+        //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario
         for (let contactoSeleccionadosLoop = 0; contactoSeleccionadosLoop < this.contactosSeleccionados.length; contactoSeleccionadosLoop++) {
-          console.log(`this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto ${this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto}`)
           newArrayContactoAnuncio.push({ contacto: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto })
         }
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
-        this.$store.dispatch('anuncioEditContactoSet', newArrayContactoAnuncio);
+        this.$store.dispatch('anuncioEditContactoSet', newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE 
         resolve();
       });
     },
@@ -1236,7 +1270,6 @@ export default {
       };
       this.nuevoContacto.contacto = "";
     },
-    
     //El usuario seleciona un contacto dentro de la lista
     prepararEditContacto(idPosicion) {
       this.nuevoContacto.idPosicion = idPosicion;
@@ -1244,24 +1277,56 @@ export default {
       this.nuevoContacto.contacto = this.contactosUsuario[idPosicion].contacto;
       this.nuevoContacto.accion = "actualizacion";
       this.anuncioContactoInputsView = true;
+
       this.abrirForm();
     },
-    eliminarContacto(idPosicion) {
+    async eliminarContacto(idPosicion) {
+      let MutateResult;
+      let newDefaulContactos = [];
 
-      this.anuncioUsuario.Sec_Contacto.splice(idPosicion, 1);
+
+      console.dir(`eliminarContacto ${idPosicion}`);
+
+      for (let contactoUsuarioLoop = 0; contactoUsuarioLoop < this.contactosUsuario.length; contactoUsuarioLoop++) {
+        if(idPosicion != contactoUsuarioLoop){
+          newDefaulContactos.push(this.contactosUsuario[contactoUsuarioLoop]);
+        }
+      }
+      
+      for (let anuncioContactosLoop = 0; anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length; anuncioContactosLoop++) {
+        if(this.contactosUsuario[idPosicion].contacto == this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto){
+          this.anuncioUsuario.Sec_Contacto.splice(anuncioContactosLoop, 1);
+          console.log(anuncioContactosLoop);
+          break;
+        }        
+      }
+
+      await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
+
       this.editarAnuncio()
-        .then((success) => {
-          this.$store.dispatch("activationAlert", {
-            type: "success",
-            message: `${success.mensaje}`,
-          });
-        })
-        .catch((error) => {
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `${error.mensaje}`,
-          });
+      .catch((error) => {
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `${error.mensaje}`,
         });
+      });
+
+      MutateResult =  await this.mixinActualizarDefaultContactos(newDefaulContactos)
+      .catch((error)=>{
+        this.$store.dispatch("activationAlert", {
+          type: "error",
+          message: `${error.mensaje}`,
+        });
+
+      });
+      
+      this.$store.dispatch("activationAlert", {
+        type: "success",
+        message: `${MutateResult.mensaje}`,//
+      });
+      
+      this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Defaul Contacto
+      this.cancelarSalvado();
     },
 
     //-----Crud Descripcion
@@ -1276,11 +1341,11 @@ export default {
         if (!!this.FormAE.id) {
           console.log("Editando existente..."); 
           MutateResult = await this.mixinAnuncioEditar(this.FormAE);
-          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando el state de vuex
+          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
         } else {
           console.log("Guardando nuevo...");
           MutateResult = await this.mixinAnuncioCrear(this.FormAE);
-          await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando el state de vuex
+          await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
         }
 
       } catch (error) {
@@ -1392,7 +1457,10 @@ export default {
           MutateResult = await this.mixinAnuncioEditar(this.FormAE);
         } catch (error) {
           console.log("Error editarAnuncio...");
-          this.mixinLlamadaRouter(error);
+
+          if(error.componenteInterno.length >= 1){
+            this.mixinLlamadaRouter(error);
+          }
           return reject(error);
         }
 

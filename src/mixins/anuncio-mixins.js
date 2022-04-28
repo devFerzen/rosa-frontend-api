@@ -200,6 +200,36 @@ export default {
                 resolve(JSON.parse(MutateResult.data.anuncioEliminacion));
             });
         },
+        mixinActualizarDefaultContactos(payload = []){
+            //En error que mande mensaje de favor de iniciar sesion nuevamente
+            return new Promise(async(resolve, reject) => {
+                let MutateResult;
+                console.log("mixinActualizarDefaultContactos...");
+
+                try {
+                    MutateResult = await this.$apollo.mutate({
+                        mutation: GraphqlCalls.EDICION_DEFAULT_CONTACTOS,
+                        variables: {
+                            input: payload
+                        }
+                    });
+                } catch (error) {
+                    console.log('Mutation call error...')
+                    console.dir(error);
+
+                    if (error.graphQLErrors.length > 0) {
+                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    } else {
+                        this.MixinResult = new ErrorResult(error)
+                    }
+
+                    return reject(this.MixinResult);
+                }
+
+                resolve(JSON.parse(MutateResult.data.actualizacionDefaultContactos));
+
+            });    
+        },
         mixinImagenDelete(payload) {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
