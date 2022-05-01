@@ -40,7 +40,7 @@ export const mutations = {
     VERIFICACION_USUARIO_SET(state, payload) {
         state.usuario.verificacionUsuario = payload;
     },
-    CARGA_ANUNCIOS_USUARIO(state, payload) {
+    CARGA_ANUNCIOS_USUARIO(state, payload = []) {
         state.usuario.anuncios_usuario = payload;
     },
     CARGA_CONTACTOS_USUARIO(state, payload) {
@@ -58,10 +58,11 @@ export const actions = {
     anuncioEliminar({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
             let newArray = state.usuario.anuncios_usuario.filter((value, index) => {
-                if (value.id !== payload) {
+                if (value._id !== payload) {
                     return value;
                 }
             });
+            console.log(`nueva carga de anuncios usuario: ${newArray}`)
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });

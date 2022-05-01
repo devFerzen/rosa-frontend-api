@@ -286,7 +286,7 @@
 
                       <div
                         style="position: absolute; bottom: 10px; right: 15%"
-                        v-show="!!FormAE.id && edicionView"
+                        v-show="edicionView"
                       >
                         <v-btn
                           fab
@@ -476,7 +476,7 @@
                                   />
                                 </v-list-item-avatar>
 
-                                <v-list-item-action class="mx-0" v-show="!!FormAE.id">
+                                <v-list-item-action class="mx-0" v-show="edicionView">
                                   <v-switch
                                     v-model="contactosSeleccionados"
                                     color="primary"
@@ -499,7 +499,7 @@
                                 bottom: 0;
                                 right: 10%;
                               "
-                              v-show="!!FormAE.id"
+                              v-show="edicionView"
                             >
                               <v-btn
                                 fab
@@ -551,7 +551,7 @@
                   :class="fullAnuncioSeccionWeb"
                   width="300"
                   height="fit-content"
-                  v-show="edicionView"
+                  v-show="nuevaDescripcionView"
                 >
                   <div
                     class="
@@ -705,7 +705,7 @@
                   :class="fullAnuncioSeccionWeb"
                   width="300"
                   height="fit-content"
-                  v-show="!edicionView"
+                  v-show="!nuevaDescripcionView"
                 >
                   {{ anuncioUsuario.Sec_Descripcion.descripcion }}
                 </v-sheet>
@@ -802,7 +802,7 @@
                 style="position: -webkit-sticky; position: sticky; bottom: 0"
                 no-gutters
               >
-                <v-col v-show="!!FormAE.id && edicionView" justify="center">
+                <v-col v-show="edicionView" justify="center">
                   <v-btn
                     color="primary"
                     class="mx-2 rounded-lg"
@@ -819,7 +819,7 @@
                 </v-col>
                 <!--BotonCancelar-->
 
-                <v-col v-show="!!FormAE.id && tabSeleccionado != 'revealDesc' && edicionView" justify="center">
+                <v-col v-show="edicionView && tabSeleccionado != 'revealDesc'" justify="center">
                   <v-btn
                     color="primary"
                     class="mx-2 rounded-lg"
@@ -835,7 +835,7 @@
                 </v-col>
                 <!--BotonNuevoContacto/Tarifa-->
                 
-                <v-col v-show="!!FormAE.id && edicionView && !nuevoContactoView && !nuevaTarifaView" justify="center">
+                <v-col v-show="edicionView" justify="center">
                   <v-btn
                     color="green"
                     class="mx-2 rounded-lg"
@@ -1022,7 +1022,10 @@ export default {
     contactosUsuario() {
       return this.Usuario.Default_Contactos;
     },
-    edicionView() {
+    edicionView(){
+      return this.nuevaDescripcionView || this.nuevaTarifaView || this.nuevoContactoView;
+    },
+    nuevaDescripcionView() {
       return this.anuncioEdicionInputsView;
     },
     nuevaTarifaView() {
@@ -1215,14 +1218,13 @@ export default {
         }
       }
 
-      //Preparando la base vuex de FormAE para la edicion del anuncio
       await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
 
       this.editarAnuncio()
       .then(async (success) => {
         this.$store.dispatch("activationAlert", {
           type: "success",
-          message: `${success.mensaje}`,
+          message: `${success.mensaje}`
         });
        
         this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Defaul Contacto
@@ -1231,7 +1233,7 @@ export default {
         .catch((error)=>{
           this.$store.dispatch("activationAlert", {
             type: "error",
-            message: `${error.mensaje}`,
+            message: `${error.mensaje}`
           });
         });
         
@@ -1294,6 +1296,7 @@ export default {
       }
       
       for (let anuncioContactosLoop = 0; anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length; anuncioContactosLoop++) {
+        //El anuncio tiene el contacto que se quiere eliminar
         if(this.contactosUsuario[idPosicion].contacto == this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto){
           this.anuncioUsuario.Sec_Contacto.splice(anuncioContactosLoop, 1);
           console.log(anuncioContactosLoop);
@@ -1325,7 +1328,7 @@ export default {
         message: `${MutateResult.mensaje}`,//
       });
       
-      this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Defaul Contacto
+      this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Default Contacto
       this.cancelarSalvado();
     },
 
@@ -1429,7 +1432,7 @@ export default {
     async borrarAnuncio() {
       let MutateResult;
       try {
-        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario.id);
+        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario._id);
       } catch (error) {
         console.log("vue borrarAnuncio en error...");
         console.dir(error);
@@ -1441,11 +1444,12 @@ export default {
       }
       //Eliminar dicho anuncio del state tmb
       console.dir(MutateResult);
-      this.$store.dispatch("anuncioEliminar", idAnuncio);
+      this.$store.dispatch("anuncioEliminar", this.anuncioUsuario._id);
+
       this.$store.dispatch("anuncioEditSet");
       this.$store.dispatch("activationAlert", {
         type: "success",
-        message: `Anuncio # ${idAnuncio} eliminado exitosamente!`,
+        message: `Anuncio # ${this.anuncioUsuario._id} eliminado exitosamente!`,
       });
     },
 
@@ -1474,6 +1478,9 @@ export default {
     },
     async imagenesAnuncioOnDelete(error, file) {
       let MutateResult;
+      let imagenesAnuncioLoop = 0;
+      let NewImagenesAnuncio = [];
+
 
       console.log("imagenesAnuncioOnDelete... file");
       console.dir(file);
@@ -1484,13 +1491,13 @@ export default {
         return;
       }
 
-      let objetoImagen = {
-        //AFSS: Esto no se porqué pero salva de que no se borré la imagen...
+      //Salvando en un objeto antes de que la variable file sea eliminada
+      let ObjetoImagenDelete = {
         nombre: file.filename,
       };
 
       try {
-        MutateResult = await this.mixinImagenDelete(objetoImagen.nombre);
+        MutateResult = await this.mixinImagenDelete(ObjetoImagenDelete.nombre);
       } catch (error) {
         console.dir(error);
         this.$store.dispatch("activationAlert", {
@@ -1501,55 +1508,45 @@ export default {
         throw error;
       }
 
-      // AFSS: Desarrollo futuro, remover el valor de su arreglo vuex usuario
-      this.imagenesAnuncio = this.imagenesAnuncio.filter((imagen) => {
-        if (imagen.nombre !== objetoImagen.nombre) {
-          return imagen;
-        }
-      });
+      for (let loop = 0; loop < this.imagenesAnuncio.length; loop++) {
+        let imagePathName = this.imagenesAnuncio[loop].url;
+        let imageNamePosition = imagePathName.search('uploads/');
+        let imageName = imagePathName.substr(imageNamePosition + 8);
 
-      /*this.FormAE.Sec_Imagenes = this.FormAE.Sec_Imagenes.filter((imagen) => {
-        console.log("formAE sec imagenes igual a ", objetoImagen.nombre);
-        console.dir(imagen);
-        if (imagen.nombre !== objetoImagen.nombre) {
-          return imagen;
+        if(imageName !== ObjetoImagenDelete.nombre){
+          NewImagenesAnuncio.push({
+            nombre: imageName,
+            posicion: imagenesAnuncioLoop
+          });
         }
-      });
 
-      if (this.imagenesAnuncioFilePond.length > 0) {
-        this.imagenesAnuncioFilePond = this.imagenesAnuncioFilePond.filter(
-          (imagen) => {
-            if (imagen.source !== file.filename) {
-              return imagen;
-            }
-          }
-        );
+        imagenesAnuncioLoop++;
       }
+      
+      this.anuncioUsuario.Sec_Imagenes = NewImagenesAnuncio;
+      this.$store.dispatch('anuncioEditImagenesSet', this.anuncioUsuario.Sec_Imagenes); //Actualizacion vuex base de FormaAE
 
-      console.dir(MutateResult);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: MutateResult.mensaje,
-      });*/
     },
     imagenesAnuncioOnProcess(error, file) {
       console.log("imagenesAnuncioOnProcess...");
       if (error) {
+        //Error Object de filepond
         console.log("error onProcess", error);
         console.log("file in error", file.file);
-        //Se pone la llamada del error
         return;
       }
 
-      console.log("file");
+      console.log("imagenesAnuncioOnProcess file...");
       console.dir(file);
-      let objetoImagen = {
+
+      let ObjetoImagen = {
         nombre: JSON.parse(file.serverId)[0],
         posicion: this.imagenesAnuncio.length || 0, //Continuación o Seguimiento inicial
       };
 
       //checar este variable hay que hacer push pero a lo que esta dentro de esa variable
-      this.imagenesAnuncio.push(objetoImagen);
+      this.anuncioUsuario.Sec_Imagenes.push(ObjetoImagen);
+
     },
   },
   created() {
@@ -1570,15 +1567,13 @@ export default {
       this.imagenesAnuncioFilePond = [];
     }
 
+    //Marcando contactoSeleccionados
     for(let defaulContactLoop = 0; defaulContactLoop < this.contactosUsuario.length; defaulContactLoop++){
       let anuncioContactoLoop = 0;
       let ContactosAnuncio = this.anuncioUsuario.Sec_Contacto;
       let ContactosUsuario = this.contactosUsuario;
       
       for(anuncioContactoLoop;  anuncioContactoLoop < ContactosAnuncio.length; anuncioContactoLoop++){
-        console.log(`${ContactosAnuncio[anuncioContactoLoop].contacto} es igual a contacto usuario ${ContactosUsuario[defaulContactLoop].contacto}`)
-        console.log(`${ContactosAnuncio[anuncioContactoLoop].contacto == ContactosUsuario[defaulContactLoop].contacto}`);
-        
         if(ContactosAnuncio[anuncioContactoLoop].contacto == ContactosUsuario[defaulContactLoop].contacto){
           this.contactosSeleccionados.push(defaulContactLoop);
         }

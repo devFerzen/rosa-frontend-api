@@ -58,6 +58,9 @@ export const mutations = {
     ANUNCIO_EDITSEC_TARIFA_SET(state, payload){
         state.AnuncioInfo.Sec_Tarifas = payload;
     },
+    IMAGENES_EDITSEC_IMAGENES_SET(state, payload){
+        state.AnuncioInfo.Sec_Imagenes = payload;
+    },
     ANUNCIO_EDITINFO_OFFSET(state, payload){
         state.AnuncioInfo = {
             categorias: [],
@@ -110,6 +113,10 @@ export const actions = {
     },
     anuncioEditTarifaSet({ commit }, payload){
         commit('ANUNCIO_EDITSEC_TARIFA_SET',payload);
+    },
+    anuncioEditImagenesSet({ commit }, payload){
+        console.log(`anuncioEditImagenesSet ${payload}`);
+        commit('IMAGENES_EDITSEC_IMAGENES_SET',payload);
     },
     anuncioEditSet({ commit, state }, payload) {
         console.log("anuncioEditSet payload");
