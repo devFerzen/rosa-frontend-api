@@ -193,7 +193,7 @@ export default {
                         this.MixinResult = new ErrorResult(error)
                     }
 
-                    return reject(this.MixinResult);
+                    return reject(this.MixinResult.anuncioEliminacion);
                 }
 
                 this.cleanMixinResult();

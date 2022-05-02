@@ -21,7 +21,26 @@ export const state = {
 export const mutations = {
     EDIT_ANUNCIO_DISPLAY(state, payload) {
         state.dashboardEditAnuncioDisplay = payload;
-    },    
+    },
+    ANUNCIO_NEWINFO_OFFSET(state, payload){
+        state.AnuncioInfo._anuncioEdicionInputsView = false;
+    },
+    ANUNCIO_NEWINFO_SET(state, payload){
+        state.AnuncioInfo.permisos = ["Descripcion", "Contacto", "Tarifas"];
+        state.AnuncioInfo.categorias = [],
+        state.AnuncioInfo.Sec_Descripcion = {
+            titulo: '',
+            estado: '',
+            ciudad: '',
+            descripcion: '',
+            sexo: 0
+        };
+        state.AnuncioInfo.Sec_Imagenes = [];
+        state.AnuncioInfo.Sec_Contacto = [];
+        state.AnuncioInfo.Sec_Tarifas = [];
+        state.AnuncioInfo.Sec_Tarifas = [];            
+        state.AnuncioInfo._anuncioEdicionInputsView = true;
+    },
     ANUNCIO_EDITINFO_SET(state, payload){
 
         if ('Sec_Descripcion' in payload) {
@@ -84,9 +103,9 @@ export const mutations = {
 
 export const actions = {
     //Este falta renombar parece la llamada para abrir el modal de edicion...
-    crearAnuncioDisplay({ commit, rootState }, payload) {
+    anunciateSet({ commit, rootState }, payload) {
         return new Promise((resolve, reject) => {
-            console.log("action crearAnuncioDisplay...");
+            console.log("action anunciateSet...");
             console.dir(payload);
 
             //Veriricar si hay usuario disponible
@@ -102,8 +121,16 @@ export const actions = {
             }
 
             //Apertura de nuevo anuncio
-            resolve({ pagina: "dashboard", componenteInterno: {editAnuncioDisplay: true}, mensaje: "" });
+            resolve({ pagina: "dashboard", componenteInterno: { newAnuncioSet: true}, mensaje: "" });
         });
+    },
+    newAnuncioSet({commit, state }, payload){
+        commit('CARGA_NUEVO_ANUNCIOVACIO');
+        commit('ANUNCIO_NEWINFO_SET');
+    },
+    newAnuncioOffSet({commit, state}, payload){
+        commit('ELIMINAR_NUEVO_ANUNCIOVACIO');
+        commit('ANUNCIO_NEWINFO_OFFSET');
     },
     editAnuncioDisplay({ commit, state }, payload) {
         commit('EDIT_ANUNCIO_DISPLAY', payload);
@@ -115,7 +142,6 @@ export const actions = {
         commit('ANUNCIO_EDITSEC_TARIFA_SET',payload);
     },
     anuncioEditImagenesSet({ commit }, payload){
-        console.log(`anuncioEditImagenesSet ${payload}`);
         commit('IMAGENES_EDITSEC_IMAGENES_SET',payload);
     },
     anuncioEditSet({ commit, state }, payload) {

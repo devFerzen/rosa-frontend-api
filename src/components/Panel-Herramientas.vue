@@ -328,7 +328,7 @@ export default {
 
       try {
         DispatchResult = await this.$store.dispatch(
-          "crearAnuncioDisplay",
+          "anunciateSet",
           null
         );
       } catch (error) {

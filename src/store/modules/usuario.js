@@ -47,10 +47,32 @@ export const mutations = {
         state.usuario.Default_Contactos = payload;
     },
     CARGA_NUEVO_ANUNCIO(state, payload) {
-        state.usuario.anuncios_usuario.push(payload);
+        state.usuario.anuncios_usuario.splica(0,1,payload);
+    },
+    ELIMINAR_NUEVO_ANUNCIOVACIO(state, payload) {
+        state.usuario.anuncios_usuario.shift();
+    },
+    CARGA_NUEVO_ANUNCIOVACIO(state, payload) {
+        payload = {
+            categorias: [],
+            permisos: ["Descripcion", "Contacto", "Tarifas"],
+            Sec_Descripcion: {
+                titulo: '',
+                estado: '',
+                ciudad: '',
+                descripcion: '',
+                sexo: 0
+            },
+            Sec_Imagenes: [],
+            Sec_Contacto: [],
+            Sec_Tarifas: [],
+            _anuncioEdicionInputsView: true
+        };
+
+        state.usuario.anuncios_usuario.unshift(payload);
     },
     NUMERO_TELEFONO_VERIFICADO(state) {
-        state.usuario.numero_telefonico_verificado = payload;
+        state.usuario.numero_telefonico_verificado = true;
     }
 }
 

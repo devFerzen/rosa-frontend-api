@@ -835,7 +835,7 @@
                 </v-col>
                 <!--BotonNuevoContacto/Tarifa-->
                 
-                <v-col v-show="edicionView" justify="center">
+                <v-col v-show="edicionView && (!nuevaTarifaView) && (!nuevoContactoView)" justify="center">
                   <v-btn
                     color="green"
                     class="mx-2 rounded-lg"
@@ -1026,7 +1026,7 @@ export default {
       return this.nuevaDescripcionView || this.nuevaTarifaView || this.nuevoContactoView;
     },
     nuevaDescripcionView() {
-      return this.anuncioEdicionInputsView;
+      return this.anuncioEdicionInputsView || this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView');
     },
     nuevaTarifaView() {
       return this.anuncioTarifaInputsView;
@@ -1176,6 +1176,8 @@ export default {
       console.log(`salvadoDeContacto`);
       let contacto = {};
       let newDefaulContactos = [];
+      let esContactoSeleccionado = -1;
+      let _Default_Contactos = this.Usuario.Default_Contactos;
 
       //validacion
       if (this.contactosUsuario.length >= 5) {
@@ -1186,6 +1188,9 @@ export default {
         return;
       }
 
+      esContactoSeleccionado = this.anuncioUsuario.Sec_Contacto.findIndex((Contacto) => Contacto.contacto == this.nuevoContacto.idPosicion);
+      console.log(`esContactoSeleccionado: ${esContactoSeleccionado}`);
+
       //Setear valores
       contacto.Tipo = {
         categoria: this.nuevoContacto.Tipo.categoria,
@@ -1195,30 +1200,35 @@ export default {
       console.dir(contacto);
 
       if (this.nuevoContacto.accion == "creacion") {
-        this.anuncioUsuario.Sec_Contacto.push({contacto: contacto.contacto});
+        this.anuncioUsuario.Sec_Contacto.push({contacto: contacto.contacto, Tipo: contacto.Tipo});
 
         //Preparar array para actualizado de Defaul_Contactos
         newDefaulContactos = this.contactosUsuario;
         newDefaulContactos.push(contacto);
+        await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
         
-      } else {
-        this.anuncioUsuario.Sec_Contacto.splice(
+      } else {       
+
+        _Default_Contactos.splice(
           this.nuevoContacto.idPosicion,
           1,
-          {contacto: contacto.contacto}
+          {contacto: contacto.contacto, Tipo: contacto.Tipo}
         );
-        
-        //Preparar array para actualizado de Defaul_Contactos
-        for (let contactoUsuarioLoop = 0; contactoUsuarioLoop < this.contactosUsuario.length; contactoUsuarioLoop++) {
-          if(this.nuevoContacto.idPosicion == contactoUsuarioLoop){
-            newDefaulContactos.push(contacto);
-          }else{
-            newDefaulContactos.push(this.contactosUsuario[contactoUsuarioLoop]);
-          }
+
+        console.log(`newDefaulContactos`);
+        console.dir(_Default_Contactos);
+        newDefaulContactos = _Default_Contactos;
+
+        if(esContactoSeleccionado >= 0){
+          this.anuncioUsuario.Sec_Contacto.splice(
+            this.nuevoContacto.idPosicion,
+            1,
+            {contacto: contacto.contacto, Tipo: contacto.Tipo}
+          );
+          await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
         }
       }
 
-      await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
 
       this.editarAnuncio()
       .then(async (success) => {
@@ -1256,7 +1266,10 @@ export default {
   
         //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario
         for (let contactoSeleccionadosLoop = 0; contactoSeleccionadosLoop < this.contactosSeleccionados.length; contactoSeleccionadosLoop++) {
-          newArrayContactoAnuncio.push({ contacto: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto })
+          newArrayContactoAnuncio.push({ 
+            contacto: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto,
+            Tipo: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].Tipo
+           })
         }
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
         this.$store.dispatch('anuncioEditContactoSet', newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE 
@@ -1333,9 +1346,9 @@ export default {
     },
 
     //-----Crud Descripcion
-    async salvadoDeDescripcion(tipoSalvado = 'editando') {
+    async salvadoDeDescripcion() {
       let MutateResult;
-      console.log(`vue salvadoDeDescripcion... ${tipoSalvado}`);
+      console.log(`vue salvadoDeDescripcion...`);
 
       try {
         
@@ -1347,6 +1360,7 @@ export default {
           await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
         } else {
           console.log("Guardando nuevo...");
+          
           MutateResult = await this.mixinAnuncioCrear(this.FormAE);
           await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
         }
@@ -1373,18 +1387,23 @@ export default {
     async cancelarSalvado(seccion) {
       this.limpiarContactoForm();
       this.limpiarTarifaForm();
+
+      if(this.FormAE.hasOwnProperty('_anuncioEdicionInputsView')){
+        if(this.FormAE._anuncioEdicionInputsView){
+          await this.$store.dispatch("newAnuncioOffSet");
+        }
+      }
       await this.$store.dispatch("anuncioEditSet");
+      
       this.anuncioEdicionInputsView = false;
       this.anuncioContactoInputsView = false;
       this.anuncioTarifaInputsView = false;
+
     },
 
     //Habilita la apertura del anuncio dependiendo del tab en el que se encuentre y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
-      if (
-        this.anuncioUsuario._id === this.FormAE.id ||
-        this.FormAE.id == undefined
-      ) {
+      if ( this.anuncioUsuario._id === this.FormAE.id || this.FormAE.id == undefined ) {
         this.activacionesSecciones(this.tabSeleccionado);
         this.anuncioEdicionInputsView = true;
 
@@ -1550,6 +1569,14 @@ export default {
     },
   },
   created() {
+
+    //activando edicion descripcion
+    console.log(`_anuncioEdicionInputsView: ${this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView')}`)
+    if(this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView')){
+      this.anuncioEdicionInputsView = true;
+    }
+
+    //Creando las vistas de las imagenes
     if (this.imagenesAnuncio.length > 0) {
       //console.log("this.imagenesAnuncio");
       //console.dir(this.imagenesAnuncio);

@@ -279,9 +279,8 @@ export default {
       console.log("vue anunciate...");
 
       try {
-        this.$store.dispatch("anuncioEditSet", null);
         DispatchResult = await this.$store.dispatch(
-          "crearAnuncioDisplay",
+          "anunciateSet",
           null
         );
       } catch (error) {
