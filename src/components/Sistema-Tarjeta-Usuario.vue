@@ -8,7 +8,7 @@
               ref="pond"
               name="filePondImages"
               @init="handleFilePondInit"
-              :files="imagenesAnuncioFilePond"
+              :files="_imagenesAnuncioFilePond"
               @processfile="imagenesAnuncioOnProcess"
               @removefile="imagenesAnuncioOnDelete"
             />
@@ -933,6 +933,7 @@ export default {
       anuncioTarifaInputsView: false,
       anuncioContactoInputsView: false,
       tiposCategoriasAnuncio: [""],
+      _imagenesAnuncioFilePond: [],
       tiposContacto: [
         { categoria: "fab", icono: "whatsapp", color: "green" },
         { categoria: "fab", icono: "twitter", color: "light-blue" },
@@ -993,7 +994,6 @@ export default {
       });
     },
     imagenesAnuncioFilePond() {
-      //verificar los created del template anuncio edit display
       return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
         if (!!infoImagen.nombre) {
           return {
@@ -1353,11 +1353,13 @@ export default {
       try {
         
         await this.salvandoEdicionContacto(); //Actualizando la base Vuex de FormAE
-
+        
         if (!!this.FormAE.id) {
-          console.log("Editando existente..."); 
+          console.log("Editando existente... aqui"); 
           MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+          console.dir(this.FormAE);
           await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
+
         } else {
           console.log("Guardando nuevo...");
           
@@ -1498,12 +1500,11 @@ export default {
     async imagenesAnuncioOnDelete(error, file) {
       let MutateResult;
       let imagenesAnuncioLoop = 0;
-      let NewImagenesAnuncio = [];
-
+      let _New_Sec_Imagenes = [];
 
       console.log("imagenesAnuncioOnDelete... file");
       console.dir(file);
-
+      
       if (error) {
         console.log("error onProcess", error);
         console.log("file in error", file.file);
@@ -1514,6 +1515,8 @@ export default {
       let ObjetoImagenDelete = {
         nombre: file.filename,
       };
+
+      //Verificar si esta la imagen antes de eliminar
 
       try {
         MutateResult = await this.mixinImagenDelete(ObjetoImagenDelete.nombre);
@@ -1533,7 +1536,7 @@ export default {
         let imageName = imagePathName.substr(imageNamePosition + 8);
 
         if(imageName !== ObjetoImagenDelete.nombre){
-          NewImagenesAnuncio.push({
+          _New_Sec_Imagenes.push({
             nombre: imageName,
             posicion: imagenesAnuncioLoop
           });
@@ -1542,12 +1545,12 @@ export default {
         imagenesAnuncioLoop++;
       }
       
-      this.anuncioUsuario.Sec_Imagenes = NewImagenesAnuncio;
-      this.$store.dispatch('anuncioEditImagenesSet', this.anuncioUsuario.Sec_Imagenes); //Actualizacion vuex base de FormaAE
-
+      //Hay que modificar el FormAE
+      this.$store.dispatch('anuncioSetImagenes', _New_Sec_Imagenes); //Actualizacion vuex base de FormaAE 
     },
-    imagenesAnuncioOnProcess(error, file) {
+    async imagenesAnuncioOnProcess(error, file) {
       console.log("imagenesAnuncioOnProcess...");
+      
       if (error) {
         //Error Object de filepond
         console.log("error onProcess", error);
@@ -1555,16 +1558,17 @@ export default {
         return;
       }
 
-      console.log("imagenesAnuncioOnProcess file...");
-      console.dir(file);
-
+      
       let ObjetoImagen = {
         nombre: JSON.parse(file.serverId)[0],
-        posicion: this.imagenesAnuncio.length || 0, //Continuación o Seguimiento inicial
+        posicion: this.imagenesAnuncio.length || 0,
       };
+      console.dir(ObjetoImagen);
+      
+      //Hay que modificar el FormAE... Esto manda a eliminar tmb puta madre
+      //Intenta ahora que mande a guardar directo al anuncio chingesu?????
+      await this.$store.dispatch('anuncioNewImagenesSet',ObjetoImagen);
 
-      //checar este variable hay que hacer push pero a lo que esta dentro de esa variable
-      this.anuncioUsuario.Sec_Imagenes.push(ObjetoImagen);
 
     },
   },
@@ -1581,7 +1585,26 @@ export default {
       //console.log("this.imagenesAnuncio");
       //console.dir(this.imagenesAnuncio);
 
-      //si funciona y ya añade, pero hay problemas al limpiar, cuando haces un clear, este actualiza y manda a eliminar, se pasa a renderizar con :key el componente
+      /*si funciona y ya añade, pero hay problemas al limpiar, 
+      cuando haces un clear, este actualiza y manda a eliminar, 
+      se pasa a renderizar con :key el componente
+      Respuesta:
+        Al momento de actualizar la variable que usa filepond que es un componente que extra informacion
+        del prop anuncioUsuario que es pasado al hijo... pero aqui lo importante es salvar la informacion
+        una vez que este de click en salvar... (No se penso en que cancelar haga que elimine el archivo... resolver ya sea por medio de filepond o una llamada a eliminar ese archivo de la carpeta de imagenes)
+        this.anuncioUsuario.Sec_Imagenes.push(ObjetoImagen);
+      */
+     //Setear anuncio para campos edit
+     this._imagenesAnuncioFilePond = this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+       if (!!infoImagen.nombre) {
+         return {
+           source: infoImagen.nombre,
+           options: { type: "local" },
+          };
+        }
+      });
+      
+      //Setear anuncio para campos view
       for (let Anuncio of this.imagenesAnuncio) {
         if (!!Anuncio.nombre) {
           this.imagenesAnuncioFilePond.push({

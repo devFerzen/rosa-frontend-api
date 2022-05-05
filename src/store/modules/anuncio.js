@@ -80,6 +80,9 @@ export const mutations = {
     IMAGENES_EDITSEC_IMAGENES_SET(state, payload){
         state.AnuncioInfo.Sec_Imagenes = payload;
     },
+    IMAGENES_EDITSEC_IMAGENES_NEW(state, payload){
+        state.AnuncioInfo.Sec_Imagenes.push(payload);
+    },
     ANUNCIO_EDITINFO_OFFSET(state, payload){
         state.AnuncioInfo = {
             categorias: [],
@@ -141,8 +144,21 @@ export const actions = {
     anuncioEditTarifaSet({ commit }, payload){
         commit('ANUNCIO_EDITSEC_TARIFA_SET',payload);
     },
-    anuncioEditImagenesSet({ commit }, payload){
-        commit('IMAGENES_EDITSEC_IMAGENES_SET',payload);
+    anuncioNewImagenesSet({ commit }, payload){
+        return new Promise((resolve, reject) => {
+            console.log(">>>>anuncioNewImagenesSet");
+            console.dir(payload);
+            commit('IMAGENES_EDITSEC_IMAGENES_NEW',payload);
+            resolve();
+        });
+    },
+    anuncioSetImagenes({ commit }, payload){
+        return new Promise((resolve, reject) => {
+            console.log(">>>>anuncioSetImagenes");
+            console.dir(payload);
+            commit('IMAGENES_EDITSEC_IMAGENES_SET',payload);
+            resolve();
+        });
     },
     anuncioEditSet({ commit, state }, payload) {
         console.log("anuncioEditSet payload");

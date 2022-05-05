@@ -80,7 +80,7 @@ export const actions = {
     anuncioEliminar({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
             let newArray = state.usuario.anuncios_usuario.filter((value, index) => {
-                if (value._id !== payload) {
+                if (value._id !== payload.id) {
                     return value;
                 }
             });
@@ -94,9 +94,12 @@ export const actions = {
     },
     anuncioEditado({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
-
+            console.log("anuncioEditado");
+            console.dir(payload);
+            console.dir(state.usuario.anuncios_usuario);
             let newArray = state.usuario.anuncios_usuario.map(function(value) {
-                if (value.id === payload.id) {
+                if (value._id === payload.id) {
+                    payload._id = payload.id;
                     return payload;
                 }
                 return value;
