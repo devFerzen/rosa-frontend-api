@@ -13,7 +13,7 @@ export const SOLICITAR_VERIFICACION_ANUNCIO = gql `
 `;
 
 export const NUEVO_ANUNCIO_MUTATE = gql `
-    mutation anuncioCreacion($input: AnuncioInput!){
+    mutation anuncioCreacion($input: AnuncioNewInput!){
         anuncioCreacion(input: $input)
     }
 `;

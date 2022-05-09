@@ -81,6 +81,8 @@ export default {
                 console.log("mixinAnuncioCrear...");
                 this.cleanMixinResult();
 
+                delete payload._anuncioEdicionInputsView;
+
                 if (!this.$store.state.usuario.usuario.usuario) {
                     console.log("No hay usuario iniciado sesion");
                     this.MixinResult.pagina = 'home';
@@ -129,6 +131,8 @@ export default {
             return new Promise(async(resolve, reject) => {
                 let MutateResult;
                 console.log("mixinAnuncioEditar...");
+
+                delete payload._anuncioEdicionInputsView;
 
                 if (!this.$store.state.usuario.usuario.usuario) {
                     this.MixinResult.pagina = 'home';

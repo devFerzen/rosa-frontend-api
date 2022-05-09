@@ -47,7 +47,7 @@ export const mutations = {
         state.usuario.Default_Contactos = payload;
     },
     CARGA_NUEVO_ANUNCIO(state, payload) {
-        state.usuario.anuncios_usuario.splica(0,1,payload);
+        state.usuario.anuncios_usuario.splice(0,1,payload);
     },
     ELIMINAR_NUEVO_ANUNCIOVACIO(state, payload) {
         state.usuario.anuncios_usuario.shift();

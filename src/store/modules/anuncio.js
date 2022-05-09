@@ -77,11 +77,18 @@ export const mutations = {
     ANUNCIO_EDITSEC_TARIFA_SET(state, payload){
         state.AnuncioInfo.Sec_Tarifas = payload;
     },
+    ANUNCIO_EDITSEC_DESCRIPCION_SET(state, payload){
+        state.AnuncioInfo.Sec_Descripcion = payload;
+    },
+    ANUNCIO_EDITSEC_CATEGORIAS_SET(state, payload){
+        state.AnuncioInfo.categorias = payload;
+    },
+    ANUNCIO_EDITSEC_PERMISOS_SET(state, payload){
+        state.AnuncioInfo.permisos = payload;
+    },
+
     IMAGENES_EDITSEC_IMAGENES_SET(state, payload){
         state.AnuncioInfo.Sec_Imagenes = payload;
-    },
-    IMAGENES_EDITSEC_IMAGENES_NEW(state, payload){
-        state.AnuncioInfo.Sec_Imagenes.push(payload);
     },
     ANUNCIO_EDITINFO_OFFSET(state, payload){
         state.AnuncioInfo = {
@@ -144,13 +151,14 @@ export const actions = {
     anuncioEditTarifaSet({ commit }, payload){
         commit('ANUNCIO_EDITSEC_TARIFA_SET',payload);
     },
-    anuncioNewImagenesSet({ commit }, payload){
-        return new Promise((resolve, reject) => {
-            console.log(">>>>anuncioNewImagenesSet");
-            console.dir(payload);
-            commit('IMAGENES_EDITSEC_IMAGENES_NEW',payload);
-            resolve();
-        });
+    anuncioDescripcionSet({ commit }, payload){
+        commit('ANUNCIO_EDITSEC_DESCRIPCION_SET',payload);
+    },
+    anuncioCategoriasSet({ commit }, payload){
+        commit('ANUNCIO_EDITSEC_CATEGORIAS_SET',payload);
+    },
+    anuncioPermisosSet({ commit }, payload){
+        commit('ANUNCIO_EDITSEC_PERMISOS_SET',payload);
     },
     anuncioSetImagenes({ commit }, payload){
         return new Promise((resolve, reject) => {

@@ -4,14 +4,11 @@
       <v-row class="" no-gutters>
         <v-col cols="12" md="6" v-if="edicionView">
           <v-card flat class="pa-0" style="height: 460px; overflow-y: hidden">
-            <file-pond
-              ref="pond"
-              name="filePondImages"
-              @init="handleFilePondInit"
-              :files="_imagenesAnuncioFilePond"
-              @processfile="imagenesAnuncioOnProcess"
-              @removefile="imagenesAnuncioOnDelete"
-            />
+            <file-pond-Imagenes-Anuncio
+              :imagenes="imagenesAnuncioFilePond"
+              @iAOnDelete="iAOnDelete"
+              @iAOnProcess="iAOnProcess"
+            ></file-pond-Imagenes-Anuncio>
           </v-card>
         </v-col>
         <v-col cols="12" md="6" v-else>
@@ -683,7 +680,7 @@
                     <v-row no-gutters>
                       <v-col>
                         <v-textarea
-                          :value="anuncioUsuario.Sec_Descripcion.descripcion"
+                          v-model="anuncioUsuario.Sec_Descripcion.descripcion"
                           outlined
                           label="Descripción"
                           rows="7"
@@ -863,62 +860,18 @@
 </template>
 
 <script>
-import vueFilePond, { setOptions } from "vue-filepond";
-import "filepond/dist/filepond.min.css";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import FilePondPluginFileMetadata from "filepond-plugin-file-metadata";
-
 import DashboardCompras from "@/components/Dashboard-Compras";
+import FilePondImagenesAnuncio from "@/components/File-Pond-Imagenes-Anuncio";
 import AnuncioMixins from "../mixins/anuncio-mixins.js";
+import GeneralMixins from "../mixins/general-mixins.js";
 import { mapGetters } from "vuex";
-
-const FilePond = vueFilePond(
-  FilePondPluginFileValidateType,
-  FilePondPluginImagePreview,
-  FilePondPluginFileMetadata
-);
-setOptions({
-  maxFiles: 6,
-  credits: false,
-  allowReorder: true,
-  allowMultiple: true,
-  imagePreviewMaxHeight: 80,
-  imagePreviewHeight: 80,
-  maxFileSize: "7MB",
-  itemInsertLocation: "antes",
-  labelFileLoading: "Cargando...",
-  labelFileLoadError: "Error durante carga",
-  labelFileProcessing: "Cargando...",
-  labelFileProcessingComplete: "Carga completada",
-  labelFileProcessingAborted: "Carga cancelada",
-  labelFileProcessingError: "Error durante carga",
-  labelTapToCancel: "Tap para cancelar",
-  labelTapToRetry: "Tap para reintentar",
-  labelTapToUndo: "Tap para deshacer",
-  labelFileSizeNotAvailable: "Tamaño no reconocido",
-  labelFileWaitingForSize: "Verificando",
-  labelInvalidField: "Archivo no valido",
-  labelIdle:
-    'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
-  server: {
-    url: "http://localhost:3000/",
-    process: {
-      url: "upload",
-    },
-    load: "uploads/",
-    fetch: "uploads/",
-    revert: "delete/",
-  },
-});
 
 export default {
   name: "tarjeta-anuncio-usuario",
-  mixins: [AnuncioMixins],
+  mixins: [AnuncioMixins,GeneralMixins],
   components: {
     DashboardCompras,
-    FilePond,
+    FilePondImagenesAnuncio
   },
   props: {
     anuncioUsuario: { type: Object, default: {} },
@@ -933,7 +886,8 @@ export default {
       anuncioTarifaInputsView: false,
       anuncioContactoInputsView: false,
       tiposCategoriasAnuncio: [""],
-      _imagenesAnuncioFilePond: [],
+      newDefaulContactos: [],
+      nuevasImagenes: [],
       tiposContacto: [
         { categoria: "fab", icono: "whatsapp", color: "green" },
         { categoria: "fab", icono: "twitter", color: "light-blue" },
@@ -967,9 +921,6 @@ export default {
       "getDdlSexo",
       "FormAE",
     ]),    
-    tipoGuardado(){
-      return Object.keys(anuncioUsuario).length !== 0 ? 'editando' : 'nuevo';
-    },
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
@@ -991,6 +942,18 @@ export default {
           url: "http://localhost:3000/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
+      });
+    },
+    imagenesActuales(){
+      let vueltaAnuncio = -1;
+      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen){
+        vueltaAnuncio++;
+        if(!!infoImagen){
+          return {
+            nombre: infoImagen.nombre,
+            posicion: vueltaAnuncio
+          }
+        }
       });
     },
     imagenesAnuncioFilePond() {
@@ -1112,24 +1075,7 @@ export default {
         );
       }
 
-      this.editarAnuncio()
-      .then(async (success) => {
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: `${success.mensaje}`,
-        });
-
-        await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-        this.cancelarSalvado();
-      })
-      .catch((error) => {
-        console.dir("error porque pasas por aqui");
-        console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
-      });
+      this.anuncioTarifaInputsView = false;
     },
     limpiarTarifaForm() {
       this.nuevaTarifa.idPosicion = 0;
@@ -1148,34 +1094,13 @@ export default {
       this.abrirForm();
     },
     eliminarTarifa(idPosicion) {
-      let MutateResult;
-      
       this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
-
-      this.editarAnuncio()
-        .then(async (success) => {
-          this.$store.dispatch("activationAlert", {
-            type: "success",
-            message: `${success.mensaje}`,
-          });
-
-          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-        this.cancelarSalvado();
-        })
-        .catch((error) => {
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `${error.mensaje}`,
-        });
-      });
-
     },
 
     //Accion de editar o crear un Contacto
     async salvadoDeContacto() {
       console.log(`salvadoDeContacto`);
       let contacto = {};
-      let newDefaulContactos = [];
       let esContactoSeleccionado = -1;
       let _Default_Contactos = this.Usuario.Default_Contactos;
 
@@ -1203,8 +1128,8 @@ export default {
         this.anuncioUsuario.Sec_Contacto.push({contacto: contacto.contacto, Tipo: contacto.Tipo});
 
         //Preparar array para actualizado de Defaul_Contactos
-        newDefaulContactos = this.contactosUsuario;
-        newDefaulContactos.push(contacto);
+        this.newDefaulContactos = this.contactosUsuario;
+        this.newDefaulContactos.push(contacto);
         await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
         
       } else {       
@@ -1215,10 +1140,11 @@ export default {
           {contacto: contacto.contacto, Tipo: contacto.Tipo}
         );
 
-        console.log(`newDefaulContactos`);
+        console.log(`this.newDefaulContactos`);
         console.dir(_Default_Contactos);
-        newDefaulContactos = _Default_Contactos;
+        this.newDefaulContactos = _Default_Contactos;
 
+        //Editar el contacto existente
         if(esContactoSeleccionado >= 0){
           this.anuncioUsuario.Sec_Contacto.splice(
             this.nuevoContacto.idPosicion,
@@ -1228,49 +1154,43 @@ export default {
           await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
         }
       }
-
-
-      this.editarAnuncio()
-      .then(async (success) => {
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: `${success.mensaje}`
-        });
-       
-        this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Defaul Contacto
-        
-        await this.mixinActualizarDefaultContactos(newDefaulContactos)
-        .catch((error)=>{
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `${error.mensaje}`
-          });
-        });
-        
-        this.cancelarSalvado();
-      })
-      .catch((error) => {
-        console.log(`Editar Anuncio`);
-        console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje == "" ? 'Error al editar el anuncio' : error.mensaje}`,
-        });
-      });
-
+      
+      this.anuncioContactoInputsView = true;
     },
-    //Manda a guardar dentro de AnuncioInfo
+    salvandoEdicionImagenes(){
+      return new Promise(async (resolve, reject)=>{
+        if(this.nuevasImagenes.length > 0){
+          await this.$store.dispatch('anuncioSetImagenes', this.nuevasImagenes); //Actualizacion vuex base de FormaAE 
+        }
+        resolve();
+      });
+    },
+    salvandoEdicionDescripcion(){
+      return new Promise(async (resolve, reject)=> {
+        await this.$store.dispatch('anuncioDescripcionSet', this.anuncioUsuario.Sec_Descripcion);
+        await this.$store.dispatch('anuncioCategoriasSet', this.anuncioUsuario.categorias);
+        await this.$store.dispatch('anuncioPermisosSet', this.anuncioUsuario.permisos);
+        resolve();
+      });
+    },
+    salvandoEdicionTarifas(){
+      return new Promise(async (resolve, reject)=> {
+        await this.$store.dispatch('anuncioEditTarifaSet', this.anuncioUsuario.Sec_Tarifas);
+        resolve();
+      });
+    },
     salvandoEdicionContacto(){
       return new Promise((resolve, reject)=>{
         let newArrayContactoAnuncio = [];
   
-        //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario
+        //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario en lo que este en contactosSeleccionados
         for (let contactoSeleccionadosLoop = 0; contactoSeleccionadosLoop < this.contactosSeleccionados.length; contactoSeleccionadosLoop++) {
           newArrayContactoAnuncio.push({ 
             contacto: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto,
             Tipo: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].Tipo
            })
         }
+        
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
         this.$store.dispatch('anuncioEditContactoSet', newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE 
         resolve();
@@ -1317,32 +1237,6 @@ export default {
         }        
       }
 
-      await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-
-      this.editarAnuncio()
-      .catch((error) => {
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
-      });
-
-      MutateResult =  await this.mixinActualizarDefaultContactos(newDefaulContactos)
-      .catch((error)=>{
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
-
-      });
-      
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${MutateResult.mensaje}`,//
-      });
-      
-      this.$store.dispatch("contactoEditado", newDefaulContactos); //Actualizacion vuex Usuario Default Contacto
-      this.cancelarSalvado();
     },
 
     //-----Crud Descripcion
@@ -1350,26 +1244,19 @@ export default {
       let MutateResult;
       console.log(`vue salvadoDeDescripcion...`);
 
+      //Cambiar Activacion de Imagenes
+      this.cancelarSalvado(false);
+
+      //Activar una especia de loading (no importante aun)
+      
       try {
-        
-        await this.salvandoEdicionContacto(); //Actualizando la base Vuex de FormAE
-        
-        if (!!this.FormAE.id) {
-          console.log("Editando existente... aqui"); 
-          MutateResult = await this.mixinAnuncioEditar(this.FormAE);
-          console.dir(this.FormAE);
-          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-
-        } else {
-          console.log("Guardando nuevo...");
-          
-          MutateResult = await this.mixinAnuncioCrear(this.FormAE);
-          await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
-        }
-
+        await this.editarAnuncio(); //Llamada de creacion/modificacion anuncio
       } catch (error) {
         console.log("Error...");
         console.dir(error);
+        //Activar los inputs en el tab donde este
+        //habilitarEdicionesAnuncio();
+        
         this.$store.dispatch("activationAlert", {
           type: "error",
           message: `>>>Error al registrar...>>>>${error.mensaje}`,
@@ -1386,21 +1273,24 @@ export default {
     },    
 
     //------Acciones Anuncio
-    async cancelarSalvado(seccion) {
-      this.limpiarContactoForm();
-      this.limpiarTarifaForm();
+    async cancelarSalvado(limpia = true) {
 
-      if(this.FormAE.hasOwnProperty('_anuncioEdicionInputsView')){
-        if(this.FormAE._anuncioEdicionInputsView){
-          await this.$store.dispatch("newAnuncioOffSet");
+      if(limpia){
+        this.limpiarContactoForm();
+        this.limpiarTarifaForm();
+        
+        if(this.FormAE.hasOwnProperty('_anuncioEdicionInputsView')){
+          if(this.FormAE._anuncioEdicionInputsView){
+            await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
+          }
         }
+        await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
+        this.contactosSeleccionadosSet(true);
       }
-      await this.$store.dispatch("anuncioEditSet");
-      
+
       this.anuncioEdicionInputsView = false;
       this.anuncioContactoInputsView = false;
       this.anuncioTarifaInputsView = false;
-
     },
 
     //Habilita la apertura del anuncio dependiendo del tab en el que se encuentre y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
@@ -1411,6 +1301,7 @@ export default {
 
         try {
           await this.mixinAnuncioSetFormAE({ id: this.anuncioUsuario._id });
+          this.contactosSeleccionadosSet();
         } catch (error) {
           this.$store.dispatch("activationAlert", {
             type: "error",
@@ -1479,10 +1370,36 @@ export default {
         let MutateResult;
 
         try {
-          MutateResult = await this.mixinAnuncioEditar(this.FormAE);
-        } catch (error) {
-          console.log("Error editarAnuncio...");
 
+          //Añadir aqui la validacion de infor de la seccion Descripcion
+          await this.salvandoEdicionContacto(); //Actualizando los contactos seleccionados del anuncio en la base Vuex de FormAE
+          await this.salvandoEdicionImagenes(); //Actualizando las imagenes que haya hecho trigger el filePond a la base Vuex de FormAE
+          await this.salvandoEdicionDescripcion(); //Actualizando seccion de descripncipn en la base Vuex de FormAE
+          await this.salvandoEdicionTarifas(); //Actualizando el listado de tarifas en la base Vuex de FormAE
+
+          console.dir(this.FormAE);
+
+          if (!!this.FormAE.id) {
+            console.log("Editando existente...");
+
+            MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+          } else {
+            console.log("Guardando nuevo...");   
+            
+            MutateResult = await this.mixinAnuncioCrear(this.FormAE);
+            await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
+          }
+          
+          if(this.newDefaulContactos.length>0){
+            this.$store.dispatch("contactoEditado", this.newDefaulContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
+            await this.mixinActualizarDefaultContactos(this.newDefaulContactos);
+          }
+
+          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
+        } catch (error) {          
+
+          console.dir(error);
+          //Analizar: esto causa error cuando no se tiene esa propiedad en el objeto
           if(error.componenteInterno.length >= 1){
             this.mixinLlamadaRouter(error);
           }
@@ -1490,87 +1407,64 @@ export default {
         }
 
         console.dir(MutateResult);
+        this.$store.dispatch("activationAlert", {
+          type: "success",
+          message: MutateResult.mensaje,
+        });
         return resolve(MutateResult);
       });
     },
-    //FilePondMethods
-    handleFilePondInit() {
-      console.log("handleFilePondInit");
-    },
-    async imagenesAnuncioOnDelete(error, file) {
-      let MutateResult;
+    
+    async iAOnDelete(Image) {
+      console.log("iAOnDelete...");
+      console.dir(Image);
+      let newArrayImagenes = [];
       let imagenesAnuncioLoop = 0;
-      let _New_Sec_Imagenes = [];
+      let comparingArray = this.nuevasImagenes.length == 0 ? this.imagenesActuales : this.nuevasImagenes;
 
-      console.log("imagenesAnuncioOnDelete... file");
-      console.dir(file);
-      
-      if (error) {
-        console.log("error onProcess", error);
-        console.log("file in error", file.file);
-        return;
-      }
-
-      //Salvando en un objeto antes de que la variable file sea eliminada
-      let ObjetoImagenDelete = {
-        nombre: file.filename,
-      };
-
-      //Verificar si esta la imagen antes de eliminar
-
-      try {
-        MutateResult = await this.mixinImagenDelete(ObjetoImagenDelete.nombre);
-      } catch (error) {
-        console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `>>>Error al registrar...>>>>${error.mensaje}`,
-        });
-        this.mixinLlamadaRouter(error);
-        throw error;
-      }
-
-      for (let loop = 0; loop < this.imagenesAnuncio.length; loop++) {
-        let imagePathName = this.imagenesAnuncio[loop].url;
-        let imageNamePosition = imagePathName.search('uploads/');
-        let imageName = imagePathName.substr(imageNamePosition + 8);
-
-        if(imageName !== ObjetoImagenDelete.nombre){
-          _New_Sec_Imagenes.push({
+      for (let loop = 0; loop < comparingArray.length; loop++) {
+        let imageName = this.imagenesActuales[loop].nombre;
+        
+        if(imageName !== Image.imageToDelete){
+          console.log(`imageName ${Image.imageToDelete}, ${this.imagenesActuales[loop].nombre}`);
+          newArrayImagenes.push({
             nombre: imageName,
             posicion: imagenesAnuncioLoop
           });
+          imagenesAnuncioLoop++;
         }
-
-        imagenesAnuncioLoop++;
       }
-      
-      //Hay que modificar el FormAE
-      this.$store.dispatch('anuncioSetImagenes', _New_Sec_Imagenes); //Actualizacion vuex base de FormaAE 
+
+      this.nuevasImagenes = newArrayImagenes;
+      await this.salvandoEdicionImagenes(); //Actualizando la base Vuex de FormAE
     },
-    async imagenesAnuncioOnProcess(error, file) {
-      console.log("imagenesAnuncioOnProcess...");
-      
-      if (error) {
-        //Error Object de filepond
-        console.log("error onProcess", error);
-        console.log("file in error", file.file);
-        return;
-      }
-
-      
-      let ObjetoImagen = {
-        nombre: JSON.parse(file.serverId)[0],
-        posicion: this.imagenesAnuncio.length || 0,
-      };
+    iAOnProcess(ObjetoImagen) {
+      console.log(`iAOnProcess...${typeof ObjetoImagen}`);
+      console.log(`nuevasImagenes...${typeof this.nuevasImagenes} ${this.nuevasImagenes}`);
       console.dir(ObjetoImagen);
-      
-      //Hay que modificar el FormAE... Esto manda a eliminar tmb puta madre
-      //Intenta ahora que mande a guardar directo al anuncio chingesu?????
-      await this.$store.dispatch('anuncioNewImagenesSet',ObjetoImagen);
-
-
+      let newArrayImagenes = this.imagenesActuales;
+      newArrayImagenes.push(ObjetoImagen);
+      this.nuevasImagenes = newArrayImagenes;
+      console.dir(this.nuevasImagenes);
     },
+    contactosSeleccionadosSet(clean = false){
+      if(clean){
+        this.contactosSeleccionados = [];
+        return
+      }
+      for(let defaulContactLoop = 0; defaulContactLoop < this.contactosUsuario.length; defaulContactLoop++){
+        let anuncioContactoLoop = 0;
+        let ContactosAnuncio = this.anuncioUsuario.Sec_Contacto;
+        let ContactosUsuario = this.contactosUsuario;
+        
+        for(anuncioContactoLoop;  anuncioContactoLoop < ContactosAnuncio.length; anuncioContactoLoop++){
+          if(ContactosAnuncio[anuncioContactoLoop].contacto == ContactosUsuario[defaulContactLoop].contacto){
+            this.contactosSeleccionados.push(defaulContactLoop);
+          }
+
+        }
+      }
+    }
   },
   created() {
 
@@ -1580,56 +1474,8 @@ export default {
       this.anuncioEdicionInputsView = true;
     }
 
-    //Creando las vistas de las imagenes
-    if (this.imagenesAnuncio.length > 0) {
-      //console.log("this.imagenesAnuncio");
-      //console.dir(this.imagenesAnuncio);
-
-      /*si funciona y ya añade, pero hay problemas al limpiar, 
-      cuando haces un clear, este actualiza y manda a eliminar, 
-      se pasa a renderizar con :key el componente
-      Respuesta:
-        Al momento de actualizar la variable que usa filepond que es un componente que extra informacion
-        del prop anuncioUsuario que es pasado al hijo... pero aqui lo importante es salvar la informacion
-        una vez que este de click en salvar... (No se penso en que cancelar haga que elimine el archivo... resolver ya sea por medio de filepond o una llamada a eliminar ese archivo de la carpeta de imagenes)
-        this.anuncioUsuario.Sec_Imagenes.push(ObjetoImagen);
-      */
-     //Setear anuncio para campos edit
-     this._imagenesAnuncioFilePond = this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
-       if (!!infoImagen.nombre) {
-         return {
-           source: infoImagen.nombre,
-           options: { type: "local" },
-          };
-        }
-      });
-      
-      //Setear anuncio para campos view
-      for (let Anuncio of this.imagenesAnuncio) {
-        if (!!Anuncio.nombre) {
-          this.imagenesAnuncioFilePond.push({
-            source: Anuncio.nombre,
-            options: { type: "local" },
-          });
-        }
-      }
-    } else {
-      this.imagenesAnuncioFilePond = [];
-    }
-
     //Marcando contactoSeleccionados
-    for(let defaulContactLoop = 0; defaulContactLoop < this.contactosUsuario.length; defaulContactLoop++){
-      let anuncioContactoLoop = 0;
-      let ContactosAnuncio = this.anuncioUsuario.Sec_Contacto;
-      let ContactosUsuario = this.contactosUsuario;
-      
-      for(anuncioContactoLoop;  anuncioContactoLoop < ContactosAnuncio.length; anuncioContactoLoop++){
-        if(ContactosAnuncio[anuncioContactoLoop].contacto == ContactosUsuario[defaulContactLoop].contacto){
-          this.contactosSeleccionados.push(defaulContactLoop);
-        }
-
-      }
-    }
+    this.contactosSeleccionadosSet();
 
   },
 };
