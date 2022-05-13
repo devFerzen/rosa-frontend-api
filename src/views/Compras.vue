@@ -419,7 +419,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .tw-redes-icons {
     color: blue;
   }

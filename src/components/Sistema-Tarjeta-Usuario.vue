@@ -1,17 +1,15 @@
 <template>
-  <v-card width="750">
+  <v-card width="tarjetaWH['cuerpoAnuncioW']">
     <v-container fluid class="pa-0">
       <v-row class="" no-gutters>
-        <v-col cols="12" md="6" v-if="edicionView">
-          <v-card flat class="pa-0" style="height: 460px; overflow-y: hidden">
+        <v-col cols="12" md="3" v-if="edicionView">
             <file-pond-Imagenes-Anuncio
               :imagenes="imagenesAnuncioFilePond"
               @iAOnDelete="iAOnDelete"
               @iAOnProcess="iAOnProcess"
             ></file-pond-Imagenes-Anuncio>
-          </v-card>
         </v-col>
-        <v-col cols="12" md="6" v-else>
+        <v-col cols="12" :md="edicionView ? 9 : 6" v-else>
           <v-carousel
             :height="tarjetaWH['carruselH']"
             style="border-radius: 8px;"
@@ -28,7 +26,7 @@
 
         <!--Carrusel-->
 
-        <v-col cols="12" md="6">
+        <v-col cols="12" :md="edicionView ? 9 : 6">
           <v-card class="pa-1" flat :height="tarjetaWH['cuerpoAnuncioH']">
             <v-card-title class="pt-0">
               <v-container class="pa-0">
@@ -82,7 +80,7 @@
                   @click="activacionesSecciones('revealDesc')"
                   :class="{ 'suave-pink-font': revealDesc }"
                   small
-                  width="100"
+                  width="90"
                 >
                   descripción
                 </v-btn>
@@ -93,12 +91,12 @@
                   rounded
                   v-ripple="false"
                   @click="activacionesSecciones('revealTarifa')"
-                  class="ml-2 mb-1"
+                  class="ml-1 mb-1"
                   small
                   :class="{ 'suave-pink-font': revealTarifa }"
-                  width="100"
+                  width="90"
                 >
-                  tarifas
+                  <span>tarifas</span>
                 </v-btn>
                 <!--Btn Tarifas-->
 
@@ -110,7 +108,7 @@
                   class="ml-2"
                   small
                   :class="{ 'suave-pink-font': revealContacto }"
-                  width="100"
+                  width="90"
                 >
                   contacto
                 </v-btn>
@@ -712,85 +710,45 @@
             <!--Cuerpo Anuncio (descripcion y tarifas)-->
 
             <div
-              style="position: -webkit-sticky; position: sticky; bottom: 0"
-              class="d-flex flex-row-reverse"
+              style="position: absolute; top: 170px; right: 0; width:38px"
+              class="d-flex flex-column glassy rounded-xl justify-center"
             >
-              <v-speed-dial
-                v-model="anuncioConfigViewBtns"
-                transition="slide-y-reverse-transition"
+
+              <v-btn
+                fab
+                small
+                plain
+                color="white"
+                @click="habilitarEdicionesAnuncio"
               >
-                <template v-slot:activator>
-                  <v-btn
-                    v-model="anuncioConfigViewBtns"
-                    fab
-                    text
-                    raised
-                    depressed
-                    plain
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'times']"
-                      class="fa-2x"
-                      color="pink"
-                      v-if="anuncioConfigViewBtns"
-                    ></font-awesome-icon>
-                    <font-awesome-icon
-                      :icon="['fas', 'bars']"
-                      class="fa-2x"
-                      style="color: #9fe676"
-                      v-else
-                    ></font-awesome-icon>
-                  </v-btn>
-                </template>
-                <!--Main btn anuncio setup-->
+                <div class="d-flex flex-column align-center">
+                  <font-awesome-icon
+                    :icon="['fas', 'pencil-alt']"
+                    class="fa-2x"
+                  ></font-awesome-icon>
+                </div>
+              </v-btn>
+            <!--editar btn-->
 
-                <v-hover v-slot="{ hover }">
-                  <v-btn
-                    fab
-                    small
-                    plain
-                    color="green"
-                    @click="habilitarEdicionesAnuncio"
-                  >
-                    <div class="d-flex flex-column align-center">
-                      <font-awesome-icon
-                        :icon="['fas', 'pencil-alt']"
-                        class="fa-2x"
-                      ></font-awesome-icon>
-                      <v-expand-transition>
-                        <span class="mt-2" v-show="hover">editar</span>
-                      </v-expand-transition>
-                    </div>
-                  </v-btn>
-                </v-hover>
+              <v-btn fab small plain color="white">
+                <div class="d-flex flex-column align-center">
+                  <font-awesome-icon
+                    :icon="['fas', 'shopping-bag']"
+                    class="fa-2x"
+                  ></font-awesome-icon>
+                </div>
+              </v-btn>
+            <!--compras btn-->
 
-                <v-hover v-slot="{ hover }">
-                  <v-btn fab small plain color="green">
-                    <div class="d-flex flex-column align-center">
-                      <font-awesome-icon
-                        :icon="['fas', 'shopping-bag']"
-                        class="fa-2x"
-                      ></font-awesome-icon>
-                      <v-expand-transition>
-                        <span class="mt-2" v-show="hover">compras</span>
-                      </v-expand-transition>
-                    </div>
-                  </v-btn>
-                </v-hover>
-
-                <v-hover v-slot="{ hover }">
-                  <v-btn fab small plain color="green" @click="borrarAnuncio()">
-                    <div class="d-flex flex-column align-center">
-                      <font-awesome-icon
-                        :icon="['fas', 'trash-alt']"
-                        class="fa-2x"
-                      ></font-awesome-icon>
-                      <span class="mt-2" v-show="hover">borrar</span>
-                    </div>
-                  </v-btn>
-                </v-hover>
-              </v-speed-dial>
-              <!--crear el speed-dial-->
+              <v-btn fab small plain color="white" @click="borrarAnuncio()">
+                <div class="d-flex flex-column align-center">
+                  <font-awesome-icon
+                    :icon="['fas', 'trash-alt']"
+                    class="fa-2x"
+                  ></font-awesome-icon>
+                </div>
+              </v-btn>
+            <!--eliminar btn-->
             </div>
             <!--Anuncio Settings-->
 
@@ -920,12 +878,12 @@ export default {
       "getDdlCategorias",
       "getDdlSexo",
       "FormAE",
-    ]),    
+    ]),
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
-        ? { carruselH: "500px", cuerpoAnuncioH: "auto" }
-        : { carruselH: "500px", cuerpoAnuncioH: "500px" };
+        ? { carruselH: "500px", cuerpoAnuncioH: "auto", cuerpoAnuncioW: "auto" }
+        : { carruselH: "500px", cuerpoAnuncioH: "500px", cuerpoAnuncioW: "auto" };
     },
     categoriaSeleccionada() {
       return 1;
@@ -1495,5 +1453,19 @@ export default {
 
 .v-textarea textarea {
   line-height: 1.35rem !important;
+}
+
+.glassy{
+  background: rgba(199, 193, 193, 0.46);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 2;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  max-height: 160px;
+  height: 160px;
 }
 </style>

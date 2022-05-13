@@ -1,13 +1,14 @@
 <template>
-  
+  <v-card flat class="pa-0" style="background-color: #f1f0ef;height: 421px;">
     <file-pond
-        ref="pond"
-        name="filePondImages"
-        @init="handleFilePondInit"
-        :files="imagenesAnuncioFilePond"
-        @processfile="imagenesAnuncioOnProcess"
-        @removefile="imagenesAnuncioOnDelete"
+    ref="pond"
+    name="filePondImages"
+    @init="handleFilePondInit"
+    :files="imagenesAnuncioFilePond"
+    @processfile="imagenesAnuncioOnProcess"
+    @removefile="imagenesAnuncioOnDelete"
     />
+  </v-card>
 </template>
 
 <script>
@@ -47,7 +48,7 @@ setOptions({
   labelFileWaitingForSize: "Verificando",
   labelInvalidField: "Archivo no valido",
   labelIdle:
-    'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
+    'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Explorar </span>',
   server: {
     url: "http://localhost:3000/",
     process: {
@@ -69,8 +70,7 @@ export default {
     imagenes: { type: Array, default: [] },
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     imagenesAnuncioFilePond() {
@@ -95,7 +95,7 @@ export default {
 
       console.log("imagenesAnuncioOnDelete... file");
       console.dir(file);
-      
+
       if (error) {
         console.log("error onProcess", error);
         console.log("file in error", file.file);
@@ -116,31 +116,39 @@ export default {
         this.mixinLlamadaRouter(error);
       }
 
-      this.$emit("iAOnDelete",{imageToDelete: ObjetoImagenDelete.nombre});
+      this.$emit("iAOnDelete", { imageToDelete: ObjetoImagenDelete.nombre });
     },
     imagenesAnuncioOnProcess(error, file) {
-        console.log("imagenesAnuncioOnProcess...");
-        
-        if (error) {
+      console.log("imagenesAnuncioOnProcess...");
+
+      if (error) {
         //Error Object de filepond
         console.log("error onProcess", error);
         console.log("file in error", file.file);
         return;
-        }
+      }
 
-        
-        let ObjetoImagen = {
+      let ObjetoImagen = {
         nombre: JSON.parse(file.serverId)[0],
         posicion: this.imagenesAnuncioFilePond.length || 0,
-        };
-        console.dir(ObjetoImagen);
+      };
+      console.dir(ObjetoImagen);
 
-        this.$emit("iAOnProcess",{...ObjetoImagen});
+      this.$emit("iAOnProcess", { ...ObjetoImagen });
     },
-  }
-  
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.filepond--root {
+  display: flex;
+  flex: column;
+  min-height: 421px;
+  max-height: 421px;
+}
+
+.filepond--item {
+  width: auto;
+}
 </style>

@@ -676,7 +676,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .filepond--root {
         height: 43em;
         max-height: 43em;

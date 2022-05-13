@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid fill-height class="white">
+  <v-container fill-height fluid class="pa-0">
     <v-row no-gutters>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i" style="margin-top: 9px;">
         <!--Aqui hacer el consumo de tarjeta anuncio usuario y pasarle una nueva propiedad, esta debe que tener pordefault un valor 1/0 para no estorbar futuros consumos-->
-        <tarjeta-anuncio-usuario v-bind:anuncioUsuario="anuncio">
+        <tarjeta-anuncio-usuario v-bind:anuncioUsuario="anuncio" class="mx-3 mx-md-2">
         </tarjeta-anuncio-usuario>
       </v-col>
     </v-row>
