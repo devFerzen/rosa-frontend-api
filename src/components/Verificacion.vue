@@ -129,10 +129,8 @@ export default {
         if (this.tipoVerificacion === "verificacionUsuarioCelular") {
           console.log(`verificacionUsuarioCelular: ${this.tipoVerificacion}`)
             params = {
-              input: this.FormV.codigoVerificacion,
-              haha: "haha"
+              input: this.FormV.codigoVerificacion
             };
-            console.dir(params);
             MutateResult = await this.mixinVerificacionCelularComparacion(params);
           }
         } catch (error) {
@@ -140,7 +138,7 @@ export default {
           console.dir(error);
           this.$store.dispatch("activationAlert", {
             type: "error",
-            message: `>>>Error al verificar tu códigio...>>>>${error.mensaje}`,
+            message: `${error.mensaje}`,
           });
 
           return;

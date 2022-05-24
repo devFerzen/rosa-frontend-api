@@ -119,8 +119,9 @@ export default {
                     console.dir(error);
 
                     if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.mensaje;
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        //Error global de Graphql
+                        let _mensaje = JSON.parse(error.graphQLErrors[0].message);
+                        this.MixinResult = new ErrorResult({componenteInterno: {'activationAlert':{ type: 'error', message: `${_mensaje.mensaje}`}}});
                     } else {
                         this.MixinResult = new ErrorResult(error)
                     }

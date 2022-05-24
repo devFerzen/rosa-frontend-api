@@ -1,5 +1,5 @@
 <template>
-  <v-card flat class="pa-0" style="background-color: #f1f0ef;height: 421px;">
+  <v-card flat class="pa-0" style="background-color: #f1f0ef; height: 421px;">
     <file-pond
     ref="pond"
     name="filePondImages"

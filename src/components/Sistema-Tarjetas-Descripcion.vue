@@ -1,11 +1,10 @@
 <template>
   <div class="">
-    <v-row>
+    <v-row align="space-around">
       <v-col
         :cols="gridColCard['cardCols']"
         v-for="(anuncio, key, i) in anunciosBusqueda"
         :key="i"
-        class="px-0 px-sm-2"
       >
         <v-hover v-slot:default="{ hover }">
           <v-card
@@ -21,12 +20,12 @@
                 <div v-if="hover">
                   <div
                     style="
-                      z-index: 2;
+                      z-index: 3;
                       position: absolute;
                       top: 2px;
                       right: 0px;
-                      width: 70px;
-                      height: 150px;
+                      width: 80px;
+                      height: 100%;
                     "
                   >
                     <v-list two-line style="background: none !important">
@@ -52,27 +51,28 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-hover>
+                    </v-list>
+                    <v-list two-line style="background: none !important; position: absolute; bottom:-18px">
                       <v-hover v-slot:default="{ hover }">
-                        <v-list-item
-                          class="white--text font-weight-black text-center"
-                        >
+                        <v-list-item>
                           <v-list-item-content>
                             <v-list-item-title
-                              @click="accionVer(anuncio.id)"
-                              style="cursor: pointer"
+                              class="
+                                font-weight-regular
+                                text-center text--secondary
+                                d-flex flex-row
+                                justify-center align-center
+                              "
                             >
                               <font-awesome-icon
                                 :icon="['fas', 'eye']"
-                                class="fa-2x"
-                                :color="hover ? 'cyan' : 'white'"
+                                class="fa-1x"
+                                color="white"
                               ></font-awesome-icon>
-                            </v-list-item-title>
-                            <v-list-item-subtitle
-                              class="white--text font-weight-black"
-                              v-text="100"
-                            ></v-list-item-subtitle>
+                              <span class="text-caption" style="color: white;">{{100}}k</span>
+                            </v-list-item-title>                        
                           </v-list-item-content>
-                        </v-list-item>
+                        </v-list-item>  
                       </v-hover>
                     </v-list>
                   </div>
@@ -80,16 +80,31 @@
 
                   <row class="glass-infoCard d-flex align-start">
                     <v-col>
-                      <div
-                        class="
-                          text-h4 text-lg-h5
-                          font-weight-black
-                          text-truncate text-capitalize
-                        "
-                        style="color: black; overflow: hidden"
-                      >
-                        {{ anuncio.Sec_Descripcion.titulo }}
-                      </div>
+                      <v-row no-gutters>
+                       <v-col cols="12">
+                         <div class="d-flex flex-row"
+                          >
+                          <div
+                            class="
+                              text-h5 text-md-h6
+                              font-weight-black
+                              text-truncate text-capitalize
+                            "
+                            style="color: black; overflow: hidden; max-width: 195px;"
+                          >
+                            {{ 'anuncio.Sec_Descripcion.titulo' }}
+                          </div>
+                          <div
+                            class="
+                              text-h6                          
+                            "
+                            style="overflow: hidden"
+                          >
+                            ,{{ 24 }}
+                          </div>
+                          </div>
+                       </v-col>        
+                      </v-row>
                       <p
                         class="
                           text-caption text-justify
@@ -134,8 +149,8 @@
                     position: absolute;
                     top: 15px;
                     right: 0px;
-                    width: 70px;
-                    height: 150px;
+                    width: 80px;
+                    height: 100%;
                   "
                 >
                   <v-list two-line style="background: none !important">
@@ -159,27 +174,28 @@
                         ></v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
+                  </v-list>
 
+                  <v-list two-line style="background: none !important; position: absolute; bottom:0px">
                     <v-list-item>
                       <v-list-item-content>
                         <v-list-item-title
                           class="
-                            black--text
                             font-weight-regular
                             text-center text--secondary
+                            d-flex flex-row
+                            justify-center align-center
                           "
                         >
                           <font-awesome-icon
                             :icon="['fas', 'eye']"
-                            class="fa-2x"
+                            class="fa-1x"
+                            color="white"
                           ></font-awesome-icon>
-                        </v-list-item-title>
-                        <v-list-item-subtitle
-                          class="black--text font-weight-regular text-center"
-                          v-text="100"
-                        ></v-list-item-subtitle>
+                          <span class="text-caption" style="color: white;">{{100}}k</span>
+                        </v-list-item-title>                        
                       </v-list-item-content>
-                    </v-list-item>
+                    </v-list-item>                 
                   </v-list>
                 </div>
                 <!--vista corazón y ojo-->
@@ -461,7 +477,7 @@
                           </v-col>
                           <v-col cols="3" md="3" align="center">
                             <div
-                              class="subtitle-1 green-font text-weight-black"
+                              class="subtitle-1 pink-font text-weight-black"
                             >
                               <font-awesome-icon icon="dollar-sign" />
                               {{ tarifa.precio }}
@@ -706,6 +722,7 @@ export default {
   },
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
+    colUsuarioDesc: { type: String, default: '4' }
   },
   data() {
     return {
@@ -818,13 +835,13 @@ export default {
     tarjetaWH() {
       const { sm, xs } = this.$vuetify.breakpoint;
       return xs || sm
-        ? { carruselH: "520" }
-        : { carruselH: "600", carruselW: "600" };
+        ? { carruselH: "400" }
+        : { carruselH: "400", carruselW: "600" };
     },
     gridColCard() {
       const { sm, xs, md } = this.$vuetify.breakpoint;
 
-      return xs || sm ? { cardCols: 12 } : { cardCols: 4 };
+      return xs || sm ? { cardCols: 12 } : { cardCols: this.colUsuarioDesc };
     },
     fullAnuncioBodyWH() {
       const { sm, xs, md } = this.$vuetify.breakpoint;
@@ -992,7 +1009,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .full-anuncio-seccion {
   height: auto;
   min-height: 270px;
@@ -1025,6 +1042,8 @@ export default {
   height: 50vh;
 }
 
+
+
 .green-font {
   color: #9fe676 !important;
 }
@@ -1032,6 +1051,10 @@ export default {
 .suave-pink-font {
   background-color: #e47ab6 !important;
   color: white !important;
+}
+
+.pink-font {
+  color: #e0409a !important;
 }
 
 .anuncioHover {

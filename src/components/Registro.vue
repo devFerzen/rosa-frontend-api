@@ -96,11 +96,11 @@ export default {
         numero_telefonico: "",
       },
       emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        (v) => !!v || "Correo es requerido",
+        (v) => /.+@.+\..+/.test(v) || "Correo invalido",
       ],
       contrasenaRules: [(v) => !!v || "Contraseña es requerida"],
-      celularRules: [(v) => !!v || "Contraseña es requerida"],
+      celularRules: [(v) => !!v || "Celular invalido"],
       panelCSS: {
         panelCardHeight: "82vh",
       },
@@ -118,23 +118,12 @@ export default {
           MutateResult = await this.mixinRegistro(this.FormR);
         } catch (error) {
           console.log("vue registrandoUsuario en error...");
-          console.dir(error);
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `>>>Error al registrar...>>>>${error.mensaje}`,
-          });
+          this.mixinLlamadaRouter(error);
           return;
         }
 
         console.log("vue registrandoUsuario... MutateResult");
         console.dir(MutateResult);
-
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: `${MutateResult.mensaje}`,
-        });
-        this.$store.dispatch("setSesion", MutateResult.data);
-        this.$store.dispatch("panelHerramientasRegistro", false);
         this.mixinLlamadaRouter(MutateResult);
       }
     },

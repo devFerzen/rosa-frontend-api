@@ -5,11 +5,11 @@
     :height="panelCSS.panelCardHeight"
     max-height="panelCSS.panelCardMaxHeight"
     min-height="13vh"
-    color="primary"
+    color="pink"
     flat
     style="border-radius: 19px !important"
   >
-    <v-system-bar height="30" color="primary" class="rounded-xl">
+    <v-system-bar height="30" color="pink" class="rounded-xl">
       <v-spacer></v-spacer>
       <v-btn text icon @click="barActionBtn">
         <span class="material-icons">{{
@@ -25,12 +25,11 @@
             <v-text-field
               v-model="busquedaBuscarPor"
               placeholder="Búsqueda..."
-              class="select609"
+              class="error609TextField"
               color="pink"
-              background-color="#f8ffff"
-              filled
               dense
-              rounded
+              outlined
+              solo
             >
             </v-text-field>
           </v-col>
@@ -71,14 +70,12 @@
               :item-value="'descripcion'"
               label="Estado"
               placeholder="Estado"
-              class="mb-0 select609"
-              filled
-              dense
-              rounded
-              solo
-              single-line
               :menu-props="{ maxHeight: 150, offsetY: true }"
-              background-color="#eef0f2"
+              single-line
+              solo
+              dense
+              outlined
+              class="error609TextField mb-0 select609"
             >
             </v-select>
           </v-col>
@@ -97,15 +94,13 @@
               :item-text="'descripcion'"
               :item-value="'descripcion'"
               label="Municipio"
-              class="select609"
               placeholder="Municipio"
-              filled
-              dense
-              rounded
-              solo
-              single-line
               :menu-props="{ maxHeight: 150, offsetY: true }"
-              background-color="#eef0f2"
+              single-line
+              solo
+              dense
+              outlined
+              class="error609TextField mb-0 select609"
             >
             </v-select>
           </v-col>
@@ -122,12 +117,13 @@
               mandatory
               show-arrows
               center-active
+              mandatory
             >
               <v-slide-item
-                v-for="categoria in getDdlCategorias"
+                v-for="categoria in getDdlCategoriasCorrection"
                 :value="categoria.descripcion"
                 :key="categoria.no_id"
-                v-slot="{ active }"
+                v-slot="{ active, toggle }"
               >
                 <v-card
                   class="
@@ -139,18 +135,18 @@
                     my-1
                   "
                   elevation="1"
-                  height="32"
+                  height="30"
                   width="90"
                   :class="
                     active
                       ? 'input-categoria-active'
                       : 'input-categoria-inactive'
                   "
-                  @click="onCategoriaClick(categoria.descripcion)"
+                  @click="toggle"
                 >
                   <div
-                    class="text-captio text-center"
-                    style="font-size: 0.8rem; line-height: 1rem"
+                    class="text-caption text-center"
+                    style="line-height: 1rem"
                   >
                     {{ categoria.descripcion }}
                   </div>
@@ -164,27 +160,25 @@
             cols="5"
             :lg="4"
             :order="panelCSS.colOrder.sexo"
-            class="mb-4"
             style="height: 50px"
             v-show="extraInputView"
           >
-            <v-select
-              v-model="busquedaSexo"
-              :menu-props="{ top: false, offsetY: true }"
-              :items="getDdlSexo"
-              :item-text="'descripcion'"
-              :item-value="'descripcion'"
-              label="Sexo"
-              placeholder="Sexo"
-              class="select609"
-              filled
-              dense
-              rounded
-              solo
-              single-line
-              background-color="#eef0f2"
-            >
-            </v-select>
+            <v-row class="ml-1">
+              <v-select
+                v-model="busquedaSexo"
+                :menu-props="{ top: false, offsetY: true }"
+                :items="getDdlSexo"
+                :item-text="'descripcion'"
+                :item-value="'descripcion'"
+                label="Sexo"
+                placeholder="Sexo"
+                solo
+                dense
+                outlined
+                class="error609TextField select609"
+              >
+              </v-select>
+            </v-row> 
           </v-col>
           <!--sexo-->
         </v-row>
@@ -192,31 +186,19 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-row align="center" justify="space-around" style="position: relative">
+      <v-row justify="center" style="position: relative">
         <v-btn
           depressed
           outlined
           rounded
           color="white"
-          class="panel-herramientas-btnBuscar"
+          class="panel-herramientas-btnBuscar rounded-xl btn-menu-pcview errorBoxShadow"
           :class="btnBuscarMinMaxClass"
           width="120"
           @click="buscar"
         >
           Buscar
-        </v-btn>
-        <v-btn
-          depressed
-          outlined
-          rounded
-          color="white"
-          class="panel-herramientas-btnAnunciate"
-          :class="btnAnunciateMinMaxClass"
-          width="120"
-          @click="anunciate"
-        >
-          Anunciate
-        </v-btn>
+        </v-btn>        
       </v-row>
     </v-card-actions>
   </v-card>
@@ -263,6 +245,10 @@ export default {
       "getDdlCategorias",
       "getDdlSexo",
     ]),
+    getDdlCategoriasCorrection(){
+      this.busquedaCategorias = "Escrots";
+      return this.getDdlCategorias;
+    },
     colSize() {
       return {
         formSearchField: 10,
@@ -286,9 +272,6 @@ export default {
     },
   },
   methods: {
-    onCategoriaClick(nuevaDescripcion) {
-      this.busquedaCategorias = nuevaDescripcion;
-    },
     panelHerramientasRegistro(value) {
       this.$store.dispatch("panelHerramientasRegistro", value);
     },
@@ -321,6 +304,8 @@ export default {
       }
 
       this.$store.dispatch("querySet", Query);
+      console.log(`querySet`);
+      console.dir(querySet);
     },
     async anunciate() {
       let DispatchResult;
@@ -374,21 +359,19 @@ export default {
         `vue PanelHerramientas: barActionBtn... isMin ${this.panelCSS.isMin}`
       );
 
-      let _busquedaCategorias = this.busquedaCategorias;
-
       //Resultados para dar a una vista mb
       if (!this.panelCSS.isMin) {
         console.log(`minimizeHerramientas`);
         this.$emit("activandoGrid", {
           herramientasWidth: { lg: 5, md: 6, sm: 8 },
           sistemaWidth: { lg: 12 },
+          colUsuarioDesc: 3
         });
         this.$emit("panelMinClass", {
           panelHerramientasClass: "panel-herramientas-mbview",
         });
 
         this.minimizeHerramientas();
-        this.busquedaCategorias = _busquedaCategorias;
         return;
       }
 
@@ -397,18 +380,17 @@ export default {
       this.$emit("activandoGrid", {
         herramientasWidth: { lg: 3, md: 6, sm: 8 },
         sistemaWidth: { lg: 9 },
+        colUsuarioDesc: 4
       });
       this.$emit("panelMinClass", {
         panelHerramientasClass: "panel-herramientas-pcview",
       });
       this.maximizeHerramientas();
-      this.busquedaCategorias = _busquedaCategorias;
     },
     minimizeHerramientas() {
       const { sm, md, xs } = this.$vuetify.breakpoint;
 
       this.panelCSS.isMin = true;
-      this.busquedaCategorias = 0;
       this.colSize["formSearchField"] = 10;
       this.colSize["formCategoriasField"] = 12;
       this.colSize["formCategorias"] = 5;
@@ -424,7 +406,6 @@ export default {
       }
 
       this.panelCSS.isMin = false;
-      this.busquedaCategorias = 0;
       this.colSize["formSearchField"] = 10;
       this.colSize["formCategoriasField"] = 12;
       this.colSize["formCategorias"] = 5;
@@ -447,15 +428,14 @@ export default {
   display: none;
 }
 
-.panel-herramientas-btnBuscar {
-  border: 3px solid white !important;
-  background-color: #e5ae78;
-  top: 13px;
-  left: 8px;
-}
-
 .panel-herramientas-masFiltros {
   box-shadow: none !important;
+}
+
+.panel-herramientas-btnBuscar {
+  border: 3px solid white !important;
+  background-color: #e0409a;
+  top: 13px;
 }
 
 .panel-herramientas-btnBuscarMin {
@@ -477,7 +457,7 @@ export default {
 
 .input-categoria-active {
   color: white !important;
-  background-color: #e994c496 !important;
+  background-color: #e0409a !important;
 }
 
 .input-categoria-inactive {
@@ -487,13 +467,15 @@ export default {
 
 .v-slide-group__prev > .v-icon,
 .v-slide-group__next > .v-icon {
-  font-size: 2rem;
-  color: #e994c496;
+  font-size: 1.8rem!important;
+  color: white;
+  background-color: #e0409a;
+  border-radius: 18px;
 }
 
-.v-slide-group__prev > .v-icon .v-icon--disabled,
-.v-slide-group__next > .v-icon .v-icon--disabled {
-  font-size: 2rem;
-  color: #e994c496;
+.v-slide-group__prev > .v-icon--disabled,
+.v-slide-group__next > .v-icon--disabled {
+  font-size: 1.2rem!important;
+  background-color: #e47ab6;
 }
 </style>

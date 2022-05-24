@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col :cols="colsTarjetaUsuario['colsTarjeta']" v-for="(anuncio, key, i) in anunciosUsuario" :key="i" style="margin-top: 9px;">
         <!--Aqui hacer el consumo de tarjeta anuncio usuario y pasarle una nueva propiedad, esta debe que tener pordefault un valor 1/0 para no estorbar futuros consumos-->
-        <tarjeta-anuncio-usuario v-bind:anuncioUsuario="anuncio" class="mx-3 mx-md-2">
+        <tarjeta-anuncio-usuario v-bind:anuncioUsuario="anuncio" class="ml-2 mr-3 mx-md-2">
         </tarjeta-anuncio-usuario>
       </v-col>
     </v-row>
@@ -96,8 +96,26 @@
 
     },
     created(){
-      console.log(`anuncios: `);
-      console.table(this.anunciosUsuario);
     }
   };
 </script>
+
+<style>
+  .v-window__prev,
+  .v-window__next {
+    background: none;
+    margin: 0;
+  }
+
+  .v-window__prev > .v-btn,
+  .v-window__prev > .v-btn {
+    font-size: 2rem;
+    color: #e994c496;
+  }
+
+  .v-window__next > .v-btn,
+  .v-window__next > .v-btn {
+    font-size: 2rem;
+    color: #e994c496;
+  }
+</style>

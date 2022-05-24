@@ -3,13 +3,55 @@
     <v-container fluid class="pa-0">
       <v-row class="" no-gutters>
         <v-col cols="12" md="3" v-if="edicionView">
-            <file-pond-Imagenes-Anuncio
-              :imagenes="imagenesAnuncioFilePond"
-              @iAOnDelete="iAOnDelete"
-              @iAOnProcess="iAOnProcess"
-            ></file-pond-Imagenes-Anuncio>
+          <file-pond-Imagenes-Anuncio
+            :imagenes="imagenesAnuncioFilePond"
+            @iAOnDelete="iAOnDelete"
+            @iAOnProcess="iAOnProcess"
+          ></file-pond-Imagenes-Anuncio>
         </v-col>
-        <v-col cols="12" :md="edicionView ? 9 : 6" v-else>
+        <v-col cols="12" :md="edicionView ? 9 : 6" style="position: relative;" v-else>
+          <div
+            style="position: absolute; top: 17px; right: 0; width:38px"
+            class="d-flex flex-column glassy rounded-xl justify-center"
+          >
+            <v-btn
+              fab
+              small
+              plain
+              color="white"
+              @click="habilitarEdicionesAnuncio"
+            >
+              <div class="d-flex flex-column align-center">
+                <font-awesome-icon
+                  :icon="['fas', 'pencil-alt']"
+                  class="fa-2x"
+                ></font-awesome-icon>
+              </div>
+            </v-btn>
+            <!--editar btn-->
+
+            <v-btn fab small plain color="white">
+              <div class="d-flex flex-column align-center">
+                <font-awesome-icon
+                  :icon="['fas', 'shopping-bag']"
+                  class="fa-2x"
+                ></font-awesome-icon>
+              </div>
+            </v-btn>
+            <!--compras btn-->
+
+            <v-btn fab small plain color="white" @click="borrarAnuncio()">
+              <div class="d-flex flex-column align-center">
+                <font-awesome-icon
+                  :icon="['fas', 'trash-alt']"
+                  class="fa-2x"
+                ></font-awesome-icon>
+              </div>
+            </v-btn>
+            <!--eliminar btn-->
+          </div>
+          <!--Anuncio Settings-->
+
           <v-carousel
             :height="tarjetaWH['carruselH']"
             style="border-radius: 8px;"
@@ -28,30 +70,12 @@
 
         <v-col cols="12" :md="edicionView ? 9 : 6">
           <v-card class="pa-1" flat :height="tarjetaWH['cuerpoAnuncioH']">
-            <v-card-title class="pt-0">
+            <v-card-title class="pt-0" v-show="!edicionView">
               <v-container class="pa-0">
                 <v-row no-gutters class="align-end">
-                  <v-col cols="10">
+                  <v-col>
                     <div class="text-h4 text-md-h6 text-truncate">
                       {{ anuncioUsuario.Sec_Descripcion.titulo }}
-                    </div>
-                  </v-col>
-                  <v-col cols="2" align="center">
-                    <div class="body-2">
-                      <v-btn
-                        fab
-                        text
-                        depressed
-                        plain
-                        small
-                        @click="accionCorazon(anuncio.id)"
-                      >
-                        <font-awesome-icon
-                          :icon="['fas', 'heart']"
-                          class="fa-2x"
-                          color="red"
-                        ></font-awesome-icon>
-                      </v-btn>
                     </div>
                   </v-col>
                 </v-row>
@@ -67,12 +91,11 @@
                 </v-row>
                 <!--Ciudad y estado-->
               </v-container>
-              <!--Normal View-->
+              <!--Descripcion-->
             </v-card-title>
-            <!--Titulo principal-->
 
-            <v-card-text class="pa-0">
-              <v-row align="center" justify="center" no-gutters>
+            <v-card-text class="pa-0 mt-4">
+              <v-row align="space-between" justify="center" no-gutters>
                 <v-btn
                   depressed
                   rounded
@@ -117,11 +140,8 @@
             </v-card-text>
             <!--acciones de tabs-->
 
-            <v-expand-x-transition>
-              <v-card-text
-                v-if="revealTarifa"
-                class="full-anuncio-seccion d-flex justify-center pb-1 pt-0"
-              >
+            <v-expand-x-transition style="position: absolute; bottom: 0px;">
+              <v-card-text v-if="revealTarifa" class="full-anuncio-seccion d-flex justify-center pb-1 pt-0">
                 <v-sheet
                   fluid
                   elevation="6"
@@ -129,10 +149,9 @@
                   :class="fullAnuncioSeccionWeb"
                   width="300"
                   height="fit-content"
+                  style="position: relative;"
                 >
-                  <div
-                    v-if="nuevaTarifaView"
-                  >
+                  <div v-if="nuevaTarifaView">
                     <div
                       class="
                         text-h6
@@ -154,73 +173,75 @@
                     <v-form ref="tarifaEdit">
                       <v-card-text class="px-0 py-0">
                         <v-row
-                          align="center"
-                          justify="center"
-                          class="pt-6 pt-md-2"
-                          no-gutters
+                          class="pt-6 pt-md-2" no-gutters
                         >
-                          <v-col cols> </v-col>
-                          <v-col cols="7" align="center" class="mr-3">
-                            <v-text-field
-                              label="Nombre"
-                              v-model="nuevaTarifa.nombre"
-                              style="
-                                margin: 0 !important;
-                                padding: 0 !important;
-                              "
-                            >
-                            </v-text-field>
+                          <v-col cols="8" class="pr-4">
+                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
+                                nombre
+                              </div>
+                              <v-row no-gutters>
+                                <v-text-field
+                                  v-model="nuevaTarifa.nombre"
+                                  class="error609TextField"
+                                  color="pink"
+                                  dense
+                                  outlined
+                                  solo
+                                  label="teclea aquí"
+                                >
+                                </v-text-field>
+                              </v-row>
                           </v-col>
-                          <v-col cols="3" align="center">
-                            <v-text-field
-                              label="Precio"
-                              v-model="nuevaTarifa.precio"
-                              prefix="$"
-                              placeholder="0.00"
-                              style="
-                                margin: 0 !important;
-                                padding: 0 !important;
-                              "
-                            >
-                            </v-text-field>
+                          <v-col cols="4">
+                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
+                                precio
+                              </div>
+                              <v-row no-gutters>
+                                <v-text-field
+                                  v-model="nuevaTarifa.precio"
+                                  prefix="$"
+                                  dense
+                                  outlined
+                                  solo
+                                  label="0.00"
+                                >
+                                </v-text-field>
+                              </v-row>
                           </v-col>
-                          <v-col cols> </v-col>
                         </v-row>
-                        <v-row no-gutters>
-                          <v-col cols> </v-col>
-                          <v-col cols="10" class="mr-3">
-                            <v-textarea
-                              counter
-                              label="Descripción"
-                              rows="3"
-                              style="
-                                margin: 0 !important;
-                                padding: 0 !important;
-                              "
-                              v-model="nuevaTarifa.descripcion"
-                            >
-                            </v-textarea>
+                        <!--nombre y precio tarifa-->
+                        
+                        <v-row no-gutters>                          
+                          <v-col cols="12">
+                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
+                                descripción
+                              </div>
+                              <v-row no-gutters>
+                                <v-textarea
+                                  counter
+                                  rows="3"
+                                  dense
+                                  outlined
+                                  solo
+                                  label="teclea aquí"
+                                  v-model="nuevaTarifa.descripcion"
+                                >
+                                </v-textarea>
+                              </v-row>
                           </v-col>
-                          <v-col cols></v-col>
                         </v-row>
                       </v-card-text>
                       <!--Nueva Tarifa Inputs-->
-                      <v-card-actions>
-                          <v-btn
-                            color="green"
-                            class="mx-2 rounded-lg"
-                            @click="salvadoDeTarifa"
-                            tile
-                            outlined
-                            raised
-                            rounded
-                          >
-                            <font-awesome-icon
-                              :icon="['fas', 'save']"
-                              class="fa-2x mr-1"
-                            ></font-awesome-icon>
-                              Guardar
-                          </v-btn>
+                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                        <v-btn
+                          @click="salvadoDeTarifa"
+                          color="primary"
+                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                          tile
+                          raised
+                        >
+                          Guardar
+                        </v-btn>
                         <!--guardar tarifa-->
                       </v-card-actions>
                     </v-form>
@@ -233,39 +254,30 @@
                       :key="i"
                       style="position: relative"
                     >
-                      <v-row
-                        align="center"
-                        justify="center"
-                        class="pt-6 pt-md-2"
-                        no-gutters
-                      >
-                        <v-col cols></v-col>
-                        <v-col cols="5" :md="7" align="center">
+                      <v-row class="pt-2" align="space-around" no-gutters>
+                        <v-col align="left" class="pl-2">
                           <div class="text-h6 font-weight-bold">
                             {{ tarifa.nombre }}
                           </div>
                         </v-col>
-                        <v-col cols="3" align="center">
-                          <div class="subtitle-1 green-font text-weight-black">
+                        <v-col cols="5" align="center" class="pr-2">
+                          <div class="subtitle-1 pink-font text-weight-black">
                             <font-awesome-icon icon="dollar-sign" />
-                            {{ tarifa.precio }}
+                            {{ "99,999.99" }}
                           </div>
                         </v-col>
-                        <v-col cols></v-col>
                       </v-row>
                       <!--Nombre Precio-->
 
-                      <v-row no-gutters>
-                        <v-col> </v-col>
-                        <v-col cols="7" md="9" align="start">
+                      <v-row no-gutters align="center" justify="center">
+                        <v-col cols="7" md="9">
                           <div
                             class="body-2 text-center"
-                            style="min-height: 42px"
+                            style="min-height: 42px; line-height: 1rem; white-space: pre-line;"
                           >
                             {{ tarifa.descripcion }}
                           </div>
                         </v-col>
-                        <v-col> </v-col>
                       </v-row>
                       <!--Descripcion-->
 
@@ -327,11 +339,9 @@
                   :class="fullAnuncioSeccionWeb"
                   width="300"
                   height="fit-content"
+                  style="position: relative;"
                 >
-                  <div
-                    v-if=" nuevoContactoView
-                    "
-                  >
+                  <div v-if="nuevoContactoView">
                     <div
                       class="
                         text-h6
@@ -353,62 +363,74 @@
                     <v-form ref="contactoEdit">
                       <v-card-text class="px-0 py-0">
                         <v-row class="pt-6 pt-md-2" no-gutters>
-                          <v-col cols="2" class="mx-1">
-                            <v-select
-                              v-model="nuevoContacto.Tipo"
-                              :menu-props="{ top: false, offsetY: true }"
-                              :items="tiposContacto"
-                              item-text="categoria"
-                              item-value="icono"
-                              return-object
-                            >
-                              <template v-slot:selection="data">
-                                <font-awesome-icon
-                                  :icon="[data.item.categoria, data.item.icono]"
+                          <v-col cols="3">
+                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
+                                red
+                              </div>
+                              <v-row no-gutters>
+                                <v-select
+                                  v-model="nuevoContacto.Tipo"
+                                  :menu-props="{ top: false, offsetY: true }"
+                                  :items="tiposContacto"
+                                  item-text="categoria"
+                                  item-value="icono"
+                                  return-object
+                                  solo
+                                  dense
+                                  outlined
+                                  class="error609TextField"
                                 >
-                                </font-awesome-icon>
-                              </template>
-                              <template v-slot:item="data">
-                                <font-awesome-icon
-                                  :icon="[data.item.categoria, data.item.icono]"
-                                >
-                                </font-awesome-icon>
-                              </template>
-                            </v-select>
+                                  <template v-slot:selection="data">
+                                    <font-awesome-icon
+                                      :icon="[data.item.categoria, data.item.icono]"
+                                    >
+                                    </font-awesome-icon>
+                                  </template>
+                                  <template v-slot:item="data">
+                                    <font-awesome-icon
+                                      :icon="[data.item.categoria, data.item.icono]"
+                                    >
+                                    </font-awesome-icon>
+                                  </template>
+                                </v-select>
+                              </v-row>
                           </v-col>
 
-                          <v-col cols="9">
-                            <v-text-field
-                              label="url..."
-                              v-model="nuevoContacto.contacto"
-                            >
-                            </v-text-field>
+                          <v-col cols="9" class="pl-4">
+                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
+                                url
+                              </div>
+                              <v-row no-gutters>
+                                <v-text-field
+                                  v-model="nuevoContacto.contacto"
+                                  class="error609TextField"
+                                  color="pink"
+                                  dense
+                                  outlined
+                                  solo
+                                  label="teclea aquí"
+                                >
+                                </v-text-field>
+                              </v-row>
                           </v-col>
                         </v-row>
                         <!-- Input nuevo contacto-->
                       </v-card-text>
                       <!--Cuerpo form nuevo contacto-->
 
-                      <v-card-actions>
-                          <v-btn
-                            color="green"
-                            class="mx-2 rounded-lg"
-                            @click="salvadoDeContacto"
-                            tile
-                            outlined
-                            raised
-                            rounded
-                          >
-                            <font-awesome-icon
-                              :icon="['fas', 'save']"
-                              class="fa-2x mr-1"
-                            ></font-awesome-icon>
-                              Guardar
-                          </v-btn>
+                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                        <v-btn
+                          @click="salvadoDeContacto"
+                          color="primary"
+                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                          tile
+                          raised
+                        >
+                          Guardar
+                        </v-btn>
                       </v-card-actions>
                     </v-form>
                     <!--Form nuevo contacto-->
-
                   </div>
                   <!--Nueva creacion contacto-->
 
@@ -437,93 +459,112 @@
                             v-for="(contacto, i) in contactosUsuario"
                             :key="i"
                             flat
-                          >
-                          <v-sheet
                             :style="{
-                              'background-color': !contactosSeleccionados.includes(i) ? 'white' : 'pink',
+                              'background-color': !contactosSeleccionados.includes(i)
+                                ? 'white'
+                                : 'pink',
                             }"
                             shaped
-                            :elevation=" !contactosSeleccionados.includes(i) ? 0 : 4"
+                            :elevation="
+                              !contactosSeleccionados.includes(i) ? 0 : 4
+                            "
                             class="mb-2"
                           >
-                            <v-list
-                              color="transparent"
-                              dense
-                              :disable="contactosSeleccionados.includes(i) ? false : true"
-                            >
-                              <v-list-item>
-                                <v-list-item-avatar
-                                  :color="
-                                    tiposContacto.find(
-                                      (tipoContacto) =>
-                                        tipoContacto.icono ==
-                                        contacto.Tipo.icono
-                                    )['color']
-                                  "
-                                >
-                                  <font-awesome-icon
-                                    :icon="[
-                                      contacto.Tipo.categoria,
-                                      contacto.Tipo.icono,
-                                    ]"
-                                    class="fa-2x"
-                                    color="white"
-                                  />
-                                </v-list-item-avatar>
+                           
+                              <v-list
+                                color="transparent"
+                                dense
+                                :disable="
+                                  contactosSeleccionados.includes(i)
+                                    ? false
+                                    : true
+                                "
+                              >
+                                <v-list-item>                                 
+                                  <v-list-item-content>
+                                    <v-card
+                                      elevation="2"
+                                      background-color="#f8ffff"
+                                      outlined
+                                      rounded-xl
+                                      style="border-radius: 20px;"
+                                    >                                      
+                                      <v-row align="space-between" no-gutters style="height: 34px;">
+                                        <v-col
+                                          v-show="edicionView"
+                                          cols="3"
+                                          align="center"
+                                        >
+                                          <v-switch
+                                            v-model="contactosSeleccionados"
+                                            color="primary"
+                                            :value="i"
+                                            style="margin: 0; padding-left: .7rem;" 
+                                          ></v-switch>
+                                        </v-col>
+                                        <v-col align="center" style="padding-top: 6%;">
+                                          {{contacto.contacto}}
+                                        </v-col>
+                                      </v-row>
+                                    </v-card>
+                                  </v-list-item-content>
+                                  <v-list-item-avatar class="ml-2"
+                                    :color="
+                                      tiposContacto.find(
+                                        (tipoContacto) =>
+                                          tipoContacto.icono ==
+                                          contacto.Tipo.icono
+                                      )['color']
+                                    "
+                                  >
+                                    <font-awesome-icon
+                                      :icon="[
+                                        contacto.Tipo.categoria,
+                                        contacto.Tipo.icono,
+                                      ]"
+                                      class="fa-2x"
+                                      color="white"
+                                    />
+                                  </v-list-item-avatar>
+                                </v-list-item>
+                              </v-list>
+                              <!--cuerpo contacto -->
 
-                                <v-list-item-action class="mx-0" v-show="edicionView">
-                                  <v-switch
-                                    v-model="contactosSeleccionados"
-                                    color="primary"
-                                    :value="i"
-                                  ></v-switch>
-                                </v-list-item-action>
-
-                                <v-list-item-content class="ml-2">
-                                  <v-list-item-title>
-                                    {{ contacto.contacto }}
-                                  </v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list>
-                            <!--cuerpo contacto -->
-
-                            <div
-                              style="
+                              <div
+                                style="
                                 position: absolute;
-                                bottom: 0;
+                                bottom: -2px;
                                 right: 10%;
                               "
-                              v-show="edicionView"
-                            >
-                              <v-btn
-                                fab
-                                icon
-                                small
-                                depressed
-                                color="error"
-                                @click="eliminarContacto(i)"
+                                v-show="edicionView"
                               >
-                                <font-awesome-icon
-                                  :icon="['fas', 'trash-alt']"
-                                ></font-awesome-icon>
-                              </v-btn>
+                                <v-btn
+                                  fab
+                                  icon
+                                  small
+                                  depressed
+                                  color="error"
+                                  @click="eliminarContacto(i)"
+                                >
+                                  <font-awesome-icon
+                                    :icon="['fas', 'trash-alt']"
+                                  ></font-awesome-icon>
+                                </v-btn>
 
-                              <v-btn
-                                fab
-                                icon
-                                small
-                                depressed
-                                color="blue"
-                                @click="prepararEditContacto(i)"
-                              >
-                                <font-awesome-icon
-                                  :icon="['fas', 'pencil-alt']"
-                                ></font-awesome-icon>
-                              </v-btn>
-                            </div>
-                            <!--Acciones Listado contactos-->
-                          </v-sheet>
+                                <v-btn
+                                  fab
+                                  icon
+                                  small
+                                  depressed
+                                  color="blue"
+                                  @click="prepararEditContacto(i)"
+                                >
+                                  <font-awesome-icon
+                                    :icon="['fas', 'pencil-alt']"
+                                  ></font-awesome-icon>
+                                </v-btn>
+                              </div>
+                              <!--Acciones Listado contactos-->
                           </v-card>
                           <!--list contactos-->
                         </div>
@@ -536,158 +577,211 @@
               </v-card-text>
               <!--v-card Contacto-->
 
-              <v-card-text
-                class="full-anuncio-seccion d-flex justify-center pb-1 pt-0"
-              >
+              <v-card-text class="d-flex justify-center pb-1 pt-0">
                 <v-sheet
                   fluid
-                  elevation="6"
-                  class="rounded-xl my-2 pa-3 full-anuncio-seccion"
+                  elevation="0"
+                  class="full-anuncio-seccion"
                   :class="fullAnuncioSeccionWeb"
-                  width="300"
-                  height="fit-content"
                   v-show="nuevaDescripcionView"
                 >
-                  <div
-                    class="
-                      text-h6
-                      green-font
-                      text-weight-black text-center
-                      py-1
-                    "
-                  >
-                    {{ `Descripción Anuncio` }}
-                  </div>
-                  <!--titulo-->
-                  <v-form ref="descripcionEdit">
+                  <v-form ref="descripcionEdit" style="margin-top: 16px;">
                     <v-row no-gutters>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="anuncioUsuario.Sec_Descripcion.titulo"
-                          color="pink"
-                          background-color="#f8ffff"
-                          label="Titulo"
-                          filled
-                          dense
-                          rounded
-                          outlined
-                          single-line
+                      <v-col cols="12" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
                         >
-                        </v-text-field>
-                        <!--input titulo-->
+                          título
+                        </div>
+                        <v-row no-gutters>
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="anuncioUsuario.Sec_Descripcion.titulo"
+                              class="error609TextField"
+                              color="pink"
+                              dense
+                              outlined
+                              solo
+                              label="teclea aquí"
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
                       </v-col>
+                      <!--input titulo-->
                     </v-row>
+                    <!--row titulo y edad-->
+
                     <v-row no-gutters>
-                      <v-col cols="12" class="mr-2">
-                        <v-select
-                          v-model="anuncioUsuario.Sec_Descripcion.estado"
-                          :menu-props="{ top: false, offsetY: true }"
-                          :items="getDdlEstados"
-                          :item-text="'descripcion'"
-                          :item-value="'descripcion'"
-                          filled
-                          dense
-                          rounded
-                          solo
-                          outlined
-                          label="Estados"
+                      <v-col cols="11" md="6" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
                         >
-                          <template v-slot:selection="{ item }">
-                            <span v-if="item.descripcion.length"
-                              >{{ item.descripcion.slice(0, item.descripcion.length) }}</span>
-                            <span v-else>{{item.descripcion}}</span>
-                          </template>
-                        </v-select>
+                          estados
+                        </div>
+                        <v-row no-gutters>
+                          <v-select
+                            v-model="anuncioUsuario.Sec_Descripcion.estado"
+                            :menu-props="{ top: false, offsetY: true }"
+                            :items="getDdlEstados"
+                            :item-text="'descripcion'"
+                            :item-value="'descripcion'"
+                            class="error609TextField"
+                            dense
+                            outlined
+                            solo
+                          >
+                            <template v-slot:selection="{ item }">
+                              <span v-if="item.descripcion.length">{{
+                                item.descripcion.slice(
+                                  0,
+                                  item.descripcion.length
+                                )
+                              }}</span>
+                              <span v-else>{{ item.descripcion }}</span>
+                            </template>
+                          </v-select>
+                        </v-row>
                         <!--input estados-->
                       </v-col>
 
-                      <v-col cols>
-                        <v-select
-                          v-model="anuncioUsuario.Sec_Descripcion.ciudad"
-                          :menu-props="{ top: false, offsetY: true }"
-                          :items="getDdlMunicipios"
-                          :item-text="'descripcion'"
-                          :item-value="'descripcion'"
-                          filled
-                          label="Municipios"
-                          outlined
-                          solo
-                          rounded
-                          dense
+                      <v-col cols="11" md="6" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
                         >
-                          <template v-slot:selection="{ item }">
-                            <span>{{item.descripcion}}</span>
-                          </template>
-                        </v-select>
-                        <!--input municipios-->
+                          municipios
+                        </div>
+                        <v-row no-gutters>
+                          <v-select
+                            v-model="anuncioUsuario.Sec_Descripcion.ciudad"
+                            :menu-props="{ top: false, offsetY: true }"
+                            :items="getDdlMunicipios"
+                            :item-text="'descripcion'"
+                            :item-value="'descripcion'"
+                            filled
+                            label="Municipios"
+                            outlined
+                            solo
+                            class="error609TextField"
+                            dense
+                          >
+                            <template v-slot:selection="{ item }">
+                              <span>{{ item.descripcion }}</span>
+                            </template>
+                          </v-select>
+                        </v-row>
                       </v-col>
+                      <!--input municipios-->
                     </v-row>
+                    <!--row estado y municipio-->
 
                     <v-row no-gutters class="align-start">
-                      <v-col cols="6">
-                        <v-select
-                          v-model="anuncioUsuario.Sec_Descripcion.sexo"
-                          :menu-props="{ top: false, offsetY: true }"
-                          :items="getDdlSexo"
-                          :item-text="'descripcion'"
-                          :item-value="'descripcion'"
-                          filled
-                          dense
-                          rounded
-                          outlined
-                          solo
-                          label="Sexo"
+                      <v-col cols="5" md="4" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
                         >
-                          <template v-slot:selection="{ item }">
-                            <span v-if="item.descripcion === 'femenino'"
-                              >femn.</span
+                          edad
+                        </div>
+                        <v-row no-gutters>
+                          <v-col cols="12">
+                            <v-text-field
+                              color="pink"
+                              dense
+                              outlined
+                              solo
+                              label="edad"
+                              type="number"
+                              min="21"
+                              class="error609TextField"
                             >
-                            <span v-else>masc.</span>
-                          </template>
-                        </v-select>
-                      </v-col>                     
-                      
-                      <v-col cols class="ml-2">
-                        <v-select
-                        v-model="anuncioUsuario.categorias"
-                        :menu-props="{ top: false, offsetY: true }"
-                          :items="getDdlCategorias"
-                          :item-text="'descripcion'"
-                          :item-value="'descripcion'"
-                          filled
-                          outlined
-                          label="Categorias"
-                          rounded
-                          dense
-                          small-chips
-                          solo
-                          multiple
-                        >
-                          <template v-slot:selection="{ index }">
-                            <span v-if="index === 0" class="text-caption"
-                              >( +{{ anuncioUsuario.categorias.length }} )
-                              ...</span
-                            >
-                          </template>
-                        </v-select>
-                        <!--input categorias-->
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
                       </v-col>
+                      <!--input edad-->
+
+                      <v-col cols="6" md="4" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                        >
+                          sexo
+                        </div>
+                        <v-row no-gutters>
+                          <v-select
+                            v-model="anuncioUsuario.Sec_Descripcion.sexo"
+                            :menu-props="{ top: false, offsetY: true }"
+                            :items="getDdlSexo"
+                            :item-text="'descripcion'"
+                            :item-value="'descripcion'"
+                            filled
+                            dense
+                            class="error609TextField"
+                            outlined
+                            solo
+                            label="Sexo"
+                          >
+                            <template v-slot:selection="{ item }">
+                              <span v-if="item.descripcion === 'femenino'"
+                                >femn.</span
+                              >
+                              <span v-else>masc.</span>
+                            </template>
+                          </v-select>
+                        </v-row>
+                      </v-col>
+                      <!--input sexo-->
+
+                      <v-col cols="7" md="4" class="pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                        >
+                          categorias
+                        </div>
+                        <v-row no-gutters>
+                          <v-select
+                            v-model="anuncioUsuario.categorias"
+                            :menu-props="{ top: false, offsetY: true }"
+                            :items="getDdlCategorias"
+                            :item-text="'descripcion'"
+                            :item-value="'descripcion'"
+                            filled
+                            outlined
+                            label="Categorias"
+                            class="error609TextField"
+                            dense
+                            small-chips
+                            solo
+                            multiple
+                          >
+                            <template v-slot:selection="{ index }">
+                              <span v-if="index === 0" class="text-caption"
+                                >( +{{ anuncioUsuario.categorias.length }} )
+                                ...</span
+                              >
+                            </template>
+                          </v-select>
+                        </v-row>
+                      </v-col>
+                      <!--input categorias-->
                     </v-row>
-                    <!--sexo y categorias input-->
+                    <!--row edad, sexo y categorias-->
 
                     <v-row no-gutters>
-                      <v-col>
+                      <v-col class="mx-auto pr-4">
+                        <div
+                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                        >
+                          descripción
+                        </div>
                         <v-textarea
                           v-model="anuncioUsuario.Sec_Descripcion.descripcion"
                           outlined
-                          label="Descripción"
                           rows="7"
                         >
                         </v-textarea>
                       </v-col>
                     </v-row>
                     <!--Input descripcion-->
-                    
                   </v-form>
                   <!--Form Descripcion Anuncio-->
                 </v-sheet>
@@ -701,113 +795,67 @@
                   width="300"
                   height="fit-content"
                   v-show="!nuevaDescripcionView"
+                  style="white-space: pre-line;"
                 >
                   {{ anuncioUsuario.Sec_Descripcion.descripcion }}
                 </v-sheet>
               </v-card-text>
               <!--v-card Descripción-->
             </v-expand-x-transition>
-            <!--Cuerpo Anuncio (descripcion y tarifas)-->
+            <!--Cuerpo Anuncio (descripcion, contacto y tarifas)-->
 
-            <div
-              style="position: absolute; top: 170px; right: 0; width:38px"
-              class="d-flex flex-column glassy rounded-xl justify-center"
-            >
-
-              <v-btn
-                fab
-                small
-                plain
-                color="white"
-                @click="habilitarEdicionesAnuncio"
-              >
-                <div class="d-flex flex-column align-center">
-                  <font-awesome-icon
-                    :icon="['fas', 'pencil-alt']"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </div>
-              </v-btn>
-            <!--editar btn-->
-
-              <v-btn fab small plain color="white">
-                <div class="d-flex flex-column align-center">
-                  <font-awesome-icon
-                    :icon="['fas', 'shopping-bag']"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </div>
-              </v-btn>
-            <!--compras btn-->
-
-              <v-btn fab small plain color="white" @click="borrarAnuncio()">
-                <div class="d-flex flex-column align-center">
-                  <font-awesome-icon
-                    :icon="['fas', 'trash-alt']"
-                    class="fa-2x"
-                  ></font-awesome-icon>
-                </div>
-              </v-btn>
-            <!--eliminar btn-->
-            </div>
-            <!--Anuncio Settings-->
-
-            <div style="position: absolute; bottom:15px;">
-              <v-row
-                style="position: -webkit-sticky; position: sticky; bottom: 0"
-                no-gutters
-              >
-                <v-col v-show="edicionView" justify="center">
-                  <v-btn
-                    color="primary"
-                    class="mx-2 rounded-lg"
-                    @click="cancelarSalvado"
-                    depressed
-                    outlined
-                    tile
-                    rounded
-                    x-small
-                    width="60px"
+            <v-card-action>
+              <v-container>
+                <v-row align="space-around">
+                  <v-col
+                    v-show="
+                      edicionView && !nuevaTarifaView && !nuevoContactoView
+                    "
+                    align="center"
                   >
-                    Cancelar
-                  </v-btn>
-                </v-col>
-                <!--BotonCancelar-->
+                    <v-btn
+                      @click="salvadoDeDescripcion"
+                      color="primary"
+                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                      tile
+                      raised
+                    >
+                      <span style="color: white;">Guardar</span>
+                    </v-btn>
+                    <!--guardar descripcion-->
+                  </v-col>
+                  <!--BotonGuardar-->
 
-                <v-col v-show="edicionView && tabSeleccionado != 'revealDesc'" justify="center">
-                  <v-btn
-                    color="primary"
-                    class="mx-2 rounded-lg"
-                    @click="abrirForm(true)"
-                    depressed
-                    raised
-                    rounded
-                    x-small
-                    width="60px"
+                  <v-col
+                    v-show="edicionView && tabSeleccionado != 'revealDesc'"
+                    align="center"
                   >
-                    <span style="color: white;">Nuevo</span>
-                  </v-btn>
-                </v-col>
-                <!--BotonNuevoContacto/Tarifa-->
-                
-                <v-col v-show="edicionView && (!nuevaTarifaView) && (!nuevoContactoView)" justify="center">
-                  <v-btn
-                    color="green"
-                    class="mx-2 rounded-lg"
-                    @click="salvadoDeDescripcion"
-                    depressed
-                    raised
-                    rounded
-                    x-small
-                    width="60px"
-                  >
-                    <span style="color: white;">Guardar</span>
-                  </v-btn>
-                  <!--guardar descripcion-->
-                </v-col>
-                <!--BotonGuardar-->
-              </v-row>
-            </div>
+                    <v-btn
+                      color="green"
+                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                      @click="abrirForm(true)"
+                      raised
+                    >
+                      <span style="color: white;">Nuevo</span>
+                    </v-btn>
+                  </v-col>
+                  <!--BotonNuevoContacto/Tarifa-->
+
+                  <v-col v-show="edicionView" align="center">
+                    <v-btn
+                      color="black"
+                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                      @click="cancelarSalvado"
+                      style="border: none!important;"
+                      outlined
+                    >
+                      Cancelar
+                    </v-btn>
+                  </v-col>
+                  <!--BotonCancelar-->
+                </v-row>
+              </v-container>
+            </v-card-action>
             <!--Botones edicion Tarifa y Contact-->
           </v-card>
         </v-col>
@@ -826,10 +874,10 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "tarjeta-anuncio-usuario",
-  mixins: [AnuncioMixins,GeneralMixins],
+  mixins: [AnuncioMixins, GeneralMixins],
   components: {
     DashboardCompras,
-    FilePondImagenesAnuncio
+    FilePondImagenesAnuncio,
   },
   props: {
     anuncioUsuario: { type: Object, default: {} },
@@ -846,6 +894,7 @@ export default {
       tiposCategoriasAnuncio: [""],
       newDefaulContactos: [],
       nuevasImagenes: [],
+      edadRules: (v) => /.+@.+\..+/.test(v) || "Solo dígitos",
       tiposContacto: [
         { categoria: "fab", icono: "whatsapp", color: "green" },
         { categoria: "fab", icono: "twitter", color: "light-blue" },
@@ -883,7 +932,11 @@ export default {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
         ? { carruselH: "500px", cuerpoAnuncioH: "auto", cuerpoAnuncioW: "auto" }
-        : { carruselH: "500px", cuerpoAnuncioH: "500px", cuerpoAnuncioW: "auto" };
+        : {
+            carruselH: "500px",
+            cuerpoAnuncioH: "500px",
+            cuerpoAnuncioW: "auto",
+          };
     },
     categoriaSeleccionada() {
       return 1;
@@ -902,15 +955,15 @@ export default {
         };
       });
     },
-    imagenesActuales(){
+    imagenesActuales() {
       let vueltaAnuncio = -1;
-      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen){
+      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
         vueltaAnuncio++;
-        if(!!infoImagen){
+        if (!!infoImagen) {
           return {
             nombre: infoImagen.nombre,
-            posicion: vueltaAnuncio
-          }
+            posicion: vueltaAnuncio,
+          };
         }
       });
     },
@@ -943,11 +996,18 @@ export default {
     contactosUsuario() {
       return this.Usuario.Default_Contactos;
     },
-    edicionView(){
-      return this.nuevaDescripcionView || this.nuevaTarifaView || this.nuevoContactoView;
+    edicionView() {
+      return (
+        this.nuevaDescripcionView ||
+        this.nuevaTarifaView ||
+        this.nuevoContactoView
+      );
     },
     nuevaDescripcionView() {
-      return this.anuncioEdicionInputsView || this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView');
+      return (
+        this.anuncioEdicionInputsView ||
+        this.anuncioUsuario.hasOwnProperty("_anuncioEdicionInputsView")
+      );
     },
     nuevaTarifaView() {
       return this.anuncioTarifaInputsView;
@@ -979,13 +1039,13 @@ export default {
   },
   methods: {
     //-----Crud Tarifas
-    
+
     abrirForm(isNew = false) {
-      if(isNew){
-        if(this.tabSeleccionado === "revealContacto"){
+      if (isNew) {
+        if (this.tabSeleccionado === "revealContacto") {
           this.anuncioContactoInputsView = true;
         }
-        if(this.tabSeleccionado === "revealTarifa"){
+        if (this.tabSeleccionado === "revealTarifa") {
           this.anuncioTarifaInputsView = true;
         }
       }
@@ -1044,9 +1104,15 @@ export default {
     },
     prepararEditTarifa(idPosicion) {
       this.nuevaTarifa.idPosicion = idPosicion;
-      this.nuevaTarifa.nombre = this.anuncioUsuario.Sec_Tarifas[idPosicion].nombre;
-      this.nuevaTarifa.precio = this.anuncioUsuario.Sec_Tarifas[idPosicion].precio;
-      this.nuevaTarifa.descripcion = this.anuncioUsuario.Sec_Tarifas[idPosicion].descripcion;
+      this.nuevaTarifa.nombre = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].nombre;
+      this.nuevaTarifa.precio = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].precio;
+      this.nuevaTarifa.descripcion = this.anuncioUsuario.Sec_Tarifas[
+        idPosicion
+      ].descripcion;
       this.nuevaTarifa.accion = "actualizacion";
 
       this.abrirForm();
@@ -1071,86 +1137,114 @@ export default {
         return;
       }
 
-      esContactoSeleccionado = this.anuncioUsuario.Sec_Contacto.findIndex((Contacto) => Contacto.contacto == this.nuevoContacto.idPosicion);
+      esContactoSeleccionado = this.anuncioUsuario.Sec_Contacto.findIndex(
+        (Contacto) => Contacto.contacto == this.nuevoContacto.idPosicion
+      );
       console.log(`esContactoSeleccionado: ${esContactoSeleccionado}`);
 
       //Setear valores
       contacto.Tipo = {
         categoria: this.nuevoContacto.Tipo.categoria,
-        icono: this.nuevoContacto.Tipo.icono
+        icono: this.nuevoContacto.Tipo.icono,
       };
       contacto.contacto = this.nuevoContacto.contacto;
       console.dir(contacto);
 
       if (this.nuevoContacto.accion == "creacion") {
-        this.anuncioUsuario.Sec_Contacto.push({contacto: contacto.contacto, Tipo: contacto.Tipo});
+        this.anuncioUsuario.Sec_Contacto.push({
+          contacto: contacto.contacto,
+          Tipo: contacto.Tipo,
+        });
 
         //Preparar array para actualizado de Defaul_Contactos
         this.newDefaulContactos = this.contactosUsuario;
         this.newDefaulContactos.push(contacto);
-        await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
-        
-      } else {       
-
-        _Default_Contactos.splice(
-          this.nuevoContacto.idPosicion,
-          1,
-          {contacto: contacto.contacto, Tipo: contacto.Tipo}
-        );
+        await this.$store.dispatch(
+          "anuncioEditContactoSet",
+          this.anuncioUsuario.Sec_Contacto
+        ); //Actualizacion vuex base de FormaAE
+      } else {
+        _Default_Contactos.splice(this.nuevoContacto.idPosicion, 1, {
+          contacto: contacto.contacto,
+          Tipo: contacto.Tipo,
+        });
 
         console.log(`this.newDefaulContactos`);
         console.dir(_Default_Contactos);
         this.newDefaulContactos = _Default_Contactos;
 
         //Editar el contacto existente
-        if(esContactoSeleccionado >= 0){
+        if (esContactoSeleccionado >= 0) {
           this.anuncioUsuario.Sec_Contacto.splice(
             this.nuevoContacto.idPosicion,
             1,
-            {contacto: contacto.contacto, Tipo: contacto.Tipo}
+            { contacto: contacto.contacto, Tipo: contacto.Tipo }
           );
-          await this.$store.dispatch("anuncioEditContactoSet", this.anuncioUsuario.Sec_Contacto); //Actualizacion vuex base de FormaAE
+          await this.$store.dispatch(
+            "anuncioEditContactoSet",
+            this.anuncioUsuario.Sec_Contacto
+          ); //Actualizacion vuex base de FormaAE
         }
       }
-      
+
       this.anuncioContactoInputsView = true;
     },
-    salvandoEdicionImagenes(){
-      return new Promise(async (resolve, reject)=>{
-        if(this.nuevasImagenes.length > 0){
-          await this.$store.dispatch('anuncioSetImagenes', this.nuevasImagenes); //Actualizacion vuex base de FormaAE 
+    salvandoEdicionImagenes() {
+      return new Promise(async (resolve, reject) => {
+        if (this.nuevasImagenes.length > 0) {
+          await this.$store.dispatch("anuncioSetImagenes", this.nuevasImagenes); //Actualizacion vuex base de FormaAE
         }
         resolve();
       });
     },
-    salvandoEdicionDescripcion(){
-      return new Promise(async (resolve, reject)=> {
-        await this.$store.dispatch('anuncioDescripcionSet', this.anuncioUsuario.Sec_Descripcion);
-        await this.$store.dispatch('anuncioCategoriasSet', this.anuncioUsuario.categorias);
-        await this.$store.dispatch('anuncioPermisosSet', this.anuncioUsuario.permisos);
+    salvandoEdicionDescripcion() {
+      return new Promise(async (resolve, reject) => {
+        await this.$store.dispatch(
+          "anuncioDescripcionSet",
+          this.anuncioUsuario.Sec_Descripcion
+        );
+        await this.$store.dispatch(
+          "anuncioCategoriasSet",
+          this.anuncioUsuario.categorias
+        );
+        await this.$store.dispatch(
+          "anuncioPermisosSet",
+          this.anuncioUsuario.permisos
+        );
         resolve();
       });
     },
-    salvandoEdicionTarifas(){
-      return new Promise(async (resolve, reject)=> {
-        await this.$store.dispatch('anuncioEditTarifaSet', this.anuncioUsuario.Sec_Tarifas);
+    salvandoEdicionTarifas() {
+      return new Promise(async (resolve, reject) => {
+        await this.$store.dispatch(
+          "anuncioEditTarifaSet",
+          this.anuncioUsuario.Sec_Tarifas
+        );
         resolve();
       });
     },
-    salvandoEdicionContacto(){
-      return new Promise((resolve, reject)=>{
+    salvandoEdicionContacto() {
+      return new Promise((resolve, reject) => {
         let newArrayContactoAnuncio = [];
-  
+
         //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario en lo que este en contactosSeleccionados
-        for (let contactoSeleccionadosLoop = 0; contactoSeleccionadosLoop < this.contactosSeleccionados.length; contactoSeleccionadosLoop++) {
-          newArrayContactoAnuncio.push({ 
-            contacto: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].contacto,
-            Tipo: this.contactosUsuario[this.contactosSeleccionados[contactoSeleccionadosLoop]].Tipo
-           })
+        for (
+          let contactoSeleccionadosLoop = 0;
+          contactoSeleccionadosLoop < this.contactosSeleccionados.length;
+          contactoSeleccionadosLoop++
+        ) {
+          newArrayContactoAnuncio.push({
+            contacto: this.contactosUsuario[
+              this.contactosSeleccionados[contactoSeleccionadosLoop]
+            ].contacto,
+            Tipo: this.contactosUsuario[
+              this.contactosSeleccionados[contactoSeleccionadosLoop]
+            ].Tipo,
+          });
         }
-        
+
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
-        this.$store.dispatch('anuncioEditContactoSet', newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE 
+        this.$store.dispatch("anuncioEditContactoSet", newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE
         resolve();
       });
     },
@@ -1177,24 +1271,33 @@ export default {
       let MutateResult;
       let newDefaulContactos = [];
 
-
       console.dir(`eliminarContacto ${idPosicion}`);
 
-      for (let contactoUsuarioLoop = 0; contactoUsuarioLoop < this.contactosUsuario.length; contactoUsuarioLoop++) {
-        if(idPosicion != contactoUsuarioLoop){
+      for (
+        let contactoUsuarioLoop = 0;
+        contactoUsuarioLoop < this.contactosUsuario.length;
+        contactoUsuarioLoop++
+      ) {
+        if (idPosicion != contactoUsuarioLoop) {
           newDefaulContactos.push(this.contactosUsuario[contactoUsuarioLoop]);
         }
       }
-      
-      for (let anuncioContactosLoop = 0; anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length; anuncioContactosLoop++) {
+
+      for (
+        let anuncioContactosLoop = 0;
+        anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length;
+        anuncioContactosLoop++
+      ) {
         //El anuncio tiene el contacto que se quiere eliminar
-        if(this.contactosUsuario[idPosicion].contacto == this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto){
+        if (
+          this.contactosUsuario[idPosicion].contacto ==
+          this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto
+        ) {
           this.anuncioUsuario.Sec_Contacto.splice(anuncioContactosLoop, 1);
           console.log(anuncioContactosLoop);
           break;
-        }        
+        }
       }
-
     },
 
     //-----Crud Descripcion
@@ -1206,7 +1309,7 @@ export default {
       this.cancelarSalvado(false);
 
       //Activar una especia de loading (no importante aun)
-      
+
       try {
         await this.editarAnuncio(); //Llamada de creacion/modificacion anuncio
       } catch (error) {
@@ -1214,7 +1317,7 @@ export default {
         console.dir(error);
         //Activar los inputs en el tab donde este
         //habilitarEdicionesAnuncio();
-        
+
         this.$store.dispatch("activationAlert", {
           type: "error",
           message: `>>>Error al registrar...>>>>${error.mensaje}`,
@@ -1228,17 +1331,16 @@ export default {
         message: MutateResult.mensaje,
       });
       this.cancelarSalvado();
-    },    
+    },
 
     //------Acciones Anuncio
     async cancelarSalvado(limpia = true) {
-
-      if(limpia){
+      if (limpia) {
         this.limpiarContactoForm();
         this.limpiarTarifaForm();
-        
-        if(this.FormAE.hasOwnProperty('_anuncioEdicionInputsView')){
-          if(this.FormAE._anuncioEdicionInputsView){
+
+        if (this.FormAE.hasOwnProperty("_anuncioEdicionInputsView")) {
+          if (this.FormAE._anuncioEdicionInputsView) {
             await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
           }
         }
@@ -1253,7 +1355,10 @@ export default {
 
     //Habilita la apertura del anuncio dependiendo del tab en el que se encuentre y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
-      if ( this.anuncioUsuario._id === this.FormAE.id || this.FormAE.id == undefined ) {
+      if (
+        this.anuncioUsuario._id === this.FormAE.id ||
+        this.FormAE.id == undefined
+      ) {
         this.activacionesSecciones(this.tabSeleccionado);
         this.anuncioEdicionInputsView = true;
 
@@ -1308,10 +1413,11 @@ export default {
         console.dir(error);
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `>>>Error al eliminar anuncio...>>>>${error.mensaje}`,
+          message: `${error.mensaje}`,
         });
         return;
       }
+
       //Eliminar dicho anuncio del state tmb
       console.dir(MutateResult);
       this.$store.dispatch("anuncioEliminar", this.anuncioUsuario._id);
@@ -1328,7 +1434,6 @@ export default {
         let MutateResult;
 
         try {
-
           //Añadir aqui la validacion de infor de la seccion Descripcion
           await this.salvandoEdicionContacto(); //Actualizando los contactos seleccionados del anuncio en la base Vuex de FormAE
           await this.salvandoEdicionImagenes(); //Actualizando las imagenes que haya hecho trigger el filePond a la base Vuex de FormAE
@@ -1342,23 +1447,25 @@ export default {
 
             MutateResult = await this.mixinAnuncioEditar(this.FormAE);
           } else {
-            console.log("Guardando nuevo...");   
-            
+            console.log("Guardando nuevo...");
+
             MutateResult = await this.mixinAnuncioCrear(this.FormAE);
-            await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
+            await this.$store.dispatch(
+              "anuncioAgregarNuevo",
+              MutateResult.data
+            ); //Actualizando la base vuex del state de FormAE
           }
-          
-          if(this.newDefaulContactos.length>0){
+
+          if (this.newDefaulContactos.length > 0) {
             this.$store.dispatch("contactoEditado", this.newDefaulContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
             await this.mixinActualizarDefaultContactos(this.newDefaulContactos);
           }
 
           await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-        } catch (error) {          
-
+        } catch (error) {
           console.dir(error);
           //Analizar: esto causa error cuando no se tiene esa propiedad en el objeto
-          if(error.componenteInterno.length >= 1){
+          if (error.componenteInterno.length >= 1) {
             this.mixinLlamadaRouter(error);
           }
           return reject(error);
@@ -1372,22 +1479,27 @@ export default {
         return resolve(MutateResult);
       });
     },
-    
+
     async iAOnDelete(Image) {
       console.log("iAOnDelete...");
       console.dir(Image);
       let newArrayImagenes = [];
       let imagenesAnuncioLoop = 0;
-      let comparingArray = this.nuevasImagenes.length == 0 ? this.imagenesActuales : this.nuevasImagenes;
+      let comparingArray =
+        this.nuevasImagenes.length == 0
+          ? this.imagenesActuales
+          : this.nuevasImagenes;
 
       for (let loop = 0; loop < comparingArray.length; loop++) {
         let imageName = this.imagenesActuales[loop].nombre;
-        
-        if(imageName !== Image.imageToDelete){
-          console.log(`imageName ${Image.imageToDelete}, ${this.imagenesActuales[loop].nombre}`);
+
+        if (imageName !== Image.imageToDelete) {
+          console.log(
+            `imageName ${Image.imageToDelete}, ${this.imagenesActuales[loop].nombre}`
+          );
           newArrayImagenes.push({
             nombre: imageName,
-            posicion: imagenesAnuncioLoop
+            posicion: imagenesAnuncioLoop,
           });
           imagenesAnuncioLoop++;
         }
@@ -1398,43 +1510,57 @@ export default {
     },
     iAOnProcess(ObjetoImagen) {
       console.log(`iAOnProcess...${typeof ObjetoImagen}`);
-      console.log(`nuevasImagenes...${typeof this.nuevasImagenes} ${this.nuevasImagenes}`);
+      console.log(
+        `nuevasImagenes...${typeof this.nuevasImagenes} ${this.nuevasImagenes}`
+      );
       console.dir(ObjetoImagen);
       let newArrayImagenes = this.imagenesActuales;
       newArrayImagenes.push(ObjetoImagen);
       this.nuevasImagenes = newArrayImagenes;
       console.dir(this.nuevasImagenes);
     },
-    contactosSeleccionadosSet(clean = false){
-      if(clean){
+    contactosSeleccionadosSet(clean = false) {
+      if (clean) {
         this.contactosSeleccionados = [];
-        return
+        return;
       }
-      for(let defaulContactLoop = 0; defaulContactLoop < this.contactosUsuario.length; defaulContactLoop++){
+      for (
+        let defaulContactLoop = 0;
+        defaulContactLoop < this.contactosUsuario.length;
+        defaulContactLoop++
+      ) {
         let anuncioContactoLoop = 0;
         let ContactosAnuncio = this.anuncioUsuario.Sec_Contacto;
         let ContactosUsuario = this.contactosUsuario;
-        
-        for(anuncioContactoLoop;  anuncioContactoLoop < ContactosAnuncio.length; anuncioContactoLoop++){
-          if(ContactosAnuncio[anuncioContactoLoop].contacto == ContactosUsuario[defaulContactLoop].contacto){
+
+        for (
+          anuncioContactoLoop;
+          anuncioContactoLoop < ContactosAnuncio.length;
+          anuncioContactoLoop++
+        ) {
+          if (
+            ContactosAnuncio[anuncioContactoLoop].contacto ==
+            ContactosUsuario[defaulContactLoop].contacto
+          ) {
             this.contactosSeleccionados.push(defaulContactLoop);
           }
-
         }
       }
-    }
+    },
   },
   created() {
-
     //activando edicion descripcion
-    console.log(`_anuncioEdicionInputsView: ${this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView')}`)
-    if(this.anuncioUsuario.hasOwnProperty('_anuncioEdicionInputsView')){
+    console.log(
+      `_anuncioEdicionInputsView: ${this.anuncioUsuario.hasOwnProperty(
+        "_anuncioEdicionInputsView"
+      )}`
+    );
+    if (this.anuncioUsuario.hasOwnProperty("_anuncioEdicionInputsView")) {
       this.anuncioEdicionInputsView = true;
     }
 
     //Marcando contactoSeleccionados
     this.contactosSeleccionadosSet();
-
   },
 };
 </script>
@@ -1442,20 +1568,20 @@ export default {
 <style lang="scss" scoped>
 .full-anuncio-seccion {
   height: auto;
-  min-height: 290px !important;
+  min-height: 356px !important;
   overflow-y: auto;
   line-height: 18px;
 }
 
 .full-anuncio-seccion-web {
-  height: 270px !important;
+  max-height: 357px !important;
 }
 
 .v-textarea textarea {
   line-height: 1.35rem !important;
 }
 
-.glassy{
+.glassy {
   background: rgba(199, 193, 193, 0.46);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
@@ -1467,5 +1593,30 @@ export default {
   width: 100%;
   max-height: 160px;
   height: 160px;
+}
+
+.suave-pink-font {
+  background-color: #e47ab6 !important;
+  color: white !important;
+}
+
+.green-font {
+  color: #9fe676 !important;
+}
+
+.pink-font {
+  color: #e0409a !important;
+}
+
+.anuncioHover {
+  border: 6px solid #e0409a !important;
+}
+
+.btn-menu-mbview {
+  width: auto;
+}
+
+.errorBoxShadow{
+  box-shadow: 0px 7px 9px -4px rgb(0 0 0 / 5%), 0px 14px 21px 2px rgb(0 0 0 / 8%), 0px 5px 26px 4px rgb(0 0 0 / 8%) !important
 }
 </style>

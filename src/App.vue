@@ -398,4 +398,9 @@ export default {
   > .v-select__selection {
   font-size: 13px !important;
 }
+
+/*Inputs radious*/
+.error609TextField{
+  border-radius: 7px;
+}
 </style>

@@ -80,11 +80,11 @@ export const actions = {
     anuncioEliminar({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
             let newArray = state.usuario.anuncios_usuario.filter((value, index) => {
-                if (value._id !== payload.id) {
+                if (value._id !== payload) {
                     return value;
                 }
             });
-            console.log(`nueva carga de anuncios usuario: ${newArray}`)
+
             commit('CARGA_ANUNCIOS_USUARIO', newArray);
             resolve();
         });

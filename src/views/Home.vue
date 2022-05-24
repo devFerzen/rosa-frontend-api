@@ -9,9 +9,9 @@
       </v-col>
     </v-row>
 
-    <v-row align="start" justify="space-between" no-gutters>
-      <v-col cols="12" :sm="WidthComponents.herramientasWidth.sm" :md="WidthComponents.herramientasWidth.lg" class="pr-3"
-         :class="[cssPanelHerramientas, mbViewTop, correccionAlturaWbView]">
+    <v-row align="start" justify="space-around" no-gutters>
+      <v-col cols="12" :sm="WidthComponents.herramientasWidth.sm" :md="WidthComponents.herramientasWidth.lg"
+         :class="[cssPanelHerramientas, correccionAlturaWbView]">
         <panel-herramientas
           v-if="!inicioSesionView && !registroView && !verificacionView && !actualizandoContrasenaView && !contactanosView"
           @activandoGrid="activandoGrid" @panelMinClass="panelMinClass" style="margin-top: 0!important;" />
@@ -28,7 +28,7 @@
         <espacio-publicitario
           v-if=" actualizandoContrasenaView || contactanosView" />
 
-        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio"
+        <sistema-tarjetas-descripcion :fullAnuncioEstado="hayAnuncio" :colUsuarioDesc="WidthComponents.colUsuarioDesc" class="mx-2"
           v-else-if="!actualizandoContrasenaView && !contactanosView" />
       </v-col>
       <!--Cuerpo-->
@@ -75,8 +75,7 @@
             lg: 9
           }
         },
-        panelHerramientasClass: '',
-        mbViewTop: ''
+        panelHerramientasClass: ''
       };
     },
     computed: {
@@ -105,20 +104,16 @@
       },
       contactanosView() {
         return this.$store.state.contactoView;
-      },
-      mbViewTopClass(){
-        const { xs, sm, md } = this.$vuetify.breakpoint;
-        this.panelHerramientasClass = xs || sm ? 'panel-herramientas-mbview' : 'panel-herramientas-pcview';
-        return this.panelHerramientasClass;
       }
     },
     methods: {
       panelMinClass(Value) {
         /*Funcion solo la usa el componente panel de herramientas. para extenderlo hacia arriba*/
         console.log(`vue: panelMinClass => `);
-        console.log(Value.panelHerramientasClass);
+        console.dir(Value);
+
         this.panelHerramientasClass = Value.panelHerramientasClass;
-        this.mbViewTop = this.panelHerramientasClass === 'panel-herramientas-mbview' ? 'activarTop0' : '';
+        this.mbViewTop = this.panelHerramientasClass === 'panel-herramientas-mbview' ? 'activarTopMin' : '';
       },
       activandoGrid(WidthComponents) {
         console.log(`Vue: activandoGrid =>`);
@@ -131,13 +126,12 @@
 <style>
 
   .container-mbview {
-    padding-right: 0; 
-    padding-left: 0;
+    padding: 0;
   }
 
   .panel-herramientas-mbview {
     position: sticky;
-    top: 0vh;
+    top: 7.6vh;
     height: auto;
     transform: translateX(0%);
     z-index: 6;
@@ -161,8 +155,8 @@
     padding-top: 0;
   }
 
-  .activarTop0{
-    top: 0!important;
+  .activarTopMin{
+    top: 7.6vh!important;
   }
 
   .panelHerramientas-IS-correccion{

@@ -117,7 +117,7 @@ export default {
         this.mixinLlamadaRouter(error);
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `>>>Error al verificar tu códigio...>>>>${error.mensaje}`,
+          message: `${error.mensaje}`,
         });
         return;
       }
