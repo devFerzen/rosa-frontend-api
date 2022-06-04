@@ -4,7 +4,8 @@ export const state = {
         descripcion: '-- sin descripción --',
         icono_icono: '',
         icono_categoria: '',
-        categoria: ''
+        categoria: '',
+        estado: true
     }],
     busquedaQuery: {}
 }

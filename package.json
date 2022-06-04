@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "start": "node server.js & vue-cli-service serve",
+    "nodeServer": "node server.js",
     "build": "node server.js & vue-cli-service build"
   },
   "dependencies": {

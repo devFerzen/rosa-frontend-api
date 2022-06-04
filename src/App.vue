@@ -256,21 +256,13 @@ export default {
       } catch (error) {
         console.log("vue anunciate... en error");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
+       
         this.mixinLlamadaRouter(error);
         return;
       }
 
       console.log("vue cerrar sesion...");
       console.dir(DispatchResult);
-
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${DispatchResult.mensaje}`,
-      });
 
       this.mixinLlamadaRouter(DispatchResult);
     },

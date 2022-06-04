@@ -46,7 +46,7 @@ const apolloProvider = new VueApollo({
         link,
         cache,
         uri: "http://localhost:3000/graphql", //"http://192.168.100.69:3000/graphql",
-        credentials: 'include',
+        //credentials: 'include',
         connectToDevTools: true //ApolloDev browser tool 
     })
 });

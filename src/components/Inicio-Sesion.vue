@@ -132,10 +132,6 @@ export default {
         console.log("vue iniciandoSesion en error...");
         console.dir(error);
         
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
         this.mixinLlamadaRouter(error);
         return;
       }
@@ -144,11 +140,8 @@ export default {
       console.dir(MutateResult);
 
       this.mixinLlamadaRouter(MutateResult);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: MutateResult.mensaje,
-      });
     },
+
     async restablecerContrasena() {
       let MutateResult;
 
@@ -168,18 +161,11 @@ export default {
       } catch (error) {
         console.log("vue restablecerContrasena en error...");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
+        
         this.mixinLlamadaRouter(MutateResult);
         return;
       }
 
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${MutateResult.mensaje}`,
-      });
       this.mixinLlamadaRouter(MutateResult);
     },
   },

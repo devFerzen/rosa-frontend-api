@@ -22,6 +22,23 @@ app.get('/dashboard', (req, res) => {
   })
 })
 
+app.get('/ddlGeneral', (req, res) => {
+    const dbddlGeneral = fs.readFileSync('./db/usuario.json');
+    const ddlArray = JSON.parse(dbddlGeneral);
+
+    console.log(`dbddlGeneral typeof:  ${ typeof ddlArray}`);
+    console.dir(dbddlGeneral)
+    console.dir(req.params.categorias)
+
+    let _categorias = req.params.categorias;
+
+    return ddlArray.find(function(ddl, index){
+      if(_categorias == ddl.categoria){
+        return ddl;
+      }
+    });
+})
+
 app.post('/register', (req, res) => {
 
   if (req.body) {
@@ -38,6 +55,7 @@ app.post('/register', (req, res) => {
 
     const data = JSON.stringify(usuario, null, 2)
     var dbUserEmail = require('./db/usuario.json').usuario
+
     console.log("dbUserEmail")
     console.dir(dbUserEmail)
     console.dir(req.body.usuario)
@@ -66,8 +84,8 @@ app.post('/register', (req, res) => {
 app.post('/loggear', (req, res) => {
   const userDB = fs.readFileSync('./db/usuario.json')
   const userInfo = JSON.parse(userDB)
-  console.log("loggear b-end");
-  console.dir(userInfo);
+
+  console.dir(req.body);
 
   if (
     req.body &&
@@ -81,9 +99,8 @@ app.post('/loggear', (req, res) => {
       usuario: userInfo
     })
   } else {
-    //No funciona aún
     res.status(400).send({
-       message: 'Usuario No encontrado'
+      componenteInterno: {'activationAlert':{ type: 'error', message: 'Usuario no encontrado' }}
     });
   }
 })
