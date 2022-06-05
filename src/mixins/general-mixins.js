@@ -89,7 +89,7 @@ export default {
                 try {
                     if(true){
                         MutateResult = await GeneralTestMixin.mixinCerrarSesion(payload);
-                        resolve(JSON.parse(MutateResult));
+                        return resolve(JSON.parse(MutateResult));
                     }
 
                     MutateResult = await this.$apollo.mutate({
@@ -133,7 +133,7 @@ export default {
 
                     if(true){
                         MutateResult = await GeneralTestMixin.mixinRegistro(payload);
-                        resolve(JSON.parse(MutateResult));
+                        return resolve(JSON.parse(MutateResult));
                     }
 
                     MutateResult = await this.$apollo.mutate({
@@ -179,7 +179,7 @@ export default {
 
                     if(true){
                         MutateResult = await GeneralTestMixin.mixinSolicitarRestablecerContrasena(payload);
-                        resolve(JSON.parse(MutateResult));
+                        return resolve(JSON.parse(MutateResult));
                     }
 
                     MutateResult = await this.$apollo.mutate({
@@ -444,6 +444,14 @@ export default {
                 let QueryResult;
 
                 try {
+
+                    if(true){
+                        QueryResult = await GeneralTestMixin.mixinBusqueda(payload);
+                        const _QueryResult = JSON.parse(QueryResult);
+
+                        return resolve(_QueryResult);
+                    }
+
                     QueryResult = await this.$apollo.query({
                         query: GraphqlCalls.ANUNCIOS_QUERY,
                         variables: {
@@ -457,20 +465,23 @@ export default {
                     return reject({ mensaje: `sin éxito!` });
                 }
                 //console.dir(QueryResult);
-                resolve(QueryResult);
+                resolve(QueryResult.data.queryAnuncios);
             });
         },
 
         mixinDdlGeneral(categoriasDdls) {
             return new Promise(async(resolve, reject) => {
-                //console.log("mixinDdlGeneral... ",categoriasDdls);
+                console.log(`mixinDdlGeneral... ${typeof categoriasDdls}`);
 
                 let QueryResult;
 
                 try {
                     if(true){
-                        MutateResult = await GeneralTestMixin.mixinDdlGeneral(payload);
-                        resolve(JSON.parse(MutateResult));
+                        console.log(categoriasDdls);
+
+                        QueryResult = await GeneralTestMixin.mixinDdlGeneral(categoriasDdls);
+                        console.dir(QueryResult);
+                        return resolve(JSON.parse(QueryResult));
                     }
 
                     QueryResult = await this.$apollo.query({
@@ -480,6 +491,7 @@ export default {
                         }
                     })
                 } catch (error) {
+                    console.dir(error);
                     return reject();
                 }
 

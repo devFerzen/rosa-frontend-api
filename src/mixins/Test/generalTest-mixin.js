@@ -12,7 +12,7 @@ export const mixinInicioSesion = async (Payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
         try {
-            Result = await instance.post('http://localhost:3000/loggear',{
+            Result = await instance.post('/loggear',{
                 usuario: Payload.usuario,
                 contrasena: Payload.contrasena
             });
@@ -40,7 +40,7 @@ export const mixinRegistro = async (Payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
 
-        Result = await instance.post('http://localhost:3000/register',{
+        Result = await instance.post('/register',{
             usuario: Payload.usuario,
             contrasena: Payload.contrasena,
             numero_telefonico: Payload.numero_telefonico,
@@ -81,7 +81,7 @@ export const mixinSolicitarRestablecerContrasena = async (payload) => {
             componenteInterno: { 
                 activationAlert: { type: "success", message: 'Favor de ingresar el código de verificación que se le fue enviado a su correo.!' },
                 setSesion: payload,
-                data: codigoVerificacion,
+                data: '1234',
                 panelHerramientasVerificacion: true, 
                 setTipoVerificacion: 'verificacionUsuarioContrasena', 
                 setCorreo: usuario
@@ -93,8 +93,10 @@ export const mixinSolicitarRestablecerContrasena = async (payload) => {
 export const mixinDdlGeneral = async (payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
+        console.log(`mixinDdlGeneral... ${payload}`);
+
         try {
-            Result = await instance.get('http://localhost:3000/ddlGeneral', {
+            Result = await instance.get('/ddlGeneral', {
                 params: {
                     categorias: [payload]
                 }
@@ -107,9 +109,25 @@ export const mixinDdlGeneral = async (payload) => {
         }
         
         return resolve(JSON.stringify({data: {
-            queryddlsByCategoria: Result
+            queryddlsByCategoria: Result.data
         }}));
     })
 };
+
+export const mixinBusqueda = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        let Result;
+        try {
+            Result = await instance.get('/busqueda');
+        } catch (error) {
+            console.log(`con error axios`);
+            console.dir(error);
+
+            return reject(JSON.stringify(error.response.data));
+        }
+        
+        return resolve(JSON.stringify(Result.data.anuncios));
+    })
+}
 
 

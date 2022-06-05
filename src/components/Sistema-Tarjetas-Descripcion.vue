@@ -914,7 +914,7 @@ export default {
         return;
       }
 
-      this.anunciosBusqueda = QueryResult.data.queryAnuncios;
+      this.anunciosBusqueda = QueryResult;
     },
 
     async reportarAnuncio() {

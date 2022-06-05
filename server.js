@@ -23,20 +23,32 @@ app.get('/dashboard', (req, res) => {
 })
 
 app.get('/ddlGeneral', (req, res) => {
-    const dbddlGeneral = fs.readFileSync('./db/usuario.json');
+    const dbddlGeneral = fs.readFileSync('./db/ddls.json');
     const ddlArray = JSON.parse(dbddlGeneral);
 
-    console.log(`dbddlGeneral typeof:  ${ typeof ddlArray}`);
-    console.dir(dbddlGeneral)
-    console.dir(req.params.categorias)
+    let _categorias = req.query.categorias;
+    let _newArrayDdl = [];
 
-    let _categorias = req.params.categorias;
-
-    return ddlArray.find(function(ddl, index){
-      if(_categorias == ddl.categoria){
-        return ddl;
+    for (let loopDdls = 0; loopDdls < ddlArray.length; loopDdls++) {
+      const _ddl = ddlArray[loopDdls];
+      for (let _loopCategoria = 0; _loopCategoria < _categorias.length; _loopCategoria++) {
+         if(_categorias[_loopCategoria] == _ddl.categoria){
+          _newArrayDdl.push(ddlArray[loopDdls]);
+        }
       }
-    });
+    }
+
+    res.json(_newArrayDdl);
+
+    /* No se porque no funciono poniendolo asi
+      return ddlArray.find(function(ddl, index){
+      for (let _loopCategorias = 0; _loopCategorias < _categorias.length; _loopCategorias++) {
+        if(_categorias[_loopCategorias] == ddl.categoria){
+          console.dir(ddl);
+          return ddl;
+        }
+      }
+    });*/
 })
 
 app.post('/register', (req, res) => {
@@ -54,28 +66,13 @@ app.post('/register', (req, res) => {
 
 
     const data = JSON.stringify(usuario, null, 2)
-    var dbUserEmail = require('./db/usuario.json').usuario
+    let users = require('./db/usuario.json');
+    users.push(usuario);
 
-    console.log("dbUserEmail")
-    console.dir(dbUserEmail)
-    console.dir(req.body.usuario)
-    if (dbUserEmail === req.body.usuario) {
-      //duplicado
-      res.sendStatus(400);
-    } else {
-      fs.writeFile('./db/usuario.json', data, err => {
-        if (err) {
-          console.log(err + data)
-        } else {
-          const token = jwt.sign({ usuario }, 'the_secret_key')
-          // In a production app, you'll want the secret key to be an environment variable
-          res.json({
-            token: token,
-            usuario: usuario
-          })
-        }
-      })
-    }
+    fs.writeFileSync('./db/usuario.json', JSON.stringify(users,null,2));
+    const token = jwt.sign({ usuario }, 'the_secret_key')
+
+    res.json({pagina: 'dashboard', componenteInterno: { activationAlert: { type: "success", message: 'Bienvenido!' }, setSesion: usuario, panelHerramientasBusqueda: true } })
   } else {
     res.sendStatus(400)
   }
@@ -83,28 +80,37 @@ app.post('/register', (req, res) => {
 
 app.post('/loggear', (req, res) => {
   const userDB = fs.readFileSync('./db/usuario.json')
-  const userInfo = JSON.parse(userDB)
+  const users = JSON.parse(userDB)
 
   console.dir(req.body);
 
-  if (
-    req.body &&
-    req.body.usuario === userInfo.usuario &&
-    req.body.contrasena === userInfo.contrasena
-  ) {
-    const token = jwt.sign({ userInfo }, 'the_secret_key')
-    // In a production app, you'll want the secret key to be an environment variable
-    res.json({
-      token,
-      usuario: userInfo
-    })
-  } else {
-    res.status(400).send({
-      componenteInterno: {'activationAlert':{ type: 'error', message: 'Usuario no encontrado' }}
-    });
+  for (let loopUser = 0; loopUser < users.length; loopUser++) {
+    const UserElement = users[loopUser];
+    if (
+      req.body &&
+      req.body.usuario === UserElement.usuario &&
+      req.body.contrasena === UserElement.contrasena
+    ) {
+      const token = jwt.sign(UserElement, 'the_secret_key')
+      // In a production app, you'll want the secret key to be an environment variable
+      res.json({
+        token,
+        usuario: UserElement
+      })
+    } else {
+      res.status(400).send({
+        componenteInterno: {'activationAlert':{ type: 'error', message: 'Usuario no encontrado' }}
+      });
+    }
   }
+
 })
 
+app.get('/busqueda', (req, res) => {
+  const anucioDB = fs.readFileSync('./db/anuncios.json');
+  const anuncios = JSON.parse(anucioDB);
+  res.json(anuncios);
+});
 // MIDDLEWARE
 function verifyToken (req, res, next) {
   const bearerHeader = req.headers['authorization']
