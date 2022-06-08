@@ -1,6 +1,7 @@
 import * as GraphqlCalls from '../graphql/general-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
 import ErrorResult from '../utilities/ErrorResult';
+import * as GeneralTestMixin from './Test/generalTest-mixin';
 
 export default {
     data() {
@@ -64,10 +65,20 @@ export default {
                 } catch (error) {
                     console.log('mixinBuscarAnuncioId Mutation error...');
                     console.dir(error); // Guardarlo en un log el error.mensage o completo.
-                    this.MixinResult.mensaje = error.message;
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.graphQLErrors[0].message;
+
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
+                    } else {
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
+
                     return reject(this.MixinResult);
                 }
 
@@ -115,10 +126,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -153,10 +171,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -191,10 +216,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult.anuncioEliminacion);
@@ -221,10 +253,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -259,10 +298,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);

@@ -5,7 +5,7 @@
 import * as GraphqlUserCalls from '../graphql/usuario-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
 import ErrorResult from '../utilities/ErrorResult';
-
+import * as GeneralTestMixin from './Test/generalTest-mixin';
 
 export default {
     methods: {
@@ -33,11 +33,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.mensaje;
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -61,6 +67,11 @@ export default {
                 this.cleanMixinResult();
 
                 try {
+                    if(true){
+                        MutateResult = await GeneralTestMixin.mixinVerificacionCelularComparacion(payload);
+                        return resolve(JSON.parse(MutateResult));
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
                         variables: {
@@ -71,11 +82,17 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult.mensaje = error.mensaje;
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult.mensaje = error.mensaje;
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -91,6 +108,11 @@ export default {
                 this.cleanMixinResult();
 
                 try {
+                    if(true){
+                        MutateResult = await GeneralTestMixin.mixinVerificacionCelularCreacion(payload);
+                        return resolve(JSON.parse(MutateResult));
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION
                     });
@@ -98,10 +120,16 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.graphQLErrors.length > 0) {
-                        this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                    if (error.hasOwnProperty('graphQLErrors')) {
+                        if(error.graphQLErrors.length > 0){
+                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                        }
                     } else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);

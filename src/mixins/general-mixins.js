@@ -219,6 +219,11 @@ export default {
                 let MutateResult;
 
                 try {
+                    if(true){
+                        MutateResult = await GeneralTestMixin.mixinMeEncantaPlus(payload);
+                        return resolve(JSON.parse(MutateResult));
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.ME_ENCANTA_MUTATE,
                         variables: {
@@ -289,10 +294,15 @@ export default {
         mixinVer(payload) {
             return new Promise(async(resolve, reject) => {
                 console.log("mixinVer...");
-                let queryResult;
+                let QueryResult;
 
                 try {
-                    queryResult = await this.$apollo.query({
+                    if(true){
+                        QueryResult = await GeneralTestMixin.mixinVer(payload);
+                        return resolve(JSON.parse(QueryResult));
+                    }
+
+                    QueryResult = await this.$apollo.query({
                         query: GraphqlCalls.ANUNCIO_BYID_QUERY,
                         variables: {
                             ids: payload
@@ -304,9 +314,9 @@ export default {
                     return reject({ mensaje: `sin éxito!` });
                 }
 
-                console.dir(queryResult);
+                console.dir(QueryResult);
                 this.mixinVerPlus(payload);
-                resolve(queryResult.data.queryAnunciosById);
+                resolve(QueryResult.data.queryAnunciosById);
             });
         },
 
@@ -325,6 +335,11 @@ export default {
                 console.log(`payload input  ${payload.input}`);
 
                 try {
+                    if(true){
+                        MutateResult = await GeneralTestMixin.mixinVerificacionUsuarioComparacion(payload);
+                        return resolve(JSON.parse(MutateResult));
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.VERIFICACIONUSUARIO_COMPARAR_MUTATE,
                         variables: {
@@ -365,6 +380,11 @@ export default {
                 console.log("mixinNuevoCorreoContactanos...");
 
                 try {
+                    if(true){
+                        QueryResult = await GeneralTestMixin.mixinNuevoCorreoContactanos(categoriasDdls);
+                        return resolve(JSON.parse(QueryResult));
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.NUEVO_CORREO_CONTACTANOS,
                         variables: {
@@ -376,7 +396,6 @@ export default {
                     console.dir(error);
 
                     if (error.hasOwnProperty('graphQLErrors')) {
-                            
                         if (error.graphQLErrors.length > 0) {
                             this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
                         } 
@@ -464,7 +483,6 @@ export default {
                     //Historial de Errores encontrados 
                     return reject({ mensaje: `sin éxito!` });
                 }
-                //console.dir(QueryResult);
                 resolve(QueryResult.data.queryAnuncios);
             });
         },
@@ -477,10 +495,7 @@ export default {
 
                 try {
                     if(true){
-                        console.log(categoriasDdls);
-
                         QueryResult = await GeneralTestMixin.mixinDdlGeneral(categoriasDdls);
-                        console.dir(QueryResult);
                         return resolve(JSON.parse(QueryResult));
                     }
 
@@ -495,7 +510,6 @@ export default {
                     return reject();
                 }
 
-                //console.dir(QueryResult);
                 resolve(QueryResult);
             });
         },

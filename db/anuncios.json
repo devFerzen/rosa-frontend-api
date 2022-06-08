@@ -4,6 +4,7 @@
             "_id": {
                 "$oid": "61930028354c4455a47a2bf2"
             },
+            "id": "61930028354c4455a47a2bf2",
             "Estado": {
                 "vivo": true
             },
@@ -12,12 +13,8 @@
                 "Masajes Eróticos"
             ],
             "permisos": [],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "9"
-            },
+            "no_corazones": "0",
+            "no_vistas": "9",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "Test 2",
@@ -30,31 +27,23 @@
             "Sec_Tarifas": [
                 {
                     "nombre": "Tarifa fin de mes",
-                    "precio": {
-                        "$numberInt": "1200"
-                    },
+                    "precio": "1200",
                     "description": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
                 },
                 {
                     "nombre": "Tarifa de ayer!",
-                    "precio": {
-                        "$numberInt": "1200"
-                    },
+                    "precio": "1200",
                     "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
                 }
             ],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1637023782376-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
                     "url": null
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1637023796657-gundam.jpg"
                 }
             ],
@@ -69,14 +58,13 @@
                     "$numberLong": "1637023784906"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
             "_id": {
                 "$oid": "621b025c736312129cced553"
             },
+            "id": "621b025c736312129cced553",
             "Estado": {
                 "vivo": true
             },
@@ -86,12 +74,8 @@
             "permisos": [
                 "Descripcion"
             ],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "57"
-            },
+            "no_corazones": "0",
+            "no_vistas": "57",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "corbata",
@@ -104,16 +88,12 @@
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1636336972731-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
                     "url": null
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1636462472150-098a15e3b90c6e2b63bc1941f64f63d2.jpg"
                 }
             ],
@@ -128,14 +108,13 @@
                     "$numberLong": "1636336974975"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
             "_id": {
                 "$oid": "621b026e736312129cced554"
             },
+            "id": "621b026e736312129cced554",
             "Estado": {
                 "vivo": true
             },
@@ -146,12 +125,8 @@
             "permisos": [
                 "Descripcion"
             ],
-            "no_corazones": {
-                "$numberInt": "3"
-            },
-            "no_vistas": {
-                "$numberInt": "36"
-            },
+            "no_corazones": "3",
+            "no_vistas": "36",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "China",
@@ -164,9 +139,7 @@
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1636461370036-th.jpg"
                 }
             ],
@@ -181,14 +154,10 @@
                     "$numberLong": "1636461378224"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
-            "_id": {
-                "$oid": "621b0288736312129cced555"
-            },
+            "id": "621b0288736312129cced555",
             "Estado": {
                 "vivo": true
             },
@@ -198,12 +167,8 @@
             "permisos": [
                 "Descripcion"
             ],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "54"
-            },
+            "no_corazones": "0",
+            "no_vistas": "54",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "men men men",
@@ -216,16 +181,12 @@
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1636336972731-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
                     "url": null
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1636462472150-098a15e3b90c6e2b63bc1941f64f63d2.jpg"
                 }
             ],
@@ -240,14 +201,10 @@
                     "$numberLong": "1636336974975"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
-            "_id": {
-                "$oid": "621b029f736312129cced556"
-            },
+            "id": "621b029f736312129cced556",
             "Estado": {
                 "vivo": true
             },
@@ -260,12 +217,8 @@
                 "Contacto",
                 "Tarifas"
             ],
-            "no_corazones": {
-                "$numberInt": "2"
-            },
-            "no_vistas": {
-                "$numberInt": "103"
-            },
+            "no_corazones": "2",
+            "no_vistas": "103",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "girl girl girl",
@@ -300,31 +253,23 @@
             "Sec_Tarifas": [
                 {
                     "nombre": "Tarifa sorpresa",
-                    "precio": {
-                        "$numberInt": "500"
-                    },
+                    "precio": "500",
                     "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
                 },
                 {
                     "nombre": "Tarifa fin de mes",
-                    "precio": {
-                        "$numberInt": "1200"
-                    },
+                    "precio": "1200",
                     "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
                 }
             ],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1637005188227-WhatsApp Image 2021-10-11 at 10.52.07 PM.jpeg",
                     "url": null
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1637009389367-images (1).jpg"
                 }
             ],
@@ -339,14 +284,13 @@
                     "$numberLong": "1637005191612"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
             "_id": {
                 "$oid": "62787d3527bd9040cc937f41"
             },
+            "id": "62787d3527bd9040cc937f41",
             "Estado": {
                 "vivo": true
             },
@@ -358,12 +302,8 @@
                 "Contacto",
                 "Tarifas"
             ],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "0"
-            },
+            "no_corazones": "0",
+            "no_vistas": "0",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "China 1",
@@ -384,23 +324,17 @@
             "Sec_Tarifas": [
                 {
                     "nombre": "Tarifa 1",
-                    "precio": {
-                        "$numberInt": "500"
-                    },
+                    "precio": "500",
                     "descripcion": "hahahaha ahaha ha ah ah ah ah ah ah aha ha hahahahaha ahaha ha ah ah ah ah ah ah aha ha ha"
                 }
             ],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1652063526172-th.jpg"
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1652063526182-th (1).jpg"
                 }
             ],
@@ -415,14 +349,13 @@
                     "$numberLong": "1652063541992"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
             "_id": {
                 "$oid": "62787e2c27bd9040cc937f5d"
             },
+            "id": "62787e2c27bd9040cc937f5d",
             "Estado": {
                 "vivo": true
             },
@@ -434,12 +367,8 @@
                 "Contacto",
                 "Tarifas"
             ],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "0"
-            },
+            "no_corazones": "0",
+            "no_vistas": "0",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "El original",
@@ -460,41 +389,29 @@
             "Sec_Tarifas": [
                 {
                     "nombre": "Hey",
-                    "precio": {
-                        "$numberInt": "500"
-                    },
+                    "precio": "500",
                     "descripcion": "ahajhahaha"
                 }
             ],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1652063732287-th (1).jpg"
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1652480681023-Sin título.jpg"
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1652480681016-9c8a2a15ef490d0ed0b0950192b7a490.jpg"
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1652480684285-sss.jpg"
                 },
                 {
-                    "posicion": {
-                        "$numberInt": "1"
-                    },
+                    "posicion": "1",
                     "nombre": "1652480684314-th.jpg"
                 }
             ],
@@ -509,14 +426,13 @@
                     "$numberLong": "1652063788522"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         },
         {
             "_id": {
                 "$oid": "62845ed179c8a75264814a83"
             },
+            "id": "62845ed179c8a75264814a83",
             "Estado": {
                 "vivo": true
             },
@@ -528,12 +444,8 @@
                 "Contacto",
                 "Tarifas"
             ],
-            "no_corazones": {
-                "$numberInt": "0"
-            },
-            "no_vistas": {
-                "$numberInt": "0"
-            },
+            "no_corazones": "0",
+            "no_vistas": "0",
             "verificado": false,
             "Sec_Descripcion": {
                 "titulo": "ANUNCIO DE USUARIO DIEZ",
@@ -546,9 +458,7 @@
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
-                    "posicion": {
-                        "$numberInt": "0"
-                    },
+                    "posicion": "0",
                     "nombre": "1652842185387-th.jpg"
                 }
             ],
@@ -563,9 +473,7 @@
                     "$numberLong": "1652842193777"
                 }
             },
-            "__v": {
-                "$numberInt": "0"
-            }
+            "__v": "0"
         }
     ]
 }

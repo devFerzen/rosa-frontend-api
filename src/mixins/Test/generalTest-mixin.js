@@ -81,7 +81,7 @@ export const mixinSolicitarRestablecerContrasena = async (payload) => {
             componenteInterno: { 
                 activationAlert: { type: "success", message: 'Favor de ingresar el código de verificación que se le fue enviado a su correo.!' },
                 setSesion: payload,
-                data: '1234',
+                data: '123',
                 panelHerramientasVerificacion: true, 
                 setTipoVerificacion: 'verificacionUsuarioContrasena', 
                 setCorreo: usuario
@@ -93,7 +93,6 @@ export const mixinSolicitarRestablecerContrasena = async (payload) => {
 export const mixinDdlGeneral = async (payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
-        console.log(`mixinDdlGeneral... ${payload}`);
 
         try {
             Result = await instance.get('/ddlGeneral', {
@@ -127,6 +126,106 @@ export const mixinBusqueda = async (payload) => {
         }
         
         return resolve(JSON.stringify(Result.data.anuncios));
+    })
+}
+
+export const mixinNuevoCorreoContactanos = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        return resolve(JSON.stringify({ 
+            pagina: 'home',
+            componenteInterno: { 
+                activationAlert: { type: "success", message: 'Correo enviado con éxito.!' },
+                panelHerramientasBusqueda: true
+            } 
+        }));
+    })
+}
+
+export const mixinMeEncantaPlus = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        return resolve(JSON.stringify({ 
+            componenteInterno: { 
+                activationAlert: { type: "success", message: 'Me encata enviado.!' }
+            } 
+        }));
+    })
+}
+
+export const mixinVerificacionCelularCreacion = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        return resolve(JSON.stringify({ 
+            pagina: 'home',
+            componenteInterno: { 
+                activationAlert: { type: "success", message: `Favor de ingresar el código de verificación que se le fue enviado a su correo.!` },
+                panelHerramientasVerificacion: true, setTipoVerificacion: 'verificacionCelular'
+            } 
+        }));
+    })
+}
+
+export const mixinVerificacionUsuarioComparacion = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        console.log(`mixinVerificacionUsuarioComparacion: ${payload}`);
+
+        if (payload.input !== '123') {
+            return reject(JSON.stringify({ 
+                componenteInterno: { 
+                    activationAlert: { type: "error", message: `Código de verificación incorrecto! Te restan ${3} intentos.!` }
+                }
+            }));
+        }
+
+        return resolve(JSON.stringify({ 
+            componenteInterno: { 
+                activationAlert: { type: "success", message: `Verificación de usuario con Éxito!` },
+                 panelHerramientasCambioContrasena: true, setVerificacionUsuario: input
+            } 
+        }));
+    })
+}
+
+export const mixinVerificacionCelularComparacion = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        console.log(`mixinVerificacionCelularComparacion:`);
+        console.dir(payload);
+
+        if (payload.input !== '123') {
+            return reject(JSON.stringify({ 
+                componenteInterno: { 
+                    activationAlert: { type: "error", message: `Código de verificación incorrecto! Te restan ${3} intentos.!` }
+                }
+            }));
+        }
+
+        return resolve(JSON.stringify({ 
+            pagina: 'dashboard',
+            componenteInterno: { 
+                activationAlert: { type: "success", message: `Verificación de celular con Éxito!` },
+                numerotelefonicoUsuario: true
+            } 
+        }));
+    })
+}
+
+export const mixinVer = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        let Result;
+        try {
+            Result = await instance.get('/ver',{
+                params:{
+                    ids: [payload]
+                }
+            });
+        } catch (error) {
+            console.log(`con error axios`);
+            console.dir(error);
+
+            return reject(JSON.stringify(error.response.data));
+        }
+        
+        console.dir(Result);
+
+        return resolve(JSON.stringify(Result.data));
     })
 }
 

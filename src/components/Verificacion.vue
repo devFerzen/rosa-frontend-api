@@ -98,7 +98,6 @@ export default {
       //Validar la accion
 
       let MutateResult, params;
-      console.log("vue verificando...");
 
       if (!this.$refs.verificacion.validate()) {
         this.$store.dispatch("activationAlert", {
@@ -107,6 +106,8 @@ export default {
         });
         return;
       }
+
+      console.log("vue verificando...");
 
       try {
         //Según su tipo de verificación
@@ -126,8 +127,8 @@ export default {
           MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
         }
 
-        if (this.tipoVerificacion === "verificacionUsuarioCelular") {
-          console.log(`verificacionUsuarioCelular: ${this.tipoVerificacion}`)
+        if (this.tipoVerificacion === "verificacionCelular") {
+          console.log(`verificacionCelular: ${this.tipoVerificacion}`)
             params = {
               input: this.FormV.codigoVerificacion
             };
@@ -136,21 +137,15 @@ export default {
         } catch (error) {
           console.log("vue verificando en error...");
           console.dir(error);
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `${error.mensaje}`,
-          });
-
+          
+          this.mixinLlamadaRouter(error);
           return;
         }
 
       console.dir(MutateResult);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${MutateResult.mensaje}`,
-      });
 
       if (this.tipoVerificacion === "verificacionUsuario") {
+        //Cambiar esto
         this.MixinResult.componenteInterno = {panelHerramientasInicioSesion:true };
       }
 

@@ -986,10 +986,8 @@ export default {
         });
         return;
       }
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${queryResult.mensaje}!`,
-      });
+
+      this.mixinLlamadaRouter(queryResult);
     },
   },
   async created() {

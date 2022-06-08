@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const fs = require('fs')
+const path = require('path');
 const anuncios = require('./db/anuncios.json')
 
 const app = express()
@@ -20,6 +21,11 @@ app.get('/dashboard', (req, res) => {
   res.json({
     result: anuncios
   })
+})
+
+app.get('/uploads/:Image', (req, res) => {
+  const imagePath = path.join(__dirname,`/uploads/${req.params.Image}`);
+  res.sendFile(imagePath);
 })
 
 app.get('/ddlGeneral', (req, res) => {
@@ -49,6 +55,21 @@ app.get('/ddlGeneral', (req, res) => {
         }
       }
     });*/
+})
+
+app.get('/ver', (req, res) => {
+    const anucioDB = fs.readFileSync('./db/anuncios.json');
+    const anuncios = JSON.parse(anucioDB).anuncios;
+    let verId = req.query.ids;
+    let _anuncioVer;
+
+    for (let loopAnuncios = 0; loopAnuncios < anuncios.length; loopAnuncios++) {
+      if(anuncios[loopAnuncios].id == verId[0]){
+        _anuncioVer = anuncios[loopAnuncios];
+        break;
+      }      
+    }
+    res.json([_anuncioVer]);
 })
 
 app.post('/register', (req, res) => {
