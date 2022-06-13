@@ -1387,8 +1387,16 @@ export default {
 
     async borrarAnuncio() {
       let MutateResult;
+      let _idAnuncio;
+
       try {
-        MutateResult = await this.mixinAnuncioEliminar(this.anuncioUsuario._id);
+        if(this.anuncioUsuario.hasOwnProperty("_id")){
+          _idAnuncio = this.anuncioUsuario._id;
+        } else {
+          _idAnuncio = this.anuncioUsuario.id;
+        }
+        
+        MutateResult = await this.mixinAnuncioEliminar(_idAnuncio);
       } catch (error) {
         console.log("vue borrarAnuncio en error...");
         console.dir(error);
