@@ -20,6 +20,7 @@ const routes = [{
         component: Dashboard,
         beforeEnter(to, from, next){
             const cuentaConRegistro = store.getters.usuarioLoggeado;
+            /*//Aqui que valide inicio de sesion de llamada...
             if(!!cuentaConRegistro){
                 console.log("Cuenta con registro");
                 next();
@@ -27,8 +28,8 @@ const routes = [{
                 console.log("Guard no cuenta con registro");
                 store.dispatch('panelHerramientasInicioSesion', true);
                 next({path: '/'});
-            }
-
+            }*/
+            next();
         }
     },
     {
@@ -37,13 +38,15 @@ const routes = [{
         component: Compras,
         beforeEnter(to, from, next){
             const cuentaConRegistro = store.getters.usuarioLoggeado;
+            /*
             if(!!cuentaConRegistro){
                 next();
             }else{
+            /*
                 store.dispatch('panelHerramientasInicioSesion', true);
                 next({path: '/'});
-            }
-
+            }*/
+            next();
         }
     },
     {
@@ -60,7 +63,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    await store.dispatch('usuarioIdentificacion');
+    //await store.dispatch('usuarioIdentificacion');
     next();
 });
 

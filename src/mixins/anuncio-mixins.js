@@ -116,6 +116,21 @@ export default {
 
                 try {
                     console.dir(payload);
+                    if(true){
+
+                        payload._id = '123456789';
+                        payload.id = '123456789';
+                        return resolve({
+                            data: payload,
+                            componenteInterno:{
+                                activationAlert : { 
+                                    type: 'success', 
+                                    message: `Anuncio creado con éxito!.` 
+                                }
+                            }
+                        });
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.NUEVO_ANUNCIO_MUTATE,
                         variables: {
@@ -161,6 +176,15 @@ export default {
 
                 try {
                     console.dir(payload);
+                    if(true){
+                        return resolve({
+                            activationAlert : { 
+                                type: 'success', 
+                                message: `Anuncio actualizado con éxito!.` 
+                            }
+                        });
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.EDICION_ANUNCIO_MUTATE,
                         variables: {
@@ -206,6 +230,19 @@ export default {
 
                 try {
                     console.dir(payload);
+                    if(true){
+                        return resolve({                            
+                            componenteInterno:{
+                                anuncioEliminar: payload, 
+                                anuncioEditSet: {}, 
+                                activationAlert : { 
+                                    type: 'success', 
+                                    message: `Anuncio eliminado con éxito!.` 
+                                }
+                            }
+                        });
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.DELETE_ANUNCIO_MUTATE,
                         variables: {
@@ -243,6 +280,9 @@ export default {
                 console.log("mixinActualizarDefaultContactos...");
 
                 try {
+                    if(true){
+                        resolve();
+                    }
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.EDICION_DEFAULT_CONTACTOS,
                         variables: {

@@ -98,16 +98,18 @@
 
     <v-navigation-drawer v-model="sideDashboard" absolute temporary>
       <div class="d-flex flex-row mb-8 ml-3 mr-1 mt-3">
-        <!--<div>
+        <div
+          class="mr-auto"
+          >
           <v-img
             alt="Vuetify Logo"
-            class="shrink"
             contain
-            :src="require('./assets/logos/logo_1x.png')"
+            :src="require('./assets/logos/logoH_3x.png')"
             transition="scale-transition"
-            width="40"
+            width="100"
+            height="40"
           />
-        </div>-->
+        </div>
 
         <v-btn
           fab
@@ -124,18 +126,6 @@
         </v-btn>
       </div>
       <!--Sidedar Header-->
-
-      <div class="d-flex justify-center">
-        <v-img
-            alt="Vuetify Logo"
-            class="shrink"
-            contain
-            :src="require('./assets/logos/logoH_1x.png')"
-            transition="scale-transition"
-            width="150"
-          />
-      </div>
-      <!--Sidedar Tile-->
 
       <!--<div class="subtitle-1 text-center mb-8">Lorem Ipsum</div>
       Sidedar Subtile-->

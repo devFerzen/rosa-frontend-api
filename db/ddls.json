@@ -86,6 +86,15 @@
         },
         {
             "_id": {
+                "$oid": "618fb2a7379f180d04ce539c"
+            },
+            "no_id": "6",
+            "descripcion": "Abasolo",
+            "no_estado": "1",
+            "categoria": "ddlMunicipios"
+        },
+        {
+            "_id": {
                 "$oid": "618fb421379f180d04ce5d35"
             },
             "no_id": "1",

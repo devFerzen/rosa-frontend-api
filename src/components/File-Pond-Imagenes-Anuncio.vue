@@ -110,7 +110,7 @@ export default {
       //Verificar si esta la imagen antes de eliminar
 
       try {
-        MutateResult = await this.mixinImagenDelete(ObjetoImagenDelete.nombre);
+        //MutateResult = await this.mixinImagenDelete(ObjetoImagenDelete.nombre);
       } catch (error) {
         console.dir(error);
         this.mixinLlamadaRouter(error);

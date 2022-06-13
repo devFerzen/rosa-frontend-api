@@ -256,7 +256,7 @@
                     >
                       <v-row class="pt-2" align="space-around" no-gutters>
                         <v-col align="left" class="pl-2">
-                          <div class="text-h6 font-weight-bold">
+                          <div class="text-subtitle-1 font-weight-bold">
                             {{ tarifa.nombre }}
                           </div>
                         </v-col>
@@ -270,7 +270,7 @@
                       <!--Nombre Precio-->
 
                       <v-row no-gutters align="center" justify="center">
-                        <v-col cols="7" md="9">
+                        <v-col cols="12">
                           <div
                             class="body-2 text-center"
                             style="min-height: 42px; line-height: 1rem; white-space: pre-line;"
@@ -435,18 +435,6 @@
                   <!--Nueva creacion contacto-->
 
                   <div v-else>
-                    <div
-                      class="
-                        text-h6
-                        green-font
-                        text-weight-black text-center
-                        py-1
-                      "
-                    >
-                      Contactos Disponibles
-                    </div>
-                    <!--titulo-->
-
                     <v-row
                       align="start"
                       justify="center"
@@ -459,15 +447,7 @@
                             v-for="(contacto, i) in contactosUsuario"
                             :key="i"
                             flat
-                            :style="{
-                              'background-color': !contactosSeleccionados.includes(i)
-                                ? 'white'
-                                : 'pink',
-                            }"
-                            shaped
-                            :elevation="
-                              !contactosSeleccionados.includes(i) ? 0 : 4
-                            "
+                            shaped                            
                             class="mb-2"
                           >
                            
@@ -480,14 +460,15 @@
                                     : true
                                 "
                               >
-                                <v-list-item>                                 
+                                <v-list-item style="padding: 0;">                                 
                                   <v-list-item-content>
                                     <v-card
                                       elevation="2"
-                                      background-color="#f8ffff"
-                                      outlined
                                       rounded-xl
                                       style="border-radius: 20px;"
+                                      :elevation="
+                                        !contactosSeleccionados.includes(i) ? 0 : 4
+                                      "
                                     >                                      
                                       <v-row align="space-between" no-gutters style="height: 34px;">
                                         <v-col
@@ -502,13 +483,13 @@
                                             style="margin: 0; padding-left: .7rem;" 
                                           ></v-switch>
                                         </v-col>
-                                        <v-col align="center" style="padding-top: 6%;">
+                                        <v-col align="left" style="padding-top: 6%; padding-left: 17px; font-weight: 500;">
                                           {{contacto.contacto}}
                                         </v-col>
                                       </v-row>
                                     </v-card>
                                   </v-list-item-content>
-                                  <v-list-item-avatar class="ml-2"
+                                  <v-list-item-avatar class="ml-4"
                                     :color="
                                       tiposContacto.find(
                                         (tipoContacto) =>
@@ -522,7 +503,7 @@
                                         contacto.Tipo.categoria,
                                         contacto.Tipo.icono,
                                       ]"
-                                      class="fa-2x"
+                                      style="font-size:1.4em;"
                                       color="white"
                                     />
                                   </v-list-item-avatar>
@@ -534,7 +515,7 @@
                                 style="
                                 position: absolute;
                                 bottom: -2px;
-                                right: 10%;
+                                right: 16%;
                               "
                                 v-show="edicionView"
                               >
@@ -627,9 +608,11 @@
                             :item-text="'descripcion'"
                             :item-value="'descripcion'"
                             class="error609TextField"
-                            dense
+                            label="Estados"
+                            filled
                             outlined
                             solo
+                            dense
                           >
                             <template v-slot:selection="{ item }">
                               <span v-if="item.descripcion.length">{{
@@ -658,11 +641,11 @@
                             :items="getDdlMunicipios"
                             :item-text="'descripcion'"
                             :item-value="'descripcion'"
-                            filled
+                            class="error609TextField"
                             label="Municipios"
+                            filled
                             outlined
                             solo
-                            class="error609TextField"
                             dense
                           >
                             <template v-slot:selection="{ item }">
@@ -1150,7 +1133,7 @@ export default {
       contacto.contacto = this.nuevoContacto.contacto;
       console.dir(contacto);
 
-      if (this.nuevoContacto.accion == "creacion") {
+      if (this.nuevoContacto.accion == "creacion" || esContactoSeleccionado < 0) {
         this.anuncioUsuario.Sec_Contacto.push({
           contacto: contacto.contacto,
           Tipo: contacto.Tipo,
@@ -1159,6 +1142,7 @@ export default {
         //Preparar array para actualizado de Defaul_Contactos
         this.newDefaulContactos = this.contactosUsuario;
         this.newDefaulContactos.push(contacto);
+
         await this.$store.dispatch(
           "anuncioEditContactoSet",
           this.anuncioUsuario.Sec_Contacto
@@ -1187,7 +1171,7 @@ export default {
         }
       }
 
-      this.anuncioContactoInputsView = true;
+      this.anuncioContactoInputsView = false;
     },
     salvandoEdicionImagenes() {
       return new Promise(async (resolve, reject) => {
@@ -1242,6 +1226,8 @@ export default {
             ].Tipo,
           });
         }
+
+        console.dir(newArrayContactoAnuncio);
 
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
         this.$store.dispatch("anuncioEditContactoSet", newArrayContactoAnuncio); //Actualizacion vuex base de FormaAE
@@ -1302,7 +1288,6 @@ export default {
 
     //-----Crud Descripcion
     async salvadoDeDescripcion() {
-      let MutateResult;
       console.log(`vue salvadoDeDescripcion...`);
 
       //Cambiar Activacion de Imagenes
@@ -1318,18 +1303,10 @@ export default {
         //Activar los inputs en el tab donde este
         //habilitarEdicionesAnuncio();
 
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `>>>Error al registrar...>>>>${error.mensaje}`,
-        });
         this.mixinLlamadaRouter(error);
         throw error;
       }
 
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: MutateResult.mensaje,
-      });
       this.cancelarSalvado();
     },
 
@@ -1345,7 +1322,6 @@ export default {
           }
         }
         await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
-        this.contactosSeleccionadosSet(true);
       }
 
       this.anuncioEdicionInputsView = false;
@@ -1353,18 +1329,23 @@ export default {
       this.anuncioTarifaInputsView = false;
     },
 
-    //Habilita la apertura del anuncio dependiendo del tab en el que se encuentre y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
+    //Habilita la apertura de edición del anuncio y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
-      if (
-        this.anuncioUsuario._id === this.FormAE.id ||
-        this.FormAE.id == undefined
-      ) {
+
+      let _idAnuncio;
+
+      if(this.anuncioUsuario.hasOwnProperty("_id")){
+          _idAnuncio = this.anuncioUsuario._id;
+      } else{
+          _idAnuncio = this.anuncioUsuario.id;
+      }
+
+      if ( _idAnuncio === this.FormAE.id || this.FormAE.id == undefined ) {
         this.activacionesSecciones(this.tabSeleccionado);
         this.anuncioEdicionInputsView = true;
 
         try {
-          await this.mixinAnuncioSetFormAE({ id: this.anuncioUsuario._id });
-          this.contactosSeleccionadosSet();
+          await this.mixinAnuncioSetFormAE({ id: this.anuncioUsuario.id });
         } catch (error) {
           this.$store.dispatch("activationAlert", {
             type: "error",
@@ -1420,13 +1401,7 @@ export default {
 
       //Eliminar dicho anuncio del state tmb
       console.dir(MutateResult);
-      this.$store.dispatch("anuncioEliminar", this.anuncioUsuario._id);
-
-      this.$store.dispatch("anuncioEditSet");
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `Anuncio # ${this.anuncioUsuario._id} eliminado exitosamente!`,
-      });
+      this.mixinLlamadaRouter(MutateResult);
     },
 
     editarAnuncio() {
@@ -1446,14 +1421,13 @@ export default {
             console.log("Editando existente...");
 
             MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+            await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
+
           } else {
             console.log("Guardando nuevo...");
 
             MutateResult = await this.mixinAnuncioCrear(this.FormAE);
-            await this.$store.dispatch(
-              "anuncioAgregarNuevo",
-              MutateResult.data
-            ); //Actualizando la base vuex del state de FormAE
+            await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
           }
 
           if (this.newDefaulContactos.length > 0) {
@@ -1461,7 +1435,6 @@ export default {
             await this.mixinActualizarDefaultContactos(this.newDefaulContactos);
           }
 
-          await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
         } catch (error) {
           console.dir(error);
           //Analizar: esto causa error cuando no se tiene esa propiedad en el objeto
@@ -1472,10 +1445,8 @@ export default {
         }
 
         console.dir(MutateResult);
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: MutateResult.mensaje,
-        });
+        this.mixinLlamadaRouter(MutateResult);
+
         return resolve(MutateResult);
       });
     },

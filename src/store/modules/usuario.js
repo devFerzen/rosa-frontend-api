@@ -116,7 +116,14 @@ export const actions = {
     },
     anuncioUsuarioById({state}, payload){
         return state.usuario.anuncios_usuario.filter(function(Anuncio){
-            if(Anuncio._id === payload){
+            let _compareAnuncioId;
+            if(Anuncio.hasOwnProperty("_id")){
+                _compareAnuncioId = Anuncio._id;
+            } else{
+                _compareAnuncioId = Anuncio.id;
+            }
+
+            if(_compareAnuncioId === payload){
                 return Anuncio;
             }
         })
@@ -146,8 +153,15 @@ export const actions = {
             return;
         }
 
+        /*
+            Aqui se debe de dar el token para que lo busque... se debe de cambiar la posicion de la llamada
+        */
         //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
         try {
+            if(true){
+                return state.usuario.usuario;
+            }
+
             AccionResult = await apolloProvider.defaultClient.query({
                 query: GraphQLUserCalls.USUARIO_QUERY,
                 variables: {

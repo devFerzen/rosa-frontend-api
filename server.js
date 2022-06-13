@@ -117,14 +117,14 @@ app.post('/loggear', (req, res) => {
       res.json({
         token,
         usuario: UserElement
-      })
-    } else {
-      res.status(400).send({
-        componenteInterno: {'activationAlert':{ type: 'error', message: 'Usuario no encontrado' }}
       });
+      return;
     }
   }
-
+  
+  res.status(400).send({
+    componenteInterno: {'activationAlert':{ type: 'error', message: 'Usuario no encontrado' }}
+  });
 })
 
 app.get('/busqueda', (req, res) => {
@@ -132,19 +132,6 @@ app.get('/busqueda', (req, res) => {
   const anuncios = JSON.parse(anucioDB);
   res.json(anuncios);
 });
-// MIDDLEWARE
-function verifyToken (req, res, next) {
-  const bearerHeader = req.headers['authorization']
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(401)
-  }
-}
 
 app.listen(3000, () => {
   console.log('Server started on port 3000')

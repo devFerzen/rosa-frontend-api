@@ -8,6 +8,29 @@ const instance = axios.create({
     }
 });
 
+export const mixinDdlGeneral = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        let Result;
+
+        try {
+            Result = await instance.get('/ddlGeneral', {
+                params: {
+                    categorias: [payload]
+                }
+            });
+        } catch (error) {
+            console.log(`con error axios`);
+            console.dir(error);
+
+            return reject(JSON.stringify(error.response.data));
+        }
+        
+        return resolve(JSON.stringify({data: {
+            queryddlsByCategoria: Result.data
+        }}));
+    })
+};
+
 export const mixinInicioSesion = async (Payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
@@ -60,8 +83,6 @@ export const mixinRegistro = async (Payload) => {
 
 export const mixinCerrarSesion = async (Payload) => {
     return new Promise(async(resolve, reject) => {
-        let Result;
-
         return resolve(JSON.stringify({ 
             pagina: 'home', 
             componenteInterno: { 
@@ -69,47 +90,6 @@ export const mixinCerrarSesion = async (Payload) => {
                 panelHerramientasBusqueda: true
             } 
         }));
-    })
-};
-
-export const mixinSolicitarRestablecerContrasena = async (payload) => {
-    return new Promise(async(resolve, reject) => {
-        let Result;
-
-        return resolve(JSON.stringify({ 
-            pagina: 'home',
-            componenteInterno: { 
-                activationAlert: { type: "success", message: 'Favor de ingresar el código de verificación que se le fue enviado a su correo.!' },
-                setSesion: payload,
-                data: '123',
-                panelHerramientasVerificacion: true, 
-                setTipoVerificacion: 'verificacionUsuarioContrasena', 
-                setCorreo: usuario
-            } 
-        }));
-    })
-};
-
-export const mixinDdlGeneral = async (payload) => {
-    return new Promise(async(resolve, reject) => {
-        let Result;
-
-        try {
-            Result = await instance.get('/ddlGeneral', {
-                params: {
-                    categorias: [payload]
-                }
-            });
-        } catch (error) {
-            console.log(`con error axios`);
-            console.dir(error);
-
-            return reject(JSON.stringify(error.response.data));
-        }
-        
-        return resolve(JSON.stringify({data: {
-            queryddlsByCategoria: Result.data
-        }}));
     })
 };
 
@@ -129,6 +109,24 @@ export const mixinBusqueda = async (payload) => {
     })
 }
 
+export const mixinSolicitarRestablecerContrasena = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        let Result;
+
+        return resolve(JSON.stringify({ 
+            pagina: 'home',
+            componenteInterno: { 
+                activationAlert: { type: "success", message: 'Favor de ingresar el código de verificación que se le fue enviado a su correo.!' },
+                setSesion: payload,
+                data: '123',
+                panelHerramientasVerificacion: true, 
+                setTipoVerificacion: 'verificacionUsuarioContrasena', 
+                setCorreo: usuario
+            } 
+        }));
+    })
+};
+
 export const mixinNuevoCorreoContactanos = async (payload) => {
     return new Promise(async(resolve, reject) => {
         return resolve(JSON.stringify({ 
@@ -136,16 +134,6 @@ export const mixinNuevoCorreoContactanos = async (payload) => {
             componenteInterno: { 
                 activationAlert: { type: "success", message: 'Correo enviado con éxito.!' },
                 panelHerramientasBusqueda: true
-            } 
-        }));
-    })
-}
-
-export const mixinMeEncantaPlus = async (payload) => {
-    return new Promise(async(resolve, reject) => {
-        return resolve(JSON.stringify({ 
-            componenteInterno: { 
-                activationAlert: { type: "success", message: 'Me encata enviado.!' }
             } 
         }));
     })
@@ -207,6 +195,16 @@ export const mixinVerificacionCelularComparacion = async (payload) => {
     })
 }
 
+export const mixinMeEncantaPlus = async (payload) => {
+    return new Promise(async(resolve, reject) => {
+        return resolve(JSON.stringify({ 
+            componenteInterno: { 
+                activationAlert: { type: "success", message: 'Me encata enviado.!' }
+            } 
+        }));
+    })
+}
+
 export const mixinVer = async (payload) => {
     return new Promise(async(resolve, reject) => {
         let Result;
@@ -228,5 +226,6 @@ export const mixinVer = async (payload) => {
         return resolve(JSON.stringify(Result.data));
     })
 }
+
 
 

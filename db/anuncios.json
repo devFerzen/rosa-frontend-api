@@ -23,28 +23,50 @@
                 "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum.",
                 "sexo": "masculino"
             },
-            "Sec_Contacto": [],
+            "Sec_Contacto": [
+                {
+                    "contacto": "insta.com",
+                    "Tipo": {
+                        "categoria": "fab",
+                        "icono": "instagram"
+                    }
+                },
+                {
+                    "contacto": "87000000",
+                    "Tipo": {
+                        "categoria": "fa",
+                        "icono": "phone-alt"
+                    }
+                },
+                {
+                    "contacto": "web2.com",
+                    "Tipo": {
+                        "categoria": "fa",
+                        "icono": "globe"
+                    }
+                }
+            ],
             "Sec_Tarifas": [
                 {
                     "nombre": "Tarifa fin de mes",
                     "precio": "1200",
-                    "description": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
+                    "description": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor 2 usó una galería de textos y los mezcló de tal manera."
                 },
                 {
                     "nombre": "Tarifa de ayer!",
                     "precio": "1200",
-                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
+                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor 2 usó una galería de textos y los mezcló de tal manera."
                 }
             ],
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1637023782376-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
+                    "nombre": "china.jpg",
                     "url": null
                 },
                 {
                     "posicion": "1",
-                    "nombre": "1637023796657-gundam.jpg"
+                    "nombre": "corbata.jpg"
                 }
             ],
             "id_usuario": "6192f9bf354c4455a47a2b30",
@@ -84,17 +106,25 @@
                 "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum.",
                 "sexo": "masculino"
             },
-            "Sec_Contacto": [],
+            "Sec_Contacto": [
+                {
+                    "contacto": "insta.com",
+                    "Tipo": {
+                        "categoria": "fab",
+                        "icono": "instagram"
+                    }
+                }
+            ],
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1636336972731-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
+                    "nombre": "war.jpg",
                     "url": null
                 },
                 {
                     "posicion": "1",
-                    "nombre": "1636462472150-098a15e3b90c6e2b63bc1941f64f63d2.jpg"
+                    "nombre": "gundam.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -135,12 +165,20 @@
                 "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum. Lorem ipsum dolor sit amet                 consectetur adipisicing elit. Corrupti doloribus qui similique                 impedit. Reiciendis et cumque odit, officiis atque omnis, quasi                 numquam repudiandae id rem itaque architecto ipsam facere cum.                 Lorem ipsum dolor sit amet consectetur adipisicing elit.                 Corrupti doloribus qui similique impedit. Reiciendis et cumque                 odit, officiis atque omnis, quasi numquam repudiandae id rem                 itaque architecto ipsam facere cum.",
                 "sexo": "femenino"
             },
-            "Sec_Contacto": [],
+            "Sec_Contacto": [               
+                {
+                    "contacto": "web2.com",
+                    "Tipo": {
+                        "categoria": "fa",
+                        "icono": "globe"
+                    }
+                }
+            ],
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1636461370036-th.jpg"
+                    "nombre": "china.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -182,12 +220,12 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1636336972731-9c8a2a15ef490d0ed0b0950192b7a490.jpg",
+                    "nombre": "corbata.jpg",
                     "url": null
                 },
                 {
                     "posicion": "0",
-                    "nombre": "1636462472150-098a15e3b90c6e2b63bc1941f64f63d2.jpg"
+                    "nombre": "china.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -254,23 +292,23 @@
                 {
                     "nombre": "Tarifa sorpresa",
                     "precio": "500",
-                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
+                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor 2 usó una galería de textos y los mezcló de tal manera."
                 },
                 {
                     "nombre": "Tarifa fin de mes",
                     "precio": "1200",
-                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera."
+                    "descripcion": "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor 2 usó una galería de textos y los mezcló de tal manera."
                 }
             ],
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1637005188227-WhatsApp Image 2021-10-11 at 10.52.07 PM.jpeg",
+                    "nombre": "gundam.jpg",
                     "url": null
                 },
                 {
                     "posicion": "1",
-                    "nombre": "1637009389367-images (1).jpg"
+                    "nombre": "war.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -331,11 +369,11 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1652063526172-th.jpg"
+                    "nombre": "gundam.jpg"
                 },
                 {
                     "posicion": "0",
-                    "nombre": "1652063526182-th (1).jpg"
+                    "nombre": "war.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -396,23 +434,15 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1652063732287-th (1).jpg"
+                    "nombre": "corbata.jpg"
                 },
                 {
                     "posicion": "1",
-                    "nombre": "1652480681023-Sin título.jpg"
+                    "nombre": "china.jpg"
                 },
                 {
-                    "posicion": "1",
-                    "nombre": "1652480681016-9c8a2a15ef490d0ed0b0950192b7a490.jpg"
-                },
-                {
-                    "posicion": "1",
-                    "nombre": "1652480684285-sss.jpg"
-                },
-                {
-                    "posicion": "1",
-                    "nombre": "1652480684314-th.jpg"
+                    "posicion": "2",
+                    "nombre": "warjpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -454,12 +484,34 @@
                 "descripcion": "hahahahah ahshhshasha sha sha sh ahs ahs ha sha hs ah sha sh ash sh ah sh ashahshahahahahah ahshhshasha sha sha sh ahs ahs ha sha hs ah sha sh ash sh ah sh ashahshahahahahah ahshhshasha sha sha sh ahs ahs ha sha hs ah sha sh ash sh ah sh ashahsha.  hahahahah ahshhshasha sha sha sh ahs ahs ha sha hs ah sha sh ash sh ah sh ashahsha. hahahahah ahshhshasha sha sha sh ahs ahs ha sha hs ah sha sh ash sh ah sh ashahsha",
                 "sexo": "femenino"
             },
-            "Sec_Contacto": [],
+            "Sec_Contacto": [
+                {
+                    "contacto": "insta.com",
+                    "Tipo": {
+                        "categoria": "fab",
+                        "icono": "instagram"
+                    }
+                },
+                {
+                    "contacto": "87000000",
+                    "Tipo": {
+                        "categoria": "fa",
+                        "icono": "phone-alt"
+                    }
+                },
+                {
+                    "contacto": "web2.com",
+                    "Tipo": {
+                        "categoria": "fa",
+                        "icono": "globe"
+                    }
+                }
+            ],
             "Sec_Tarifas": [],
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "1652842185387-th.jpg"
+                    "nombre": "china.jpg"
                 }
             ],
             "id_usuario": "628459020e537247d03ee6c8",

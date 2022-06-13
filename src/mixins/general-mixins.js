@@ -89,6 +89,7 @@ export default {
                 try {
                     if(true){
                         MutateResult = await GeneralTestMixin.mixinCerrarSesion(payload);
+                        this.$store.dispatch('cerrarSesion');
                         return resolve(JSON.parse(MutateResult));
                     }
 
@@ -381,8 +382,8 @@ export default {
 
                 try {
                     if(true){
-                        QueryResult = await GeneralTestMixin.mixinNuevoCorreoContactanos(categoriasDdls);
-                        return resolve(JSON.parse(QueryResult));
+                        MutateResult = await GeneralTestMixin.mixinNuevoCorreoContactanos(payload);
+                        return resolve(JSON.parse(MutateResult));
                     }
 
                     MutateResult = await this.$apollo.mutate({
@@ -400,7 +401,11 @@ export default {
                             this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
                         } 
                     }else {
-                        this.MixinResult = new ErrorResult(error)
+                        if(typeof error === 'string'){
+                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                        } else{
+                            this.MixinResult = new ErrorResult(error);
+                        }
                     }
 
                     return reject(this.MixinResult);
@@ -423,6 +428,17 @@ export default {
                 this.cleanMixinResult();
 
                 try {
+                    if(true){
+                        return resolve({
+                            pagina: 'home', 
+                            componenteInterno: { 
+                                panelHerramientasInicioSesion: true, 
+                                cerrarSesion: true,
+                                activationAlert: { type: "success", message: 'Contraseña guardada exitosamente.!' },                                
+                            }
+                        });
+                    }
+
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlCalls.RESTABLECER_CONTRASENA,
                         variables: {

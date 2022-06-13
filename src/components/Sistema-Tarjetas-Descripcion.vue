@@ -20,7 +20,7 @@
                 <div v-if="hover">
                   <div
                     style="
-                      z-index: 3;
+                      z-index: 1;
                       position: absolute;
                       top: 2px;
                       right: 0px;
@@ -207,6 +207,7 @@
                   <v-carousel
                     :height="tarjetaWH['carruselH']"
                     id="carouselImgAnuncio"
+                    continuous="true"
                   >
                     <template v-slot:prev="{ on }">
                       <v-btn
@@ -227,11 +228,9 @@
                     <template v-slot:next="{ on }">
                       <v-btn
                         fab
-                        depressed
-                        plain
-                        text
                         color="pink"
                         large
+                        plain
                         v-on="on"
                         v-ripple="false"
                         id="idPrevNext"
@@ -242,6 +241,7 @@
                         ></font-awesome-icon>
                       </v-btn>
                     </template>
+
                     <v-carousel-item
                       active-class="anuncio-imagenes-dots"
                       v-for="(imagen, i) in anuncio.Sec_Imagenes"
@@ -320,7 +320,7 @@
             :style="{ 'margin-bottom': marginMbView + 'px' }"
           >
             <v-col cols="12" md="4" style="min-height: 95vh">
-              <v-carousel height="90vh" class="my-4">
+              <v-carousel continuous="true" height="90vh" class="my-4">
                 <v-carousel-item
                   v-for="(imagen, i) in anuncioView.Sec_Imagenes"
                   :key="i"
@@ -711,15 +711,11 @@
     1.- Posible issue en traspaso de estilos hacia un futuro carrusel children.
   */
 import { mapGetters } from "vuex";
-import MiniTarifas from "@/components/Mini-Tarifas";
 import GeneralMixins from "../mixins/general-mixins.js";
 
 export default {
   name: "sistema-tarjetas-descripcion",
   mixins: [GeneralMixins],
-  components: {
-    MiniTarifas,
-  },
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
     colUsuarioDesc: { type: String, default: '4' }
@@ -1074,27 +1070,22 @@ export default {
 
 #carouselImgAnuncio .v-carousel__controls {
   background: none !important;
-  z-index: 3 !important;
+  z-index: 3 !important;  
 }
 
 .anuncio-imagenes-dots {
   color: #e0409a !important;
 }
 
-.v-window__prev,
-.v-window__next {
+.v-window__prev, .v-window__next{
   background: none;
   margin: 0;
 }
 
+.v-window__next > .v-btn,
+.v-window__next > .v-btn,
 .v-window__prev > .v-btn,
 .v-window__prev > .v-btn {
-  font-size: 2rem;
-  color: #e994c496;
-}
-
-.v-window__next > .v-btn,
-.v-window__next > .v-btn {
   font-size: 2rem;
   color: #e994c496;
 }
