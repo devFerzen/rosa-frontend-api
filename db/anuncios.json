@@ -119,12 +119,12 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "war.jpg",
+                    "nombre": "corbata.jpg",
                     "url": null
                 },
                 {
                     "posicion": "1",
-                    "nombre": "gundam.jpg"
+                    "nombre": "china.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -303,12 +303,12 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "gundam.jpg",
+                    "nombre": "china.jpg",
                     "url": null
                 },
                 {
                     "posicion": "1",
-                    "nombre": "war.jpg"
+                    "nombre": "corbata.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -369,11 +369,11 @@
             "Sec_Imagenes": [
                 {
                     "posicion": "0",
-                    "nombre": "gundam.jpg"
+                    "nombre": "china.jpg"
                 },
                 {
                     "posicion": "0",
-                    "nombre": "war.jpg"
+                    "nombre": "corbata.jpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",
@@ -442,7 +442,7 @@
                 },
                 {
                     "posicion": "2",
-                    "nombre": "warjpg"
+                    "nombre": "corbatajpg"
                 }
             ],
             "id_usuario": "6146308a2598e82564534adf",

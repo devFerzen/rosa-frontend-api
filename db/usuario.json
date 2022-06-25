@@ -91,7 +91,7 @@
           },
           {
             "posicion": "1",
-            "nombre": "gundam.jpg"
+            "nombre": "corbata.jpg"
           }
         ],
         "id_usuario": "6192f9bf354c4455a47a2b30",
@@ -153,7 +153,7 @@
           },
           {
             "posicion": "1",
-            "nombre": "war.jpg"
+            "nombre": "china.jpg"
           }
         ],
         "id_usuario": "6146308a2598e82564534adf",
@@ -286,7 +286,7 @@
         "Sec_Imagenes": [
           {
             "posicion": "0",
-            "nombre": "war.jpg",
+            "nombre": "china.jpg",
             "url": null
           },
           {
@@ -423,7 +423,7 @@
           },
           {
             "posicion": "0",
-            "nombre": "gundam.jpg"
+            "nombre": "corbata.jpg"
           }
         ],
         "id_usuario": "6146308a2598e82564534adf",

@@ -512,6 +512,7 @@ export default {
                 try {
                     if(true){
                         QueryResult = await GeneralTestMixin.mixinDdlGeneral(categoriasDdls);
+                        console.dir(QueryResult);
                         return resolve(JSON.parse(QueryResult));
                     }
 
