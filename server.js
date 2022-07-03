@@ -9,7 +9,7 @@ const anuncios = require('./db/anuncios.json')
 const app = express()
 
 var corsOptions = {
-  origin: "http://localhost:8080",
+  origin: "https://error-609.herokuapp.com", //"http://localhost:8080",
 }
 
 app.use(cors(corsOptions))

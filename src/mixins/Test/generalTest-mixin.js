@@ -3,7 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: "http://localhost:3080/api",
   headers: {
-    "Access-Control-Allow-Origin": "http://localhost:8080", //"*" "https://error-609.herokuapp.com",
+    "Access-Control-Allow-Origin": "*", //"http://localhost:8080", //"*" "https://error-609.herokuapp.com",
     "Accept": "application/json",
     "Access-Control-Allow-Methods": "GET, POST, DELETE"
   },
