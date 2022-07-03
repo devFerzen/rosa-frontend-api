@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "npm run build",
+    "build": "vue-cli-service build",
     "serve": "vue-cli-service serve",
-    "start": "node server.js & vue-cli-service serve",
-    "nodeServer": "node server.js",
-    "build": "node server.js & vue-cli-service build"
+    "start": "node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",

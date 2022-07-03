@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://localhost:3000',
-  headers:{
-        'Access-Control-Allow-Origin': '*',
-        'Accept': 'application/json'
-    }
+  baseURL: "http://localhost:3080/api",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    Accept: "application/json",
+  },
 });
 
 export const mixinDdlGeneral = async (payload) => {

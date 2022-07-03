@@ -8,27 +8,36 @@ const anuncios = require('./db/anuncios.json')
 
 const app = express()
 
-app.use(cors())
+var corsOptions = {
+  origin: "http://localhost:8080",
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname,'/dist')))
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) =>{
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
+});
+
+app.get('/api/', (req, res) => {
   res.json({
     message: 'Welcome to the API.'
   })
 })
 
-app.get('/dashboard', (req, res) => {
+app.get('/api/dashboard', (req, res) => {
   res.json({
     result: anuncios
   })
 })
 
-app.get('/uploads/:Image', (req, res) => {
+app.get('/api/uploads/:Image', (req, res) => {
   const imagePath = path.join(__dirname,`/uploads/${req.params.Image}`);
   res.sendFile(imagePath);
 })
 
-app.get('/ddlGeneral', (req, res) => {
+app.get('/api/ddlGeneral', (req, res) => {
     const dbddlGeneral = fs.readFileSync('./db/ddls.json');
     const ddlArray = JSON.parse(dbddlGeneral);
 
@@ -57,7 +66,7 @@ app.get('/ddlGeneral', (req, res) => {
     });*/
 })
 
-app.get('/ver', (req, res) => {
+app.get('/api/ver', (req, res) => {
     const anucioDB = fs.readFileSync('./db/anuncios.json');
     const anuncios = JSON.parse(anucioDB).anuncios;
     let verId = req.query.ids;
@@ -72,7 +81,7 @@ app.get('/ver', (req, res) => {
     res.json([_anuncioVer]);
 })
 
-app.post('/register', (req, res) => {
+app.post('/api/register', (req, res) => {
 
   if (req.body) {
     const usuario = {
@@ -99,7 +108,7 @@ app.post('/register', (req, res) => {
   }
 })
 
-app.post('/loggear', (req, res) => {
+app.post('/api/loggear', (req, res) => {
   const userDB = fs.readFileSync('./db/usuario.json')
   const users = JSON.parse(userDB)
 
@@ -127,12 +136,12 @@ app.post('/loggear', (req, res) => {
   });
 })
 
-app.get('/busqueda', (req, res) => {
+app.get('/api/busqueda', (req, res) => {
   const anucioDB = fs.readFileSync('./db/anuncios.json');
   const anuncios = JSON.parse(anucioDB);
   res.json(anuncios);
 });
 
-app.listen(3000, () => {
-  console.log('Server started on port 3000')
+app.listen(3080, () => {
+  console.log('Server started on port 3080')
 })

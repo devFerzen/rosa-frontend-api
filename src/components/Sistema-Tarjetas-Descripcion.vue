@@ -246,7 +246,7 @@
                       active-class="anuncio-imagenes-dots"
                       v-for="(imagen, i) in anuncio.Sec_Imagenes"
                       :key="i"
-                      :src="'http://localhost:3000/uploads/' + imagen.nombre"
+                      :src="'http://localhost:3080/api/uploads/' + imagen.nombre"
                     ></v-carousel-item>
                   </v-carousel>
                 </v-col>
@@ -324,7 +324,7 @@
                 <v-carousel-item
                   v-for="(imagen, i) in anuncioView.Sec_Imagenes"
                   :key="i"
-                  :src="'http://localhost:3000/uploads/' + imagen.nombre"
+                  :src="'http://localhost:3080/api/uploads/' + imagen.nombre"
                   reverse-transition="fade-transition"
                   transition="fade-transition"
                   height="600px"

@@ -933,7 +933,7 @@ export default {
       //verificar los created del template anuncio edit display
       return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
         return {
-          url: "http://localhost:3000/uploads/" + infoImagen.nombre,
+          url: "http://localhost:3080/api/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
       });

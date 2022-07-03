@@ -505,7 +505,6 @@ export default {
 
         mixinDdlGeneral(categoriasDdls) {
             return new Promise(async(resolve, reject) => {
-                console.log(`mixinDdlGeneral... ${typeof categoriasDdls}`);
 
                 let QueryResult;
 

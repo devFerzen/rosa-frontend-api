@@ -14,7 +14,6 @@ export default new Vuetify({
         pink: '#e47ab6',
         green: '#9fe676',
         orange: '#e5ae78',
-        grey: '#d7f3c6de',
         primary: '#e0409a',
         secondary: '#424242',
         accent: '#82B1FF',
