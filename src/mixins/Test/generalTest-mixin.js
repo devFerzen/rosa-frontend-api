@@ -4,9 +4,9 @@ const instance = axios.create({
   baseURL: "https://localhost:3080/api",
   headers: {
     "Access-Control-Allow-Origin": "https://error-609.herokuapp.com", //"http://localhost:8080"
-    "Accept": "application/json",
-    "Access-Control-Allow-Methods": "GET, POST, DELETE",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Accept": "application/json"
   },
 });
 
