@@ -7,7 +7,7 @@ module.exports = {
   devServer: {
     proxy: {
       "/api": {
-        target: "https://localhost:3080" //"https://error-609.herokuapp.com:3080/api", //"https://localhost:3080/api",
+        target: "https://localhost:3080/",
       },
     },
   },
