@@ -9,12 +9,12 @@ const anuncios = require('./db/anuncios.json')
 const app = express()
 
 var corsOptions = {
-  origin: "https://error-609.herokuapp.com:8080" //"http://localhost:8080",
-};
+  origin: "http://localhost:8080",
+}
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname,'/dist')))
 
 app.get('/', (req, res) =>{
