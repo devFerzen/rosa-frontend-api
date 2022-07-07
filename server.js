@@ -142,6 +142,6 @@ app.get('/api/busqueda', (req, res) => {
   res.json(anuncios);
 });
 
-app.listen(3080, () => {
+app.listen(process.env.PORT || 3080, () => {
   console.log('Server started on port 3080')
 })
