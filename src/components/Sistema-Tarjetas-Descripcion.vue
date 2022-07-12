@@ -112,13 +112,7 @@
                         "
                         :class="anuncioTextDescMobile"
                       >
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Dolorum ut iure soluta nam quia tenetur quibusdam
-                        saepe et cupiditate, libero minima quiLorem ipsum dolor
-                        sit, amet consectetur adipisicing elit. Dolorum ut iure
-                        soluta nam quia tenetur quibusdam saepe et cupiditate,
-                        libero minima officiis impedit fugiat voluptates nisi
-                        consequatur inventore? Dignissimos.
+                        {{tipoPuerto}}.
                       </p>
                     </v-col>
                   </row>
@@ -246,7 +240,7 @@
                       active-class="anuncio-imagenes-dots"
                       v-for="(imagen, i) in anuncio.Sec_Imagenes"
                       :key="i"
-                      :src="'http://localhost:3080/api/uploads/' + imagen.nombre"
+                      :src="tipoPuerto + imagen.nombre"
                     ></v-carousel-item>
                   </v-carousel>
                 </v-col>
@@ -324,7 +318,7 @@
                 <v-carousel-item
                   v-for="(imagen, i) in anuncioView.Sec_Imagenes"
                   :key="i"
-                  :src="'http://localhost:3080/api/uploads/' + imagen.nombre"
+                  :src="tipoPuerto + imagen.nombre"
                   reverse-transition="fade-transition"
                   transition="fade-transition"
                   height="600px"
@@ -828,6 +822,9 @@ export default {
   },
   computed: {
     ...mapGetters(["getBusquedaQuery"]),
+    tipoPuerto(){
+      return this.$store.state.tipoPuerto
+    },
     tarjetaWH() {
       const { sm, xs } = this.$vuetify.breakpoint;
       return xs || sm

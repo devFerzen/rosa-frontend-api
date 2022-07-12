@@ -5,16 +5,28 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const path = require('path');
 const anuncios = require('./db/anuncios.json')
+const serveStatic = require("serve-static");
 
 const app = express()
+const _port = process.env.PORT || 3080;
+
+app.use((req, res, next)=>{
+  res.setHeader("Access-Control-Allow-Origin", `http://localhost:${_port}`); //'https://error-609.herokuapp.com')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT')
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type')//'X-Requested-With, content-type, Authorization') // Headers you wish to allow
+  //res.setHeader('Access-Control-Allow-Credentials', true) // set to true to include cookies in the requests sent
+  next();
+});
+
 var corsOptions = {
-  origin: "https://error-609.herokuapp.com", //"http://localhost:8080",
-}
+  origin: `http://localhost:${_port}`, //"https://error-609.herokuapp.com",
+};
 
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname,'/dist')))
+//app.use(express.static(path.join(__dirname+'/dist')))
+app.use(serveStatic(__dirname + "/dist"));
 
 app.get('/', (req, res) =>{
   res.sendFile(path.join(__dirname, '/dist/index.html'));
@@ -142,6 +154,6 @@ app.get('/api/busqueda', (req, res) => {
   res.json(anuncios);
 });
 
-app.listen(process.env.PORT || 3080, () => {
-  console.log('Server started on port 3080')
-})
+app.listen(_port, () => {
+  console.log(`Server started on port ${_port}`);
+});

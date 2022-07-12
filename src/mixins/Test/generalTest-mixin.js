@@ -1,13 +1,12 @@
 import axios from 'axios';
-const _port = process.env.PORT || 3080
+const _port = process.env.PORT || 5000
 const instance = axios.create({
-  baseURL: `https://localhost:${_port}/api`,
+  baseURL: `http://localhost:${_port}/api`,
   headers: {
     "Access-Control-Allow-Origin": "https://error-609.herokuapp.com", //"http://localhost:8080"
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT",
-    "Access-Control-Allow-Headers": "Origin, Accept, Content-Type",
-    Accept: "application/json",
-    Credentials: "same-origin",
+    "Access-Control-Allow-Headers": "Origin, Content-Type",
+    "Accept": "application/json"
   },
 });
 

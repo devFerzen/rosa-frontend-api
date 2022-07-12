@@ -282,6 +282,7 @@ export default {
   },
   async created() {
     let QueryEstadosResult;
+    this.$store.dispatch('tipoPuerto');
 
     if (this.getDdlEstados[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlEstado");
