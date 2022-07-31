@@ -158,9 +158,9 @@ export const actions = {
         */
         //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
         try {
-            if(true){
+            /*if(true){
                 return state.usuario.usuario;
-            }
+            }*/
 
             AccionResult = await apolloProvider.defaultClient.query({
                 query: GraphQLUserCalls.USUARIO_QUERY,

@@ -178,7 +178,7 @@
                 class="error609TextField select609"
               >
               </v-select>
-            </v-row> 
+            </v-row>
           </v-col>
           <!--sexo-->
         </v-row>
@@ -198,7 +198,7 @@
           @click="buscar"
         >
           Buscar
-        </v-btn>        
+        </v-btn>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -245,7 +245,7 @@ export default {
       "getDdlCategorias",
       "getDdlSexo",
     ]),
-    getDdlCategoriasCorrection(){
+    getDdlCategoriasCorrection() {
       this.busquedaCategorias = "Escrots";
       return this.getDdlCategorias;
     },
@@ -304,29 +304,20 @@ export default {
       }
 
       this.$store.dispatch("querySet", Query);
-      console.log(`querySet`);
-      console.dir(querySet);
     },
     async anunciate() {
       let DispatchResult;
       console.log("vue anunciate...");
 
       try {
-        DispatchResult = await this.$store.dispatch(
-          "anunciateSet",
-          null
-        );
+        DispatchResult = await this.$store.dispatch("anunciateSet", null);
       } catch (error) {
-        console.log("vue anunciate... en error");
+        console.log("vue anunciate... dispatch en error");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
         this.mixinLlamadaRouter(error);
         return;
       }
-      console.log("vue anunciate...");
+      console.log("vue anunciate... result");
       console.dir(DispatchResult);
       this.mixinLlamadaRouter(DispatchResult);
     },
@@ -338,12 +329,15 @@ export default {
         return;
       }
 
-      this.extraInputView = window.pageYOffset > this.scrollLimitClosed ? false : window.pageYOffset < this.scrollLimitClosed &&
+      this.extraInputView =
+        window.pageYOffset > this.scrollLimitClosed
+          ? false
+          : window.pageYOffset < this.scrollLimitClosed &&
             window.pageYOffset < this.scrollLimitOpened
           ? true
           : false;
 
-        /*if( window.pageYOffset > this.scrollLimitClosed ){
+      /*if( window.pageYOffset > this.scrollLimitClosed ){
           this.extraInputViewUserActivation = false;//!this.extraInputView ? false : true;
         }*/
     },
@@ -365,7 +359,7 @@ export default {
         this.$emit("activandoGrid", {
           herramientasWidth: { lg: 5, md: 6, sm: 8 },
           sistemaWidth: { lg: 12 },
-          colUsuarioDesc: 3
+          colUsuarioDesc: 3,
         });
         this.$emit("panelMinClass", {
           panelHerramientasClass: "panel-herramientas-mbview",
@@ -380,7 +374,7 @@ export default {
       this.$emit("activandoGrid", {
         herramientasWidth: { lg: 3, md: 6, sm: 8 },
         sistemaWidth: { lg: 9 },
-        colUsuarioDesc: 4
+        colUsuarioDesc: 4,
       });
       this.$emit("panelMinClass", {
         panelHerramientasClass: "panel-herramientas-pcview",
@@ -467,7 +461,7 @@ export default {
 
 .v-slide-group__prev > .v-icon,
 .v-slide-group__next > .v-icon {
-  font-size: 1.8rem!important;
+  font-size: 1.8rem !important;
   color: white;
   background-color: #e0409a;
   border-radius: 18px;
@@ -475,7 +469,7 @@ export default {
 
 .v-slide-group__prev > .v-icon--disabled,
 .v-slide-group__next > .v-icon--disabled {
-  font-size: 1.2rem!important;
+  font-size: 1.2rem !important;
   background-color: #e47ab6;
 }
 </style>

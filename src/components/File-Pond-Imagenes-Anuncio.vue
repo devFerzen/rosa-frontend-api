@@ -50,7 +50,8 @@ setOptions({
   labelIdle:
     'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Explorar </span>',
   server: {
-    url: "http://localhost:3000/",
+    //url: "/api/",
+    url: 'http://localhost:3080/',
     process: {
       url: "upload",
     },
@@ -116,7 +117,7 @@ export default {
         this.mixinLlamadaRouter(error);
       }
 
-      this.$emit("iAOnDelete", { imageToDelete: ObjetoImagenDelete.nombre });
+      this.$emit("imageOnDelete", { imageToDelete: ObjetoImagenDelete.nombre });
     },
     imagenesAnuncioOnProcess(error, file) {
       console.log("imagenesAnuncioOnProcess...");
@@ -134,7 +135,7 @@ export default {
       };
       console.dir(ObjetoImagen);
 
-      this.$emit("iAOnProcess", { ...ObjetoImagen });
+      this.$emit("imageOnProcess", { ...ObjetoImagen });
     },
   },
 };

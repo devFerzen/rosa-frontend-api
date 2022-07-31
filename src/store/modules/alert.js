@@ -20,7 +20,7 @@ export const actions = {
   async activationAlert({commit},payload){
     commit('MODIFICATION_ALERT', payload);
     commit('ACTIVATION_ALERT', true);
-    await retrasoDe(3500);
+    await retrasoDe(4500);
     commit('ACTIVATION_ALERT', false);
   }
 }

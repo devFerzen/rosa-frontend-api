@@ -13,7 +13,7 @@ import Cookies from 'js-cookie'
 
 Vue.use(Vuetify);
 
-const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql', credentials: "include" });
+const httpLink = new HttpLink({ uri: 'http://localhost:3080/graphql', credentials: "include" });
 const cache = new InMemoryCache({
     addTypename: false //Borra los __typename de los querys o mutaciones
 });
@@ -45,7 +45,7 @@ const apolloProvider = new VueApollo({
     defaultClient: new ApolloClient({
         link,
         cache,
-        uri: "http://localhost:3000/graphql", //"http://192.168.100.69:3000/graphql",
+        uri: "http://localhost:3080/graphql", //"http://192.168.100.69:3000/graphql",
         //credentials: 'include',
         connectToDevTools: true //ApolloDev browser tool 
     })

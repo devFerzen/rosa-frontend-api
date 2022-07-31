@@ -7,17 +7,11 @@
         </tarjeta-anuncio-usuario>
       </v-col>
     </v-row>
-
-    <!--<anuncio-edit-display :displayState="false" :key="anuncioPreView" />
-    AnuncioEdit Dialog para VIEW-->
-
   </v-container>
 </template>
 
 <script>
   import TarjetaAnuncioUsuario from "@/components/Sistema-Tarjeta-Usuario";
-  import AnuncioEditDisplay from "@/components/Anuncio-Edit-Display";
-
   import { mapGetters } from "vuex";
 
   import AnuncioMixins from '../mixins/anuncio-mixins.js';
@@ -27,8 +21,7 @@
     name: "dashboard",
     mixins: [AnuncioMixins, GeneralMixins],
     components: {
-      TarjetaAnuncioUsuario,
-      AnuncioEditDisplay
+      TarjetaAnuncioUsuario      
     },
     data() {
       return {

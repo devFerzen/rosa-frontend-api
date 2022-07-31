@@ -5,8 +5,8 @@
         <v-col cols="12" md="3" v-if="edicionView">
           <file-pond-Imagenes-Anuncio
             :imagenes="imagenesAnuncioFilePond"
-            @iAOnDelete="iAOnDelete"
-            @iAOnProcess="iAOnProcess"
+            @imageOnDelete="imageOnDelete"
+            @imageOnProcess="imageOnProcess"
           ></file-pond-Imagenes-Anuncio>
         </v-col>
         <v-col cols="12" :md="edicionView ? 9 : 6" style="position: relative;" v-else>
@@ -234,7 +234,7 @@
                       <!--Nueva Tarifa Inputs-->
                       <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
                         <v-btn
-                          @click="salvadoDeTarifa"
+                          @click="setSalvadoNuevaTarifa"
                           color="primary"
                           class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
                           tile
@@ -797,7 +797,7 @@
                     align="center"
                   >
                     <v-btn
-                      @click="salvadoDeDescripcion"
+                      @click="salvarFormAnuncio"
                       color="primary"
                       class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
                       tile
@@ -816,7 +816,7 @@
                     <v-btn
                       color="green"
                       class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                      @click="abrirForm(true)"
+                      @click="abrirFormAnuncio(true)"
                       raised
                     >
                       <span style="color: white;">Nuevo</span>
@@ -828,7 +828,7 @@
                     <v-btn
                       color="black"
                       class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                      @click="cancelarSalvado"
+                      @click="cancelarFormAnuncio"
                       style="border: none!important;"
                       outlined
                     >
@@ -933,7 +933,8 @@ export default {
       //verificar los created del template anuncio edit display
       return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
         return {
-          url: "http://localhost:3000/uploads/" + infoImagen.nombre,
+          url: "http://localhost:3080/uploads/" + infoImagen.nombre,
+          //url: "/api/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
       });
@@ -1022,8 +1023,7 @@ export default {
   },
   methods: {
     //-----Crud Tarifas
-
-    abrirForm(isNew = false) {
+    abrirFormAnuncio(isNew = false) {
       if (isNew) {
         if (this.tabSeleccionado === "revealContacto") {
           this.anuncioContactoInputsView = true;
@@ -1047,9 +1047,51 @@ export default {
           break;
       }
     },
-    salvadoDeTarifa() {
+    async salvarFormAnuncio() {
+      console.log(`vue salvarFormAnuncio...`);
+
+      //Cambiar Activacion de Imagenes
+      this.cancelarFormAnuncio(false);
+
+      //Activar una especia de loading (no importante aun)
+
+      try {
+        await this.savingAnuncio(); //Llamada de creacion/modificacion anuncio
+      } catch (error) {
+        console.log("vue salvarFormAnuncio... en error");
+        console.dir(error);
+
+        this.mixinLlamadaRouter(error);
+        throw error;
+      }
+
+      
+      this.cancelarFormAnuncio();
+      this.mixinLlamadaRouter(this.MixinResult);
+    },
+
+    //------Acciones Anuncio
+    async cancelarFormAnuncio(limpia = true) {
+      if (limpia) {
+        this.limpiarContactoForm();
+        this.limpiarTarifaForm();
+
+        if (this.FormAE.hasOwnProperty("_anuncioEdicionInputsView")) {
+          if (this.FormAE._anuncioEdicionInputsView) {
+            await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
+          }
+        }
+        await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
+      }
+
+      this.anuncioEdicionInputsView = false;
+      this.anuncioContactoInputsView = false;
+      this.anuncioTarifaInputsView = false;
+    },
+    
+    setSalvadoNuevaTarifa() {
       let tarifa = {};
-      console.log("salvadoDeTarifa");
+      console.log("setSalvadoNuevaTarifa");
 
       //validacion
       if (this.anuncioUsuario.Sec_Tarifas.length >= 3) {
@@ -1098,13 +1140,13 @@ export default {
       ].descripcion;
       this.nuevaTarifa.accion = "actualizacion";
 
-      this.abrirForm();
+      this.abrirFormAnuncio();
     },
     eliminarTarifa(idPosicion) {
       this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
     },
 
-    //Accion de editar o crear un Contacto
+    //Falta las acciones backend?
     async salvadoDeContacto() {
       console.log(`salvadoDeContacto`);
       let contacto = {};
@@ -1120,12 +1162,12 @@ export default {
         return;
       }
 
+      //Setear valores
       esContactoSeleccionado = this.anuncioUsuario.Sec_Contacto.findIndex(
         (Contacto) => Contacto.contacto == this.nuevoContacto.idPosicion
       );
       console.log(`esContactoSeleccionado: ${esContactoSeleccionado}`);
 
-      //Setear valores
       contacto.Tipo = {
         categoria: this.nuevoContacto.Tipo.categoria,
         icono: this.nuevoContacto.Tipo.icono,
@@ -1133,7 +1175,8 @@ export default {
       contacto.contacto = this.nuevoContacto.contacto;
       console.dir(contacto);
 
-      if (this.nuevoContacto.accion == "creacion" || esContactoSeleccionado < 0) {
+      //Hacer que la funcion mixin haga desde aqui y con las llamadas de las variables tal como estan
+      if (this.nuevoContacto.accion == "creacion" || esContactoSeleccionado <= 0) {
         this.anuncioUsuario.Sec_Contacto.push({
           contacto: contacto.contacto,
           Tipo: contacto.Tipo,
@@ -1148,6 +1191,8 @@ export default {
           this.anuncioUsuario.Sec_Contacto
         ); //Actualizacion vuex base de FormaAE
       } else {
+
+        //Default
         _Default_Contactos.splice(this.nuevoContacto.idPosicion, 1, {
           contacto: contacto.contacto,
           Tipo: contacto.Tipo,
@@ -1173,7 +1218,9 @@ export default {
 
       this.anuncioContactoInputsView = false;
     },
-    salvandoEdicionImagenes() {
+    
+    //----- Sets de secciones
+    setSalvadoEdicionImagenes() {
       return new Promise(async (resolve, reject) => {
         if (this.nuevasImagenes.length > 0) {
           await this.$store.dispatch("anuncioSetImagenes", this.nuevasImagenes); //Actualizacion vuex base de FormaAE
@@ -1181,7 +1228,7 @@ export default {
         resolve();
       });
     },
-    salvandoEdicionDescripcion() {
+    setSalvadoEdicionDescripcion() {
       return new Promise(async (resolve, reject) => {
         await this.$store.dispatch(
           "anuncioDescripcionSet",
@@ -1198,7 +1245,7 @@ export default {
         resolve();
       });
     },
-    salvandoEdicionTarifas() {
+    setSalvadoEdicionTarifas() {
       return new Promise(async (resolve, reject) => {
         await this.$store.dispatch(
           "anuncioEditTarifaSet",
@@ -1207,7 +1254,7 @@ export default {
         resolve();
       });
     },
-    salvandoEdicionContacto() {
+    setSalvadoEdicionContacto() {
       return new Promise((resolve, reject) => {
         let newArrayContactoAnuncio = [];
 
@@ -1251,8 +1298,10 @@ export default {
       this.nuevoContacto.accion = "actualizacion";
       this.anuncioContactoInputsView = true;
 
-      this.abrirForm();
+      this.abrirFormAnuncio();
     },
+    
+    //falta el backend?
     async eliminarContacto(idPosicion) {
       let MutateResult;
       let newDefaulContactos = [];
@@ -1286,50 +1335,8 @@ export default {
       }
     },
 
-    //-----Crud Descripcion
-    async salvadoDeDescripcion() {
-      console.log(`vue salvadoDeDescripcion...`);
 
-      //Cambiar Activacion de Imagenes
-      this.cancelarSalvado(false);
-
-      //Activar una especia de loading (no importante aun)
-
-      try {
-        await this.editarAnuncio(); //Llamada de creacion/modificacion anuncio
-      } catch (error) {
-        console.log("Error...");
-        console.dir(error);
-        //Activar los inputs en el tab donde este
-        //habilitarEdicionesAnuncio();
-
-        this.mixinLlamadaRouter(error);
-        throw error;
-      }
-
-      this.cancelarSalvado();
-    },
-
-    //------Acciones Anuncio
-    async cancelarSalvado(limpia = true) {
-      if (limpia) {
-        this.limpiarContactoForm();
-        this.limpiarTarifaForm();
-
-        if (this.FormAE.hasOwnProperty("_anuncioEdicionInputsView")) {
-          if (this.FormAE._anuncioEdicionInputsView) {
-            await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
-          }
-        }
-        await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
-      }
-
-      this.anuncioEdicionInputsView = false;
-      this.anuncioContactoInputsView = false;
-      this.anuncioTarifaInputsView = false;
-    },
-
-    //Habilita la apertura de edición del anuncio y manda a salvar a al objeto FormAE responsable de los CRUDS del anuncio.
+    //Habilita la apertura de edición del anuncio y manda a setea a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
 
       let _idAnuncio;
@@ -1388,6 +1395,8 @@ export default {
     async borrarAnuncio() {
       let MutateResult;
       let _idAnuncio;
+      console.log("vue borrarAnuncio...");
+
 
       try {
         if(this.anuncioUsuario.hasOwnProperty("_id")){
@@ -1398,43 +1407,43 @@ export default {
         
         MutateResult = await this.mixinAnuncioEliminar(_idAnuncio);
       } catch (error) {
-        console.log("vue borrarAnuncio en error...");
+        console.log("vue borrarAnuncio... en error");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
-        return;
+
+        this.mixinLlamadaRouter(error);
+        throw error;
       }
 
-      //Eliminar dicho anuncio del state tmb
+      //Eliminar dicho anuncio del state tmb????, claro... validar porque no se esta haciendo
       console.dir(MutateResult);
       this.mixinLlamadaRouter(MutateResult);
     },
 
-    editarAnuncio() {
+    //Esta funcion, no es una funcion directa, asi que no hace la llamadas al dispatch de acciones finales
+    savingAnuncio() {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
 
         try {
           //Añadir aqui la validacion de infor de la seccion Descripcion
-          await this.salvandoEdicionContacto(); //Actualizando los contactos seleccionados del anuncio en la base Vuex de FormAE
-          await this.salvandoEdicionImagenes(); //Actualizando las imagenes que haya hecho trigger el filePond a la base Vuex de FormAE
-          await this.salvandoEdicionDescripcion(); //Actualizando seccion de descripncipn en la base Vuex de FormAE
-          await this.salvandoEdicionTarifas(); //Actualizando el listado de tarifas en la base Vuex de FormAE
+          //Añade los vuex de FormAE
+          await this.setSalvadoEdicionContacto(); //Actualizando los contactos seleccionados del anuncio en la base Vuex de FormAE
+          await this.setSalvadoEdicionImagenes(); //Actualizando las imagenes que haya hecho trigger el filePond a la base Vuex de FormAE
+          await this.setSalvadoEdicionDescripcion(); //Actualizando seccion de descripncipn en la base Vuex de FormAE
+          await this.setSalvadoEdicionTarifas(); //Actualizando el listado de tarifas en la base Vuex de FormAE
 
           console.dir(this.FormAE);
 
           if (!!this.FormAE.id) {
             console.log("Editando existente...");
 
-            MutateResult = await this.mixinAnuncioEditar(this.FormAE);
+            await this.mixinAnuncioEditar(this.FormAE);
             await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
 
           } else {
             console.log("Guardando nuevo...");
 
-            MutateResult = await this.mixinAnuncioCrear(this.FormAE);
+            await this.mixinAnuncioSetCrear(this.FormAE);
             await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
           }
 
@@ -1445,22 +1454,15 @@ export default {
 
         } catch (error) {
           console.dir(error);
-          //Analizar: esto causa error cuando no se tiene esa propiedad en el objeto
-          if (error.componenteInterno.length >= 1) {
-            this.mixinLlamadaRouter(error);
-          }
           return reject(error);
         }
 
-        console.dir(MutateResult);
-        this.mixinLlamadaRouter(MutateResult);
-
-        return resolve(MutateResult);
+        return resolve();
       });
     },
 
-    async iAOnDelete(Image) {
-      console.log("iAOnDelete...");
+    async imageOnDelete(Image) {
+      console.log("imageOnDelete...");
       console.dir(Image);
       let newArrayImagenes = [];
       let imagenesAnuncioLoop = 0;
@@ -1485,10 +1487,10 @@ export default {
       }
 
       this.nuevasImagenes = newArrayImagenes;
-      await this.salvandoEdicionImagenes(); //Actualizando la base Vuex de FormAE
+      await this.setSalvadoEdicionImagenes(); //Actualizando la base Vuex de FormAE
     },
-    iAOnProcess(ObjetoImagen) {
-      console.log(`iAOnProcess...${typeof ObjetoImagen}`);
+    imageOnProcess(ObjetoImagen) {
+      console.log(`imageOnProcess...${typeof ObjetoImagen}`);
       console.log(
         `nuevasImagenes...${typeof this.nuevasImagenes} ${this.nuevasImagenes}`
       );

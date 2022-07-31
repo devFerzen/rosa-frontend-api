@@ -13,7 +13,9 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">Lorem ipsum</h6>
+      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">
+        Lorem ipsum
+      </h6>
 
       <v-form ref="verificacion" v-model="valid" lazy-validation>
         <v-text-field
@@ -94,15 +96,13 @@ export default {
   },
   methods: {
     async verificando() {
-
       //Validar la accion
-
       let MutateResult, params;
 
       if (!this.$refs.verificacion.validate()) {
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `>>>código de verificación con error...>>>>`,
+          message: `Favor de llenar todos los campos requeridos!.`,
         });
         return;
       }
@@ -111,9 +111,15 @@ export default {
 
       try {
         //Según su tipo de verificación
-        if ( this.tipoVerificacion === "verificacionUsuario" || this.tipoVerificacion === "verificacionUsuarioContrasena" ) {
-          console.log("verificacionUsuarioContrasena || verificacionUsuario: ", this.tipoVerificacion);
-          
+        if (
+          this.tipoVerificacion === "verificacionUsuario" ||
+          this.tipoVerificacion === "verificacionUsuarioContrasena"
+        ) {
+          console.log(
+            "verificacionUsuarioContrasena || verificacionUsuario: ",
+            this.tipoVerificacion
+          );
+
           params = {
             input: this.FormV.codigoVerificacion,
             usuario: this.$store.state.usuario.usuario.usuario,
@@ -126,27 +132,21 @@ export default {
           console.dir(params);
           MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
         }
+        //Llamada mixinVerificacionUsuarioComparacion()
 
         if (this.tipoVerificacion === "verificacionCelular") {
-          console.log(`verificacionCelular: ${this.tipoVerificacion}`)
-            params = {
-              input: this.FormV.codigoVerificacion
-            };
-            MutateResult = await this.mixinVerificacionCelularComparacion(params);
-          }
-        } catch (error) {
-          console.log("vue verificando en error...");
-          console.dir(error);
-          
-          this.mixinLlamadaRouter(error);
-          return;
+          console.log(`verificacionCelular: ${this.tipoVerificacion}`);
+          params = {
+            input: this.FormV.codigoVerificacion,
+          };
+          MutateResult = await this.mixinVerificacionCelularComparacion(params);
         }
-
-      console.dir(MutateResult);
-
-      if (this.tipoVerificacion === "verificacionUsuario") {
-        //Cambiar esto
-        this.MixinResult.componenteInterno = {panelHerramientasInicioSesion:true };
+        //Llamada mixinVerificacionCelularComparacion()
+      } catch (error) {
+        console.log("vue verificando en error...");
+        console.dir(error);
+        this.mixinLlamadaRouter(error);
+        return;
       }
 
       this.mixinLlamadaRouter(MutateResult);

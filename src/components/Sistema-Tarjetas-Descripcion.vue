@@ -242,11 +242,12 @@
                       </v-btn>
                     </template>
 
+                    <!--:src="'/uploads/' + imagen.nombre"-->
                     <v-carousel-item
                       active-class="anuncio-imagenes-dots"
                       v-for="(imagen, i) in anuncio.Sec_Imagenes"
                       :key="i"
-                      :src="'http://localhost:3000/uploads/' + imagen.nombre"
+                      :src="'http://localhost:3080/uploads/' + imagen.nombre"
                     ></v-carousel-item>
                   </v-carousel>
                 </v-col>
@@ -321,10 +322,11 @@
           >
             <v-col cols="12" md="4" style="min-height: 95vh">
               <v-carousel continuous="true" height="90vh" class="my-4">
+                <!--:src="'/uploads/' + imagen.nombre"-->
                 <v-carousel-item
                   v-for="(imagen, i) in anuncioView.Sec_Imagenes"
                   :key="i"
-                  :src="'http://localhost:3000/uploads/' + imagen.nombre"
+                  :src="'http://localhost:3080/uploads/' + imagen.nombre"
                   reverse-transition="fade-transition"
                   transition="fade-transition"
                   height="600px"
@@ -899,14 +901,10 @@ export default {
       try {
         QueryResult = await this.mixinBusqueda(this.getBusquedaQuery);
       } catch (error) {
-        console.log(
-          "vue aplicaBusqueda: QueryResult(anunciosBusqueda) en error..."
-        );
+        console.log("vue aplicaBusqueda...");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `>>>Error anunciosBusqueda...>>>>${error.mensaje}`,
-        });
+
+        this.mixinLlamadaRouter(error);
         return;
       }
 
@@ -929,24 +927,19 @@ export default {
       } catch (error) {
         console.log("vue reportarAnuncio...");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error}`,
-        });
+
+        this.mixinLlamadaRouter(error);
         throw error;
       }
 
       this.$store.dispatch("anuncioReportado", this.anuncioView.id); //Convertir a nulo una vez que se haya puesto el reporte si esq se hace en otro modal
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `Anuncio reportado!, Gracias por su cooperación!!`,
-      });
+      this.mixinLlamadaRouter(MutateResult);
       //this.fullAnuncio_Display(false);
     },
 
     /*
-        accionVer muestra a un usuario un anuncio seleccionado
-      */
+      accionVer muestra a un usuario un anuncio seleccionado
+    */
     async accionVer(idAnuncio) {
       let queryResult;
       try {
@@ -955,10 +948,8 @@ export default {
       } catch (error) {
         console.log("vue accionVer en error...");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `Error al tratar de abrir al anuncio, favor de intentarlo más tarde!`,
-        });
+
+        this.mixinLlamadaRouter(error);
         return;
       }
       console.log("se esta imprimiendo en modal el sig anuncio");
@@ -967,8 +958,8 @@ export default {
     },
 
     /*
-        accionCorazon acciona un like para usuario hacia un anuncio
-      */
+      accionCorazon acciona un like para usuario hacia un anuncio
+    */
     async accionCorazon(idAnuncio) {
       let queryResult;
       try {
@@ -976,14 +967,11 @@ export default {
       } catch (error) {
         console.log("vue accionCorazon en error...");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `Error al dar like al anuncio, favor de intentarlo más tarde!`,
-        });
+        this.mixinLlamadaRouter(error);
         return;
       }
 
-      this.mixinLlamadaRouter(queryResult);
+      this.mixinLlamadaRouter(this.MixinResult);
     },
   },
   async created() {

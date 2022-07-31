@@ -8,6 +8,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!--Slogan-->
 
     <v-row align="start" justify="space-around" no-gutters>
       <v-col cols="12" :sm="WidthComponents.herramientasWidth.sm" :md="WidthComponents.herramientasWidth.lg"
@@ -37,14 +38,14 @@
 </template>
 
 <script>
-  import PanelHerramientas from "@/components/Panel-Herramientas";
-  import SistemaTarjetasDescripcion from "@/components/Sistema-Tarjetas-Descripcion";
-  import InicioSesion from "@/components/Inicio-Sesion";
-  import Registro from "@/components/Registro";
-  import Verificacion from "@/components/Verificacion";
   import ActualizandoContrasena from "@/components/Actualizando-Contrasena";
   import Contactanos from "@/components/Contacto";
+  import PanelHerramientas from "@/components/Panel-Herramientas";
   import EspacioPublicitario from "@/components/Espacio-Publicitario";
+  import InicioSesion from "@/components/Inicio-Sesion";
+  import Registro from "@/components/Registro";
+  import SistemaTarjetasDescripcion from "@/components/Sistema-Tarjetas-Descripcion";
+  import Verificacion from "@/components/Verificacion";
 
   export default {
     name: "home",
@@ -109,15 +110,15 @@
     methods: {
       panelMinClass(Value) {
         /*Funcion solo la usa el componente panel de herramientas. para extenderlo hacia arriba*/
-        console.log(`vue: panelMinClass => `);
-        console.dir(Value);
+        //console.log(`vue: panelMinClass => `);
+        //console.dir(Value);
 
         this.panelHerramientasClass = Value.panelHerramientasClass;
         this.mbViewTop = this.panelHerramientasClass === 'panel-herramientas-mbview' ? 'activarTopMin' : '';
       },
       activandoGrid(WidthComponents) {
-        console.log(`Vue: activandoGrid =>`);
-        console.dir(WidthComponents);
+        //console.log(`Vue: activandoGrid =>`);
+        //console.dir(WidthComponents);
         this.WidthComponents = WidthComponents;
       },
     }

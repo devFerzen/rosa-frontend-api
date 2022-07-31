@@ -2,8 +2,7 @@
   <v-card
     :height="bodyWH['vMainContenth']"
     :width="bodyWH['vMainContentw']"
-    style="border:1px solid red"
-    class="mt-2">     
+    class="mt-2 px-2">     
     <v-img
       contain
       aspect-ratio="1.7"
@@ -32,7 +31,7 @@ export default {
         'vMainContentw': '58vw',
         'vMainContenth': 'auto'
       } : {
-        'vMainContentw': '72vw',
+        'vMainContentw': '67vw',
         'vMainContenth': '82vh'
       };
     }

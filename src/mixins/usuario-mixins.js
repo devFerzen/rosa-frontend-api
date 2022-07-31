@@ -4,7 +4,7 @@
 
 import * as GraphqlUserCalls from '../graphql/usuario-mutations';
 import * as GraphqlAnuncioCalls from '../graphql/anuncio-mutations';
-import ErrorResult from '../utilities/ErrorResult';
+import Result from '../utilities/Result';
 import * as GeneralTestMixin from './Test/generalTest-mixin';
 
 export default {
@@ -33,19 +33,6 @@ export default {
                     console.log('Mutation call error...')
                     console.dir(error);
 
-                    if (error.hasOwnProperty('graphQLErrors')) {
-                        if(error.graphQLErrors.length > 0){
-                            this.MixinResult.mensaje = error.mensaje;
-                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
-                        }
-                    } else {
-                        if(typeof error === 'string'){
-                            this.MixinResult = new ErrorResult(JSON.parse(error));
-                        } else{
-                            this.MixinResult = new ErrorResult(error);
-                        }
-                    }
-
                     return reject(this.MixinResult);
                 }
                 console.log("MutateResult");
@@ -67,10 +54,10 @@ export default {
                 this.cleanMixinResult();
 
                 try {
-                    if(true){
+                    /*if(true){
                         MutateResult = await GeneralTestMixin.mixinVerificacionCelularComparacion(payload);
                         return resolve(JSON.parse(MutateResult));
-                    }
+                    }*/
 
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
@@ -79,22 +66,13 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log('Mutation call error...')
+                    console.log("mixinVerificacionCelularComparacion...");
                     console.dir(error);
 
-                    if (error.hasOwnProperty('graphQLErrors')) {
-                        if(error.graphQLErrors.length > 0){
-                            this.MixinResult.mensaje = error.mensaje;
-                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
-                        }
-                    } else {
-                        if(typeof error === 'string'){
-                            this.MixinResult = new ErrorResult(JSON.parse(error));
-                        } else{
-                            this.MixinResult = new ErrorResult(error);
-                        }
-                    }
-
+                    this.MixinResult = {
+                      ...this.MixinResult,
+                      ...new Respuesta(error),
+                    };
                     return reject(this.MixinResult);
                 }
 
@@ -108,10 +86,10 @@ export default {
                 this.cleanMixinResult();
 
                 try {
-                    if(true){
+                    /*if(true){
                         MutateResult = await GeneralTestMixin.mixinVerificacionCelularCreacion(payload);
                         return resolve(JSON.parse(MutateResult));
-                    }
+                    }*/
 
                     MutateResult = await this.$apollo.mutate({
                         mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION
@@ -122,13 +100,13 @@ export default {
 
                     if (error.hasOwnProperty('graphQLErrors')) {
                         if(error.graphQLErrors.length > 0){
-                            this.MixinResult = new ErrorResult(JSON.parse(error.graphQLErrors[0].message));
+                            this.MixinResult = new Result(JSON.parse(error.graphQLErrors[0].message));
                         }
                     } else {
                         if(typeof error === 'string'){
-                            this.MixinResult = new ErrorResult(JSON.parse(error));
+                            this.MixinResult = new Result(JSON.parse(error));
                         } else{
-                            this.MixinResult = new ErrorResult(error);
+                            this.MixinResult = new Result(error);
                         }
                     }
 

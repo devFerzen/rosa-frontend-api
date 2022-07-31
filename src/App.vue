@@ -15,6 +15,7 @@
           "
         />
       </div>
+      <!--Image-->
 
       <v-row align="center" justify="end">
         <v-hover v-slot:default="{ hover }">
@@ -92,9 +93,9 @@
           </v-btn>
           <!--Btn Dashboard-->
         </v-hover>
-        <!--Top Nav Bar Bottons-->
       </v-row>
     </v-app-bar>
+    <!--Top Nav Bar Bottons-->
 
     <v-navigation-drawer v-model="sideDashboard" absolute temporary>
       <div class="d-flex flex-row mb-8 ml-3 mr-1 mt-3">
@@ -188,7 +189,7 @@
 <script>
 import GeneralMixins from "./mixins/general-mixins.js";
 import UsuarioMixin from "./mixins/usuario-mixins.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import * as GraphqlCalls from "./graphql/general-mutations";
 
 export default {
@@ -253,7 +254,6 @@ export default {
 
       console.log("vue cerrar sesion...");
       console.dir(DispatchResult);
-
       this.mixinLlamadaRouter(DispatchResult);
     },
     async anunciate() {
@@ -283,48 +283,50 @@ export default {
   async created() {
     let QueryEstadosResult;
 
+    await this.$store.dispatch("SystemaCreate")
+
     if (this.getDdlEstados[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlEstado");
-      QueryEstadosResult = await this.mixinDdlGeneral("ddlEstado");
+      await this.mixinDdlGeneral("ddlEstado");
       await this.$store.dispatch("ddls", {
         categoria: "ddlEstado",
-        categorias: QueryEstadosResult.data.queryddlsByCategoria,
+        categorias: this.MixinResult.data
       });
     }
 
     if (this.getDdlMunicipios[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlMunicipios");
-      QueryEstadosResult = await this.mixinDdlGeneral("ddlMunicipios");
+      await this.mixinDdlGeneral("ddlMunicipios");
       await this.$store.dispatch("ddls", {
         categoria: "ddlMunicipios",
-        categorias: QueryEstadosResult.data.queryddlsByCategoria,
+        categorias: this.MixinResult.data
       });
     }
 
     if (this.getDdlCategorias[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlCategoriaAnuncio");
-      QueryEstadosResult = await this.mixinDdlGeneral("ddlCategoriaAnuncio");
+      await this.mixinDdlGeneral("ddlCategoriaAnuncio");
       await this.$store.dispatch("ddls", {
         categoria: "ddlCategoriaAnuncio",
-        categorias: QueryEstadosResult.data.queryddlsByCategoria,
+        categorias: this.MixinResult.data
       });
     }
 
     if (this.getDdlSexo[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlSexo");
-      QueryEstadosResult = await this.mixinDdlGeneral("ddlSexo");
+      await this.mixinDdlGeneral("ddlSexo");
       await this.$store.dispatch("ddls", {
         categoria: "ddlSexo",
-        categorias: QueryEstadosResult.data.queryddlsByCategoria,
+        categorias: this.MixinResult.data
       });
     }
 
     if (this.getDdlRedesSociales[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlRedesSociales");
-      QueryEstadosResult = await this.mixinDdlGeneral("ddlRedesSociales");
+      await this.mixinDdlGeneral("ddlRedesSociales");
       await this.$store.dispatch("ddls", {
         categoria: "ddlRedesSociales",
-        categorias: QueryEstadosResult.data.queryddlsByCategoria,
+        categorias: this.MixinResult.data
       });
     }
   },

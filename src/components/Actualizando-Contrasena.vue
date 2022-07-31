@@ -13,7 +13,9 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">Actualización Contraseña</h6>
+      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">
+        Actualización Contraseña
+      </h6>
 
       <v-form ref="verificacion" v-model="valid" lazy-validation>
         <v-text-field
@@ -92,14 +94,20 @@ export default {
   computed: {},
   methods: {
     async actualizarContrasena() {
-      let MutateResult, params;
+      let params;
+      let MutateResult = {
+        componenteInterno: {
+          activationAlert: {
+            type: "error",
+            message: `Favor de llenar todos los campos requeridos!.`
+          }
+        }
+      };
+      
       console.log("vue actualizarContrasena...");
 
       if (!this.$refs.verificacion.validate()) {
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `Favor de llenar todos los campos!`,
-        });
+        this.mixinLlamadaRouter(MutateResult);
         return;
       }
 
@@ -112,27 +120,17 @@ export default {
         console.dir(params);
         MutateResult = await this.mixinRestablecerContrasena(params);
       } catch (error) {
-        console.log("vue actualizarContrasena en error...");
+        console.log("vue actualizarContrasena... error");
         console.dir(error);
         this.mixinLlamadaRouter(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
         return;
       }
 
+      console.log("vue actualizarContrasena... result");
       console.dir(MutateResult);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${MutateResult.mensaje}`,
-      });
-      
-      this.mixinCerrarSesion();
       this.mixinLlamadaRouter(MutateResult);
     },
   },
 };
 </script>
-<style>
-</style>
+<style></style>

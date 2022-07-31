@@ -13,7 +13,9 @@
     </v-system-bar>
 
     <v-card-text class="pb-0">
-      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">Contactanos</h6>
+      <h6 class="text-h4 text-lg-h6 text-center my-4 color-rosa">
+        Contactanos
+      </h6>
 
       <v-form ref="registro" v-model="valid" lazy-validation>
         <v-text-field
@@ -114,7 +116,14 @@ export default {
   },
   methods: {
     async correoContacto() {
-      let MutateResult;
+      let MutateResult = {
+        componenteInterno: {
+          activationAlert: {
+            type: "error",
+            message: `Favor de llenar todos los campos requeridos!.`
+          }
+        }
+      };
 
       if (this.$refs.registro.validate()) {
         try {
@@ -122,28 +131,16 @@ export default {
         } catch (error) {
           console.log("vue correoContacto...");
           console.dir(error);
-          this.$store.dispatch("activationAlert", {
-            type: "error",
-            message: `>>>Error al registrar...>>>>${error}`,
-          });
+
+          this.mixinLlamadaRouter(error);
           throw error;
         }
         console.dir(MutateResult);
-        this.$store.dispatch("activationAlert", {
-          type: "success",
-          message: `${MutateResult.mensaje}`,
-        });
-        this.mixinLlamadaRouter(MutateResult);
-        return;
       }
-
-      this.$store.dispatch("activationAlert", {
-        type: "error",
-        message: `Favor de llenar todos los campos requeridos!.`,
-      });
+      
+      this.mixinLlamadaRouter(MutateResult);
     },
   },
 };
 </script>
-<style>
-</style>
+<style></style>

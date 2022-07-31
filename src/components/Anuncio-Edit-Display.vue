@@ -370,7 +370,7 @@
         labelInvalidField: "Archivo no valido",
         labelIdle: 'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Browse </span>',
         server: {
-            url: 'http://localhost:3000/',
+            url: 'http://localhost:3080/',
             process: {
                 url: 'upload'
             },
@@ -390,6 +390,7 @@
         },
         data() {
             return {
+                ...mapState(["Systema"]),
                 tiposContacto: [
                     { categoria: "fab", icono: "whatsapp" },
                     { categoria: "fab", icono: "twitter" },
@@ -528,7 +529,7 @@
                         }
 
                         if (tipoSalvado === "nuevo") {
-                            MutateResult = await this.mixinAnuncioCrear(this.FormAE);
+                            MutateResult = await this.mixinAnuncioSetCrear(this.FormAE);
                         }
 
                         if (tipoSalvado === "editado") {
@@ -536,7 +537,7 @@
                         }
 
                     } catch (error) {
-                        console.log("vue salvandoNuevoAnuncio error...");
+                        console.log("vue salvandoNuevoAnuncio... en error");
                         console.dir(error);
                         this.$store.dispatch('activationAlert', { type: 'error', message: `>>>Error al registrar...>>>>${error.mensaje}` });
                         this.mixinLlamadaRouter(error);

@@ -114,15 +114,19 @@ export default {
         Descripción: Acción para iniciar sesion con correo y contraseña
        */
     async iniciandoSesion() {
-      let MutateResult;
+      let MutateResult = {
+        componenteInterno: {
+          activationAlert: {
+            type: "error",
+            message: `Favor de llenar todos los campos requeridos!.`
+          }
+        }
+      };
       console.log("vue iniciandoSesion... validado");
       console.dir(this.FormIS);
 
       if (!this.$refs.inicioSesion.validate()) {
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `>>>Favor de validar su información...>>>>`,
-        });
+        this.mixinLlamadaRouter(MutateResult);
         return;
       }
 
@@ -138,19 +142,22 @@ export default {
 
       console.log("vue iniciandoSesion... MutateResult");
       console.dir(MutateResult);
-
       this.mixinLlamadaRouter(MutateResult);
     },
 
     async restablecerContrasena() {
-      let MutateResult;
+      let MutateResult = {
+        componenteInterno: {
+          activationAlert: {
+            type: "error",
+            message: `Favor de indicar el usuario del cuál desea reinicar la contraseña`
+          }
+        }
+      };
+      console.log("vue restablecerContrasena...");
 
       if (!this.FormIS.usuario) {
-        console.log(`usuario, ${this.FormIS.usuario}`);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `Favor de indicar el usuario del cuál desea reinicar la contraseña!`,
-        });
+        this.mixinLlamadaRouter(MutateResult);
         return;
       }
 
@@ -159,7 +166,7 @@ export default {
           this.FormIS.usuario
         );
       } catch (error) {
-        console.log("vue restablecerContrasena en error...");
+        console.log("vue restablecerContrasena... en error");
         console.dir(error);
         
         this.mixinLlamadaRouter(MutateResult);

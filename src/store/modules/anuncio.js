@@ -120,18 +120,37 @@ export const actions = {
 
             //Veriricar si hay usuario disponible
             if (!rootState.usuario.usuario.usuario) {
-                reject({ pagina: "home", componenteInterno: {panelHerramientasInicioSesion: true}, mensaje: "Favor de Iniciar sesion o pasar a Registrarse!" });
-                return;
+                return reject({
+                  pagina: 'home',
+                  componenteInterno: {
+                    panelHerramientasInicioSesion: true,
+                    activationAlert: {
+                      type: `error`,
+                      message: "Favor de Iniciar sesion o pasar a Registrarse!",
+                    },
+                  },
+                });                
             }
 
             if (!rootState.usuario.usuario.numero_telefonico_verificado) {
-                //Indicar el tipo de veritifacion y enviarlo ahí como no son estay alive si vuelve picarle a anunciate este vuelve a solicitar un codigo de verificación
+                //Se setea el tipo de verificiacion que se hara
+                  //Validar si se esta creando o si necesita mejor dicho
                 commit('TIPO_VERIFICACION_SET', 'verificacionCelular')
-                return reject({ pagina: "home", componenteInterno: {panelHerramientasVerificacion: true}, mensaje: "Favor de verificar el número de celular de la cuenta!" });
+                return reject({
+                  pagina: "home",
+                  componenteInterno: {
+                    panelHerramientasVerificacion: true,
+                    activationAlert: {
+                      type: `error`,
+                      message:
+                        "Favor de verificar el número de celular de la cuenta!",
+                    },
+                  },
+                });
             }
 
             //Apertura de nuevo anuncio
-            resolve({ pagina: "dashboard", componenteInterno: { newAnuncioSet: true}, mensaje: "" });
+            resolve({ pagina: "dashboard", componenteInterno: { newAnuncioSet: true } });
         });
     },
     newAnuncioSet({commit, state }, payload){
