@@ -1437,14 +1437,14 @@ export default {
           if (!!this.FormAE.id) {
             console.log("Editando existente...");
 
-            await this.mixinAnuncioEditar(this.FormAE);
+            MutateResult = await this.mixinAnuncioEditar(this.FormAE);
             await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
 
           } else {
             console.log("Guardando nuevo...");
 
-            await this.mixinAnuncioSetCrear(this.FormAE);
-            await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
+            MutateResult = await this.mixinAnuncioSetCrear(this.FormAE);
+            //await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
           }
 
           if (this.newDefaulContactos.length > 0) {
@@ -1457,7 +1457,7 @@ export default {
           return reject(error);
         }
 
-        return resolve();
+        return resolve(MutateResult);
       });
     },
 

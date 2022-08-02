@@ -2,7 +2,7 @@
  *
  * Definiciónes de mixin
  * * Es una funcion promesa todo controlado por try catch,
- * * No retorna nada de información esta a su vez asigna información a MixinResult llamando la clase Result
+ * * Todo query o mutacion regresa un MixinResult
  * * No debera que hacer validaciónes
  * * No debera de hacer llamadas a MixinRouter (Analizar situaciones)
  */
@@ -59,7 +59,7 @@ export default {
         console.log(`mixinInicioSesion... result`);
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(MutateResult, "inicioSesion", true),
+          ...new Result(MutateResult, "inicioSesion"),
         };
         console.dir(this.MixinResult);
         return resolve(this.MixinResult);
@@ -194,11 +194,11 @@ export default {
           return reject(this.MixinResult);
         }
 
-        console.log("mixinDdlGeneral... result");
+        console.log("mixinMeEncantaPlus... result");
         console.dir(MutateResult);
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(MutateResult.data.anunciolike),
+          ...new Result(MutateResult, "anunciolike"),
         };
         resolve(this.MixinResult);
       });
@@ -229,11 +229,7 @@ export default {
           return reject(this.MixinResult);
         }
         console.dir(MutateResult);
-        this.MixinResult = {
-          ...this.MixinResult,
-          ...new Result(MutateResult.data, "anuncioVista"),
-        };
-        resolve(this.MixinResult);
+        resolve();
       });
     },
 
@@ -258,22 +254,24 @@ export default {
         } catch (error) {
           console.log(`mixinVer... en error`);
           console.dir(error);
-          error.componenteInterno = {
-            activationAlert: {
-              type: "error",
-              message: `Error al tratar de abrir al anuncio, favor de intentarlo más tarde!`,
-            },
+          this.MixinResult = {
+            ...this.MixinResult,
+            ...new Result({
+              componenteInterno: {
+                activationAlert: {
+                  type: "error",
+                  message: `Error al tratar de abrir al anuncio, favor de intentarlo más tarde!.`,
+                },
+              },
+            }),
           };
-
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
           return reject(this.MixinResult);
         }
 
         console.dir(QueryResult);
-        this.mixinVerPlus(payload);
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(QueryResult.data, "queryAnunciosById"),
+          ...new Result(QueryResult.data, "queryAnunciosById", true),
         };
         resolve(this.MixinResult);
       });
@@ -314,7 +312,7 @@ export default {
           return reject(this.MixinResult);
         }
 
-        // Ocupa enviarlo a home pagina = 'home';
+        // Analizar - Ocupa enviarlo a home pagina = 'home';
         this.MixinResult = {
           ...this.MixinResult,
           ...new Result(MutateResult.data, "compararVerificacionUsuario"),
@@ -328,7 +326,7 @@ export default {
      * @param {*} payload Objecto que representa input...
      * @returns
      */
-    mixinNuevoCorreoContactanos(payload) {
+    mixinNuevoCorreoContactanos(payload, esReporte = false) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
         this.cleanMixinResult();
@@ -344,14 +342,41 @@ export default {
         } catch (error) {
           console.log(`mixinNuevoCorreoContactanos... en error`);
           console.dir(error);
+          if (esReporte) {
+            this.MixinResult = {
+              ...this.MixinResult,
+              ...new Result({
+                componenteInterno: {
+                  activationAlert: {
+                    type: "error",
+                    message: `Error al tratar de reportar el anuncio, Favor de actualizar e intentarlo de nuevo!.`,
+                  },
+                },
+              }),
+            };
+            return reject(this.MixinResult);
+          }
 
           this.MixinResult = { ...this.MixinResult, ...new Result(error) };
           return reject(this.MixinResult);
         }
-        this.MixinResult = {
-          ...this.MixinResult,
-          ...new Result(MutateResult.data, "nuevoContactoCliente"),
-        };
+
+        if (esReporte) {
+          this.MixinResult = {
+            ...this.MixinResult,
+            ...new Result({
+              componenteInterno: {
+                activationAlert: {
+                  type: "error",
+                  message: `Anuncio reportado!, Gracias por su cooperación!.`,
+                },
+              },
+            }),
+          };
+          resolve(this.MixinResult);
+        }
+
+        this.MixinResult = { ...this.MixinResult, ...new Result(MutateResult) };
         resolve(this.MixinResult);
       });
     },
@@ -449,7 +474,7 @@ export default {
         console.dir(QueryResult);
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(QueryResult, "queryddlsByCategoria"),
+          ...new Result(QueryResult, "queryddlsByCategoria", true),
         };
         console.dir(this.MixinResult);
         resolve(this.MixinResult);

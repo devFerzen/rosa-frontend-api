@@ -103,7 +103,7 @@ export default {
         correo: "",
         asunto: "",
         mensaje: "",
-        anuncio: this.getIdAnuncioReportado,
+        anuncio: "deBe ser vacio pero extraer al usuario loggeado",
       },
       emailRules: [(v) => /.+@.+\..+/.test(v) || "E-mail must be valid"],
       panelCSS: {
@@ -136,9 +136,9 @@ export default {
           throw error;
         }
         console.dir(MutateResult);
+        this.mixinLlamadaRouter(MutateResult);
       }
       
-      this.mixinLlamadaRouter(MutateResult);
     },
   },
 };

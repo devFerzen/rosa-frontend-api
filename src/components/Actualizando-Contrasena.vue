@@ -98,7 +98,7 @@ export default {
       let MutateResult = {
         componenteInterno: {
           activationAlert: {
-            type: "error",
+            type: "warning",
             message: `Favor de llenar todos los campos requeridos!.`
           }
         }
@@ -113,7 +113,7 @@ export default {
 
       try {
         params = {
-          input: this.$store.state.usuario.usuario.verificacionUsuario,
+          input: this.$store.state.usuario.usuario.verificacionUsuario, //No va aqui
           usuario: this.$store.state.usuario.usuario.usuario,
           contrasena: this.FormAC.nuevaContrasena,
         };

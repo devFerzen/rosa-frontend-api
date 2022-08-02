@@ -117,7 +117,7 @@ export default {
       let MutateResult = {
         componenteInterno: {
           activationAlert: {
-            type: "error",
+            type: "warning",
             message: `Favor de llenar todos los campos requeridos!.`
           }
         }

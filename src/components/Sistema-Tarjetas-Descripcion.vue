@@ -896,6 +896,7 @@ export default {
       this.fullAnuncioEstado = payload;
     },
 
+    //Analizar aplicaBusqueda
     async aplicaBusqueda() {
       let QueryResult;
       try {
@@ -923,7 +924,7 @@ export default {
           asunto: "Reporte de Anuncio!",
           mensaje: "Reporte por usuario",
           anuncio: this.anuncioView.id,
-        });
+        }, true);
       } catch (error) {
         console.log("vue reportarAnuncio...");
         console.dir(error);
@@ -932,9 +933,10 @@ export default {
         throw error;
       }
 
-      this.$store.dispatch("anuncioReportado", this.anuncioView.id); //Convertir a nulo una vez que se haya puesto el reporte si esq se hace en otro modal
+      //Convertir a nulo una vez que se haya puesto el reporte si esq se hace en otro modal
+      //Analizar su uso
+      this.$store.dispatch("anuncioReportado", this.anuncioView.id); 
       this.mixinLlamadaRouter(MutateResult);
-      //this.fullAnuncio_Display(false);
     },
 
     /*
@@ -944,7 +946,6 @@ export default {
       let queryResult;
       try {
         queryResult = await this.mixinVer(idAnuncio);
-        this.fullAnuncio_Display(true);
       } catch (error) {
         console.log("vue accionVer en error...");
         console.dir(error);
@@ -953,8 +954,10 @@ export default {
         return;
       }
       console.log("se esta imprimiendo en modal el sig anuncio");
-      console.dir(queryResult[0]);
-      this.anuncioView = queryResult[0];
+      console.dir(queryResult);
+      this.anuncioView = queryResult.data[0];
+      this.fullAnuncio_Display(true);
+      this.mixinVerPlus(payload);
     },
 
     /*
@@ -974,6 +977,7 @@ export default {
       this.mixinLlamadaRouter(this.MixinResult);
     },
   },
+
   async created() {
     const { xs, sm } = this.$vuetify.breakpoint;
     this.fullAnuncioCss.list = xs || sm ? "" : "full-anuncio-titlelist-web";
@@ -982,6 +986,7 @@ export default {
     this.aplicaBusqueda();
   },
   watch: {
+    //Analizar el uso de watch aqui
     getBusquedaQuery: function(value) {
       console.log("getBusquedaQuery...");
       console.dir(value);

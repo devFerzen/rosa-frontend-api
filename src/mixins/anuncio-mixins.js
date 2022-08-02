@@ -25,7 +25,7 @@ export default {
             message:
               "No se detecto Usuario. Favor de Iniciar Sesion nuevamente é intentarlo de nuevo.",
           };
-          
+
           return reject(this.MixinResult);
         }
 
@@ -94,10 +94,12 @@ export default {
           this.MixinResult.pagina = "home";
           this.MixinResult.componenteInterno = {
             panelHerramientasInicioSesion: true,
+            activationAlert: {
+              type: "warning",
+              message: `Sesión cerrada por inactividad, favor de iniciar sesión nuevamente!.`,
+            },
           };
-          this.MixinResult.mensaje = "Favor de iniciar sesión primero!";
-          //Regresarlo con apertura de registro
-          console.log("no debe que pasar por aquí cuando pase");
+          //Analizar - Regresarlo con apertura de registro
           return reject(this.MixinResult);
         }
 
@@ -105,18 +107,21 @@ export default {
         if (!this.$store.state.usuario.usuario.numero_telefonico_verificado) {
           console.log("Usuario no verificado");
           this.MixinResult.pagina = "home";
-          this.MixinResult.mensaje =
-            "Celular registrado aún no esta verificado, Favor de validar el código verificación de celular";
           this.MixinResult.componenteInterno = {
             panelHerramientasVerificacion: true,
+            setTipoVerificacion: "verificacionCelular",
+            activationAlert: {
+              type: "warning",
+              message: `Celular registrado aún no esta verificado, Favor de validar el código verificación enviado a su celular!.`,
+            },
           };
-          this.$store.dispatch("setTipoVerificacion", "verificacionCelular");
+          // Analizar - this.$store.dispatch("setTipoVerificacion", "verificacionCelular");
           return reject(this.MixinResult);
         }
 
         try {
           console.dir(payload);
-         
+
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.NUEVO_ANUNCIO_MUTATE,
             variables: {
@@ -130,8 +135,11 @@ export default {
           this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
           return reject(this.MixinResult);
         }
-
-        resolve(JSON.parse(MutateResult.data.anuncioCreacion));
+        this.MixinResult = {
+          ...this.MixinResult,
+          ...new Respuesta(MutateResult.data, "anuncioCreacion"),
+        };
+        return resolve(this.MixinResult);
       });
     },
     mixinAnuncioEditar(payload) {
@@ -143,7 +151,7 @@ export default {
             panelHerramientasInicioSesion: true,
             activationAlert: {
               type: "warning",
-              message: `Favor de iniciar sesión primero!`,
+              message: `Sesión cerrada por inactividad, favor de iniciar sesión nuevamente!.`,
             },
           },
         };
@@ -152,11 +160,11 @@ export default {
         delete payload._anuncioEdicionInputsView;
 
         if (!this.$store.state.usuario.usuario.usuario) {
-            this.MixinResult = {
+          this.MixinResult = {
             ...this.MixinResult,
             ...new Respuesta(MutateResult),
-            };
-          return reject();
+          };
+          return reject(this.MixinResult);
         }
 
         try {
@@ -178,12 +186,13 @@ export default {
 
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Respuesta(MutateResult.data.anuncioActualizacion),
+          ...new Respuesta(MutateResult.data, "anuncioActualizacion"),
         };
+
         if (this.tipoVerificacion === "verificacionUsuario") {
           this.MixinResult.componenteInterno.panelHerramientasInicioSesion = true;
         }
-        resolve();
+        resolve(this.MixinResult);
       });
     },
 
@@ -195,13 +204,18 @@ export default {
 
         if (!this.$store.state.usuario.usuario.usuario) {
           console.log("No hay usuario iniciado sesion");
-          this.MixinResult.pagina = "home";
-          this.MixinResult.componenteInterno = {
-            panelHerramientasInicioSesion: true,
-            activationAlert: {
-              type: "error",
-              message: `Sea ha cerrado cuenta por inactividad, favor de Iniciar Sesion Nuevamente`,
-            },
+          this.MixinResult = {
+            ...this.MixinResult,
+            ...new Respuesta({
+              pagina: "home",
+              componenteInterno: {
+                panelHerramientasInicioSesion: true,
+                activationAlert: {
+                  type: "error",
+                  message: `Sesión cerrada por inactividad, favor de iniciar sesión nuevamente!.`,
+                },
+              },
+            }),
           };
           return reject(this.MixinResult);
         }
@@ -219,11 +233,14 @@ export default {
           console.log("mixinAnuncioEliminar... on error");
           console.dir(error);
 
-          this.mixinLlamadaRouter(error);
-          throw error;
+          this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
+          return reject(this.MixinResult);
         }
-
-        resolve(JSON.parse(MutateResult.data.anuncioEliminacion));
+        this.MixinResult = {
+          ...this.MixinResult,
+          ...new Respuesta(MutateResult.data, "anuncioEliminacion"),
+        };
+        resolve(JSON.parse(this.MixinResult));
       });
     },
 
@@ -234,7 +251,6 @@ export default {
         console.log("mixinActualizarDefaultContactos...");
 
         try {
-         
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlCalls.EDICION_DEFAULT_CONTACTOS,
             variables: {

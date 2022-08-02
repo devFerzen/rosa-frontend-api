@@ -1,5 +1,5 @@
 //Esta funcion tiene un loading por default
-export default function(Result, dataName = undefined, data = false) {
+export default function(Result, dataName = undefined, esQuery = false) {
   let _Result;
 
   if (Result.hasOwnProperty("graphQLErrors")) {
@@ -13,16 +13,22 @@ export default function(Result, dataName = undefined, data = false) {
       _Result = Result;
     }
   }
-  
+
   if (_Result.hasOwnProperty("data")) {
     if (dataName !== undefined) {
-      if (data) {
-        _Result = JSON.parse(_Result.data[`${dataName}`]);
-      } else {
+      if (esQuery) {
         this.data = _Result.data[`${dataName}`];
+      } else {
+        _Result = JSON.parse(_Result.data[`${dataName}`]);
       }
-    } else {
-      this.data = _Result.data;
+    }
+  } else {
+    if (dataName !== undefined) {
+      if (esQuery) {
+        this.data = _Result[`${dataName}`];
+      } else {
+        _Result = JSON.parse(_Result[`${dataName}`]);
+      }
     }
   }
 
@@ -31,9 +37,9 @@ export default function(Result, dataName = undefined, data = false) {
 
   console.log("_Result");
   console.dir(_Result);
-
+  
   this.componenteInterno = _Result.componenteInterno || {};
-  this.data = "";
+  this.data = this.data || _Result.data;
   this.pagina = _Result.pagina || undefined;
   this.log = _Result.Log || undefined;
 }
