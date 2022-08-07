@@ -126,9 +126,11 @@ export default {
             clean: false,
           };
 
+          //Cuando pase la comparación este mandará a limpiar el campo del bloque de verificación usuario
           if (this.tipoVerificacion === "verificacionUsuario") {
             params.clean = true;
           }
+
           console.dir(params);
           MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
         }
@@ -154,6 +156,7 @@ export default {
   },
   async created() {
     // AFSS: No mantener vivo este componente para que así se puede llamar una y otra vez verificacionCelularCreacion esta manda correo del nuevo codigo
+    //Esto debe ser pasado desde el backend y guardado de una vez allá no llamada de aqui
     let MutateResult;
     if (this.tipoVerificacion === "verificacionCelular") {
       try {
@@ -170,10 +173,6 @@ export default {
         return;
       }
       console.dir(MutateResult);
-      this.$store.dispatch("activationAlert", {
-        type: "success",
-        message: `${MutateResult.mensaje}`,
-      });
       this.mixinLlamadaRouter(MutateResult);
     }
   },

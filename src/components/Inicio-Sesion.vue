@@ -57,6 +57,21 @@
             </div>
           </v-btn>
         </v-col>
+        <v-col cols="12" class="d-flex">
+          <v-btn
+            plain
+            text
+            @click="restablecerContrasena"
+            style="margin-left: auto; margin-right: auto;"
+          >
+            <div
+              class="text-caption text--lighten-1 text-center color-verde"
+              style="text-transform: capitalize;"
+            >
+              Restablecer contraseña
+            </div>
+          </v-btn>
+        </v-col>
       </v-row>
     </v-card-text>
 

@@ -50,6 +50,10 @@
   color: var(--rosa)!important;
 }
 
+.color-verde {
+  color: var(--verde)!important;
+}
+
 .color-white {
   color: white!important;
 }

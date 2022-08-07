@@ -547,7 +547,7 @@
 
                     if (tipoSalvado === "nuevo") {
                         //Funcion de back end para guardar nuevo
-                        await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data);
+                        await this.$store.dispatch("agregarEnAnunciosUsuario", MutateResult.data);
                     }
 
                     if (tipoSalvado === "editado") {

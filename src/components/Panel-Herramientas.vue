@@ -310,6 +310,7 @@ export default {
       console.log("vue anunciate...");
 
       try {
+        //
         DispatchResult = await this.$store.dispatch("anunciateSet", null);
       } catch (error) {
         console.log("vue anunciate... dispatch en error");

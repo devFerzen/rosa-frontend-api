@@ -53,11 +53,7 @@ export default {
         this.cleanMixinResult();
 
         try {
-          /*if(true){
-                        MutateResult = await GeneralTestMixin.mixinVerificacionCelularComparacion(payload);
-                        return resolve(JSON.parse(MutateResult));
-                    }*/
-
+      
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlUserCalls.VERIFICACIONCELULAR_COMPARAR_MUTATE,
             variables: {

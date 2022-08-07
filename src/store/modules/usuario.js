@@ -77,7 +77,7 @@ export const mutations = {
 }
 
 export const actions = {
-    anuncioEliminar({ commit, state }, payload) {
+    eliminarEnAnunciosUsuario({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
             let newArray = state.usuario.anuncios_usuario.filter((value, index) => {
                 if (value._id !== payload) {
@@ -89,7 +89,7 @@ export const actions = {
             resolve();
         });
     },
-    anuncioAgregarNuevo({ commit, state }, payload) {
+    agregarEnAnunciosUsuario({ commit, state }, payload) {
         commit('CARGA_NUEVO_ANUNCIO', payload);
     },
     anuncioEditado({ commit, state }, payload) {

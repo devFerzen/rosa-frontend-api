@@ -9,7 +9,12 @@
             @imageOnProcess="imageOnProcess"
           ></file-pond-Imagenes-Anuncio>
         </v-col>
-        <v-col cols="12" :md="edicionView ? 9 : 6" style="position: relative;" v-else>
+        <v-col
+          cols="12"
+          :md="edicionView ? 9 : 6"
+          style="position: relative;"
+          v-else
+        >
           <div
             style="position: absolute; top: 17px; right: 0; width:38px"
             class="d-flex flex-column glassy rounded-xl justify-center"
@@ -141,7 +146,10 @@
             <!--acciones de tabs-->
 
             <v-expand-x-transition style="position: absolute; bottom: 0px;">
-              <v-card-text v-if="revealTarifa" class="full-anuncio-seccion d-flex justify-center pb-1 pt-0">
+              <v-card-text
+                v-if="revealTarifa"
+                class="full-anuncio-seccion d-flex justify-center pb-1 pt-0"
+              >
                 <v-sheet
                   fluid
                   elevation="6"
@@ -172,67 +180,73 @@
 
                     <v-form ref="tarifaEdit">
                       <v-card-text class="px-0 py-0">
-                        <v-row
-                          class="pt-6 pt-md-2" no-gutters
-                        >
+                        <v-row class="pt-6 pt-md-2" no-gutters>
                           <v-col cols="8" class="pr-4">
-                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
-                                nombre
-                              </div>
-                              <v-row no-gutters>
-                                <v-text-field
-                                  v-model="nuevaTarifa.nombre"
-                                  class="error609TextField"
-                                  color="pink"
-                                  dense
-                                  outlined
-                                  solo
-                                  label="teclea aquí"
-                                >
-                                </v-text-field>
-                              </v-row>
+                            <div
+                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                            >
+                              nombre
+                            </div>
+                            <v-row no-gutters>
+                              <v-text-field
+                                v-model="nuevaTarifa.nombre"
+                                class="error609TextField"
+                                color="pink"
+                                dense
+                                outlined
+                                solo
+                                label="teclea aquí"
+                              >
+                              </v-text-field>
+                            </v-row>
                           </v-col>
                           <v-col cols="4">
-                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
-                                precio
-                              </div>
-                              <v-row no-gutters>
-                                <v-text-field
-                                  v-model="nuevaTarifa.precio"
-                                  prefix="$"
-                                  dense
-                                  outlined
-                                  solo
-                                  label="0.00"
-                                >
-                                </v-text-field>
-                              </v-row>
+                            <div
+                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                            >
+                              precio
+                            </div>
+                            <v-row no-gutters>
+                              <v-text-field
+                                v-model="nuevaTarifa.precio"
+                                prefix="$"
+                                dense
+                                outlined
+                                solo
+                                label="0.00"
+                              >
+                              </v-text-field>
+                            </v-row>
                           </v-col>
                         </v-row>
                         <!--nombre y precio tarifa-->
-                        
-                        <v-row no-gutters>                          
+
+                        <v-row no-gutters>
                           <v-col cols="12">
-                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
-                                descripción
-                              </div>
-                              <v-row no-gutters>
-                                <v-textarea
-                                  counter
-                                  rows="3"
-                                  dense
-                                  outlined
-                                  solo
-                                  label="teclea aquí"
-                                  v-model="nuevaTarifa.descripcion"
-                                >
-                                </v-textarea>
-                              </v-row>
+                            <div
+                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                            >
+                              descripción
+                            </div>
+                            <v-row no-gutters>
+                              <v-textarea
+                                counter
+                                rows="3"
+                                dense
+                                outlined
+                                solo
+                                label="teclea aquí"
+                                v-model="nuevaTarifa.descripcion"
+                              >
+                              </v-textarea>
+                            </v-row>
                           </v-col>
                         </v-row>
                       </v-card-text>
                       <!--Nueva Tarifa Inputs-->
-                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                      <v-card-actions
+                        style="position: absolute; bottom:12px; left: 26%;"
+                      >
                         <v-btn
                           @click="setSalvadoNuevaTarifa"
                           color="primary"
@@ -364,61 +378,73 @@
                       <v-card-text class="px-0 py-0">
                         <v-row class="pt-6 pt-md-2" no-gutters>
                           <v-col cols="3">
-                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
-                                red
-                              </div>
-                              <v-row no-gutters>
-                                <v-select
-                                  v-model="nuevoContacto.Tipo"
-                                  :menu-props="{ top: false, offsetY: true }"
-                                  :items="tiposContacto"
-                                  item-text="categoria"
-                                  item-value="icono"
-                                  return-object
-                                  solo
-                                  dense
-                                  outlined
-                                  class="error609TextField"
-                                >
-                                  <template v-slot:selection="data">
-                                    <font-awesome-icon
-                                      :icon="[data.item.categoria, data.item.icono]"
-                                    >
-                                    </font-awesome-icon>
-                                  </template>
-                                  <template v-slot:item="data">
-                                    <font-awesome-icon
-                                      :icon="[data.item.categoria, data.item.icono]"
-                                    >
-                                    </font-awesome-icon>
-                                  </template>
-                                </v-select>
-                              </v-row>
+                            <div
+                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                            >
+                              red
+                            </div>
+                            <v-row no-gutters>
+                              <v-select
+                                v-model="nuevoContacto.Tipo"
+                                :menu-props="{ top: false, offsetY: true }"
+                                :items="tiposContacto"
+                                item-text="categoria"
+                                item-value="icono"
+                                return-object
+                                solo
+                                dense
+                                outlined
+                                class="error609TextField"
+                              >
+                                <template v-slot:selection="data">
+                                  <font-awesome-icon
+                                    :icon="[
+                                      data.item.categoria,
+                                      data.item.icono,
+                                    ]"
+                                  >
+                                  </font-awesome-icon>
+                                </template>
+                                <template v-slot:item="data">
+                                  <font-awesome-icon
+                                    :icon="[
+                                      data.item.categoria,
+                                      data.item.icono,
+                                    ]"
+                                  >
+                                  </font-awesome-icon>
+                                </template>
+                              </v-select>
+                            </v-row>
                           </v-col>
 
                           <v-col cols="9" class="pl-4">
-                              <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
-                                url
-                              </div>
-                              <v-row no-gutters>
-                                <v-text-field
-                                  v-model="nuevoContacto.contacto"
-                                  class="error609TextField"
-                                  color="pink"
-                                  dense
-                                  outlined
-                                  solo
-                                  label="teclea aquí"
-                                >
-                                </v-text-field>
-                              </v-row>
+                            <div
+                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
+                            >
+                              url
+                            </div>
+                            <v-row no-gutters>
+                              <v-text-field
+                                v-model="nuevoContacto.contacto"
+                                class="error609TextField"
+                                color="pink"
+                                dense
+                                outlined
+                                solo
+                                label="teclea aquí"
+                              >
+                              </v-text-field>
+                            </v-row>
                           </v-col>
                         </v-row>
                         <!-- Input nuevo contacto-->
                       </v-card-text>
                       <!--Cuerpo form nuevo contacto-->
 
-                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                      <v-card-actions
+                        style="position: absolute; bottom:12px; left: 26%;"
+                      >
                         <v-btn
                           @click="salvadoDeContacto"
                           color="primary"
@@ -447,105 +473,114 @@
                             v-for="(contacto, i) in contactosUsuario"
                             :key="i"
                             flat
-                            shaped                            
+                            shaped
                             class="mb-2"
                           >
-                           
-                              <v-list
-                                color="transparent"
-                                dense
-                                :disable="
-                                  contactosSeleccionados.includes(i)
-                                    ? false
-                                    : true
-                                "
-                              >
-                                <v-list-item style="padding: 0;">                                 
-                                  <v-list-item-content>
-                                    <v-card
-                                      elevation="2"
-                                      rounded-xl
-                                      style="border-radius: 20px;"
-                                      :elevation="
-                                        !contactosSeleccionados.includes(i) ? 0 : 4
-                                      "
-                                    >                                      
-                                      <v-row align="space-between" no-gutters style="height: 34px;">
-                                        <v-col
-                                          v-show="edicionView"
-                                          cols="3"
-                                          align="center"
-                                        >
-                                          <v-switch
-                                            v-model="contactosSeleccionados"
-                                            color="primary"
-                                            :value="i"
-                                            style="margin: 0; padding-left: .7rem;" 
-                                          ></v-switch>
-                                        </v-col>
-                                        <v-col align="left" style="padding-top: 6%; padding-left: 17px; font-weight: 500;">
-                                          {{contacto.contacto}}
-                                        </v-col>
-                                      </v-row>
-                                    </v-card>
-                                  </v-list-item-content>
-                                  <v-list-item-avatar class="ml-4"
-                                    :color="
-                                      tiposContacto.find(
-                                        (tipoContacto) =>
-                                          tipoContacto.icono ==
-                                          contacto.Tipo.icono
-                                      )['color']
+                            <v-list
+                              color="transparent"
+                              dense
+                              :disable="
+                                contactosSeleccionados.includes(i)
+                                  ? false
+                                  : true
+                              "
+                            >
+                              <v-list-item style="padding: 0;">
+                                <v-list-item-content>
+                                  <v-card
+                                    elevation="2"
+                                    rounded-xl
+                                    style="border-radius: 20px;"
+                                    :elevation="
+                                      !contactosSeleccionados.includes(i)
+                                        ? 0
+                                        : 4
                                     "
                                   >
-                                    <font-awesome-icon
-                                      :icon="[
-                                        contacto.Tipo.categoria,
-                                        contacto.Tipo.icono,
-                                      ]"
-                                      style="font-size:1.4em;"
-                                      color="white"
-                                    />
-                                  </v-list-item-avatar>
-                                </v-list-item>
-                              </v-list>
-                              <!--cuerpo contacto -->
+                                    <v-row
+                                      align="space-between"
+                                      no-gutters
+                                      style="height: 34px;"
+                                    >
+                                      <v-col
+                                        v-show="edicionView"
+                                        cols="3"
+                                        align="center"
+                                      >
+                                        <v-switch
+                                          v-model="contactosSeleccionados"
+                                          color="primary"
+                                          :value="i"
+                                          style="margin: 0; padding-left: .7rem;"
+                                        ></v-switch>
+                                      </v-col>
+                                      <v-col
+                                        align="left"
+                                        style="padding-top: 6%; padding-left: 17px; font-weight: 500;"
+                                      >
+                                        {{ contacto.contacto }}
+                                      </v-col>
+                                    </v-row>
+                                  </v-card>
+                                </v-list-item-content>
+                                <v-list-item-avatar
+                                  class="ml-4"
+                                  :color="
+                                    tiposContacto.find(
+                                      (tipoContacto) =>
+                                        tipoContacto.icono ==
+                                        contacto.Tipo.icono
+                                    )['color']
+                                  "
+                                >
+                                  <font-awesome-icon
+                                    :icon="[
+                                      contacto.Tipo.categoria,
+                                      contacto.Tipo.icono,
+                                    ]"
+                                    style="font-size:1.4em;"
+                                    color="white"
+                                  />
+                                </v-list-item-avatar>
+                              </v-list-item>
+                            </v-list>
+                            <!--cuerpo contacto -->
 
-                              <div
-                                style="
+                            <div
+                              style="
                                 position: absolute;
                                 bottom: -2px;
                                 right: 16%;
                               "
-                                v-show="edicionView"
+                              v-show="edicionView"
+                            >
+                              <v-btn
+                                fab
+                                icon
+                                small
+                                depressed
+                                color="error"
+                                @click="eliminarContacto(i)"
                               >
-                                <v-btn
-                                  fab
-                                  icon
-                                  small
-                                  depressed
-                                  color="error"
-                                  @click="eliminarContacto(i)"
-                                >
-                                  <font-awesome-icon
-                                    :icon="['fas', 'trash-alt']"
-                                  ></font-awesome-icon>
-                                </v-btn>
+                                <font-awesome-icon
+                                  :icon="['fas', 'trash-alt']"
+                                ></font-awesome-icon>
+                              </v-btn>
 
-                                <v-btn
-                                  fab
-                                  icon
-                                  small
-                                  depressed
-                                  color="blue"
-                                  @click="prepararEditContacto(i)"
-                                >
-                                  <font-awesome-icon
-                                    :icon="['fas', 'pencil-alt']"
-                                  ></font-awesome-icon>
-                                </v-btn>
-                              </div>
-                              <!--Acciones Listado contactos-->
+                              <v-btn
+                                fab
+                                icon
+                                small
+                                depressed
+                                color="blue"
+                                @click="prepararEditContacto(i)"
+                              >
+                                <font-awesome-icon
+                                  :icon="['fas', 'pencil-alt']"
+                                ></font-awesome-icon>
+                              </v-btn>
+                            </div>
+                            <!--Acciones Listado contactos-->
                           </v-card>
                           <!--list contactos-->
                         </div>
@@ -875,7 +910,7 @@ export default {
       anuncioTarifaInputsView: false,
       anuncioContactoInputsView: false,
       tiposCategoriasAnuncio: [""],
-      newDefaulContactos: [],
+      newDefaultContactos: [],
       nuevasImagenes: [],
       edadRules: (v) => /.+@.+\..+/.test(v) || "Solo dígitos",
       tiposContacto: [
@@ -886,6 +921,9 @@ export default {
         { categoria: "fa", icono: "globe", color: "blue" },
       ],
       contactosSeleccionados: [],
+      oldContacto: {
+        contacto: "",
+      },
       nuevoContacto: {
         accion: "creacion",
         idPosicion: 0,
@@ -1062,10 +1100,9 @@ export default {
         console.dir(error);
 
         this.mixinLlamadaRouter(error);
-        throw error;
+        return;
       }
 
-      
       this.cancelarFormAnuncio();
       this.mixinLlamadaRouter(this.MixinResult);
     },
@@ -1088,7 +1125,7 @@ export default {
       this.anuncioContactoInputsView = false;
       this.anuncioTarifaInputsView = false;
     },
-    
+
     setSalvadoNuevaTarifa() {
       let tarifa = {};
       console.log("setSalvadoNuevaTarifa");
@@ -1097,7 +1134,7 @@ export default {
       if (this.anuncioUsuario.Sec_Tarifas.length >= 3) {
         this.$store.dispatch("activationAlert", {
           type: "error",
-          message: `No puedes tener más de 3 tarifas por Anuncio!!!`,
+          message: `No puedes tener más de 3 tarifas por Anuncio!.`,
         });
         return;
       }
@@ -1146,28 +1183,29 @@ export default {
       this.anuncioUsuario.Sec_Tarifas.splice(idPosicion, 1);
     },
 
-    //Falta las acciones backend?
+    //Descripción: Solo guarda en las propiedades que usa el salvado de Anuncio, Solo cuando se de el guardado general este, manda guardar a todo lo demás
     async salvadoDeContacto() {
       console.log(`salvadoDeContacto`);
       let contacto = {};
       let esContactoSeleccionado = -1;
       let _Default_Contactos = this.Usuario.Default_Contactos;
 
-      //validacion
+      // Analizar validacion
       if (this.contactosUsuario.length >= 5) {
         this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `No puedes tener más de 5 contactos !!!`,
+          type: "warning",
+          message: `No puedes tener más de 5 contactos !.`,
         });
         return;
       }
 
       //Setear valores
       esContactoSeleccionado = this.anuncioUsuario.Sec_Contacto.findIndex(
-        (Contacto) => Contacto.contacto == this.nuevoContacto.idPosicion
+        (Contacto) => Contacto.contacto == this.oldContacto.contacto
       );
       console.log(`esContactoSeleccionado: ${esContactoSeleccionado}`);
 
+      //Crear Objeto
       contacto.Tipo = {
         categoria: this.nuevoContacto.Tipo.categoria,
         icono: this.nuevoContacto.Tipo.icono,
@@ -1175,32 +1213,27 @@ export default {
       contacto.contacto = this.nuevoContacto.contacto;
       console.dir(contacto);
 
-      //Hacer que la funcion mixin haga desde aqui y con las llamadas de las variables tal como estan
-      if (this.nuevoContacto.accion == "creacion" || esContactoSeleccionado <= 0) {
-        this.anuncioUsuario.Sec_Contacto.push({
-          contacto: contacto.contacto,
-          Tipo: contacto.Tipo,
-        });
+      if (this.nuevoContacto.accion == "creacion") {
+        //Se autoSelecciona dentro del anuncio creado
+        this.anuncioUsuario.Sec_Contacto.push(contacto);
 
         //Preparar array para actualizado de Defaul_Contactos
-        this.newDefaulContactos = this.contactosUsuario;
-        this.newDefaulContactos.push(contacto);
+        this.newDefaultContactos = this.contactosUsuario;
+        this.newDefaultContactos.push(contacto);
 
         await this.$store.dispatch(
           "anuncioEditContactoSet",
           this.anuncioUsuario.Sec_Contacto
         ); //Actualizacion vuex base de FormaAE
       } else {
-
-        //Default
         _Default_Contactos.splice(this.nuevoContacto.idPosicion, 1, {
           contacto: contacto.contacto,
           Tipo: contacto.Tipo,
         });
 
-        console.log(`this.newDefaulContactos`);
+        console.log(`this.newDefaultContactos`);
         console.dir(_Default_Contactos);
-        this.newDefaulContactos = _Default_Contactos;
+        this.newDefaultContactos = _Default_Contactos; //Variable analizar
 
         //Editar el contacto existente
         if (esContactoSeleccionado >= 0) {
@@ -1209,6 +1242,7 @@ export default {
             1,
             { contacto: contacto.contacto, Tipo: contacto.Tipo }
           );
+
           await this.$store.dispatch(
             "anuncioEditContactoSet",
             this.anuncioUsuario.Sec_Contacto
@@ -1218,12 +1252,17 @@ export default {
 
       this.anuncioContactoInputsView = false;
     },
-    
+
     //----- Sets de secciones
     setSalvadoEdicionImagenes() {
       return new Promise(async (resolve, reject) => {
         if (this.nuevasImagenes.length > 0) {
           await this.$store.dispatch("anuncioSetImagenes", this.nuevasImagenes); //Actualizacion vuex base de FormaAE
+        } else {
+          await this.$store.dispatch(
+            "anuncioSetImagenes",
+            this.anuncioUsuario.Sec_Imagenes
+          );
         }
         resolve();
       });
@@ -1292,6 +1331,7 @@ export default {
     },
     //El usuario seleciona un contacto dentro de la lista
     prepararEditContacto(idPosicion) {
+      this.oldContacto.contacto = this.contactosUsuario[idPosicion].contacto;
       this.nuevoContacto.idPosicion = idPosicion;
       this.nuevoContacto.Tipo = this.contactosUsuario[idPosicion].Tipo;
       this.nuevoContacto.contacto = this.contactosUsuario[idPosicion].contacto;
@@ -1300,11 +1340,10 @@ export default {
 
       this.abrirFormAnuncio();
     },
-    
-    //falta el backend?
+
+    //Prepara los Vuex para el guardado de Default Contactos o Anuncio Contactos
     async eliminarContacto(idPosicion) {
       let MutateResult;
-      let newDefaulContactos = [];
 
       console.dir(`eliminarContacto ${idPosicion}`);
 
@@ -1314,16 +1353,17 @@ export default {
         contactoUsuarioLoop++
       ) {
         if (idPosicion != contactoUsuarioLoop) {
-          newDefaulContactos.push(this.contactosUsuario[contactoUsuarioLoop]);
+          this.newDefaultContactos.push(
+            this.contactosUsuario[contactoUsuarioLoop]
+          );
         }
-      }
+      } // Asignacion de nuevos defaultContactos
 
       for (
         let anuncioContactosLoop = 0;
         anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length;
         anuncioContactosLoop++
       ) {
-        //El anuncio tiene el contacto que se quiere eliminar
         if (
           this.contactosUsuario[idPosicion].contacto ==
           this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto
@@ -1332,27 +1372,27 @@ export default {
           console.log(anuncioContactosLoop);
           break;
         }
-      }
+      } //El anuncio tiene como seleccion el contacto que se quiere eliminar
     },
-
 
     //Habilita la apertura de edición del anuncio y manda a setea a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
-
       let _idAnuncio;
 
-      if(this.anuncioUsuario.hasOwnProperty("_id")){
-          _idAnuncio = this.anuncioUsuario._id;
-      } else{
-          _idAnuncio = this.anuncioUsuario.id;
+      if (this.anuncioUsuario.hasOwnProperty("_id")) {
+        _idAnuncio = this.anuncioUsuario._id;
+      } else if (this.anuncioUsuario.hasOwnProperty("id")) {
+        _idAnuncio = this.anuncioUsuario.id;
       }
 
-      if ( _idAnuncio === this.FormAE.id || this.FormAE.id == undefined ) {
+      if (_idAnuncio === this.FormAE.id || !this.FormAE.id) {
         this.activacionesSecciones(this.tabSeleccionado);
         this.anuncioEdicionInputsView = true;
 
         try {
-          await this.mixinAnuncioSetFormAE({ id: this.anuncioUsuario.id });
+          let MixinResult = await this.mixinAnuncioSetFormAE({
+            id: _idAnuncio,
+          });
         } catch (error) {
           this.$store.dispatch("activationAlert", {
             type: "error",
@@ -1360,6 +1400,8 @@ export default {
           });
           return;
         }
+
+        this.$store.dispatch("anuncioEditSet", MixinResult);
         return;
       }
 
@@ -1397,14 +1439,14 @@ export default {
       let _idAnuncio;
       console.log("vue borrarAnuncio...");
 
-
       try {
-        if(this.anuncioUsuario.hasOwnProperty("_id")){
+        if (this.anuncioUsuario.hasOwnProperty("_id")) {
           _idAnuncio = this.anuncioUsuario._id;
         } else {
           _idAnuncio = this.anuncioUsuario.id;
         }
-        
+
+        console.log(`_idAnuncio ${_idAnuncio}`)
         MutateResult = await this.mixinAnuncioEliminar(_idAnuncio);
       } catch (error) {
         console.log("vue borrarAnuncio... en error");
@@ -1414,7 +1456,6 @@ export default {
         throw error;
       }
 
-      //Eliminar dicho anuncio del state tmb????, claro... validar porque no se esta haciendo
       console.dir(MutateResult);
       this.mixinLlamadaRouter(MutateResult);
     },
@@ -1423,6 +1464,13 @@ export default {
     savingAnuncio() {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
+        let _idAnuncio;
+
+        if (this.anuncioUsuario.hasOwnProperty("_id")) {
+          _idAnuncio = this.anuncioUsuario._id;
+        } else if (this.anuncioUsuario.hasOwnProperty("id")) {
+          _idAnuncio = this.anuncioUsuario.id;
+        }
 
         try {
           //Añadir aqui la validacion de infor de la seccion Descripcion
@@ -1434,24 +1482,25 @@ export default {
 
           console.dir(this.FormAE);
 
-          if (!!this.FormAE.id) {
-            console.log("Editando existente...");
-
+          if (!!_idAnuncio) {
+            console.log("Editando seleccionado...");
+            await this.$store.dispatch("anuncioIdSet", this.anuncioUsuario._id);
             MutateResult = await this.mixinAnuncioEditar(this.FormAE);
-            await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
-
+            //await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
           } else {
             console.log("Guardando nuevo...");
 
             MutateResult = await this.mixinAnuncioSetCrear(this.FormAE);
-            //await this.$store.dispatch("anuncioAgregarNuevo", MutateResult.data); //Actualizando la base vuex del state de FormAE
+            //await this.$store.dispatch("agregarEnAnunciosUsuario", MutateResult.data); //Actualizando la base vuex del state de FormAE
           }
 
-          if (this.newDefaulContactos.length > 0) {
-            this.$store.dispatch("contactoEditado", this.newDefaulContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
-            await this.mixinActualizarDefaultContactos(this.newDefaulContactos);
+          //Solo cuando haya sido alterado newDefaultContactos este manda a salvar DefaultCOntactosBackend
+          if (this.newDefaultContactos.length > 0) {
+            this.$store.dispatch("contactoEditado", this.newDefaultContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
+            await this.mixinActualizarDefaultContactos(
+              this.newDefaultContactos
+            );
           }
-
         } catch (error) {
           console.dir(error);
           return reject(error);
@@ -1597,7 +1646,8 @@ export default {
   width: auto;
 }
 
-.errorBoxShadow{
-  box-shadow: 0px 7px 9px -4px rgb(0 0 0 / 5%), 0px 14px 21px 2px rgb(0 0 0 / 8%), 0px 5px 26px 4px rgb(0 0 0 / 8%) !important
+.errorBoxShadow {
+  box-shadow: 0px 7px 9px -4px rgb(0 0 0 / 5%),
+    0px 14px 21px 2px rgb(0 0 0 / 8%), 0px 5px 26px 4px rgb(0 0 0 / 8%) !important;
 }
 </style>

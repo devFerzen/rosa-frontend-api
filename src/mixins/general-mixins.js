@@ -162,7 +162,7 @@ export default {
         console.log(`mixinSolicitarRestablecerContrasena... result`);
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(MutateResult, "solicitarRestablecerContrasena"),
+          ...new Result(MutateResult.data, "solicitarRestablecerContrasena"),
         };
         console.dir(this.MixinResult);
         return resolve(this.MixinResult);
@@ -376,7 +376,10 @@ export default {
           resolve(this.MixinResult);
         }
 
-        this.MixinResult = { ...this.MixinResult, ...new Result(MutateResult) };
+        this.MixinResult = {
+          ...this.MixinResult,
+          ...new Result(MutateResult.data, 'nuevoContactoCliente'),
+        };
         resolve(this.MixinResult);
       });
     },

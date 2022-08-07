@@ -40,8 +40,7 @@ export default {
           return reject();
         }
 
-        this.MixinResult.componenteInterno.anuncioEditSet = Resultado[0];
-        return resolve();
+        return resolve(Resultado[0]);
       });
     },
 
@@ -81,6 +80,7 @@ export default {
         resolve(this.MixinResult);
       });
     },
+
     mixinAnuncioSetCrear(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
@@ -89,6 +89,7 @@ export default {
 
         delete payload._anuncioEdicionInputsView;
 
+        //Hay usuario
         if (!this.$store.state.usuario.usuario.usuario) {
           console.log("No hay usuario iniciado sesion");
           this.MixinResult.pagina = "home";
@@ -112,10 +113,9 @@ export default {
             setTipoVerificacion: "verificacionCelular",
             activationAlert: {
               type: "warning",
-              message: `Celular registrado aún no esta verificado, Favor de validar el código verificación enviado a su celular!.`,
+              message: `Su número de contacto aún no esta verificado, Favor de validar el código verificación enviado a su celular!.`,
             },
           };
-          // Analizar - this.$store.dispatch("setTipoVerificacion", "verificacionCelular");
           return reject(this.MixinResult);
         }
 
@@ -142,6 +142,7 @@ export default {
         return resolve(this.MixinResult);
       });
     },
+    
     mixinAnuncioEditar(payload) {
       return new Promise(async (resolve, reject) => {
         this.cleanMixinResult();
@@ -159,6 +160,7 @@ export default {
 
         delete payload._anuncioEdicionInputsView;
 
+        //Analizar - Aqui debe que checar tokens tmb
         if (!this.$store.state.usuario.usuario.usuario) {
           this.MixinResult = {
             ...this.MixinResult,
@@ -201,6 +203,7 @@ export default {
         let MutateResult;
         this.cleanMixinResult();
         console.log("mixinAnuncioEliminar...");
+        console.dir(payload);
 
         if (!this.$store.state.usuario.usuario.usuario) {
           console.log("No hay usuario iniciado sesion");
@@ -221,13 +224,12 @@ export default {
         }
 
         try {
-          console.dir(payload);
 
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.DELETE_ANUNCIO_MUTATE,
             variables: {
-              id_anuncio: payload,
-            },
+              id_anuncio: payload
+            }
           });
         } catch (error) {
           console.log("mixinAnuncioEliminar... on error");
@@ -236,11 +238,18 @@ export default {
           this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
           return reject(this.MixinResult);
         }
+
+        console.log("anuncioEliminacion... result MutateResult");
+        console.dir(MutateResult);
+
         this.MixinResult = {
           ...this.MixinResult,
           ...new Respuesta(MutateResult.data, "anuncioEliminacion"),
         };
-        resolve(JSON.parse(this.MixinResult));
+        
+        console.log("anuncioEliminacion... result MixinResult");
+        console.dir(this.MixinResult);
+        resolve(this.MixinResult);
       });
     },
 
