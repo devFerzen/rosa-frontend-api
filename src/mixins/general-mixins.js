@@ -200,7 +200,7 @@ export default {
           ...this.MixinResult,
           ...new Result(MutateResult, "anunciolike"),
         };
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 
@@ -229,7 +229,7 @@ export default {
           return reject(this.MixinResult);
         }
         console.dir(MutateResult);
-        resolve();
+        return resolve();
       });
     },
 
@@ -267,13 +267,14 @@ export default {
           };
           return reject(this.MixinResult);
         }
-
+        
+        this.mixinVerPlus(payload);
         console.dir(QueryResult);
         this.MixinResult = {
           ...this.MixinResult,
           ...new Result(QueryResult.data, "queryAnunciosById", true),
         };
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 
@@ -317,7 +318,7 @@ export default {
           ...this.MixinResult,
           ...new Result(MutateResult.data, "compararVerificacionUsuario"),
         };
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 
@@ -330,7 +331,8 @@ export default {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
         this.cleanMixinResult();
-        console.log("mixinNuevoCorreoContactanos...");
+        console.log("mixinNuevoCorreoContactanos... ");
+        console.dir(payload);        
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -367,20 +369,20 @@ export default {
             ...new Result({
               componenteInterno: {
                 activationAlert: {
-                  type: "error",
+                  type: "success",
                   message: `Anuncio reportado!, Gracias por su cooperación!.`,
                 },
               },
             }),
           };
-          resolve(this.MixinResult);
+          return resolve(this.MixinResult);
         }
 
         this.MixinResult = {
           ...this.MixinResult,
           ...new Result(MutateResult.data, 'nuevoContactoCliente'),
         };
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 
@@ -415,7 +417,7 @@ export default {
           ...this.MixinResult,
           ...new Result(MutateResult.data, "restablecerContrasena"),
         };
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 
@@ -446,7 +448,7 @@ export default {
           this.MixinResult = { ...this.MixinResult, ...new Result(error) };
           return reject(this.MixinResult);
         }
-        resolve(QueryResult.data.queryAnuncios);
+        return resolve(QueryResult.data.queryAnuncios);
       });
     },
 
@@ -480,7 +482,7 @@ export default {
           ...new Result(QueryResult, "queryddlsByCategoria", true),
         };
         console.dir(this.MixinResult);
-        resolve(this.MixinResult);
+        return resolve(this.MixinResult);
       });
     },
 

@@ -15,8 +15,7 @@ export const state = {
     Sec_Imagenes: [],
     Sec_Contacto: [],
     Sec_Tarifas: [],
-  },
-  idAnuncioReportado: "",
+  }
 };
 
 export const mutations = {
@@ -112,9 +111,6 @@ export const mutations = {
              Sec_Tarifas: [],
            };
          },
-         ID_ANUNCIOREPORTADO_SET(state, payload) {
-           state.idAnuncioReportado = payload;
-         },
        };
 
 export const actions = {
@@ -208,10 +204,7 @@ export const actions = {
              console.log("anuncio edit offset");
              commit("ANUNCIO_EDITINFO_OFFSET", null);
            }
-         },
-         anuncioReportado({ commit, state }, payload) {
-           commit("ID_ANUNCIOREPORTADO_SET", payload);
-         },
+         }
        };
 
 export const getters = {
@@ -220,8 +213,5 @@ export const getters = {
   },
   FormAE: (state) => {
     return state.AnuncioInfo;
-  },
-  getIdAnuncioReportado: (state) => {
-    return state.idAnuncioReportado;
   },
 };

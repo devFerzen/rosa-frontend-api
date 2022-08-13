@@ -160,24 +160,6 @@
                   style="position: relative;"
                 >
                   <div v-if="nuevaTarifaView">
-                    <div
-                      class="
-                        text-h6
-                        green-font
-                        text-weight-black text-center
-                        py-1
-                      "
-                    >
-                      {{
-                        `${
-                          nuevaTarifa.accion == "creacion"
-                            ? "Nueva"
-                            : "Actualizando"
-                        } Tarifa`
-                      }}
-                    </div>
-                    <!--titulo-->
-
                     <v-form ref="tarifaEdit">
                       <v-card-text class="px-0 py-0">
                         <v-row class="pt-6 pt-md-2" no-gutters>
@@ -231,12 +213,13 @@
                             <v-row no-gutters>
                               <v-textarea
                                 counter
-                                rows="3"
+                                rows="5"
                                 dense
                                 outlined
                                 solo
                                 label="teclea aquí"
                                 v-model="nuevaTarifa.descripcion"
+                                id="nuevaTarifa-descripcion"
                               >
                               </v-textarea>
                             </v-row>
@@ -432,7 +415,7 @@
                                 dense
                                 outlined
                                 solo
-                                label="teclea aquí"
+                                label="teclea aquí"                                
                               >
                               </v-text-field>
                             </v-row>
@@ -860,15 +843,54 @@
                   <!--BotonNuevoContacto/Tarifa-->
 
                   <v-col v-show="edicionView" align="center">
-                    <v-btn
-                      color="black"
-                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                      @click="cancelarFormAnuncio"
-                      style="border: none!important;"
-                      outlined
+                    <v-dialog
+                      transition="dialog-bottom-transition"
+                      max-width="600"
                     >
-                      Cancelar
-                    </v-btn>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          color="black"
+                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                          style="border: none!important;"
+                          outlined
+                          v-on="on"
+                          v-bind="attrs"
+                        >
+                          Cancelar
+                        </v-btn>
+                      </template>
+                      <template v-slot:default="dialog">
+                        <v-card>
+                          <v-toolbar color="primary" dark>
+                            Error 609...
+                          </v-toolbar>
+                          <v-card-text>
+                            <div class="text-h5">
+                              Quieres salir sin guardar...?
+                            </div>
+                          </v-card-text>
+                          <v-card-actions class="justify-end">
+                            <v-row no-gutters>
+                              <v-col align="center">
+                                <v-btn text @click="dialog.value = false"
+                                  >No</v-btn
+                                >
+                              </v-col>
+                              <v-col align="center">
+                                <v-btn
+                                  text
+                                  @click="
+                                    cancelarFormAnuncio();
+                                    dialog.value = false;
+                                  "
+                                  >Si</v-btn
+                                >
+                              </v-col>
+                            </v-row>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-dialog>
                   </v-col>
                   <!--BotonCancelar-->
                 </v-row>
@@ -1085,11 +1107,12 @@ export default {
           break;
       }
     },
+
     async salvarFormAnuncio() {
       console.log(`vue salvarFormAnuncio...`);
 
       //Cambiar Activacion de Imagenes
-      this.cancelarFormAnuncio(false);
+      //this.cancelarFormAnuncio(false);
 
       //Activar una especia de loading (no importante aun)
 
@@ -1103,27 +1126,30 @@ export default {
         return;
       }
 
-      this.cancelarFormAnuncio();
+      await this.cancelarFormAnuncio();
       this.mixinLlamadaRouter(this.MixinResult);
     },
 
     //------Acciones Anuncio
-    async cancelarFormAnuncio(limpia = true) {
-      if (limpia) {
-        this.limpiarContactoForm();
-        this.limpiarTarifaForm();
+    cancelarFormAnuncio(limpia = true) {
+      return new Promise(async (resolve, rejected) => {
+        if (limpia) {
+          this.limpiarContactoForm();
+          this.limpiarTarifaForm();
 
-        if (this.FormAE.hasOwnProperty("_anuncioEdicionInputsView")) {
-          if (this.FormAE._anuncioEdicionInputsView) {
-            await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
+          if (this.FormAE.hasOwnProperty("_anuncioEdicionInputsView")) {
+            if (this.FormAE._anuncioEdicionInputsView) {
+              await this.$store.dispatch("newAnuncioOffSet"); //Quita el anuncio que se iba a crear y limpa la base vuex de FormAE
+            }
           }
+          await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
         }
-        await this.$store.dispatch("anuncioEditSet"); //Limpia la base de vuex de FormAE
-      }
 
-      this.anuncioEdicionInputsView = false;
-      this.anuncioContactoInputsView = false;
-      this.anuncioTarifaInputsView = false;
+        this.anuncioEdicionInputsView = false;
+        this.anuncioContactoInputsView = false;
+        this.anuncioTarifaInputsView = false;
+        resolve();
+      });
     },
 
     setSalvadoNuevaTarifa() {
@@ -1345,39 +1371,46 @@ export default {
     async eliminarContacto(idPosicion) {
       let MutateResult;
 
-      console.dir(`eliminarContacto ${idPosicion}`);
+      console.log(`${typeof idPosicion}`);
+      if (idPosicion === "undefined") {
+        //Analizar algun error para enviar
+        console.log("se regresa");
+        return;
+      }
 
-      for (
-        let contactoUsuarioLoop = 0;
-        contactoUsuarioLoop < this.contactosUsuario.length;
-        contactoUsuarioLoop++
-      ) {
-        if (idPosicion != contactoUsuarioLoop) {
-          this.newDefaultContactos.push(
-            this.contactosUsuario[contactoUsuarioLoop]
-          );
-        }
+      if (this.contactosUsuario.length == 0) {
+        this.newDefaultContactos.splice(idPosicion, 1);
       } // Asignacion de nuevos defaultContactos
+
+      console.log(`eliminarContacto ${idPosicion}`);
+      console.log(
+        `this.anuncioUsuario.Sec_Contacto.length ${this.anuncioUsuario.Sec_Contacto.length}`
+      );
+      console.log(
+        `this.contactosUsuario.length ${this.contactosUsuario.length}`
+      );
+      console.dir(this.contactosUsuario);
+      console.dir(this.contactosUsuario[idPosicion]);
 
       for (
         let anuncioContactosLoop = 0;
-        anuncioContactosLoop < this.anuncioUsuario.Sec_Contacto.length;
+        anuncioContactosLoop <= this.anuncioUsuario.Sec_Contacto.length;
         anuncioContactosLoop++
       ) {
         if (
           this.contactosUsuario[idPosicion].contacto ==
           this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto
         ) {
+          console.log("es un contacto seleccionado");
           this.anuncioUsuario.Sec_Contacto.splice(anuncioContactosLoop, 1);
-          console.log(anuncioContactosLoop);
           break;
         }
-      } //El anuncio tiene como seleccion el contacto que se quiere eliminar
+      } //El anuncio tiene como seleccion el contacto que se quiere eliminar y lo quita tmb del array de seleccionados
     },
 
     //Habilita la apertura de edición del anuncio y manda a setea a al objeto FormAE responsable de los CRUDS del anuncio.
     async habilitarEdicionesAnuncio() {
-      let _idAnuncio;
+      let _idAnuncio, MixinResult;
 
       if (this.anuncioUsuario.hasOwnProperty("_id")) {
         _idAnuncio = this.anuncioUsuario._id;
@@ -1390,7 +1423,7 @@ export default {
         this.anuncioEdicionInputsView = true;
 
         try {
-          let MixinResult = await this.mixinAnuncioSetFormAE({
+          MixinResult = await this.mixinAnuncioSetFormAE({
             id: _idAnuncio,
           });
         } catch (error) {
@@ -1400,6 +1433,9 @@ export default {
           });
           return;
         }
+
+        console.log("anuncioEditSet... ");
+        console.dir(MixinResult);
 
         this.$store.dispatch("anuncioEditSet", MixinResult);
         return;
@@ -1446,7 +1482,7 @@ export default {
           _idAnuncio = this.anuncioUsuario.id;
         }
 
-        console.log(`_idAnuncio ${_idAnuncio}`)
+        console.log(`_idAnuncio ${_idAnuncio}`);
         MutateResult = await this.mixinAnuncioEliminar(_idAnuncio);
       } catch (error) {
         console.log("vue borrarAnuncio... en error");
@@ -1483,15 +1519,14 @@ export default {
           console.dir(this.FormAE);
 
           if (!!_idAnuncio) {
-            console.log("Editando seleccionado...");
-            await this.$store.dispatch("anuncioIdSet", this.anuncioUsuario._id);
+            console.log(`Editando seleccionado... ${_idAnuncio}`);
+            await this.$store.dispatch("anuncioIdSet", _idAnuncio);
+
             MutateResult = await this.mixinAnuncioEditar(this.FormAE);
-            //await this.$store.dispatch("anuncioEditado", this.FormAE); //Actualizando la base vuex del state de FormAE
           } else {
             console.log("Guardando nuevo...");
 
             MutateResult = await this.mixinAnuncioSetCrear(this.FormAE);
-            //await this.$store.dispatch("agregarEnAnunciosUsuario", MutateResult.data); //Actualizando la base vuex del state de FormAE
           }
 
           //Solo cuando haya sido alterado newDefaultContactos este manda a salvar DefaultCOntactosBackend
@@ -1587,6 +1622,8 @@ export default {
     );
     if (this.anuncioUsuario.hasOwnProperty("_anuncioEdicionInputsView")) {
       this.anuncioEdicionInputsView = true;
+    } else {
+      this.anuncioEdicionInputsView = false;
     }
 
     //Marcando contactoSeleccionados
@@ -1609,6 +1646,10 @@ export default {
 
 .v-textarea textarea {
   line-height: 1.35rem !important;
+}
+
+.v-text-field--outlined.v-input--dense .v-label {
+  top: 12px!important;
 }
 
 .glassy {

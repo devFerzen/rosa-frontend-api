@@ -52,7 +52,10 @@
                         </v-list-item>
                       </v-hover>
                     </v-list>
-                    <v-list two-line style="background: none !important; position: absolute; bottom:-18px">
+                    <v-list
+                      two-line
+                      style="background: none !important; position: absolute; bottom:-18px"
+                    >
                       <v-hover v-slot:default="{ hover }">
                         <v-list-item>
                           <v-list-item-content>
@@ -69,10 +72,12 @@
                                 class="fa-1x"
                                 color="white"
                               ></font-awesome-icon>
-                              <span class="text-caption" style="color: white;">{{100}}k</span>
-                            </v-list-item-title>                        
+                              <span class="text-caption" style="color: white;"
+                                >{{ 100 }}k</span
+                              >
+                            </v-list-item-title>
                           </v-list-item-content>
-                        </v-list-item>  
+                        </v-list-item>
                       </v-hover>
                     </v-list>
                   </div>
@@ -81,29 +86,28 @@
                   <row class="glass-infoCard d-flex align-start">
                     <v-col>
                       <v-row no-gutters>
-                       <v-col cols="12">
-                         <div class="d-flex flex-row"
-                          >
-                          <div
-                            class="
+                        <v-col cols="12">
+                          <div class="d-flex justify-space-between flex-row">
+                            <div
+                              class="
                               text-h5 text-md-h6
                               font-weight-black
                               text-truncate text-capitalize
                             "
-                            style="color: black; overflow: hidden; max-width: 195px;"
-                          >
-                            {{ 'anuncio.Sec_Descripcion.titulo' }}
-                          </div>
-                          <div
-                            class="
-                              text-h6                          
+                              style="color: black; overflow: hidden; max-width: 220px; background-color: #9fe676;"
+                            >
+                              {{ anuncio.Sec_Descripcion.titulo }}
+                            </div>
+                            <div
+                              class="
+                              text-h6
                             "
-                            style="overflow: hidden"
-                          >
-                            ,{{ 24 }}
+                              style="overflow: hidden"
+                            >
+                              ,{{ 24 }}
+                            </div>
                           </div>
-                          </div>
-                       </v-col>        
+                        </v-col>
                       </v-row>
                       <p
                         class="
@@ -176,7 +180,10 @@
                     </v-list-item>
                   </v-list>
 
-                  <v-list two-line style="background: none !important; position: absolute; bottom:0px">
+                  <v-list
+                    two-line
+                    style="background: none !important; position: absolute; bottom:0px"
+                  >
                     <v-list-item>
                       <v-list-item-content>
                         <v-list-item-title
@@ -192,10 +199,12 @@
                             class="fa-1x"
                             color="white"
                           ></font-awesome-icon>
-                          <span class="text-caption" style="color: white;">{{100}}k</span>
-                        </v-list-item-title>                        
+                          <span class="text-caption" style="color: white;"
+                            >{{ 100 }}k</span
+                          >
+                        </v-list-item-title>
                       </v-list-item-content>
-                    </v-list-item>                 
+                    </v-list-item>
                   </v-list>
                 </div>
                 <!--vista corazón y ojo-->
@@ -376,7 +385,7 @@
                                   depressed
                                   plain
                                   small
-                                  @click="accionCorazon(anuncio.id)"
+                                  @click="accionCorazon(anuncioView.id)"
                                 >
                                   <font-awesome-icon
                                     :icon="['fas', 'heart']"
@@ -478,9 +487,7 @@
                             </div>
                           </v-col>
                           <v-col cols="3" md="3" align="center">
-                            <div
-                              class="subtitle-1 pink-font text-weight-black"
-                            >
+                            <div class="subtitle-1 pink-font text-weight-black">
                               <font-awesome-icon icon="dollar-sign" />
                               {{ tarifa.precio }}
                             </div>
@@ -720,7 +727,7 @@ export default {
   mixins: [GeneralMixins],
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
-    colUsuarioDesc: { type: String, default: '4' }
+    colUsuarioDesc: { type: String, default: "4" },
   },
   data() {
     return {
@@ -914,17 +921,18 @@ export default {
 
     async reportarAnuncio() {
       console.log("vue reportarAnuncio ", this.anuncioView.id);
-      //Para activarlo en la página de Contacto
-      //this.$store.dispatch('panelHerramientasContactanos',true);
       let MutateResult;
 
       try {
-        MutateResult = await this.mixinNuevoCorreoContactanos({
-          correo: "",
-          asunto: "Reporte de Anuncio!",
-          mensaje: "Reporte por usuario",
-          anuncio: this.anuncioView.id,
-        }, true);
+        MutateResult = await this.mixinNuevoCorreoContactanos(
+          {
+            correo: "",
+            asunto: "Reporte de Anuncio!",
+            mensaje: "Reporte anónimo, favor de revisar el id del anuncio",
+            anuncio: this.anuncioView.id,
+          },
+          true
+        );
       } catch (error) {
         console.log("vue reportarAnuncio...");
         console.dir(error);
@@ -933,9 +941,6 @@ export default {
         throw error;
       }
 
-      //Convertir a nulo una vez que se haya puesto el reporte si esq se hace en otro modal
-      //Analizar su uso
-      this.$store.dispatch("anuncioReportado", this.anuncioView.id); 
       this.mixinLlamadaRouter(MutateResult);
     },
 
@@ -955,9 +960,10 @@ export default {
       }
       console.log("se esta imprimiendo en modal el sig anuncio");
       console.dir(queryResult);
+
+      //Setteando para ser usado en el Anuncio vista completa
       this.anuncioView = queryResult.data[0];
       this.fullAnuncio_Display(true);
-      this.mixinVerPlus(payload);
     },
 
     /*
@@ -984,6 +990,10 @@ export default {
     this.fullAnuncioCss.seccion = xs || sm ? "" : "full-anuncio-seccion-web";
 
     this.aplicaBusqueda();
+
+    if (this.fullAnuncioEstado && this.anuncioView.id) {
+      this.mixinVerPlus(this.anuncioView.id);
+    }
   },
   watch: {
     //Analizar el uso de watch aqui
@@ -1029,8 +1039,6 @@ export default {
   height: 50vh;
 }
 
-
-
 .green-font {
   color: #9fe676 !important;
 }
@@ -1063,14 +1071,15 @@ export default {
 
 #carouselImgAnuncio .v-carousel__controls {
   background: none !important;
-  z-index: 3 !important;  
+  z-index: 3 !important;
 }
 
 .anuncio-imagenes-dots {
   color: #e0409a !important;
 }
 
-.v-window__prev, .v-window__next{
+.v-window__prev,
+.v-window__next {
   background: none;
   margin: 0;
 }

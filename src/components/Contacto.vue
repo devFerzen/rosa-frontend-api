@@ -112,7 +112,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters["getIdAnuncioReportado"],
   },
   methods: {
     async correoContacto() {

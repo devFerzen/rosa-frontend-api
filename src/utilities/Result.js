@@ -32,8 +32,8 @@ export default function(Result, dataName = undefined, esQuery = false) {
     }
   }
 
-  console.log("Result");
-  console.dir(Result);
+  //console.log("Result");
+  //console.dir(Result);
 
   console.log("_Result");
   console.dir(_Result);

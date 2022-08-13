@@ -2,7 +2,7 @@ export const state = {
   alert: {
     type: 'success',
     isActive: false,
-    message: 'bla bla bla',
+    message: 'bla bla bla'
   }
 }
 
