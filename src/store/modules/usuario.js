@@ -109,7 +109,7 @@ export const actions = {
             resolve();
         });
     },
-    contactoEditado({commit, state}, payload){
+    contactoDefaultEditado({commit, state}, payload){
         console.log(`payload`);
         console.dir(payload);
         commit('CARGA_CONTACTOS_USUARIO', payload);

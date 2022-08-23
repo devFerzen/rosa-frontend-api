@@ -37,7 +37,7 @@ export const actions = {
     panelHerramientasCambioContrasena({ commit }, payload) {
         commit('ACTUALIZANDO_CONTRASENA', payload, { root: true });
     },
-    async ddls({ commit }, payload) {
+    ddls({ commit }, payload) {
         commit('DDLS_ESTADO_SET', payload);
     },
     querySet({ commit }, payload) {

@@ -14,6 +14,7 @@
           :md="edicionView ? 9 : 6"
           style="position: relative;"
           v-else
+          v-show="!anuncioComprasView"
         >
           <div
             style="position: absolute; top: 17px; right: 0; width:38px"
@@ -36,7 +37,7 @@
             <!--editar btn-->
 
             <v-btn fab small plain color="white">
-              <div class="d-flex flex-column align-center">
+              <div class="d-flex flex-column align-center" @click="habilitarComprasAnuncio">
                 <font-awesome-icon
                   :icon="['fas', 'shopping-bag']"
                   class="fa-2x"
@@ -73,7 +74,7 @@
 
         <!--Carrusel-->
 
-        <v-col cols="12" :md="edicionView ? 9 : 6">
+        <v-col cols="12" :md="edicionView ? 9 : !anuncioComprasView ? 6 : 12">
           <v-card class="pa-1" flat :height="tarjetaWH['cuerpoAnuncioH']">
             <v-card-title class="pt-0" v-show="!edicionView">
               <v-container class="pa-0">
@@ -99,7 +100,7 @@
               <!--Descripcion-->
             </v-card-title>
 
-            <v-card-text class="pa-0 mt-4">
+            <v-card-text class="pa-0 mt-4" v-show="!anuncioComprasView">
               <v-row align="space-between" justify="center" no-gutters>
                 <v-btn
                   depressed
@@ -260,13 +261,13 @@
                         <v-col cols="5" align="center" class="pr-2">
                           <div class="subtitle-1 pink-font text-weight-black">
                             <font-awesome-icon icon="dollar-sign" />
-                            {{ "99,999.99" }}
+                            {{ tarifa.precio }}
                           </div>
                         </v-col>
                       </v-row>
                       <!--Nombre Precio-->
 
-                      <v-row no-gutters align="center" justify="center">
+                      <v-row no-gutters align="center" justify="center" class="mt-2">
                         <v-col cols="12">
                           <div
                             class="body-2 text-center"
@@ -278,7 +279,7 @@
                       </v-row>
                       <!--Descripcion-->
 
-                      <v-row justify="center" class="mb-2">
+                      <v-row justify="center">
                         <v-col cols="8">
                           <v-divider
                             color="pink"
@@ -415,7 +416,7 @@
                                 dense
                                 outlined
                                 solo
-                                label="teclea aquí"                                
+                                label="teclea aquí"
                               >
                               </v-text-field>
                             </v-row>
@@ -583,7 +584,7 @@
                   class="full-anuncio-seccion"
                   :class="fullAnuncioSeccionWeb"
                   v-show="nuevaDescripcionView"
-                >
+                  >
                   <v-form ref="descripcionEdit" style="margin-top: 16px;">
                     <v-row no-gutters>
                       <v-col cols="12" class="pr-4">
@@ -795,23 +796,30 @@
                   :class="fullAnuncioSeccionWeb"
                   width="300"
                   height="fit-content"
-                  v-show="!nuevaDescripcionView"
+                  v-show="!nuevaDescripcionView && !anuncioComprasView"
                   style="white-space: pre-line;"
                 >
                   {{ anuncioUsuario.Sec_Descripcion.descripcion }}
+                </v-sheet>
+
+                <v-sheet
+                  fluid
+                  elevation="0"
+                  v-show="anuncioComprasView"
+                  class="full-anuncio-seccion"
+                  style="overflow-y: hidden;"
+                >
+                  <dashboard-compras></dashboard-compras>                  
                 </v-sheet>
               </v-card-text>
               <!--v-card Descripción-->
             </v-expand-x-transition>
             <!--Cuerpo Anuncio (descripcion, contacto y tarifas)-->
 
-            <v-card-action>
+            <v-card-action v-show="edicionView">
               <v-container>
                 <v-row align="space-around">
-                  <v-col
-                    v-show="
-                      edicionView && !nuevaTarifaView && !nuevoContactoView
-                    "
+                  <v-col v-show="!nuevaTarifaView && !nuevoContactoView"
                     align="center"
                   >
                     <v-btn
@@ -827,8 +835,7 @@
                   </v-col>
                   <!--BotonGuardar-->
 
-                  <v-col
-                    v-show="edicionView && tabSeleccionado != 'revealDesc'"
+                  <v-col v-show="tabSeleccionado != 'revealDesc'"
                     align="center"
                   >
                     <v-btn
@@ -842,7 +849,7 @@
                   </v-col>
                   <!--BotonNuevoContacto/Tarifa-->
 
-                  <v-col v-show="edicionView" align="center">
+                  <v-col align="center">
                     <v-dialog
                       transition="dialog-bottom-transition"
                       max-width="600"
@@ -929,6 +936,7 @@ export default {
       revealTarifa: false,
       anuncioConfigViewBtns: false,
       anuncioEdicionInputsView: false,
+      anuncioComprasInputView: false,
       anuncioTarifaInputsView: false,
       anuncioContactoInputsView: false,
       tiposCategoriasAnuncio: [""],
@@ -1046,6 +1054,9 @@ export default {
         this.nuevaTarifaView ||
         this.nuevoContactoView
       );
+    },
+    anuncioComprasView(){
+      return this.anuncioComprasInputView;
     },
     nuevaDescripcionView() {
       return (
@@ -1212,6 +1223,7 @@ export default {
     //Descripción: Solo guarda en las propiedades que usa el salvado de Anuncio, Solo cuando se de el guardado general este, manda guardar a todo lo demás
     async salvadoDeContacto() {
       console.log(`salvadoDeContacto`);
+
       let contacto = {};
       let esContactoSeleccionado = -1;
       let _Default_Contactos = this.Usuario.Default_Contactos;
@@ -1252,6 +1264,7 @@ export default {
           this.anuncioUsuario.Sec_Contacto
         ); //Actualizacion vuex base de FormaAE
       } else {
+
         _Default_Contactos.splice(this.nuevoContacto.idPosicion, 1, {
           contacto: contacto.contacto,
           Tipo: contacto.Tipo,
@@ -1326,7 +1339,7 @@ export default {
         //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario en lo que este en contactosSeleccionados
         for (
           let contactoSeleccionadosLoop = 0;
-          contactoSeleccionadosLoop < this.contactosSeleccionados.length;
+          contactoSeleccionadosLoop < this.contactosSeleccionados.length -1;
           contactoSeleccionadosLoop++
         ) {
           newArrayContactoAnuncio.push({
@@ -1339,6 +1352,7 @@ export default {
           });
         }
 
+        console.log(`setSalvadoEdicionContacto...`);
         console.dir(newArrayContactoAnuncio);
 
         this.anuncioUsuario.Sec_Contacto = newArrayContactoAnuncio;
@@ -1378,18 +1392,20 @@ export default {
         return;
       }
 
-      if (this.contactosUsuario.length == 0) {
-        this.newDefaultContactos.splice(idPosicion, 1);
+      console.log(`eliminarContacto ${idPosicion}`);
+
+      if (this.contactosUsuario.length > 0) {
+        this.Usuario.Default_Contactos.splice(idPosicion, 1);
+        this.newDefaultContactos = this.Usuario.Default_Contactos;
       } // Asignacion de nuevos defaultContactos
 
-      console.log(`eliminarContacto ${idPosicion}`);
       console.log(
         `this.anuncioUsuario.Sec_Contacto.length ${this.anuncioUsuario.Sec_Contacto.length}`
       );
       console.log(
         `this.contactosUsuario.length ${this.contactosUsuario.length}`
       );
-      console.dir(this.contactosUsuario);
+
       console.dir(this.contactosUsuario[idPosicion]);
 
       for (
@@ -1401,11 +1417,35 @@ export default {
           this.contactosUsuario[idPosicion].contacto ==
           this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop].contacto
         ) {
+
           console.log("es un contacto seleccionado");
+          console.dir(this.anuncioUsuario.Sec_Contacto[anuncioContactosLoop]);
+
           this.anuncioUsuario.Sec_Contacto.splice(anuncioContactosLoop, 1);
           break;
         }
       } //El anuncio tiene como seleccion el contacto que se quiere eliminar y lo quita tmb del array de seleccionados
+    },
+
+    habilitarComprasAnuncio(){
+      let _idAnuncio;
+
+      if (this.anuncioUsuario.hasOwnProperty("_id")) {
+        _idAnuncio = this.anuncioUsuario._id;
+      } else if (this.anuncioUsuario.hasOwnProperty("id")) {
+        _idAnuncio = this.anuncioUsuario.id;
+      }
+
+      if(!!_idAnuncio){
+        this.anuncioComprasInputView = true;
+        return;
+      }
+      
+      this.anuncioComprasInputView = false;
+      this.$store.dispatch("activationAlert", {
+        type: "error",
+        message: `Otro Anuncio tiene habilitado la sección de Compras.`,
+      });
     },
 
     //Habilita la apertura de edición del anuncio y manda a setea a al objeto FormAE responsable de los CRUDS del anuncio.
@@ -1531,12 +1571,16 @@ export default {
 
           //Solo cuando haya sido alterado newDefaultContactos este manda a salvar DefaultCOntactosBackend
           if (this.newDefaultContactos.length > 0) {
-            this.$store.dispatch("contactoEditado", this.newDefaultContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
+            this.$store.dispatch("contactoDefaultEditado", this.newDefaultContactos); //Actualizacion vuex Usuario.DefaultContacto con los cambios
+            console.log("this.newDefaultContactos... ");
+            console.dir(this.newDefaultContactos);
+
             await this.mixinActualizarDefaultContactos(
               this.newDefaultContactos
             );
           }
         } catch (error) {
+          console.log("savingAnuncio... en error")
           console.dir(error);
           return reject(error);
         }
@@ -1649,7 +1693,7 @@ export default {
 }
 
 .v-text-field--outlined.v-input--dense .v-label {
-  top: 12px!important;
+  top: 12px !important;
 }
 
 .glassy {

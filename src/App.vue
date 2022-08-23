@@ -138,9 +138,6 @@
               >Mis Anuncios</v-list-item-title
             >
           </v-list-item>
-          <v-list-item @click="$router.push({ path: '/compras' })">
-            <v-list-item-title class="text-center">Compras</v-list-item-title>
-          </v-list-item>
           <v-list-item @click="cambiarContraViewState">
             <v-list-item-title class="text-center">Cambiar Contraseña</v-list-item-title>
           </v-list-item>

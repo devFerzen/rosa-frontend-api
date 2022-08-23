@@ -94,7 +94,7 @@
                               font-weight-black
                               text-truncate text-capitalize
                             "
-                              style="color: black; overflow: hidden; max-width: 220px; background-color: #9fe676;"
+                              style="color: black; overflow: hidden; max-width: 220px;"
                             >
                               {{ anuncio.Sec_Descripcion.titulo }}
                             </div>
@@ -139,7 +139,7 @@
                       bottom: 8px;
                       left: 10px;
                     "
-                    @click="accionVer(anuncio.id)"
+                    @click="accionVer(key)"
                   >
                     Ver Más
                   </v-btn>
@@ -638,7 +638,12 @@
                   >
                     <v-row no-gutters>
                       <v-col style="height: 68px" class="d-flex justify-start">
-                        <v-btn color="pink" rounded icon>
+                        <v-btn
+                          color="pink"
+                          rounded
+                          icon
+                          @click="accionVer(_positionAnuncioArray, 'izq')"
+                        >
                           <font-awesome-icon
                             class="fa-2x"
                             :icon="['fa', 'arrow-left']"
@@ -688,7 +693,13 @@
                       <!--brand image H-->
 
                       <v-col style="height: 68px" class="d-flex justify-end">
-                        <v-btn color="pink" depressed rounded icon>
+                        <v-btn
+                          color="pink"
+                          depressed
+                          rounded
+                          icon
+                          @click="accionVer(_positionAnuncioArray, 'der')"
+                        >
                           <font-awesome-icon
                             class="fa-2x"
                             :icon="['fa', 'arrow-right']"
@@ -833,6 +844,7 @@ export default {
           },
         ],
       },
+      _positionAnuncioArray: 0,
     };
   },
   computed: {
@@ -896,7 +908,7 @@ export default {
     },
     marginMbView() {
       return !!this.navegacionMbView ? "50" : "0";
-    },
+    }
   },
   methods: {
     fullAnuncio_Display(payload) {
@@ -947,23 +959,45 @@ export default {
     /*
       accionVer muestra a un usuario un anuncio seleccionado
     */
-    async accionVer(idAnuncio) {
+    async accionVer(key, cambioTipo = "") {
       let queryResult;
-      try {
-        queryResult = await this.mixinVer(idAnuncio);
-      } catch (error) {
-        console.log("vue accionVer en error...");
-        console.dir(error);
+      console.log(`key ${key}`);
 
-        this.mixinLlamadaRouter(error);
-        return;
+      if (cambioTipo == "der") {
+        this._positionAnuncioArray = this.flechaDerNavegacion();
+        console.log(`new ${this._positionAnuncioArray}`);
       }
-      console.log("se esta imprimiendo en modal el sig anuncio");
-      console.dir(queryResult);
 
-      //Setteando para ser usado en el Anuncio vista completa
-      this.anuncioView = queryResult.data[0];
+      if (cambioTipo == "izq") {
+        console.log(`izq ${this._positionAnuncioArray}`);
+        this._positionAnuncioArray = this.flechaIzqNavegacion();
+      }
+
+      if(cambioTipo == ""){
+        this._positionAnuncioArray = parseInt(key);
+      }
+
+      this.anuncioView = this.anunciosBusqueda[this._positionAnuncioArray];
       this.fullAnuncio_Display(true);
+    },
+
+    flechaIzqNavegacion() {
+      //Devuelve la posicion para pasar a la izq
+      let _result = this.anunciosBusqueda.length - 1;
+      if (this._positionAnuncioArray > 0) {
+        _result = this._positionAnuncioArray - 1;
+      }
+      return _result;
+    },
+    flechaDerNavegacion() {
+      //Devuelve la posicion para pasar a la der
+      let _result = 0;
+
+      if (this._positionAnuncioArray < this.anunciosBusqueda.length - 1) {
+        _result = this._positionAnuncioArray + 1;
+      }
+      console.log(`flecha navegacion ${_result}`)
+      return _result;
     },
 
     /*
