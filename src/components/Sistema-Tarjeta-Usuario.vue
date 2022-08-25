@@ -807,7 +807,7 @@
                   elevation="0"
                   v-show="anuncioComprasView"
                   class="full-anuncio-seccion"
-                  style="overflow-y: hidden;"
+                  style="overflow-y: hidden; width: 100%;"
                 >
                   <dashboard-compras></dashboard-compras>                  
                 </v-sheet>
@@ -917,6 +917,7 @@ import DashboardCompras from "@/components/Dashboard-Compras";
 import FilePondImagenesAnuncio from "@/components/File-Pond-Imagenes-Anuncio";
 import AnuncioMixins from "../mixins/anuncio-mixins.js";
 import GeneralMixins from "../mixins/general-mixins.js";
+import PaqueteMixins from "../mixins/paquete-mixins.js";
 import { mapGetters } from "vuex";
 
 export default {
@@ -1672,6 +1673,7 @@ export default {
 
     //Marcando contactoSeleccionados
     this.contactosSeleccionadosSet();
+    
   },
 };
 </script>

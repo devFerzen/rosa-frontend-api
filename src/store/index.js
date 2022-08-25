@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import * as usuario from '@/store/modules/usuario'
 import * as anuncio from '@/store/modules/anuncio'
 import * as alert from '@/store/modules/alert'
+import * as paquete from "@/store/modules/paquete";
 import * as panelHerramientas from '@/store/modules/panelHerramientas'
 
 Vue.use(Vuex);
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     usuario,
     anuncio,
     alert,
+    paquete,
     panelHerramientas,
   },
   //agregar en un objeto las vistas

@@ -14,9 +14,6 @@ import { mapGetters } from "vuex";
 import * as GeneralTestMixin from "./Test/generalTest-mixin";
 
 export default {
-  computed: {
-    ...mapGetters["getDdlEstados"],
-  },
   data() {
     return {
       MixinResult: {
@@ -25,6 +22,9 @@ export default {
         data: null,
       },
     };
+  },
+  computed: {
+    ...mapGetters["getDdlEstados"],
   },
   methods: {
     /**
@@ -267,7 +267,7 @@ export default {
           };
           return reject(this.MixinResult);
         }
-        
+
         this.mixinVerPlus(payload);
         console.dir(QueryResult);
         this.MixinResult = {
@@ -332,7 +332,7 @@ export default {
         let MutateResult;
         this.cleanMixinResult();
         console.log("mixinNuevoCorreoContactanos... ");
-        console.dir(payload);        
+        console.dir(payload);
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -380,7 +380,7 @@ export default {
 
         this.MixinResult = {
           ...this.MixinResult,
-          ...new Result(MutateResult.data, 'nuevoContactoCliente'),
+          ...new Result(MutateResult.data, "nuevoContactoCliente"),
         };
         return resolve(this.MixinResult);
       });

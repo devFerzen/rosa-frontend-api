@@ -64,8 +64,8 @@ export default {
 
         try {
           console.dir(payload);
-          MutateResult = await this.$apollo.mutate({
-            mutation: GraphqlCalls.ANUNCIO_BYID_QUERY,
+          MutateResult = await this.$apollo.query({
+            query: GraphqlCalls.ANUNCIO_BYID_QUERY,
             variables: {
               ids: [payload.id],
             },
