@@ -9,6 +9,14 @@ export const CREACION_PAQUETE_MUTATE = gql `
 
 export const PAQUETES_QUERY = gql `
     query {
-        queryPaquetes
+        queryPaquetes{
+          nombre
+          clave
+          tipo
+          descripcion
+          precio
+          descuento
+          periodo_por
+        }
     }
 `;
