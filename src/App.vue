@@ -201,8 +201,6 @@ export default {
   computed: {
     ...mapGetters([
       "usuarioLoggeado",
-      "getDdlEstados",
-      "getDdlMunicipios",
       "getDdlCategorias",
       "getDdlSexo",
       "getDdlRedesSociales",
@@ -279,51 +277,34 @@ export default {
   },
   async created() {
     let QueryEstadosResult;
+    let _MixinResult;
 
-    await this.$store.dispatch("SystemaCreate")
-
-    if (this.getDdlEstados[0]["no_id"] == 0) {
-      //console.log("correr query en mounted ddlEstado");
-      await this.mixinDdlGeneral("ddlEstado");
-      await this.$store.dispatch("ddls", {
-        categoria: "ddlEstado",
-        categorias: this.MixinResult.data
-      });
-    }
-
-    if (this.getDdlMunicipios[0]["no_id"] == 0) {
-      //console.log("correr query en mounted ddlMunicipios");
-      await this.mixinDdlGeneral("ddlMunicipios");
-      await this.$store.dispatch("ddls", {
-        categoria: "ddlMunicipios",
-        categorias: this.MixinResult.data
-      });
-    }
+    await this.$store.dispatch("SystemaCreate")    
 
     if (this.getDdlCategorias[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlCategoriaAnuncio");
-      await this.mixinDdlGeneral("ddlCategoriaAnuncio");
+      _MixinResult = await this.mixinDdlGeneral("ddlCategoriaAnuncio");
       await this.$store.dispatch("ddls", {
         categoria: "ddlCategoriaAnuncio",
-        categorias: this.MixinResult.data
+        categorias: _MixinResult.data
       });
     }
 
     if (this.getDdlSexo[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlSexo");
-      await this.mixinDdlGeneral("ddlSexo");
+      _MixinResult = await this.mixinDdlGeneral("ddlSexo");
       await this.$store.dispatch("ddls", {
         categoria: "ddlSexo",
-        categorias: this.MixinResult.data
+        categorias: _MixinResult.data
       });
     }
 
     if (this.getDdlRedesSociales[0]["no_id"] == 0) {
       //console.log("correr query en mounted ddlRedesSociales");
-      await this.mixinDdlGeneral("ddlRedesSociales");
+      _MixinResult = await this.mixinDdlGeneral("ddlRedesSociales");
       await this.$store.dispatch("ddls", {
         categoria: "ddlRedesSociales",
-        categorias: this.MixinResult.data
+        categorias: _MixinResult.data
       });
     }
   },

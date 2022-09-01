@@ -17,7 +17,6 @@ export default {
     mixinContrasenaActualizar(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
-        this.cleanMixinResult();
 
         console.log("mixinContrasenaActualizar...");
         try {
@@ -29,10 +28,9 @@ export default {
             },
           });
         } catch (error) {
-          console.log("Mutation call error...");
-          console.dir(error);
-
-          return reject(this.MixinResult);
+          console.log("mixinContrasenaActualizar... en error");
+          console.dir(error); 
+          return reject(new Result(error));
         }
         console.log("MutateResult");
         console.dir(MutateResult);
@@ -48,9 +46,8 @@ export default {
      */
     mixinVerificacionCelularComparacion(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
+        let MutateResult, MixinResult;
         console.log("mixinVerificacionCelularComparacion...");
-        this.cleanMixinResult();
 
         try {
       
@@ -64,25 +61,22 @@ export default {
           console.log("mixinVerificacionCelularComparacion...");
           console.dir(error);
 
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Respuesta(error),
           };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult.data, "compararVerificacionCelular"),
         };
-        resolve(this.MixinResult);
+        resolve(MixinResult);
       });
     },
 
     mixinVerificacionCelularCreacion(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
-        this.cleanMixinResult();
+        let MutateResult, MixinResult;
 
         try {
           /*if(true){
@@ -99,30 +93,23 @@ export default {
 
           if (error.hasOwnProperty("graphQLErrors")) {
             if (error.graphQLErrors.length > 0) {
-              this.MixinResult = new Result(
+              MixinResult = new Result(
                 JSON.parse(error.graphQLErrors[0].message)
               );
             }
           } else {
             if (typeof error === "string") {
-              this.MixinResult = new Result(JSON.parse(error));
+              MixinResult = new Result(JSON.parse(error));
             } else {
-              this.MixinResult = new Result(error);
+              MixinResult = new Result(error);
             }
           }
 
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         resolve(JSON.parse(MutateResult.data.solicitarVerificacionCelular));
       });
-    },
-
-    cleanMixinResult() {
-      this.MixinResult.pagina = null;
-      this.MixinResult.componenteInterno = null;
-      this.MixinResult.mensaje = "";
-      this.MixinResult.data = null;
-    },
+    }
   },
 };

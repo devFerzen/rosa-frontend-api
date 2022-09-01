@@ -623,7 +623,7 @@
                           <v-select
                             v-model="anuncioUsuario.Sec_Descripcion.estado"
                             :menu-props="{ top: false, offsetY: true }"
-                            :items="getDdlEstados"
+                            :items="ddlEstados"
                             :item-text="'descripcion'"
                             :item-value="'descripcion'"
                             class="error609TextField"
@@ -632,6 +632,7 @@
                             outlined
                             solo
                             dense
+                            @change="getMunicipios(anuncioUsuario.Sec_Descripcion.estado)"
                           >
                             <template v-slot:selection="{ item }">
                               <span v-if="item.descripcion.length">{{
@@ -657,7 +658,7 @@
                           <v-select
                             v-model="anuncioUsuario.Sec_Descripcion.ciudad"
                             :menu-props="{ top: false, offsetY: true }"
-                            :items="getDdlMunicipios"
+                            :items="ddlMunicipios"
                             :item-text="'descripcion'"
                             :item-value="'descripcion'"
                             class="error609TextField"
@@ -969,17 +970,23 @@ export default {
         precio: "",
         descripcion: "",
       },
+      DdlMunicipios: [],
+      DdlEstados: []
     };
   },
   computed: {
     ...mapGetters([
       "Usuario",
-      "getDdlEstados",
-      "getDdlMunicipios",
       "getDdlCategorias",
       "getDdlSexo",
       "FormAE",
     ]),
+    ddlEstados(){
+      return this.DdlEstados;
+    },
+    ddlMunicipios(){
+      return this.DdlMunicipios
+    },
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
@@ -1673,6 +1680,28 @@ export default {
 
     //Marcando contactoSeleccionados
     this.contactosSeleccionadosSet();
+
+    const _DdlEstados = this.$store.state.panelHerramientas.ddls.filter(
+        (Ddls) => {
+          return Ddls.categoria === "ddlEstado"
+        }
+      )
+    console.log("_ddlEstados...");
+    this.DdlEstados = _DdlEstados;
+
+    if(_DdlEstados.length <= 0){
+      let _MixinResult;
+
+      console.log("mixinDdlGeneral(ddlEstado)...");
+      _MixinResult = this.mixinDdlGeneral("ddlEstado");
+      console.dir(_MixinResult);
+      this.$store.dispatch("ddls", {
+        categoria: "ddlEstado",
+        categorias: _MixinResult.data
+      });
+      
+      this.DdlEstados = _MixinResult.data;
+    }
     
   },
 };

@@ -12,17 +12,11 @@ export default {
     };
   },
   methods: {
-    cleanMixinResult() {
-      this.MixinResult.pagina = null;
-      this.MixinResult.componenteInterno = null;
-      this.MixinResult.mensaje = "";
-      this.MixinResult.data = null;
-    },
     mixinBuscarPaquetes() {
       return new Promise(async (resolve, reject) => {
-        let QueryResult;
+        let QueryResult, MixinResult;
+
         console.log("mixinBuscarAnuncioId...");
-        this.cleanMixinResult();
 
         try {
           QueryResult = await this.$apollo.query({
@@ -38,11 +32,10 @@ export default {
 
         console.dir(QueryResult);
 
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Respuesta(QueryResult.data, "queryPaquetes", true),
         };
-        return resolve(this.MixinResult.data);
+        return resolve(MixinResult.data);
       });
     },
   },

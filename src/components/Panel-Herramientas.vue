@@ -65,7 +65,7 @@
           >
             <v-select
               v-model="busquedaEstado"
-              :items="getDdlEstados"
+              :items="ddlEstados"
               :item-text="'descripcion'"
               :item-value="'descripcion'"
               label="Estado"
@@ -76,6 +76,7 @@
               dense
               outlined
               class="error609TextField mb-0 select609"
+              @change="getMunicipios(busquedaEstado)"
             >
             </v-select>
           </v-col>
@@ -90,7 +91,7 @@
           >
             <v-select
               v-model="busquedaCiudad"
-              :items="getDdlMunicipios"
+              :items="ddlMunicipios"
               :item-text="'descripcion'"
               :item-value="'descripcion'"
               label="Municipio"
@@ -236,15 +237,19 @@ export default {
     scrollLimitOpened: 100,
     scrollLimitClosed: 800,
     extraInputView: true,
-    extraInputViewUserActivation: "",
+    extraInputViewUserActivation: ""
   }),
   computed: {
     ...mapGetters([
-      "getDdlEstados",
-      "getDdlMunicipios",
       "getDdlCategorias",
       "getDdlSexo",
     ]),
+    ddlMunicipios(){
+      return this.DdlMunicipios
+    },
+    ddlEstados(){
+      return this.DdlEstados
+    },
     getDdlCategoriasCorrection() {
       this.busquedaCategorias = "Escrots";
       return this.getDdlCategorias;
@@ -271,7 +276,7 @@ export default {
       return xs ? { formCategorias: 5 } : { formCategorias: 5 };
     },
   },
-  methods: {
+  methods: {    
     panelHerramientasRegistro(value) {
       this.$store.dispatch("panelHerramientasRegistro", value);
     },
@@ -415,6 +420,33 @@ export default {
     if (typeof window === "undefined") return;
     window.removeEventListener("scroll", this.onScroll);
   },
+  async created(){
+    //Guardando estados
+    let _MixinResult;
+
+    if (this.DdlEstados.length == 0) {
+      _MixinResult = await this.mixinDdlGeneral("ddlEstado");
+      console.log("ddlEstado");
+      console.dir(_MixinResult);
+      this.$store.dispatch("ddls", {
+        categoria: "ddlEstado",
+        categorias: _MixinResult.data
+      });
+      await this.mixinSetDdlEstados(_MixinResult.data);
+    }
+
+    //Guardando municipios
+    if (this.DdlMunicipios.length == 0) {
+      console.log("ddlMunicipios...");
+      _MixinResult = await this.mixinDdlGeneral("ddlMunicipios");
+      console.dir(_MixinResult.data);
+
+      await this.$store.dispatch("ddls", {
+        categoria: "ddlMunicipios",
+        categorias: _MixinResult.data
+      });
+    }
+  }
 };
 </script>
 

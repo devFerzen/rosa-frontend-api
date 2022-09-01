@@ -47,18 +47,16 @@ export default {
     //Funciona ya no en uso???
     mixinBuscarAnuncioId(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
+        let MutateResult, MixinResult;
         console.log("mixinBuscarAnuncioId...");
-        this.cleanMixinResult();
 
         if (payload.AnuncioDashboard) {
           if (!this.$store.state.usuario.usuario.usuario) {
             console.log("No hay usuario iniciado sesion");
-            this.MixinResult.pagina = "home";
-            this.MixinResult.componenteInterno =
-              "panelHerramientasInicioSesion";
-            this.MixinResult.mensaje = "Favor de iniciar sesión primero!";
-            return reject(this.MixinResult);
+            MixinResult.pagina = "home";
+            MixinResult.componenteInterno = "panelHerramientasInicioSesion";
+            MixinResult.mensaje = "Favor de iniciar sesión primero!";
+            return reject(MixinResult);
           }
         }
 
@@ -76,24 +74,23 @@ export default {
           return reject(new Respuesta(error));
         }
 
-        this.MixinResult.data = MutateResult.data.queryAnunciosById[0];
-        resolve(this.MixinResult);
+        MixinResult.data = MutateResult.data.queryAnunciosById[0];
+        resolve(MixinResult);
       });
     },
 
     mixinAnuncioSetCrear(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
+        let MutateResult, MixinResult;
         console.log("mixinAnuncioSetCrear...");
-        this.cleanMixinResult();
 
         delete payload._anuncioEdicionInputsView;
 
         //Hay usuario
         if (!this.$store.state.usuario.usuario.usuario) {
           console.log("No hay usuario iniciado sesion");
-          this.MixinResult.pagina = "home";
-          this.MixinResult.componenteInterno = {
+          MixinResult.pagina = "home";
+          MixinResult.componenteInterno = {
             panelHerramientasInicioSesion: true,
             activationAlert: {
               type: "warning",
@@ -101,14 +98,14 @@ export default {
             },
           };
           //Analizar - Regresarlo con apertura de registro
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         //Esto es para doble check porque en si el botón aunciate verifica esto
         if (!this.$store.state.usuario.usuario.numero_telefonico_verificado) {
           console.log("Usuario no verificado");
-          this.MixinResult.pagina = "home";
-          this.MixinResult.componenteInterno = {
+          MixinResult.pagina = "home";
+          MixinResult.componenteInterno = {
             panelHerramientasVerificacion: true,
             setTipoVerificacion: "verificacionCelular",
             activationAlert: {
@@ -116,7 +113,7 @@ export default {
               message: `Su número de contacto aún no esta verificado, Favor de validar el código verificación enviado a su celular!.`,
             },
           };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         try {
@@ -132,21 +129,20 @@ export default {
           console.log("mixinAnuncioSetCrear... en error");
           console.dir(error);
 
-          this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Respuesta(error) };
+          return reject(MixinResult);
         }
-        this.MixinResult = {
-          ...this.MixinResult,
+
+        MixinResult = {
           ...new Respuesta(MutateResult.data, "anuncioCreacion"),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
-    
+
     mixinAnuncioEditar(payload) {
       return new Promise(async (resolve, reject) => {
-        this.cleanMixinResult();
-        let MutateResult = {
+        let MixinResult = {
           pagina: "home",
           componenteInterno: {
             panelHerramientasInicioSesion: true,
@@ -162,11 +158,7 @@ export default {
 
         //Analizar - Aqui debe que checar tokens tmb
         if (!this.$store.state.usuario.usuario.usuario) {
-          this.MixinResult = {
-            ...this.MixinResult,
-            ...new Respuesta(MutateResult),
-          };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         try {
@@ -182,33 +174,30 @@ export default {
           console.log("Mutation call error...");
           console.dir(error);
 
-          this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Respuesta(error) };
+          return reject(MixinResult);
         }
 
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Respuesta(MutateResult.data, "anuncioActualizacion"),
         };
 
         if (this.tipoVerificacion === "verificacionUsuario") {
-          this.MixinResult.componenteInterno.panelHerramientasInicioSesion = true;
+          MixinResult.componenteInterno.panelHerramientasInicioSesion = true;
         }
-        resolve(this.MixinResult);
+        resolve(MixinResult);
       });
     },
 
     mixinAnuncioEliminar(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
-        this.cleanMixinResult();
+        let MutateResult, MixinResult;
         console.log("mixinAnuncioEliminar...");
         console.dir(payload);
 
         if (!this.$store.state.usuario.usuario.usuario) {
           console.log("No hay usuario iniciado sesion");
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Respuesta({
               pagina: "home",
               componenteInterno: {
@@ -220,36 +209,34 @@ export default {
               },
             }),
           };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         try {
-
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.DELETE_ANUNCIO_MUTATE,
             variables: {
-              id_anuncio: payload
-            }
+              id_anuncio: payload,
+            },
           });
         } catch (error) {
           console.log("mixinAnuncioEliminar... on error");
           console.dir(error);
 
-          this.MixinResult = { ...this.MixinResult, ...new Respuesta(error) };
-          return reject(this.MixinResult);
+          MixinResult = {  ...new Respuesta(error) };
+          return reject(MixinResult);
         }
 
         console.log("anuncioEliminacion... result MutateResult");
         console.dir(MutateResult);
 
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Respuesta(MutateResult.data, "anuncioEliminacion"),
         };
-        
+
         console.log("anuncioEliminacion... result MixinResult");
-        console.dir(this.MixinResult);
-        resolve(this.MixinResult);
+        console.dir(MixinResult);
+        resolve(MixinResult);
       });
     },
 
@@ -307,12 +294,6 @@ export default {
 
         resolve(JSON.parse(MutateResult.data.imagenEliminacion));
       });
-    },
-    cleanMixinResult() {
-      this.MixinResult.pagina = null;
-      this.MixinResult.componenteInterno = null;
-      this.MixinResult.mensaje = "";
-      this.MixinResult.data = null;
-    },
+    }
   },
 };

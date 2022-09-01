@@ -5,7 +5,8 @@ export const state = {
         icono_icono: '',
         icono_categoria: '',
         categoria: '',
-        estado: true
+        estado: true,
+        no_estado: ''
     }],
     busquedaQuery: {}
 }
@@ -47,41 +48,6 @@ export const actions = {
 export const getters = {
     getBusquedaQuery: state => {
         return state.busquedaQuery;
-    },
-    getDdlEstados: state => {
-        //console.log("getters getDdlEstados");
-
-        let DdlEstados = [];
-        let Ddls = [];
-        Ddls = state.ddls;
-
-        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlEstado")) {
-            DdlEstados = Ddls.filter(ddl => ddl.categoria == "ddlEstado");
-            return DdlEstados;
-        }
-
-        DdlEstados = Ddls;
-        //console.dir(DdlEstados);
-        return [DdlEstados.find(ddl => ddl.no_id == 0)];
-    },
-    getDdlMunicipios: state => {
-        //console.log("getters getDdlMunicipios");
-
-        let DdlMunicipios = [];
-        let Ddls = [];
-        Ddls = state.ddls;
-
-        if (Ddls.some(ddlCategoria => ddlCategoria.categoria == "ddlMunicipios")) {
-            //console.log("...YA hay un ddl con categoria 'ddlMunicipios'.");
-            DdlMunicipios = Ddls.filter(ddl => ddl.categoria == "ddlMunicipios");
-            //console.dir(DdlMunicipios);
-            return DdlMunicipios;
-        }
-
-        //console.log("...NO hay un ddl con categoria 'ddlMunicipio'.");
-        DdlMunicipios = Ddls;
-
-        return [DdlMunicipios.find(ddl => ddl.no_id == 0)];
     },
     getDdlCategorias: state => {
         //console.log("getters getDdlCategorias");

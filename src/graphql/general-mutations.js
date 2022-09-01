@@ -70,6 +70,7 @@ export const DDL_BYCATEGORIA_QUERY = gql `
             icono_icono
             icono_categoria
             categoria
+            no_estado
         }
     }
 `;

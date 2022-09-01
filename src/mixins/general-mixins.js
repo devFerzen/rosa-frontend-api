@@ -16,16 +16,11 @@ import * as GeneralTestMixin from "./Test/generalTest-mixin";
 export default {
   data() {
     return {
-      MixinResult: {
-        pagina: null,
-        componenteInterno: null,
-        data: null,
-      },
+      DdlMunicipios: [],
+      DdlEstados: [],
     };
   },
-  computed: {
-    ...mapGetters["getDdlEstados"],
-  },
+
   methods: {
     /**
      * Mixin Para poder iniciar sesion a un usuario con correo y contraseña
@@ -36,7 +31,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log("mixinInicioSesion...");
         let MutateResult;
-        this.cleanMixinResult();
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -49,20 +44,18 @@ export default {
         } catch (error) {
           console.log(`mixinInicioSesion... en error`);
           console.dir(error);
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Result(error),
           };
           return reject();
         }
 
         console.log(`mixinInicioSesion... result`);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult, "inicioSesion"),
         };
-        console.dir(this.MixinResult);
-        return resolve(this.MixinResult);
+        console.dir(MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -75,7 +68,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log(`mixinCerrarSesion...`);
         let MutateResult;
-        this.cleanMixinResult();
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -85,17 +78,16 @@ export default {
         } catch (error) {
           console.log("mixinCerrarSesion... en error");
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
 
         console.log(`mixinCerrarSesion... result`);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult, "cerrarSesion"),
         };
-        console.dir(this.MixinResult);
-        return resolve(this.MixinResult);
+        console.dir(MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -108,7 +100,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log("mixinRegistro...");
         let MutateResult;
-        this.cleanMixinResult();
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -120,17 +112,16 @@ export default {
         } catch (error) {
           console.log(`mixinRegistro... en error`);
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
 
         console.log(`mixinRegistro... result`);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult, "registroUsuario"),
         };
-        console.dir(this.MixinResult);
-        return resolve(this.MixinResult);
+        console.dir(MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -143,7 +134,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log("mixinSolicitarRestablecerContrasena...");
         let MutateResult;
-        this.cleanMixinResult();
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -155,17 +146,16 @@ export default {
         } catch (error) {
           console.log(`mixinSolicitarRestablecerContrasena... en error`);
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
 
         console.log(`mixinSolicitarRestablecerContrasena... result`);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult.data, "solicitarRestablecerContrasena"),
         };
-        console.dir(this.MixinResult);
-        return resolve(this.MixinResult);
+        console.dir(MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -177,8 +167,8 @@ export default {
     mixinMeEncantaPlus(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
-        this.cleanMixinResult();
         console.log("mixinMeEncantaPlus...");
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -190,17 +180,16 @@ export default {
         } catch (error) {
           console.log(`mixinMeEncantaPlus... en error`);
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
 
         console.log("mixinMeEncantaPlus... result");
         console.dir(MutateResult);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult, "anunciolike"),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -212,8 +201,8 @@ export default {
     mixinVerPlus(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
-        this.cleanMixinResult();
         console.log("mixinVerPlus...");
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -225,8 +214,8 @@ export default {
         } catch (error) {
           console.log(`mixinVerPlus... en error`);
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
         console.dir(MutateResult);
         return resolve();
@@ -241,8 +230,8 @@ export default {
     mixinVer(payload) {
       return new Promise(async (resolve, reject) => {
         let QueryResult;
-        this.cleanMixinResult();
         console.log("mixinVer...");
+        let MixinResult;
 
         try {
           QueryResult = await this.$apollo.query({
@@ -254,8 +243,7 @@ export default {
         } catch (error) {
           console.log(`mixinVer... en error`);
           console.dir(error);
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Result({
               componenteInterno: {
                 activationAlert: {
@@ -265,16 +253,15 @@ export default {
               },
             }),
           };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         this.mixinVerPlus(payload);
         console.dir(QueryResult);
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(QueryResult.data, "queryAnunciosById", true),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -286,9 +273,9 @@ export default {
     mixinVerificacionUsuarioComparacion(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult, validandoUsuarioTKN;
-        this.cleanMixinResult();
+        let MixinResult;
 
-        //Poner correctamente
+        //Analizar Poner correctamente
         //validandoUsuarioTKN = await this.$store.dispatch("validandoUsuario");
         console.log(
           `mixinVerificacionUsuarioComparacion... input  ${payload.input}`
@@ -306,19 +293,17 @@ export default {
         } catch (error) {
           console.log(`mixinVerificacionUsuarioComparacion... en error`);
           console.dir(error);
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Result(error),
           };
-          return reject(this.MixinResult);
+          return reject(MixinResult);
         }
 
         // Analizar - Ocupa enviarlo a home pagina = 'home';
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult.data, "compararVerificacionUsuario"),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -330,9 +315,9 @@ export default {
     mixinNuevoCorreoContactanos(payload, esReporte = false) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
-        this.cleanMixinResult();
         console.log("mixinNuevoCorreoContactanos... ");
         console.dir(payload);
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -345,8 +330,7 @@ export default {
           console.log(`mixinNuevoCorreoContactanos... en error`);
           console.dir(error);
           if (esReporte) {
-            this.MixinResult = {
-              ...this.MixinResult,
+            MixinResult = {
               ...new Result({
                 componenteInterno: {
                   activationAlert: {
@@ -356,16 +340,15 @@ export default {
                 },
               }),
             };
-            return reject(this.MixinResult);
+            return reject(MixinResult);
           }
 
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
 
         if (esReporte) {
-          this.MixinResult = {
-            ...this.MixinResult,
+          MixinResult = {
             ...new Result({
               componenteInterno: {
                 activationAlert: {
@@ -375,14 +358,13 @@ export default {
               },
             }),
           };
-          return resolve(this.MixinResult);
+          return resolve(MixinResult);
         }
 
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult.data, "nuevoContactoCliente"),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -394,9 +376,9 @@ export default {
     mixinRestablecerContrasena(payload) {
       return new Promise(async (resolve, reject) => {
         let MutateResult;
-        this.cleanMixinResult();
         console.log("mixinRestablecerContrasena...");
         console.dir(payload);
+        let MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -410,14 +392,13 @@ export default {
         } catch (error) {
           console.log(`mixinRestablecerContrasena... en error`);
           console.dir(error);
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
-        this.MixinResult = {
-          ...this.MixinResult,
+        MixinResult = {
           ...new Result(MutateResult.data, "restablecerContrasena"),
         };
-        return resolve(this.MixinResult);
+        return resolve(MixinResult);
       });
     },
 
@@ -431,8 +412,8 @@ export default {
     mixinBusqueda(payload = {}) {
       return new Promise(async (resolve, reject) => {
         let QueryResult;
-        this.cleanMixinResult();
         console.log("mixinBusqueda...");
+        let MixinResult;
 
         try {
           QueryResult = await this.$apollo.query({
@@ -445,8 +426,8 @@ export default {
           console.log(`mixinBusqueda... en error`);
           console.dir(error);
 
-          this.MixinResult = { ...this.MixinResult, ...new Result(error) };
-          return reject(this.MixinResult);
+          MixinResult = { ...new Result(error) };
+          return reject(MixinResult);
         }
         return resolve(QueryResult.data.queryAnuncios);
       });
@@ -454,9 +435,9 @@ export default {
 
     mixinDdlGeneral(categoriasDdls) {
       return new Promise(async (resolve, reject) => {
-        this.cleanMixinResult();
         let QueryResult;
         console.log(`mixinDdlGeneral... ${categoriasDdls}`);
+        let MixinResult;
 
         try {
           QueryResult = await this.$apollo.query({
@@ -468,27 +449,28 @@ export default {
         } catch (error) {
           console.log(`mixinDdlGeneral... en error`);
           console.dir(error);
-          this.MixinResult = {
-            ...this.MixinResult,
+
+          MixinResult = {
             ...new Result(error),
           };
-          console.dir(this.MixinResult);
+          console.dir(MixinResult);
           return reject();
         }
         console.log("mixinDdlGeneral... result");
         console.dir(QueryResult);
-        this.MixinResult = {
-          ...this.MixinResult,
+
+        MixinResult = {
           ...new Result(QueryResult, "queryddlsByCategoria", true),
         };
-        console.dir(this.MixinResult);
-        return resolve(this.MixinResult);
+
+        console.dir(MixinResult);
+        return resolve(MixinResult);
       });
     },
 
     /**
      * mixinLlamadaRouter: Manda a otra ruta agrega props en caso de haber y hace dispatch para componentes internos .
-     * @param {*} payload Es el Objeto MixinResult
+     * @param {*} payload ...
      * @returns
      */
     mixinLlamadaRouter(payload) {
@@ -516,11 +498,37 @@ export default {
       });
     },
 
-    cleanMixinResult() {
-      this.MixinResult.pagina = null;
-      this.MixinResult.componenteInterno = null;
-      this.MixinResult.mensaje = "";
-      this.MixinResult.data = null;
+    //Agregar un sort
+    getMunicipios(nombre_estado) {
+      console.log(`getMunicipios... nombre_estado ${nombre_estado}`);
+
+      let Estado = this.$store.state.panelHerramientas.ddls.filter(
+        (Ddls) => {
+          return Ddls.categoria === "ddlEstado" && Ddls.descripcion === nombre_estado;
+        }
+      )
+      console.dir(Estado);
+
+      const _municipiosList = this.$store.state.panelHerramientas.ddls.filter(
+
+        (Ddls) => {
+          return (
+            Ddls.categoria === "ddlMunicipios" && Ddls.no_estado == Estado[0].no_id
+          );
+        }
+      );
+      console.dir(_municipiosList);
+      this.DdlMunicipios = _municipiosList;
+    },
+
+    mixinSetDdlEstados(Data) {
+      console.log(`mixinSetDdlEstados...`);
+      console.log(`${this.DdlEstados.length}`);
+
+      if (this.DdlEstados.length < 1) {
+        console.dir(Data);
+        this.DdlEstados = Data;
+      }
     },
   },
 };
