@@ -113,8 +113,7 @@ export default {
         //Según su tipo de verificación
         if (
           this.tipoVerificacion === "verificacionUsuario" ||
-          this.tipoVerificacion === "verificacionUsuarioContrasena"
-        ) {
+          this.tipoVerificacion === "verificacionUsuarioContrasena") {
           console.log(
             "verificacionUsuarioContrasena || verificacionUsuario: ",
             this.tipoVerificacion
@@ -134,16 +133,16 @@ export default {
           console.dir(params);
           MutateResult = await this.mixinVerificacionUsuarioComparacion(params);
         }
-        //Llamada mixinVerificacionUsuarioComparacion()
 
-        if (this.tipoVerificacion === "verificacionCelular") {
-          console.log(`verificacionCelular: ${this.tipoVerificacion}`);
+        if (this.tipoVerificacion === "verificacionUsuarioCelular" || this.tipoVerificacion === "verificacionCelular") {
+          console.log(`verificacionUsuarioCelular: ${this.tipoVerificacion}`);
           params = {
             input: this.FormV.codigoVerificacion,
           };
+
+          console.dir(params);
           MutateResult = await this.mixinVerificacionCelularComparacion(params);
         }
-        //Llamada mixinVerificacionCelularComparacion()
       } catch (error) {
         console.log("vue verificando en error...");
         console.dir(error);
@@ -151,6 +150,7 @@ export default {
         return;
       }
 
+      console.dir(MutateResult);
       this.mixinLlamadaRouter(MutateResult);
     },
   },
@@ -158,6 +158,7 @@ export default {
     // AFSS: No mantener vivo este componente para que así se puede llamar una y otra vez verificacionCelularCreacion esta manda correo del nuevo codigo
     //Esto debe ser pasado desde el backend y guardado de una vez allá no llamada de aqui
     let MutateResult;
+
     if (this.tipoVerificacion === "verificacionCelular") {
       try {
         //Cambiar a una nueva función esta llamada porque primero debe de validar

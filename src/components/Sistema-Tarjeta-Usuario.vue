@@ -1129,14 +1129,14 @@ export default {
 
     async salvarFormAnuncio() {
       console.log(`vue salvarFormAnuncio...`);
-
+      let MixinResult;
       //Cambiar Activacion de Imagenes
       //this.cancelarFormAnuncio(false);
 
       //Activar una especia de loading (no importante aun)
 
       try {
-        await this.savingAnuncio(); //Llamada de creacion/modificacion anuncio
+        MixinResult = await this.savingAnuncio(); //Llamada de creacion/modificacion anuncio
       } catch (error) {
         console.log("vue salvarFormAnuncio... en error");
         console.dir(error);
@@ -1146,7 +1146,7 @@ export default {
       }
 
       await this.cancelarFormAnuncio();
-      this.mixinLlamadaRouter(this.MixinResult);
+      this.mixinLlamadaRouter(MixinResult);
     },
 
     //------Acciones Anuncio

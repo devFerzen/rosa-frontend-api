@@ -47,7 +47,7 @@ export default {
           MixinResult = {
             ...new Result(error),
           };
-          return reject();
+          return reject(MixinResult);
         }
 
         console.log(`mixinInicioSesion... result`);
@@ -473,18 +473,20 @@ export default {
      * @param {*} payload ...
      * @returns
      */
-    mixinLlamadaRouter(payload) {
+    mixinLlamadaRouter(payload = {}) {
       return new Promise(async (resolve, reject) => {
         console.log("mixinLlamadaRouter");
 
-        if ("pagina" in payload && payload.pagina !== undefined) {
-          this.$router.push({ name: payload.pagina }).catch((error) => {
-            //this.$router.push({ name: 'no-encontrado' });
-          });
+        if (payload.hasOwnProperty("pagina")) {
+          if (payload.pagina !== undefined) {
+            this.$router.push({ name: payload.pagina }).catch((error) => {
+              //this.$router.push({ name: 'no-encontrado' });
+            });
+          }
         }
 
         //Crear arreglo de objetos
-        if (payload.componenteInterno) {
+        if (payload.hasOwnProperty('componenteInterno')) {
           for (let componenteInterno in payload.componenteInterno) {
             console.log(
               `Haciendo dispatch a ${componenteInterno} con ${payload.componenteInterno[componenteInterno]}`
@@ -502,18 +504,18 @@ export default {
     getMunicipios(nombre_estado) {
       console.log(`getMunicipios... nombre_estado ${nombre_estado}`);
 
-      let Estado = this.$store.state.panelHerramientas.ddls.filter(
-        (Ddls) => {
-          return Ddls.categoria === "ddlEstado" && Ddls.descripcion === nombre_estado;
-        }
-      )
+      let Estado = this.$store.state.panelHerramientas.ddls.filter((Ddls) => {
+        return (
+          Ddls.categoria === "ddlEstado" && Ddls.descripcion === nombre_estado
+        );
+      });
       console.dir(Estado);
 
       const _municipiosList = this.$store.state.panelHerramientas.ddls.filter(
-
         (Ddls) => {
           return (
-            Ddls.categoria === "ddlMunicipios" && Ddls.no_estado == Estado[0].no_id
+            Ddls.categoria === "ddlMunicipios" &&
+            Ddls.no_estado == Estado[0].no_id
           );
         }
       );

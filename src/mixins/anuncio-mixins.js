@@ -164,7 +164,7 @@ export default {
         try {
           console.dir(payload);
 
-          MutateResult = await this.$apollo.mutate({
+          MixinResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.EDICION_ANUNCIO_MUTATE,
             variables: {
               input: payload,
@@ -179,7 +179,7 @@ export default {
         }
 
         MixinResult = {
-          ...new Respuesta(MutateResult.data, "anuncioActualizacion"),
+          ...new Respuesta(MixinResult.data, "anuncioActualizacion"),
         };
 
         if (this.tipoVerificacion === "verificacionUsuario") {
@@ -191,7 +191,7 @@ export default {
 
     mixinAnuncioEliminar(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult, MixinResult;
+        let MixinResult;
         console.log("mixinAnuncioEliminar...");
         console.dir(payload);
 
@@ -213,7 +213,7 @@ export default {
         }
 
         try {
-          MutateResult = await this.$apollo.mutate({
+          MixinResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.DELETE_ANUNCIO_MUTATE,
             variables: {
               id_anuncio: payload,
@@ -227,11 +227,11 @@ export default {
           return reject(MixinResult);
         }
 
-        console.log("anuncioEliminacion... result MutateResult");
-        console.dir(MutateResult);
+        console.log("anuncioEliminacion... result MixinResult");
+        console.dir(MixinResult);
 
         MixinResult = {
-          ...new Respuesta(MutateResult.data, "anuncioEliminacion"),
+          ...new Respuesta(MixinResult.data, "anuncioEliminacion"),
         };
 
         console.log("anuncioEliminacion... result MixinResult");

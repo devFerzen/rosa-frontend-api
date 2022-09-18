@@ -62,7 +62,7 @@ export default {
           console.dir(error);
 
           MixinResult = {
-            ...new Respuesta(error),
+            ...new Result(error),
           };
           return reject(MixinResult);
         }

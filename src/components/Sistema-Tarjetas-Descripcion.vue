@@ -1014,7 +1014,7 @@ export default {
         return;
       }
 
-      this.mixinLlamadaRouter(this.MixinResult);
+      this.mixinLlamadaRouter(queryResult);
     },
   },
 
