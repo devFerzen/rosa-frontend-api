@@ -37,7 +37,10 @@
             <!--editar btn-->
 
             <v-btn fab small plain color="white">
-              <div class="d-flex flex-column align-center" @click="habilitarComprasAnuncio">
+              <div
+                class="d-flex flex-column align-center"
+                @click="habilitarComprasAnuncio"
+              >
                 <font-awesome-icon
                   :icon="['fas', 'shopping-bag']"
                   class="fa-2x"
@@ -267,7 +270,12 @@
                       </v-row>
                       <!--Nombre Precio-->
 
-                      <v-row no-gutters align="center" justify="center" class="mt-2">
+                      <v-row
+                        no-gutters
+                        align="center"
+                        justify="center"
+                        class="mt-2"
+                      >
                         <v-col cols="12">
                           <div
                             class="body-2 text-center"
@@ -584,7 +592,7 @@
                   class="full-anuncio-seccion"
                   :class="fullAnuncioSeccionWeb"
                   v-show="nuevaDescripcionView"
-                  >
+                >
                   <v-form ref="descripcionEdit" style="margin-top: 16px;">
                     <v-row no-gutters>
                       <v-col cols="12" class="pr-4">
@@ -632,7 +640,11 @@
                             outlined
                             solo
                             dense
-                            @change="getMunicipios(anuncioUsuario.Sec_Descripcion.estado)"
+                            @change="
+                              getMunicipios(
+                                anuncioUsuario.Sec_Descripcion.estado
+                              )
+                            "
                           >
                             <template v-slot:selection="{ item }">
                               <span v-if="item.descripcion.length">{{
@@ -810,7 +822,7 @@
                   class="full-anuncio-seccion"
                   style="overflow-y: hidden; width: 100%;"
                 >
-                  <dashboard-compras></dashboard-compras>                  
+                  <dashboard-compras></dashboard-compras>
                 </v-sheet>
               </v-card-text>
               <!--v-card Descripción-->
@@ -820,7 +832,8 @@
             <v-card-action v-show="edicionView">
               <v-container>
                 <v-row align="space-around">
-                  <v-col v-show="!nuevaTarifaView && !nuevoContactoView"
+                  <v-col
+                    v-show="!nuevaTarifaView && !nuevoContactoView"
                     align="center"
                   >
                     <v-btn
@@ -836,7 +849,8 @@
                   </v-col>
                   <!--BotonGuardar-->
 
-                  <v-col v-show="tabSeleccionado != 'revealDesc'"
+                  <v-col
+                    v-show="tabSeleccionado != 'revealDesc'"
                     align="center"
                   >
                     <v-btn
@@ -1008,6 +1022,15 @@ export default {
     imagenesAnuncio() {
       //verificar los created del template anuncio edit display
       return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+        let _urlImage = `${infoImagen.nombre}`;
+
+        if(_urlImage.includes('cloudinary')){
+          return {
+            url: infoImagen.nombre,
+            options: { type: "remote" },
+          };
+        }
+
         return {
           url: "http://localhost:3080/uploads/" + infoImagen.nombre,
           //url: "/api/uploads/" + infoImagen.nombre,
@@ -1448,7 +1471,7 @@ export default {
         this.anuncioComprasInputView = true;
         return;
       }
-      
+
       this.anuncioComprasInputView = false;
       this.$store.dispatch("activationAlert", {
         type: "error",
@@ -1625,14 +1648,20 @@ export default {
       this.nuevasImagenes = newArrayImagenes;
       await this.setSalvadoEdicionImagenes(); //Actualizando la base Vuex de FormAE
     },
+
     imageOnProcess(ObjetoImagen) {
-      console.log(`imageOnProcess...${typeof ObjetoImagen}`);
-      console.log(
-        `nuevasImagenes...${typeof this.nuevasImagenes} ${this.nuevasImagenes}`
-      );
-      console.dir(ObjetoImagen);
+      console.log(`imageOnProcess...`);
+      console.dir(ObjetoImagen)
+
+      console.log(`imagenesActuales...`);
+      console.dir(ObjetoImagen)
+
       let newArrayImagenes = this.imagenesActuales;
       newArrayImagenes.push(ObjetoImagen);
+
+      console.log(`newArrayImagenes...`);
+      console.dir(newArrayImagenes);
+
       this.nuevasImagenes = newArrayImagenes;
       console.dir(this.nuevasImagenes);
     },
@@ -1665,6 +1694,7 @@ export default {
       }
     },
   },
+
   created() {
     //activando edicion descripcion
     console.log(
@@ -1699,10 +1729,10 @@ export default {
         categoria: "ddlEstado",
         categorias: _MixinResult.data
       });
-      
+
       this.DdlEstados = _MixinResult.data;
     }
-    
+
   },
 };
 </script>

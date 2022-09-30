@@ -256,7 +256,7 @@
                       active-class="anuncio-imagenes-dots"
                       v-for="(imagen, i) in anuncio.Sec_Imagenes"
                       :key="i"
-                      :src="'http://localhost:3080/uploads/' + imagen.nombre"
+                      :src="gettingUrl(imagen.nombre)"
                     ></v-carousel-item>
                   </v-carousel>
                 </v-col>
@@ -335,7 +335,7 @@
                 <v-carousel-item
                   v-for="(imagen, i) in anuncioView.Sec_Imagenes"
                   :key="i"
-                  :src="'http://localhost:3080/uploads/' + imagen.nombre"
+                  :src="imagen.nombre"
                   reverse-transition="fade-transition"
                   transition="fade-transition"
                   height="600px"
@@ -908,9 +908,18 @@ export default {
     },
     marginMbView() {
       return !!this.navegacionMbView ? "50" : "0";
-    }
+    },
   },
   methods: {
+    gettingUrl(anuncioNombre) {
+
+      if (anuncioNombre.includes("cloudinary")) {
+        console.log(anuncioNombre);
+        return anuncioNombre;
+      }
+      return `http://localhost:3080/uploads/${anuncioNombre}`;
+    },
+
     fullAnuncio_Display(payload) {
       this.fullAnuncioEstado = payload;
     },
@@ -973,7 +982,7 @@ export default {
         this._positionAnuncioArray = this.flechaIzqNavegacion();
       }
 
-      if(cambioTipo == ""){
+      if (cambioTipo == "") {
         this._positionAnuncioArray = parseInt(key);
       }
 
@@ -996,7 +1005,7 @@ export default {
       if (this._positionAnuncioArray < this.anunciosBusqueda.length - 1) {
         _result = this._positionAnuncioArray + 1;
       }
-      console.log(`flecha navegacion ${_result}`)
+      console.log(`flecha navegacion ${_result}`);
       return _result;
     },
 

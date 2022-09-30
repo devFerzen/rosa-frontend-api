@@ -121,21 +121,29 @@ export default {
     },
     imagenesAnuncioOnProcess(error, file) {
       console.log("imagenesAnuncioOnProcess...");
+      //Analizar, poner un try catch
 
-      if (error) {
-        //Error Object de filepond
-        console.log("error onProcess", error);
-        console.log("file in error", file.file);
-        return;
+      try {
+        if (error) {
+          //Error Object de filepond
+          console.log("error onProcess", error);
+          console.log("file in error", file.file);
+          return;
+        }
+        console.dir(file);
+  
+        let ObjetoImagen = {
+          nombre: file.serverId,
+          posicion: this.imagenesAnuncioFilePond.length || 0,
+        };
+        console.dir(ObjetoImagen);
+  
+        this.$emit("imageOnProcess", { ...ObjetoImagen });
+      } catch (error) {
+
+        console.log("imagenesAnuncioOnProcess...");
+        console.dir(error);
       }
-
-      let ObjetoImagen = {
-        nombre: JSON.parse(file.serverId)[0],
-        posicion: this.imagenesAnuncioFilePond.length || 0,
-      };
-      console.dir(ObjetoImagen);
-
-      this.$emit("imageOnProcess", { ...ObjetoImagen });
     },
   },
 };
