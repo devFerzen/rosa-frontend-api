@@ -51,7 +51,8 @@ setOptions({
     'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Explorar </span>',
   server: {
     //url: "/api/",
-    url: 'http://localhost:3080/',
+    //url: 'http://localhost:3080/',
+    url: '/',
     process: {
       url: "upload",
     },

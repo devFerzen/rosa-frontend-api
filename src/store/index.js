@@ -27,7 +27,7 @@ export default new Vuex.Store({
     actualizandoContrasenaView: false,
     tipoVerificacion: "",
     Systema: {
-      apiMode: "http://localhost:3080/"
+      apiMode: "/" //"http://localhost:3080/"
     },
   },
   mutations: {
