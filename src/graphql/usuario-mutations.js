@@ -35,6 +35,7 @@ export const USUARIO_QUERY = gql `
                     ciudad
                     descripcion
                     sexo
+                    edad
                 }
                 Sec_Contacto{
                     contacto

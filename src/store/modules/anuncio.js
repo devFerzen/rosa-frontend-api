@@ -11,6 +11,7 @@ export const state = {
       ciudad: "",
       descripcion: "",
       sexo: 0,
+      edad: 21
     },
     Sec_Imagenes: [],
     Sec_Contacto: [],
@@ -34,6 +35,7 @@ export const mutations = {
                ciudad: "",
                descripcion: "",
                sexo: 0,
+               edad:21
              });
            state.AnuncioInfo.Sec_Imagenes = [];
            state.AnuncioInfo.Sec_Contacto = [];
@@ -105,6 +107,7 @@ export const mutations = {
                ciudad: "",
                descripcion: "",
                sexo: 0,
+               edad: 21
              },
              Sec_Imagenes: [],
              Sec_Contacto: [],

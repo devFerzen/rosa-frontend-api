@@ -61,6 +61,18 @@ library.add(faStar, faShare, faTimes,
     faTwitter);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
+Vue.filter('countView', function (value) {
+    if (!value) return '0'
+
+    if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1).replace(/\.0$/, '')} M`;
+     }
+     if (value >= 1000) {
+        return `${(value / 1000).toFixed(1).replace(/\.0$/, '')} K`;
+     }
+     return `${value}`;
+  })
+
 new Vue({
     router,
     store,

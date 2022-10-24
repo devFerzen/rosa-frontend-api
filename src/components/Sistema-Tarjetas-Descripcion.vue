@@ -1,80 +1,41 @@
 <template>
   <div class="">
     <v-row align="space-around">
-      <v-col
-        :cols="gridColCard['cardCols']"
-        v-for="(anuncio, key, i) in anunciosBusqueda"
-        :key="i"
-      >
+      <v-col :cols="gridColCard['cardCols']" v-for="(anuncio, key, i) in anunciosBusqueda" :key="i">
         <v-hover v-slot:default="{ hover }">
-          <v-card
-            class="rounded-xl"
-            flat
-            style="overflow: hidden"
-            :class="hover ? 'anuncioHover' : ''"
-            :height="tarjetaWH['carruselH']"
-            :width="tarjetaWH['carruselW']"
-          >
+          <v-card class="rounded-xl" flat style="overflow: hidden" :class="hover ? 'anuncioHover' : ''"
+            :height="tarjetaWH['carruselH']" :width="tarjetaWH['carruselW']">
             <v-container style="padding: 0">
               <v-expand-transition>
                 <div v-if="hover">
-                  <div
-                    style="
-                      z-index: 1;
-                      position: absolute;
-                      top: 2px;
-                      right: 0px;
-                      width: 80px;
-                      height: 100%;
-                    "
-                  >
+                  <div class="hoverCardItems">
                     <v-list two-line style="background: none !important">
                       <v-hover v-slot:default="{ hover }">
-                        <v-list-item
-                          class="red--text font-weight-black text-center"
-                        >
+                        <v-list-item class="red--text font-weight-black text-center">
                           <v-list-item-content>
-                            <v-list-item-title
-                              @click="accionCorazon(anuncio.id)"
-                              style="cursor: pointer"
-                            >
-                              <font-awesome-icon
-                                :icon="['fas', 'heart']"
-                                class="fa-2x"
-                                :color="hover ? 'red' : 'white'"
-                              ></font-awesome-icon>
+                            <v-list-item-title @click="accionCorazon(anuncio.id)" style="cursor: pointer">
+                              <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x"
+                                :color="hover ? 'red' : 'white'"></font-awesome-icon>
                             </v-list-item-title>
-                            <v-list-item-subtitle
-                              class="white--text font-weight-black"
-                              v-text="150"
-                            ></v-list-item-subtitle>
+                            <v-list-item-subtitle class="white--text font-weight-black">
+                              {{anuncio.no_corazones | countView}}
+                            </v-list-item-subtitle>
                           </v-list-item-content>
                         </v-list-item>
                       </v-hover>
                     </v-list>
-                    <v-list
-                      two-line
-                      style="background: none !important; position: absolute; bottom:-18px"
-                    >
+                    <v-list two-line style="background: none !important; position: absolute; bottom:-18px">
                       <v-hover v-slot:default="{ hover }">
                         <v-list-item>
                           <v-list-item-content>
-                            <v-list-item-title
-                              class="
+                            <v-list-item-title class="
                                 font-weight-regular
                                 text-center text--secondary
                                 d-flex flex-row
                                 justify-center align-center
-                              "
-                            >
-                              <font-awesome-icon
-                                :icon="['fas', 'eye']"
-                                class="fa-1x"
-                                color="white"
-                              ></font-awesome-icon>
-                              <span class="text-caption" style="color: white;"
-                                >{{ 100 }}k</span
-                              >
+                              ">
+                              <font-awesome-icon :icon="['fas', 'eye']" class="fa-1x" color="white"></font-awesome-icon>
+                              <span class="text-caption" style="color: white;">{{ anuncio.no_vistas | countView}}</span>
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -88,176 +49,96 @@
                       <v-row no-gutters>
                         <v-col cols="12">
                           <div class="d-flex justify-space-between flex-row">
-                            <div
-                              class="
+                            <div class="
                               text-h5 text-md-h6
                               font-weight-black
                               text-truncate text-capitalize
-                            "
-                              style="color: black; overflow: hidden; max-width: 220px;"
-                            >
+                            " style="color: black; overflow: hidden; max-width: 220px;">
                               {{ anuncio.Sec_Descripcion.titulo }}
                             </div>
-                            <div
-                              class="
+                            <div class="
                               text-h6
-                            "
-                              style="overflow: hidden"
-                            >
-                              ,{{ 24 }}
+                            " style="overflow: hidden">
+                              {{ anuncio.Sec_Descripcion.edad }}
                             </div>
                           </div>
                         </v-col>
                       </v-row>
-                      <p
-                        class="
+                      <p class="
                           text-caption text-justify
                           anuncio-textDescripcion
-                        "
-                        :class="anuncioTextDescMobile"
-                      >
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Dolorum ut iure soluta nam quia tenetur quibusdam
-                        saepe et cupiditate, libero minima quiLorem ipsum dolor
-                        sit, amet consectetur adipisicing elit. Dolorum ut iure
-                        soluta nam quia tenetur quibusdam saepe et cupiditate,
-                        libero minima officiis impedit fugiat voluptates nisi
-                        consequatur inventore? Dignissimos.
+                        " :class="anuncioTextDescMobile">
+                        {{anuncio.Sec_Descripcion.descripcion}}
                       </p>
                     </v-col>
                   </row>
                   <!--Campo descripcion-->
 
-                  <v-btn
-                    small
-                    raised
-                    rounded
-                    color="primary"
-                    style="
-                      z-index: 5 !important;
-                      position: absolute;
-                      bottom: 8px;
-                      left: 10px;
-                    "
-                    @click="accionVer(key)"
-                  >
+                  <v-btn small raised rounded color="primary"
+                    style=" z-index: 5 !important; position: absolute; bottom: 8px; left: 10px;"
+                    @click="accionVer(key)">
                     Ver Más
                   </v-btn>
                   <!--Botón ver más-->
                 </div>
-                <!--vista hover contenido-->
+                <!--vista info hover anuncio-->
 
-                <div
-                  style="
-                    z-index: 1;
-                    position: absolute;
-                    top: 15px;
-                    right: 0px;
-                    width: 80px;
-                    height: 100%;
-                  "
-                >
+                <div style=" z-index: 1; position: absolute; top: 15px; right: 0px; width: 80px; height: 100%;">
                   <v-list two-line style="background: none !important">
                     <v-list-item>
                       <v-list-item-content>
-                        <v-list-item-title
-                          class="
+                        <v-list-item-title class="
                             black--text
                             font-weight-regular
                             text-center text--secondary
-                          "
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'heart']"
-                            class="fa-2x"
-                          ></font-awesome-icon>
+                          ">
+                          <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x"></font-awesome-icon>
                         </v-list-item-title>
-                        <v-list-item-subtitle
-                          class="black--text font-weight-regular text-center"
-                          v-text="150"
-                        ></v-list-item-subtitle>
+                        <v-list-item-subtitle class="black--text font-weight-regular text-center">
+                          {{anuncio.no_corazones | countView}}
+                        </v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
 
-                  <v-list
-                    two-line
-                    style="background: none !important; position: absolute; bottom:0px"
-                  >
+                  <v-list two-line style="background: none !important; position: absolute; bottom:0px">
                     <v-list-item>
                       <v-list-item-content>
-                        <v-list-item-title
-                          class="
+                        <v-list-item-title class="
                             font-weight-regular
                             text-center text--secondary
                             d-flex flex-row
                             justify-center align-center
-                          "
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'eye']"
-                            class="fa-1x"
-                            color="white"
-                          ></font-awesome-icon>
-                          <span class="text-caption" style="color: white;"
-                            >{{ 100 }}k</span
-                          >
+                          ">
+                          <font-awesome-icon :icon="['fas', 'eye']" class="fa-1x" color="white"></font-awesome-icon>
+                          <span class="text-caption" style="color: white; padding-left: 2px;">{{ anuncio.no_vistas |
+                          countView}}</span>
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
                 </div>
-                <!--vista corazón y ojo-->
+                <!--vista info default anuncio-->
               </v-expand-transition>
               <!--Contenido de Hover-->
 
               <v-row class="fill-height" no-gutters>
                 <v-col style="background-color: blue">
-                  <v-carousel
-                    :height="tarjetaWH['carruselH']"
-                    id="carouselImgAnuncio"
-                    continuous="true"
-                  >
+                  <v-carousel :height="tarjetaWH['carruselH']" id="carouselImgAnuncio" continuous="true">
                     <template v-slot:prev="{ on }">
-                      <v-btn
-                        fab
-                        color="pink"
-                        large
-                        plain
-                        v-on="on"
-                        v-ripple="false"
-                        id="idPrevNext"
-                      >
-                        <font-awesome-icon
-                          :icon="['fa', 'caret-left']"
-                          size="lg"
-                        ></font-awesome-icon>
+                      <v-btn fab color="pink" large plain v-on="on" v-ripple="false" id="idPrevNext">
+                        <font-awesome-icon :icon="['fa', 'caret-left']" size="lg"></font-awesome-icon>
                       </v-btn>
                     </template>
                     <template v-slot:next="{ on }">
-                      <v-btn
-                        fab
-                        color="pink"
-                        large
-                        plain
-                        v-on="on"
-                        v-ripple="false"
-                        id="idPrevNext"
-                      >
-                        <font-awesome-icon
-                          :icon="['fa', 'caret-right']"
-                          size="lg"
-                        ></font-awesome-icon>
+                      <v-btn fab color="pink" large plain v-on="on" v-ripple="false" id="idPrevNext">
+                        <font-awesome-icon :icon="['fa', 'caret-right']" size="lg"></font-awesome-icon>
                       </v-btn>
                     </template>
 
                     <!--:src="'/uploads/' + imagen.nombre"-->
-                    <v-carousel-item
-                      active-class="anuncio-imagenes-dots"
-                      v-for="(imagen, i) in anuncio.Sec_Imagenes"
-                      :key="i"
-                      :src="gettingUrl(imagen.nombre)"
-                    ></v-carousel-item>
+                    <v-carousel-item active-class="anuncio-imagenes-dots" v-for="(imagen, i) in anuncio.Sec_Imagenes"
+                      :key="i" :src="gettingUrl(imagen.nombre)"></v-carousel-item>
                   </v-carousel>
                 </v-col>
               </v-row>
@@ -269,93 +150,49 @@
     </v-row>
     <!--grid de tarjetas-->
 
-    <v-dialog
-      v-model="fullAnuncioEstado"
-      fullscreen
-      hide-overlay
-      transition="dialog-bottom-transition"
-    >
+    <v-dialog v-model="fullAnuncioEstado" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-sheet color="darken-2" v-if="!anuncioView.Estado.vivo">
         <v-row no-gutters>
           <v-col>
-            <v-skeleton-loader
-              class="mx-auto"
-              width="500"
-              height="50vh"
-              type="image"
-              light="true"
-              tile
-              style="background: #df6dad"
-            ></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto" width="500" height="50vh" type="image" light="true" tile
+              style="background: #df6dad"></v-skeleton-loader>
           </v-col>
           <v-col>
-            <v-skeleton-loader
-              class="mx-auto"
-              width="500"
-              height="50vh"
-              tile
-              type="list-item-avatar-three-line, list-item-three-line, list-item-two-line, divider, table-tfoot"
-            ></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto" width="500" height="50vh" tile
+              type="list-item-avatar-three-line, list-item-three-line, list-item-two-line, divider, table-tfoot">
+            </v-skeleton-loader>
           </v-col>
         </v-row>
         <v-row no-gutters justify="center" align="center">
           <v-col>
-            <v-skeleton-loader
-              class="mx-auto"
-              width="500"
-              height="50vh"
-              style="background: #df6dad"
-              type="image"
-            ></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto" width="500" height="50vh" style="background: #df6dad" type="image">
+            </v-skeleton-loader>
           </v-col>
           <v-col>
-            <v-skeleton-loader
-              class="mx-auto"
-              width="500"
-              type="actions"
-            ></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto" width="500" type="actions"></v-skeleton-loader>
           </v-col>
         </v-row>
         <!--Skeletoo vacío-->
       </v-sheet>
+      <!--Vista Vacia anuncio-->
 
       <v-card :height="fullAnuncioMbView" v-if="anuncioView.Estado.vivo">
         <v-container fluid class="px-0 py-0 pr-1 pr-md-0">
-          <v-row
-            align="center"
-            justify="center"
-            class="fill-height"
-            no-gutters
-            style="background: white"
-            :style="{ 'margin-bottom': marginMbView + 'px' }"
-          >
+          <v-row align="center" justify="center" class="fill-height" no-gutters style="background: white"
+            :style="{ 'margin-bottom': marginMbView + 'px' }">
             <v-col cols="12" md="4" style="min-height: 95vh">
               <v-carousel continuous="true" height="90vh" class="my-4">
                 <!--:src="'/uploads/' + imagen.nombre"-->
-                <v-carousel-item
-                  v-for="(imagen, i) in anuncioView.Sec_Imagenes"
-                  :key="i"
-                  :src="imagen.nombre"
-                  reverse-transition="fade-transition"
-                  transition="fade-transition"
-                  height="600px"
-                ></v-carousel-item>
+                <v-carousel-item v-for="(imagen, i) in anuncioView.Sec_Imagenes" :key="i" :src="imagen.nombre"
+                  reverse-transition="fade-transition" transition="fade-transition" height="600px"></v-carousel-item>
               </v-carousel>
             </v-col>
             <!--Carrusel-->
 
-            <v-col
-              cols="12"
-              md="8"
-              style="min-height: 95vh; max-height: auto"
-              class="d-flex flex-column justify-center align-center"
-            >
-              <v-card
-                class="pa-2 pa-lg-2"
-                flat
-                :height="fullAnuncioBodyWH['vMainContenth']"
-                :width="fullAnuncioBodyWH['vMainContentw']"
-              >
+            <v-col cols="12" md="8" style="min-height: 95vh; max-height: auto"
+              class="d-flex flex-column justify-center align-center">
+              <v-card class="pa-2 pa-lg-2" flat :height="fullAnuncioBodyWH['vMainContenth']"
+                :width="fullAnuncioBodyWH['vMainContentw']">
                 <v-card-title class="pa-0">
                   <v-container class="px-0">
                     <v-row no-gutters>
@@ -363,45 +200,24 @@
                         <v-card tile flat>
                           <v-row no-gutters>
                             <v-col cols="12" md="10">
-                              <div
-                                class="
+                              <div class="
                                   text-h5 text-md-h3 text-capitalize
                                   font-weight-bold
-                                "
-                              >
+                                ">
                                 {{ anuncioView.Sec_Descripcion.titulo }}
                               </div>
                             </v-col>
-                            <v-col
-                              cols="2"
-                              align="start"
-                              justify="start"
-                              :order="fullAnuncioheadersOrder['iconoCorazon']"
-                            >
+                            <v-col cols="2" align="start" justify="start"
+                              :order="fullAnuncioheadersOrder['iconoCorazon']">
                               <div class="body-2">
-                                <v-btn
-                                  fab
-                                  text
-                                  depressed
-                                  plain
-                                  small
-                                  @click="accionCorazon(anuncioView.id)"
-                                >
-                                  <font-awesome-icon
-                                    :icon="['fas', 'heart']"
-                                    class="fa-2x"
-                                    color="red"
-                                  ></font-awesome-icon>
+                                <v-btn fab text depressed plain small @click="accionCorazon(anuncioView.id)">
+                                  <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x" color="red">
+                                  </font-awesome-icon>
                                 </v-btn>
                               </div>
                             </v-col>
-                            <v-col
-                              cols="10"
-                              md="12"
-                              align="start"
-                              class="font-weight-medium pl-6"
-                              style="align-items: center"
-                            >
+                            <v-col cols="10" md="12" align="start" class="font-weight-medium pl-6"
+                              style="align-items: center">
                               {{ anuncioView.Sec_Descripcion.ciudad }},
                               {{ anuncioView.Sec_Descripcion.estado }}
                             </v-col>
@@ -421,36 +237,18 @@
 
                 <v-card-text class="pa-0">
                   <v-row align="center" justify="center" no-gutters>
-                    <v-btn
-                      depressed
-                      rounded
-                      v-ripple="false"
-                      @click="revealDesc = true"
-                      class="subtitle-2"
-                      :class="{
-                        'suave-pink-font': revealDesc,
-                        'subtitle-1': revealDesc,
-                      }"
-                      :small="revealDesc ? false : true"
-                      width="130"
-                    >
+                    <v-btn depressed rounded v-ripple="false" @click="revealDesc = true" class="subtitle-2" :class="{
+                      'suave-pink-font': revealDesc,
+                      'subtitle-1': revealDesc,
+                    }" :small="revealDesc ? false : true" width="130">
                       descripción
                     </v-btn>
 
-                    <v-btn
-                      depressed
-                      rounded
-                      v-ripple="false"
-                      @click="revealDesc = false"
-                      class="ml-2 subtitle-2"
+                    <v-btn depressed rounded v-ripple="false" @click="revealDesc = false" class="ml-2 subtitle-2"
                       :class="{
                         'suave-pink-font': !revealDesc,
                         'subtitle-1': !revealDesc,
-                      }"
-                      :small="!revealDesc ? false : true"
-                      width="130"
-                      v-if="anuncioView.Sec_Tarifas.length > 0"
-                    >
+                      }" :small="!revealDesc ? false : true" width="130" v-if="anuncioView.Sec_Tarifas.length > 0">
                       tarifas
                     </v-btn>
                   </v-row>
@@ -458,28 +256,11 @@
                 <!--Tabs secciones anuncio-->
 
                 <v-expand-x-transition>
-                  <v-card-text
-                    v-if="!revealDesc"
-                    class="full-anuncio-seccion d-flex justify-center"
-                    :class="fullAnuncioSeccionWeb"
-                  >
-                    <v-sheet
-                      fluid
-                      elevation="6"
-                      class="px-4 px-lg-8 pb-8 rounded-xl"
-                      width="650"
-                      height="fit-content"
-                    >
-                      <div
-                        v-for="(tarifa, i) in anuncioView.Sec_Tarifas"
-                        :key="i"
-                      >
-                        <v-row
-                          align="center"
-                          justify="center"
-                          class="pt-6 mb-2"
-                          no-gutters
-                        >
+                  <v-card-text v-if="!revealDesc" class="full-anuncio-seccion d-flex justify-center"
+                    :class="fullAnuncioSeccionWeb">
+                    <v-sheet fluid elevation="6" class="px-4 px-lg-8 pb-8 rounded-xl" width="650" height="fit-content">
+                      <div v-for="(tarifa, i) in anuncioView.Sec_Tarifas" :key="i">
+                        <v-row align="center" justify="center" class="pt-6 mb-2" no-gutters>
                           <v-col cols></v-col>
                           <v-col cols="8" md="6" align="center">
                             <div class="text-h6 font-weight-bold">
@@ -505,10 +286,7 @@
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="10" md="7">
-                            <v-divider
-                              color="pink"
-                              style="border-width: revert"
-                            ></v-divider>
+                            <v-divider color="pink" style="border-width: revert"></v-divider>
                           </v-col>
                         </v-row>
                       </div>
@@ -516,17 +294,8 @@
                   </v-card-text>
                   <!--Tarifas-->
 
-                  <v-card-text
-                    class="full-anuncio-seccion px-1 d-flex justify-center"
-                    :class="fullAnuncioSeccionWeb"
-                  >
-                    <v-sheet
-                      fluid
-                      elevation="6"
-                      class="px-4 px-lg-8 py-6 rounded-xl"
-                      width="650"
-                      height="fit-content"
-                    >
+                  <v-card-text class="full-anuncio-seccion px-1 d-flex justify-center" :class="fullAnuncioSeccionWeb">
+                    <v-sheet fluid elevation="6" class="px-4 px-lg-8 py-6 rounded-xl" width="650" height="fit-content">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       Corrupti doloribus qui similique impedit. Reiciendis et
                       cumque odit, officiis atque omnis, quasi numquam
@@ -594,116 +363,52 @@
                 <!--Cuerpo Anuncio (descripcion y tarifas)-->
 
                 <v-card-actions style="float: right">
-                  <v-btn
-                    class="mx-2"
-                    small
-                    text
-                    plain
-                    raised
-                    color="primary"
-                    @click="reportarAnuncio"
-                  >
+                  <v-btn class="mx-2" small text plain raised color="primary" @click="reportarAnuncio">
                     Reportar Anuncio!
                   </v-btn>
 
-                  <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    small
-                    color="primary"
-                    @click="fullAnuncioEstado = false"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'times']"
-                      class="fa-2x"
-                    ></font-awesome-icon>
+                  <v-btn class="mx-2" fab dark small color="primary" @click="fullAnuncioEstado = false">
+                    <font-awesome-icon :icon="['fas', 'times']" class="fa-2x"></font-awesome-icon>
                   </v-btn>
                 </v-card-actions>
                 <!--Acciones Anuncio-->
 
-                <v-bottom-navigation
-                  :fixed="navegacionMbView"
-                  v-model="contactBottomNav"
-                  color="pink"
-                  style="border-radius: 30px 30px 0 0; height: 72px!important;"
-                  :class="{
+                <v-bottom-navigation :fixed="navegacionMbView" v-model="contactBottomNav" color="pink"
+                  style="border-radius: 30px 30px 0 0; height: 72px!important;" :class="{
                     'fullAnuncio-navBottom-web': !navegacionMbView,
-                  }"
-                  active-class="ejemplo"
-                >
-                  <v-sheet
-                    class="pa-0 fullAnuncio-navBottom-web"
-                    style="background: transparent"
-                  >
+                  }" active-class="ejemplo">
+                  <v-sheet class="pa-0 fullAnuncio-navBottom-web" style="background: transparent">
                     <v-row no-gutters>
                       <v-col style="height: 68px" class="d-flex justify-start">
-                        <v-btn
-                          color="pink"
-                          rounded
-                          icon
-                          @click="accionVer(_positionAnuncioArray, 'izq')"
-                        >
-                          <font-awesome-icon
-                            class="fa-2x"
-                            :icon="['fa', 'arrow-left']"
-                          >
+                        <v-btn color="pink" rounded icon @click="accionVer(_positionAnuncioArray, 'izq')">
+                          <font-awesome-icon class="fa-2x" :icon="['fa', 'arrow-left']">
                           </font-awesome-icon>
                         </v-btn>
                       </v-col>
                       <!--left btn-->
 
-                      <v-col
-                        v-for="(contacto, key, i) in anuncioView.Sec_Contacto"
-                        :key="i"
-                        v-show="anuncioView.Sec_Contacto.length > 0"
-                        class="d-flex justify-center"
-                        style="height: 68px; width: 62px"
-                      >
-                        <v-btn
-                          color="green"
-                          depressed
-                          rounded
-                          icon
-                          style="min-width: 60px !important"
-                        >
-                          <font-awesome-icon
-                            class="fa-2x"
-                            :icon="[
-                              anuncioView.Sec_Contacto[key].Tipo.categoria,
-                              anuncioView.Sec_Contacto[key].Tipo.icono,
-                            ]"
-                          >
+                      <v-col v-for="(contacto, key, i) in anuncioView.Sec_Contacto" :key="i"
+                        v-show="anuncioView.Sec_Contacto.length > 0" class="d-flex justify-center"
+                        style="height: 68px; width: 62px">
+                        <v-btn color="green" depressed rounded icon style="min-width: 60px !important">
+                          <font-awesome-icon class="fa-2x" :icon="[
+                            anuncioView.Sec_Contacto[key].Tipo.categoria,
+                            anuncioView.Sec_Contacto[key].Tipo.icono,
+                          ]">
                           </font-awesome-icon>
                         </v-btn>
                       </v-col>
                       <!--list contactos cycle-->
 
-                      <v-col
-                        v-if="anuncioView.Sec_Contacto.length == 0"
-                        class="d-flex align-center justify-center"
-                      >
-                        <v-img
-                          max-width="100"
-                          max-height="50"
-                          contain
-                          :src="require('../assets/logos/logoH_1x.png')"
-                        ></v-img>
+                      <v-col v-if="anuncioView.Sec_Contacto.length == 0" class="d-flex align-center justify-center">
+                        <v-img max-width="100" max-height="50" contain :src="require('../assets/logos/logoH_1x.png')">
+                        </v-img>
                       </v-col>
                       <!--brand image H-->
 
                       <v-col style="height: 68px" class="d-flex justify-end">
-                        <v-btn
-                          color="pink"
-                          depressed
-                          rounded
-                          icon
-                          @click="accionVer(_positionAnuncioArray, 'der')"
-                        >
-                          <font-awesome-icon
-                            class="fa-2x"
-                            :icon="['fa', 'arrow-right']"
-                          >
+                        <v-btn color="pink" depressed rounded icon @click="accionVer(_positionAnuncioArray, 'der')">
+                          <font-awesome-icon class="fa-2x" :icon="['fa', 'arrow-right']">
                           </font-awesome-icon>
                         </v-btn>
                       </v-col>
@@ -865,17 +570,17 @@ export default {
 
       return sm || xs || md
         ? {
-            vMainContentw: "92vw",
-            vMainContenth: "auto",
-            vTextContent: "auto",
-            CardTarifaCol: 12,
-          }
+          vMainContentw: "92vw",
+          vMainContenth: "auto",
+          vTextContent: "auto",
+          CardTarifaCol: 12,
+        }
         : {
-            vMainContentw: "58vw",
-            vMainContenth: "90vh",
-            vTextContent: "40vh",
-            CardTarifaCol: 4,
-          };
+          vMainContentw: "58vw",
+          vMainContenth: "90vh",
+          vTextContent: "40vh",
+          CardTarifaCol: 4,
+        };
     },
     fullAnuncioheadersOrder() {
       let { xs } = this.$vuetify.breakpoint;
@@ -899,7 +604,7 @@ export default {
 
       return xs || sm;
       Math.abs(window.pageYOffset - this.limitScrollPosition) <
-      this.limitScrollPosition
+        this.limitScrollPosition
         ? true
         : false;
     },
@@ -917,7 +622,8 @@ export default {
         console.log(anuncioNombre);
         return anuncioNombre;
       }
-      return `/uploads/${anuncioNombre}`; //`http://localhost:3080/uploads/${anuncioNombre}`;
+      //return `/uploads/${anuncioNombre}`;
+      return `http://localhost:3080/uploads/${anuncioNombre}`;
     },
 
     fullAnuncio_Display(payload) {
@@ -926,7 +632,7 @@ export default {
 
     //Analizar aplicaBusqueda
     async aplicaBusqueda() {
-      let QueryResult;
+      let QueryResult = [];
       try {
         QueryResult = await this.mixinBusqueda(this.getBusquedaQuery);
       } catch (error) {
@@ -935,6 +641,19 @@ export default {
 
         this.mixinLlamadaRouter(error);
         return;
+      }
+
+      //Sin mensajes encontrados
+      if (QueryResult.length <= 0) {
+        this.mixinLlamadaRouter({
+          componenteInterno: {
+            activationAlert: {
+              type: "warning",
+              message: `Búsqueda sin resultados, intenta en otra categoría!.`,
+            }
+          }
+        })
+        return
       }
 
       this.anunciosBusqueda = QueryResult;
@@ -987,6 +706,7 @@ export default {
       }
 
       this.anuncioView = this.anunciosBusqueda[this._positionAnuncioArray];
+      this.PlusOne('ojo');
       this.fullAnuncio_Display(true);
     },
 
@@ -998,6 +718,7 @@ export default {
       }
       return _result;
     },
+
     flechaDerNavegacion() {
       //Devuelve la posicion para pasar a la der
       let _result = 0;
@@ -1005,7 +726,6 @@ export default {
       if (this._positionAnuncioArray < this.anunciosBusqueda.length - 1) {
         _result = this._positionAnuncioArray + 1;
       }
-      console.log(`flecha navegacion ${_result}`);
       return _result;
     },
 
@@ -1023,7 +743,22 @@ export default {
         return;
       }
 
+      this.PlusOne('corzaon');
       this.mixinLlamadaRouter(queryResult);
+    },
+
+    PlusOne(tipo) {
+
+      if(tipo === undefined){
+        return
+      }
+
+      if (tipo == "ojo") {
+        this.anunciosBusqueda[this._positionAnuncioArray].no_vistas = this.anunciosBusqueda[this._positionAnuncioArray].no_vistas + 1; 
+        return
+      }
+
+      this.anunciosBusqueda[this._positionAnuncioArray].no_corazones = this.anunciosBusqueda[this._positionAnuncioArray].no_corazones + 1; 
     },
   },
 
@@ -1038,9 +773,10 @@ export default {
       this.mixinVerPlus(this.anuncioView.id);
     }
   },
+
   watch: {
     //Analizar el uso de watch aqui
-    getBusquedaQuery: function(value) {
+    getBusquedaQuery: function (value) {
       console.log("getBusquedaQuery...");
       console.dir(value);
       this.aplicaBusqueda();
@@ -1127,10 +863,10 @@ export default {
   margin: 0;
 }
 
-.v-window__next > .v-btn,
-.v-window__next > .v-btn,
-.v-window__prev > .v-btn,
-.v-window__prev > .v-btn {
+.v-window__next>.v-btn,
+.v-window__next>.v-btn,
+.v-window__prev>.v-btn,
+.v-window__prev>.v-btn {
   font-size: 2rem;
   color: #e994c496;
 }
@@ -1148,5 +884,14 @@ export default {
   width: 100%;
   max-height: 160px;
   height: 160px;
+}
+
+.hoverCardItems {
+  z-index: 1;
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  width: 80px;
+  height: 100%;
 }
 </style>

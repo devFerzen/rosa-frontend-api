@@ -189,6 +189,8 @@ export default {
         MixinResult = {
           ...new Result(MutateResult, "anunciolike"),
         };
+
+        
         return resolve(MixinResult);
       });
     },
@@ -211,6 +213,13 @@ export default {
               idAnuncio: payload,
             },
           });
+          
+          this.$store.dispatch(
+            'PlusOne',{
+              tipo: 'corazon',
+              idAnuncio: payload
+            }
+          );
         } catch (error) {
           console.log(`mixinVerPlus... en error`);
           console.dir(error);

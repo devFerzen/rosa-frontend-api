@@ -1032,8 +1032,8 @@ export default {
         }
 
         return {
-          url: "/uploads/" + infoImagen.nombre, //url: "http://localhost:3080/uploads/" + infoImagen.nombre,
-          //url: "/api/uploads/" + infoImagen.nombre,
+          url: "http://localhost:3080/uploads/" + infoImagen.nombre,
+          //url: "/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
       });

@@ -3,7 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: '/',
   headers:{
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:3080/',
         'Accept': 'application/json'
     }
 });

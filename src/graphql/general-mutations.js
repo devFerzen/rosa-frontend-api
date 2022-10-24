@@ -89,6 +89,7 @@ export const ANUNCIO_BYID_QUERY = gql `
                 ciudad
                 descripcion
                 sexo
+                edad
             }
             Sec_Contacto{
                 contacto
@@ -125,6 +126,7 @@ export const ANUNCIOS_QUERY = gql `
                 ciudad
                 descripcion
                 sexo
+                edad
             }
             Sec_Contacto{
                 contacto

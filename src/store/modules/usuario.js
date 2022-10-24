@@ -61,7 +61,8 @@ export const mutations = {
                 estado: '',
                 ciudad: '',
                 descripcion: '',
-                sexo: 0
+                sexo: 'masculino',
+                edad: 21
             },
             Sec_Imagenes: [],
             Sec_Contacto: [],
