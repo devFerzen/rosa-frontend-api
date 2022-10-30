@@ -118,7 +118,6 @@
               mandatory
               show-arrows
               center-active
-              mandatory
             >
               <v-slide-item
                 v-for="categoria in getDdlCategoriasCorrection"

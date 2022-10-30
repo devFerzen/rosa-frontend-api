@@ -16,7 +16,7 @@ Vue.use(Vuetify);
 const httpLink = new HttpLink({ 
     //uri: '/graphql', 
     uri: 'http://localhost:3080/graphql',
-    credentials: "omit" 
+    credentials: "include" 
 });
 const cache = new InMemoryCache({
     addTypename: false //Borra los __typename de los querys o mutaciones
@@ -43,6 +43,7 @@ const middlewareLink = setContext((_, { headers }) => {
         }
     }
 });
+
 const prelink = logoutLink.concat(httpLink);
 const link = middlewareLink.concat(prelink);
 const apolloProvider = new VueApollo({

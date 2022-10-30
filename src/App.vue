@@ -240,7 +240,7 @@ export default {
       try {
         DispatchResult = await this.mixinCerrarSesion();
       } catch (error) {
-        console.log("vue anunciate... en error");
+        console.log("vue cerrarSesion... en error");
         console.dir(error);
        
         this.mixinLlamadaRouter(error);
@@ -251,6 +251,7 @@ export default {
       console.dir(DispatchResult);
       this.mixinLlamadaRouter(DispatchResult);
     },
+
     async anunciate() {
       let DispatchResult;
       console.log("vue anunciate...");
@@ -263,14 +264,10 @@ export default {
       } catch (error) {
         console.log("vue anunciate... en error");
         console.dir(error);
-        this.$store.dispatch("activationAlert", {
-          type: "error",
-          message: `${error.mensaje}`,
-        });
         this.mixinLlamadaRouter(error);
         return;
       }
-      console.log("vue anunciate...");
+      
       console.dir(DispatchResult);
       this.mixinLlamadaRouter(DispatchResult);
     },

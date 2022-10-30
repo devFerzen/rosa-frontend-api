@@ -29,7 +29,6 @@ export default {
      */
     mixinInicioSesion(payload) {
       return new Promise(async (resolve, reject) => {
-        console.log("mixinInicioSesion...");
         let MutateResult;
         let MixinResult;
 
@@ -497,9 +496,6 @@ export default {
         //Crear arreglo de objetos
         if (payload.hasOwnProperty('componenteInterno')) {
           for (let componenteInterno in payload.componenteInterno) {
-            console.log(
-              `Haciendo dispatch a ${componenteInterno} con ${payload.componenteInterno[componenteInterno]}`
-            );
             await this.$store.dispatch(
               componenteInterno,
               payload.componenteInterno[componenteInterno]

@@ -41,6 +41,7 @@
           required
         ></v-text-field>
       </v-form>
+
       <v-row align="center" justify="space-between" no-gutters>
         <v-col cols="12" class="d-flex">
           <v-btn
@@ -57,6 +58,7 @@
             </div>
           </v-btn>
         </v-col>
+
         <v-col cols="12" class="d-flex">
           <v-btn
             plain
@@ -73,6 +75,7 @@
           </v-btn>
         </v-col>
       </v-row>
+      <!--BTNs Registro y Olvido contraseña-->
     </v-card-text>
 
     <v-row align="center" justify="center">
@@ -89,6 +92,7 @@
         </v-btn>
       </v-card-actions>
     </v-row>
+    <!--BTN Entrar-->
   </v-card>
 </template>
 
@@ -137,8 +141,6 @@ export default {
           }
         }
       };
-      console.log("vue iniciandoSesion... validado");
-      console.dir(this.FormIS);
 
       if (!this.$refs.inicioSesion.validate()) {
         this.mixinLlamadaRouter(MutateResult);

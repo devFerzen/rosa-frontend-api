@@ -79,11 +79,6 @@ export default {
         let MutateResult, MixinResult;
 
         try {
-          /*if(true){
-                        MutateResult = await GeneralTestMixin.mixinVerificacionCelularCreacion(payload);
-                        return resolve(JSON.parse(MutateResult));
-                    }*/
-
           MutateResult = await this.$apollo.mutate({
             mutation: GraphqlAnuncioCalls.VERIFICACIONCELULAR_CREACION,
           });

@@ -139,16 +139,16 @@ export const actions = {
 
              if (!rootState.usuario.usuario.numero_telefonico_verificado) {
                return reject({
-                 pagina: "home",
                  componenteInterno: {
                    setTipoVerificacion: "verificacionCelular",
+                   panelHerramientasVerificacion: true,
                    activationAlert: {
                      type: `error`,
                      message:
                        "Favor de verificar el número de celular de la cuenta!",
                    },
-                   panelHerramientasVerificacion: true,
                  },
+                 pagina: "home",
                });
              }
 

@@ -35,8 +35,8 @@ export default function(Result, dataName = undefined, esQuery = false) {
   //console.log("Result");
   //console.dir(Result);
 
-  console.log("_Result");
-  console.dir(_Result);
+  //console.log("_Result");
+  //console.dir(_Result);
   
   this.componenteInterno = _Result.componenteInterno || {};
   this.data = this.data || _Result.data;
