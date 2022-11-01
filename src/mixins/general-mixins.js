@@ -189,7 +189,7 @@ export default {
           ...new Result(MutateResult, "anunciolike"),
         };
 
-        
+
         return resolve(MixinResult);
       });
     },
@@ -212,12 +212,12 @@ export default {
               idAnuncio: payload,
             },
           });
-          
+
           this.$store.dispatch(
-            'PlusOne',{
-              tipo: 'corazon',
-              idAnuncio: payload
-            }
+            'PlusOne', {
+            tipo: 'corazon',
+            idAnuncio: payload
+          }
           );
         } catch (error) {
           console.log(`mixinVerPlus... en error`);
@@ -280,11 +280,10 @@ export default {
      */
     mixinVerificacionUsuarioComparacion(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult, validandoUsuarioTKN;
+        let MutateResult;
         let MixinResult;
 
-        //Analizar Poner correctamente
-        //validandoUsuarioTKN = await this.$store.dispatch("validandoUsuario");
+        //Analizar Poner correctamente - validandoUsuarioTKN = await this.$store.dispatch("validandoUsuario");
         console.log(
           `mixinVerificacionUsuarioComparacion... input  ${payload.input}`
         );
@@ -444,7 +443,6 @@ export default {
     mixinDdlGeneral(categoriasDdls) {
       return new Promise(async (resolve, reject) => {
         let QueryResult;
-        console.log(`mixinDdlGeneral... ${categoriasDdls}`);
         let MixinResult;
 
         try {
@@ -455,7 +453,7 @@ export default {
             },
           });
         } catch (error) {
-          console.log(`mixinDdlGeneral... en error`);
+          console.log(`mixinDdlGeneral... ${categoriasDdls} en error`);
           console.dir(error);
 
           MixinResult = {
@@ -464,14 +462,11 @@ export default {
           console.dir(MixinResult);
           return reject();
         }
-        console.log("mixinDdlGeneral... result");
-        console.dir(QueryResult);
 
         MixinResult = {
           ...new Result(QueryResult, "queryddlsByCategoria", true),
         };
 
-        console.dir(MixinResult);
         return resolve(MixinResult);
       });
     },
@@ -528,12 +523,11 @@ export default {
       this.DdlMunicipios = _municipiosList;
     },
 
+    //Analizar
     mixinSetDdlEstados(Data) {
       console.log(`mixinSetDdlEstados...`);
-      console.log(`${this.DdlEstados.length}`);
 
       if (this.DdlEstados.length < 1) {
-        console.dir(Data);
         this.DdlEstados = Data;
       }
     },

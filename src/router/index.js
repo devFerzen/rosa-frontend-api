@@ -63,7 +63,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    //await store.dispatch('usuarioIdentificacion');
+    await store.dispatch('usuarioIdentificacion');
+    console.log(`beforeEach usuarioIdentificacion...`)
     next();
 });
 

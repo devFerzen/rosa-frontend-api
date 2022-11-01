@@ -425,8 +425,7 @@ export default {
 
     if (this.DdlEstados.length == 0) {
       _MixinResult = await this.mixinDdlGeneral("ddlEstado");
-      console.log("ddlEstado");
-      console.dir(_MixinResult);
+      
       this.$store.dispatch("ddls", {
         categoria: "ddlEstado",
         categorias: _MixinResult.data
@@ -436,9 +435,7 @@ export default {
 
     //Guardando municipios
     if (this.DdlMunicipios.length == 0) {
-      console.log("ddlMunicipios...");
       _MixinResult = await this.mixinDdlGeneral("ddlMunicipios");
-      console.dir(_MixinResult.data);
 
       await this.$store.dispatch("ddls", {
         categoria: "ddlMunicipios",

@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 
 export const state = {
     usuario: {
-        "usuario": '',
+        "usuario": null,
         "numero_telefonico_verificado": false,
         "verificacionUsuario": "",
         "anuncios_usuario": []
@@ -136,6 +136,7 @@ export const actions = {
         commit('USUARIO_OFFSET', {});
     },
     validandoUsuario({commit}, payload){
+        //Analizar validandoUsuario ya no se esta usando y auth-token no puede ser vista desde el frontend
         const token = Cookies.get('auth-token');
         if (!token) {
             return false;
@@ -159,10 +160,6 @@ export const actions = {
         */
         //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
         try {
-            /*if(true){
-                return state.usuario.usuario;
-            }*/
-
             AccionResult = await apolloProvider.defaultClient.query({
                 query: GraphQLUserCalls.USUARIO_QUERY,
                 variables: {
@@ -176,7 +173,9 @@ export const actions = {
 
         //Seteo de usuario y anuncios usuario
         console.log("seteando usuario");
-        await commit('USUARIO_SET', AccionResult.data.queryUsuario);
+        console.dir(AccionResult);
+
+        //await commit('USUARIO_SET', AccionResult.data.queryUsuario);
     }
 }
 
