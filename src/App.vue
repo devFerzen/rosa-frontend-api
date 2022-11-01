@@ -200,11 +200,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "usuarioLoggeado",
-      "getDdlCategorias",
-      "getDdlSexo",
-      "getDdlRedesSociales",
+      "usuarioLoggeado"
     ]),
+    ...mapState({
+      _Ddls: (state) => state.panelHerramientas.ddls
+    }),
     Alert() {
       return this.$store.state.alert.alert;
     },
@@ -278,32 +278,46 @@ export default {
 
     await this.$store.dispatch("SystemaCreate")    
 
-    if (this.getDdlCategorias[0]["no_id"] == 0) {
-      //console.log("correr query en mounted ddlCategoriaAnuncio");
-      _MixinResult = await this.mixinDdlGeneral("ddlCategoriaAnuncio");
+    if(!this._Ddls.some(_Ddl => _Ddl.categoria == "ddlCategoriaAnuncio")){
+      _MixinResult = await this.mixinDdlGeneral("ddlCategoriaAnuncio"); //Analizar, extraer en una sola llamada
       await this.$store.dispatch("ddls", {
         categoria: "ddlCategoriaAnuncio",
         categorias: _MixinResult.data
       });
     }
 
-    if (this.getDdlSexo[0]["no_id"] == 0) {
-      //console.log("correr query en mounted ddlSexo");
-      _MixinResult = await this.mixinDdlGeneral("ddlSexo");
+    if(!this._Ddls.some(_Ddl => _Ddl.categoria == "ddlRedesSociales")){
+      _MixinResult = await this.mixinDdlGeneral("ddlRedesSociales"); //Analizar, extraer en una sola llamada
+      await this.$store.dispatch("ddls", {
+        categoria: "ddlRedesSociales",
+        categorias: _MixinResult.data
+      });
+    }
+
+    if(!this._Ddls.some(_Ddl => _Ddl.categoria == "ddlSexo")){
+      _MixinResult = await this.mixinDdlGeneral("ddlSexo"); //Analizar, extraer en una sola llamada
       await this.$store.dispatch("ddls", {
         categoria: "ddlSexo",
         categorias: _MixinResult.data
       });
     }
 
-    if (this.getDdlRedesSociales[0]["no_id"] == 0) {
-      //console.log("correr query en mounted ddlRedesSociales");
-      _MixinResult = await this.mixinDdlGeneral("ddlRedesSociales");
+    if(!this._Ddls.some(_Ddl => _Ddl.categoria == "ddlEstado")){
+      _MixinResult = await this.mixinDdlGeneral("ddlEstado"); //Analizar, extraer en una sola llamada
       await this.$store.dispatch("ddls", {
-        categoria: "ddlRedesSociales",
+        categoria: "ddlEstado",
         categorias: _MixinResult.data
       });
     }
+
+    if(!this._Ddls.some(_Ddl => _Ddl.categoria == "ddlMunicipios")){
+      _MixinResult = await this.mixinDdlGeneral("ddlMunicipios"); //Analizar, extraer en una sola llamada
+      await this.$store.dispatch("ddls", {
+        categoria: "ddlMunicipios",
+        categorias: _MixinResult.data
+      });
+    }
+
   },
 };
 </script>

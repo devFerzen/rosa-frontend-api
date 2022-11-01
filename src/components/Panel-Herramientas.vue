@@ -167,7 +167,7 @@
               <v-select
                 v-model="busquedaSexo"
                 :menu-props="{ top: false, offsetY: true }"
-                :items="getDdlSexo"
+                :items="ddlSexo"
                 :item-text="'descripcion'"
                 :item-value="'descripcion'"
                 label="Sexo"
@@ -205,7 +205,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import GeneralMixins from "../mixins/general-mixins.js";
 import * as GraphqlCalls from "../graphql/general-mutations";
 
@@ -239,19 +239,24 @@ export default {
     extraInputViewUserActivation: ""
   }),
   computed: {
-    ...mapGetters([
-      "getDdlCategorias",
-      "getDdlSexo",
-    ]),
-    ddlMunicipios(){
-      return this.DdlMunicipios
+    ...mapState({
+      _Ddl: (state) => state.panelHerramientas.ddls
+    }),
+    ddlSexo(){
+      return this.getDdlByCategory('ddlSexo');
     },
     ddlEstados(){
-      return this.DdlEstados
+      return this.getDdlByCategory('ddlEstado');
+    },
+    ddlMunicipios(){
+      return this.getDdlByCategory('ddlMunicipios');
+    },
+    ddlCategorias(){
+      return this.getDdlByCategory('ddlCategoriaAnuncio');
     },
     getDdlCategoriasCorrection() {
       this.busquedaCategorias = "Escrots";
-      return this.getDdlCategorias;
+      return this.ddlCategorias;
     },
     colSize() {
       return {
@@ -275,7 +280,13 @@ export default {
       return xs ? { formCategorias: 5 } : { formCategorias: 5 };
     },
   },
-  methods: {    
+  methods: {
+    getDdlByCategory(category){
+      if (this._Ddl.some(ddl => ddl.categoria == category)) {
+        return this._Ddl.filter(ddl => ddl.categoria == category)
+      }
+      return this._Ddl.find(ddl => ddl.no_id == 0)
+    },
     panelHerramientasRegistro(value) {
       this.$store.dispatch("panelHerramientasRegistro", value);
     },
@@ -420,28 +431,7 @@ export default {
     window.removeEventListener("scroll", this.onScroll);
   },
   async created(){
-    //Guardando estados
-    let _MixinResult;
-
-    if (this.DdlEstados.length == 0) {
-      _MixinResult = await this.mixinDdlGeneral("ddlEstado");
-      
-      this.$store.dispatch("ddls", {
-        categoria: "ddlEstado",
-        categorias: _MixinResult.data
-      });
-      await this.mixinSetDdlEstados(_MixinResult.data);
-    }
-
-    //Guardando municipios
-    if (this.DdlMunicipios.length == 0) {
-      _MixinResult = await this.mixinDdlGeneral("ddlMunicipios");
-
-      await this.$store.dispatch("ddls", {
-        categoria: "ddlMunicipios",
-        categorias: _MixinResult.data
-      });
-    }
+    
   }
 };
 </script>

@@ -3,74 +3,37 @@
     <v-container fluid class="pa-0">
       <v-row class="" no-gutters>
         <v-col cols="12" md="3" v-if="edicionView">
-          <file-pond-Imagenes-Anuncio
-            :imagenes="imagenesAnuncioFilePond"
-            @imageOnDelete="imageOnDelete"
-            @imageOnProcess="imageOnProcess"
-          ></file-pond-Imagenes-Anuncio>
+          <file-pond-Imagenes-Anuncio :imagenes="imagenesAnuncioFilePond" @imageOnDelete="imageOnDelete"
+            @imageOnProcess="imageOnProcess"></file-pond-Imagenes-Anuncio>
         </v-col>
-        <v-col
-          cols="12"
-          :md="edicionView ? 9 : 6"
-          style="position: relative;"
-          v-else
-          v-show="!anuncioComprasView"
-        >
-          <div
-            style="position: absolute; top: 17px; right: 0; width:38px"
-            class="d-flex flex-column glassy rounded-xl justify-center"
-          >
-            <v-btn
-              fab
-              small
-              plain
-              color="white"
-              @click="habilitarEdicionesAnuncio"
-            >
+        <v-col cols="12" :md="edicionView ? 9 : 6" style="position: relative;" v-else v-show="!anuncioComprasView">
+          <div style="position: absolute; top: 17px; right: 0; width:38px"
+            class="d-flex flex-column glassy rounded-xl justify-center">
+            <v-btn fab small plain color="white" @click="habilitarEdicionesAnuncio">
               <div class="d-flex flex-column align-center">
-                <font-awesome-icon
-                  :icon="['fas', 'pencil-alt']"
-                  class="fa-2x"
-                ></font-awesome-icon>
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="fa-2x"></font-awesome-icon>
               </div>
             </v-btn>
             <!--editar btn-->
 
             <v-btn fab small plain color="white">
-              <div
-                class="d-flex flex-column align-center"
-                @click="habilitarComprasAnuncio"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'shopping-bag']"
-                  class="fa-2x"
-                ></font-awesome-icon>
+              <div class="d-flex flex-column align-center" @click="habilitarComprasAnuncio">
+                <font-awesome-icon :icon="['fas', 'shopping-bag']" class="fa-2x"></font-awesome-icon>
               </div>
             </v-btn>
             <!--compras btn-->
 
             <v-btn fab small plain color="white" @click="borrarAnuncio()">
               <div class="d-flex flex-column align-center">
-                <font-awesome-icon
-                  :icon="['fas', 'trash-alt']"
-                  class="fa-2x"
-                ></font-awesome-icon>
+                <font-awesome-icon :icon="['fas', 'trash-alt']" class="fa-2x"></font-awesome-icon>
               </div>
             </v-btn>
             <!--eliminar btn-->
           </div>
           <!--Anuncio Settings-->
 
-          <v-carousel
-            :height="tarjetaWH['carruselH']"
-            style="border-radius: 8px;"
-          >
-            <v-carousel-item
-              v-for="(imagen, i) in imagenesAnuncio"
-              :key="i"
-              :src="imagen.url"
-              max-height="100%"
-            >
+          <v-carousel :height="tarjetaWH['carruselH']" style="border-radius: 8px;">
+            <v-carousel-item v-for="(imagen, i) in imagenesAnuncio" :key="i" :src="imagen.url" max-height="100%">
             </v-carousel-item>
           </v-carousel>
         </v-col>
@@ -105,43 +68,20 @@
 
             <v-card-text class="pa-0 mt-4" v-show="!anuncioComprasView">
               <v-row align="space-between" justify="center" no-gutters>
-                <v-btn
-                  depressed
-                  rounded
-                  v-ripple="false"
-                  @click="activacionesSecciones('revealDesc')"
-                  :class="{ 'suave-pink-font': revealDesc }"
-                  small
-                  width="90"
-                >
+                <v-btn depressed rounded v-ripple="false" @click="activacionesSecciones('revealDesc')"
+                  :class="{ 'suave-pink-font': revealDesc }" small width="90">
                   descripción
                 </v-btn>
                 <!--Btn Descripción-->
 
-                <v-btn
-                  depressed
-                  rounded
-                  v-ripple="false"
-                  @click="activacionesSecciones('revealTarifa')"
-                  class="ml-1 mb-1"
-                  small
-                  :class="{ 'suave-pink-font': revealTarifa }"
-                  width="90"
-                >
+                <v-btn depressed rounded v-ripple="false" @click="activacionesSecciones('revealTarifa')"
+                  class="ml-1 mb-1" small :class="{ 'suave-pink-font': revealTarifa }" width="90">
                   <span>tarifas</span>
                 </v-btn>
                 <!--Btn Tarifas-->
 
-                <v-btn
-                  depressed
-                  rounded
-                  v-ripple="false"
-                  @click="activacionesSecciones('revealContacto')"
-                  class="ml-2"
-                  small
-                  :class="{ 'suave-pink-font': revealContacto }"
-                  width="90"
-                >
+                <v-btn depressed rounded v-ripple="false" @click="activacionesSecciones('revealContacto')" class="ml-2"
+                  small :class="{ 'suave-pink-font': revealContacto }" width="90">
                   contacto
                 </v-btn>
                 <!--Btn Contacto-->
@@ -150,57 +90,29 @@
             <!--acciones de tabs-->
 
             <v-expand-x-transition style="position: absolute; bottom: 0px;">
-              <v-card-text
-                v-if="revealTarifa"
-                class="full-anuncio-seccion d-flex justify-center pb-1 pt-0"
-              >
-                <v-sheet
-                  fluid
-                  elevation="6"
-                  class="rounded-xl my-2 pa-3 full-anuncio-seccion"
-                  :class="fullAnuncioSeccionWeb"
-                  width="300"
-                  height="fit-content"
-                  style="position: relative;"
-                >
+              <v-card-text v-if="revealTarifa" class="full-anuncio-seccion d-flex justify-center pb-1 pt-0">
+                <v-sheet fluid elevation="6" class="rounded-xl my-2 pa-3 full-anuncio-seccion"
+                  :class="fullAnuncioSeccionWeb" width="300" height="fit-content" style="position: relative;">
                   <div v-if="nuevaTarifaView">
                     <v-form ref="tarifaEdit">
                       <v-card-text class="px-0 py-0">
                         <v-row class="pt-6 pt-md-2" no-gutters>
                           <v-col cols="8" class="pr-4">
-                            <div
-                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                            >
+                            <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                               nombre
                             </div>
                             <v-row no-gutters>
-                              <v-text-field
-                                v-model="nuevaTarifa.nombre"
-                                class="error609TextField"
-                                color="pink"
-                                dense
-                                outlined
-                                solo
-                                label="teclea aquí"
-                              >
+                              <v-text-field v-model="nuevaTarifa.nombre" class="error609TextField" color="pink" dense
+                                outlined solo label="teclea aquí">
                               </v-text-field>
                             </v-row>
                           </v-col>
                           <v-col cols="4">
-                            <div
-                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                            >
+                            <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                               precio
                             </div>
                             <v-row no-gutters>
-                              <v-text-field
-                                v-model="nuevaTarifa.precio"
-                                prefix="$"
-                                dense
-                                outlined
-                                solo
-                                label="0.00"
-                              >
+                              <v-text-field v-model="nuevaTarifa.precio" prefix="$" dense outlined solo label="0.00">
                               </v-text-field>
                             </v-row>
                           </v-col>
@@ -209,38 +121,21 @@
 
                         <v-row no-gutters>
                           <v-col cols="12">
-                            <div
-                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                            >
+                            <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                               descripción
                             </div>
                             <v-row no-gutters>
-                              <v-textarea
-                                counter
-                                rows="5"
-                                dense
-                                outlined
-                                solo
-                                label="teclea aquí"
-                                v-model="nuevaTarifa.descripcion"
-                                id="nuevaTarifa-descripcion"
-                              >
+                              <v-textarea counter rows="5" dense outlined solo label="teclea aquí"
+                                v-model="nuevaTarifa.descripcion" id="nuevaTarifa-descripcion">
                               </v-textarea>
                             </v-row>
                           </v-col>
                         </v-row>
                       </v-card-text>
                       <!--Nueva Tarifa Inputs-->
-                      <v-card-actions
-                        style="position: absolute; bottom:12px; left: 26%;"
-                      >
-                        <v-btn
-                          @click="setSalvadoNuevaTarifa"
-                          color="primary"
-                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                          tile
-                          raised
-                        >
+                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                        <v-btn @click="setSalvadoNuevaTarifa" color="primary"
+                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow" tile raised>
                           Guardar
                         </v-btn>
                         <!--guardar tarifa-->
@@ -250,11 +145,7 @@
                   <!--Nueva creacion tarifa-->
 
                   <div v-else>
-                    <div
-                      v-for="(tarifa, i) in tarifasAnuncio"
-                      :key="i"
-                      style="position: relative"
-                    >
+                    <div v-for="(tarifa, i) in tarifasAnuncio" :key="i" style="position: relative">
                       <v-row class="pt-2" align="space-around" no-gutters>
                         <v-col align="left" class="pl-2">
                           <div class="text-subtitle-1 font-weight-bold">
@@ -270,17 +161,10 @@
                       </v-row>
                       <!--Nombre Precio-->
 
-                      <v-row
-                        no-gutters
-                        align="center"
-                        justify="center"
-                        class="mt-2"
-                      >
+                      <v-row no-gutters align="center" justify="center" class="mt-2">
                         <v-col cols="12">
-                          <div
-                            class="body-2 text-center"
-                            style="min-height: 42px; line-height: 1rem; white-space: pre-line;"
-                          >
+                          <div class="body-2 text-center"
+                            style="min-height: 42px; line-height: 1rem; white-space: pre-line;">
                             {{ tarifa.descripcion }}
                           </div>
                         </v-col>
@@ -289,42 +173,18 @@
 
                       <v-row justify="center">
                         <v-col cols="8">
-                          <v-divider
-                            color="pink"
-                            style="border-width: revert"
-                          ></v-divider>
+                          <v-divider color="pink" style="border-width: revert"></v-divider>
                         </v-col>
                       </v-row>
                       <!--Divider-->
 
-                      <div
-                        style="position: absolute; bottom: 10px; right: 15%"
-                        v-show="edicionView"
-                      >
-                        <v-btn
-                          fab
-                          icon
-                          small
-                          depressed
-                          color="error"
-                          @click="eliminarTarifa(i)"
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'trash-alt']"
-                          ></font-awesome-icon>
+                      <div style="position: absolute; bottom: 10px; right: 15%" v-show="edicionView">
+                        <v-btn fab icon small depressed color="error" @click="eliminarTarifa(i)">
+                          <font-awesome-icon :icon="['fas', 'trash-alt']"></font-awesome-icon>
                         </v-btn>
 
-                        <v-btn
-                          fab
-                          icon
-                          small
-                          depressed
-                          color="blue"
-                          @click="prepararEditTarifa(i)"
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'pencil-alt']"
-                          ></font-awesome-icon>
+                        <v-btn fab icon small depressed color="blue" @click="prepararEditTarifa(i)">
+                          <font-awesome-icon :icon="['fas', 'pencil-alt']"></font-awesome-icon>
                         </v-btn>
                       </div>
                     </div>
@@ -334,34 +194,21 @@
               </v-card-text>
               <!--v-card Tarifas-->
 
-              <v-card-text
-                v-if="revealContacto"
-                class="full-anuncio-seccion d-flex justify-center pb-1 pt-0"
-              >
-                <v-sheet
-                  fluid
-                  elevation="6"
-                  class="rounded-xl my-2 pa-3 full-anuncio-seccion"
-                  :class="fullAnuncioSeccionWeb"
-                  width="300"
-                  height="fit-content"
-                  style="position: relative;"
-                >
+              <v-card-text v-if="revealContacto" class="full-anuncio-seccion d-flex justify-center pb-1 pt-0">
+                <v-sheet fluid elevation="6" class="rounded-xl my-2 pa-3 full-anuncio-seccion"
+                  :class="fullAnuncioSeccionWeb" width="300" height="fit-content" style="position: relative;">
                   <div v-if="nuevoContactoView">
-                    <div
-                      class="
+                    <div class="
                         text-h6
                         green-font
                         text-weight-black text-center
                         py-1
-                      "
-                    >
+                      ">
                       {{
-                        `${
-                          nuevoContacto.accion == "creacion"
+                          `${nuevoContacto.accion == "creacion"
                             ? "Nuevo"
                             : "Actualizando"
-                        } Contacto`
+                          } Contacto`
                       }}
                     </div>
                     <!--titulo-->
@@ -370,40 +217,25 @@
                       <v-card-text class="px-0 py-0">
                         <v-row class="pt-6 pt-md-2" no-gutters>
                           <v-col cols="3">
-                            <div
-                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                            >
+                            <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                               red
                             </div>
                             <v-row no-gutters>
-                              <v-select
-                                v-model="nuevoContacto.Tipo"
-                                :menu-props="{ top: false, offsetY: true }"
-                                :items="tiposContacto"
-                                item-text="categoria"
-                                item-value="icono"
-                                return-object
-                                solo
-                                dense
-                                outlined
-                                class="error609TextField"
-                              >
+                              <v-select v-model="nuevoContacto.Tipo" :menu-props="{ top: false, offsetY: true }"
+                                :items="tiposContacto" item-text="categoria" item-value="icono" return-object solo dense
+                                outlined class="error609TextField">
                                 <template v-slot:selection="data">
-                                  <font-awesome-icon
-                                    :icon="[
-                                      data.item.categoria,
-                                      data.item.icono,
-                                    ]"
-                                  >
+                                  <font-awesome-icon :icon="[
+                                    data.item.categoria,
+                                    data.item.icono,
+                                  ]">
                                   </font-awesome-icon>
                                 </template>
                                 <template v-slot:item="data">
-                                  <font-awesome-icon
-                                    :icon="[
-                                      data.item.categoria,
-                                      data.item.icono,
-                                    ]"
-                                  >
+                                  <font-awesome-icon :icon="[
+                                    data.item.categoria,
+                                    data.item.icono,
+                                  ]">
                                   </font-awesome-icon>
                                 </template>
                               </v-select>
@@ -411,21 +243,12 @@
                           </v-col>
 
                           <v-col cols="9" class="pl-4">
-                            <div
-                              class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                            >
+                            <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                               url
                             </div>
                             <v-row no-gutters>
-                              <v-text-field
-                                v-model="nuevoContacto.contacto"
-                                class="error609TextField"
-                                color="pink"
-                                dense
-                                outlined
-                                solo
-                                label="teclea aquí"
-                              >
+                              <v-text-field v-model="nuevoContacto.contacto" class="error609TextField" color="pink"
+                                dense outlined solo label="teclea aquí">
                               </v-text-field>
                             </v-row>
                           </v-col>
@@ -434,16 +257,9 @@
                       </v-card-text>
                       <!--Cuerpo form nuevo contacto-->
 
-                      <v-card-actions
-                        style="position: absolute; bottom:12px; left: 26%;"
-                      >
-                        <v-btn
-                          @click="salvadoDeContacto"
-                          color="primary"
-                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                          tile
-                          raised
-                        >
+                      <v-card-actions style="position: absolute; bottom:12px; left: 26%;">
+                        <v-btn @click="salvadoDeContacto" color="primary"
+                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow" tile raised>
                           Guardar
                         </v-btn>
                       </v-card-actions>
@@ -453,123 +269,57 @@
                   <!--Nueva creacion contacto-->
 
                   <div v-else>
-                    <v-row
-                      align="start"
-                      justify="center"
-                      no-gutters
-                      style="height: 220px; max-height: auto"
-                    >
+                    <v-row align="start" justify="center" no-gutters style="height: 220px; max-height: auto">
                       <v-col>
                         <div class="d-flex flex-column">
-                          <v-card
-                            v-for="(contacto, i) in contactosUsuario"
-                            :key="i"
-                            flat
-                            shaped
-                            class="mb-2"
-                          >
-                            <v-list
-                              color="transparent"
-                              dense
-                              :disable="
-                                contactosSeleccionados.includes(i)
-                                  ? false
-                                  : true
-                              "
-                            >
+                          <v-card v-for="(contacto, i) in contactosUsuario" :key="i" flat shaped class="mb-2">
+                            <v-list color="transparent" dense :disable="
+                              contactosSeleccionados.includes(i)
+                                ? false
+                                : true
+                            ">
                               <v-list-item style="padding: 0;">
                                 <v-list-item-content>
-                                  <v-card
-                                    elevation="2"
-                                    rounded-xl
-                                    style="border-radius: 20px;"
-                                    :elevation="
-                                      !contactosSeleccionados.includes(i)
-                                        ? 0
-                                        : 4
-                                    "
-                                  >
-                                    <v-row
-                                      align="space-between"
-                                      no-gutters
-                                      style="height: 34px;"
-                                    >
-                                      <v-col
-                                        v-show="edicionView"
-                                        cols="3"
-                                        align="center"
-                                      >
-                                        <v-switch
-                                          v-model="contactosSeleccionados"
-                                          color="primary"
-                                          :value="i"
-                                          style="margin: 0; padding-left: .7rem;"
-                                        ></v-switch>
+                                  <v-card elevation="2" rounded-xl style="border-radius: 20px;" :elevation="
+                                    !contactosSeleccionados.includes(i)
+                                      ? 0
+                                      : 4
+                                  ">
+                                    <v-row align="space-between" no-gutters style="height: 34px;">
+                                      <v-col v-show="edicionView" cols="3" align="center">
+                                        <v-switch v-model="contactosSeleccionados" color="primary" :value="i"
+                                          style="margin: 0; padding-left: .7rem;"></v-switch>
                                       </v-col>
-                                      <v-col
-                                        align="left"
-                                        style="padding-top: 6%; padding-left: 17px; font-weight: 500;"
-                                      >
+                                      <v-col align="left"
+                                        style="padding-top: 6%; padding-left: 17px; font-weight: 500;">
                                         {{ contacto.contacto }}
                                       </v-col>
                                     </v-row>
                                   </v-card>
                                 </v-list-item-content>
-                                <v-list-item-avatar
-                                  class="ml-4"
-                                  :color="
-                                    tiposContacto.find(
-                                      (tipoContacto) =>
-                                        tipoContacto.icono ==
-                                        contacto.Tipo.icono
-                                    )['color']
-                                  "
-                                >
-                                  <font-awesome-icon
-                                    :icon="[
-                                      contacto.Tipo.categoria,
-                                      contacto.Tipo.icono,
-                                    ]"
-                                    style="font-size:1.4em;"
-                                    color="white"
-                                  />
+                                <v-list-item-avatar class="ml-4" :color="
+                                  tiposContacto.find(
+                                    (tipoContacto) =>
+                                      tipoContacto.icono ==
+                                      contacto.Tipo.icono
+                                  )['color']
+                                ">
+                                  <font-awesome-icon :icon="[
+                                    contacto.Tipo.categoria,
+                                    contacto.Tipo.icono,
+                                  ]" style="font-size:1.4em;" color="white" />
                                 </v-list-item-avatar>
                               </v-list-item>
                             </v-list>
                             <!--cuerpo contacto -->
 
-                            <div
-                              style="
-                                position: absolute;
-                                bottom: -2px;
-                                right: 16%;
-                              "
-                              v-show="edicionView"
-                            >
-                              <v-btn
-                                fab
-                                icon
-                                small
-                                depressed
-                                color="error"
-                                @click="eliminarContacto(i)"
-                              >
-                                <font-awesome-icon
-                                  :icon="['fas', 'trash-alt']"
-                                ></font-awesome-icon>
+                            <div style="position: absolute; bottom: -2px; right: 16%;" v-show="edicionView">
+                              <v-btn fab icon small depressed color="error" @click="eliminarContacto(i)">
+                                <font-awesome-icon :icon="['fas', 'trash-alt']"></font-awesome-icon>
                               </v-btn>
 
-                              <v-btn
-                                fab
-                                icon
-                                small
-                                depressed
-                                color="blue"
-                                @click="prepararEditContacto(i)"
-                              >
-                                <font-awesome-icon
-                                  :icon="['fas', 'pencil-alt']"
-                                ></font-awesome-icon>
+                              <v-btn fab icon small depressed color="blue" @click="prepararEditContacto(i)">
+                                <font-awesome-icon :icon="['fas', 'pencil-alt']"></font-awesome-icon>
                               </v-btn>
                             </div>
                             <!--Acciones Listado contactos-->
@@ -586,32 +336,18 @@
               <!--v-card Contacto-->
 
               <v-card-text class="d-flex justify-center pb-1 pt-0">
-                <v-sheet
-                  fluid
-                  elevation="0"
-                  class="full-anuncio-seccion"
-                  :class="fullAnuncioSeccionWeb"
-                  v-show="nuevaDescripcionView"
-                >
+                <v-sheet fluid elevation="0" class="full-anuncio-seccion" :class="fullAnuncioSeccionWeb"
+                  v-show="nuevaDescripcionView">
                   <v-form ref="descripcionEdit" style="margin-top: 16px;">
                     <v-row no-gutters>
                       <v-col cols="12" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           título
                         </div>
                         <v-row no-gutters>
                           <v-col cols="12">
-                            <v-text-field
-                              v-model="anuncioUsuario.Sec_Descripcion.titulo"
-                              class="error609TextField"
-                              color="pink"
-                              dense
-                              outlined
-                              solo
-                              label="teclea aquí"
-                            >
+                            <v-text-field v-model="anuncioUsuario.Sec_Descripcion.titulo" class="error609TextField"
+                              color="pink" dense outlined solo label="teclea aquí">
                             </v-text-field>
                           </v-col>
                         </v-row>
@@ -622,36 +358,24 @@
 
                     <v-row no-gutters>
                       <v-col cols="11" md="6" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           estados
                         </div>
                         <v-row no-gutters>
-                          <v-select
-                            v-model="anuncioUsuario.Sec_Descripcion.estado"
-                            :menu-props="{ top: false, offsetY: true }"
-                            :items="ddlEstados"
-                            :item-text="'descripcion'"
-                            :item-value="'descripcion'"
-                            class="error609TextField"
-                            label="Estados"
-                            filled
-                            outlined
-                            solo
-                            dense
-                            @change="
+                          <v-select v-model="anuncioUsuario.Sec_Descripcion.estado"
+                            :menu-props="{ top: false, offsetY: true }" :items="ddlEstados" :item-text="'descripcion'"
+                            :item-value="'descripcion'" class="error609TextField" label="Estados" filled outlined solo
+                            dense @change="
                               getMunicipios(
                                 anuncioUsuario.Sec_Descripcion.estado
                               )
-                            "
-                          >
+                            ">
                             <template v-slot:selection="{ item }">
                               <span v-if="item.descripcion.length">{{
-                                item.descripcion.slice(
-                                  0,
-                                  item.descripcion.length
-                                )
+                                  item.descripcion.slice(
+                                    0,
+                                    item.descripcion.length
+                                  )
                               }}</span>
                               <span v-else>{{ item.descripcion }}</span>
                             </template>
@@ -661,25 +385,14 @@
                       </v-col>
 
                       <v-col cols="11" md="6" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           municipios
                         </div>
                         <v-row no-gutters>
-                          <v-select
-                            v-model="anuncioUsuario.Sec_Descripcion.ciudad"
-                            :menu-props="{ top: false, offsetY: true }"
-                            :items="ddlMunicipios"
-                            :item-text="'descripcion'"
-                            :item-value="'descripcion'"
-                            class="error609TextField"
-                            label="Municipios"
-                            filled
-                            outlined
-                            solo
-                            dense
-                          >
+                          <v-select v-model="anuncioUsuario.Sec_Descripcion.ciudad"
+                            :menu-props="{ top: false, offsetY: true }" :items="ddlMunicipios"
+                            :item-text="'descripcion'" :item-value="'descripcion'" class="error609TextField"
+                            label="Municipios" filled outlined solo dense>
                             <template v-slot:selection="{ item }">
                               <span>{{ item.descripcion }}</span>
                             </template>
@@ -692,23 +405,13 @@
 
                     <v-row no-gutters class="align-start">
                       <v-col cols="5" md="4" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           edad
                         </div>
                         <v-row no-gutters>
                           <v-col cols="12">
-                            <v-text-field
-                              color="pink"
-                              dense
-                              outlined
-                              solo
-                              label="edad"
-                              type="number"
-                              min="21"
-                              class="error609TextField"
-                            >
+                            <v-text-field color="pink" dense outlined solo label="edad" type="number" min="21"
+                              class="error609TextField">
                             </v-text-field>
                           </v-col>
                         </v-row>
@@ -716,29 +419,16 @@
                       <!--input edad-->
 
                       <v-col cols="6" md="4" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           sexo
                         </div>
                         <v-row no-gutters>
-                          <v-select
-                            v-model="anuncioUsuario.Sec_Descripcion.sexo"
-                            :menu-props="{ top: false, offsetY: true }"
-                            :items="getDdlSexo"
-                            :item-text="'descripcion'"
-                            :item-value="'descripcion'"
-                            filled
-                            dense
-                            class="error609TextField"
-                            outlined
-                            solo
-                            label="Sexo"
-                          >
+                          <v-select v-model="anuncioUsuario.Sec_Descripcion.sexo"
+                            :menu-props="{ top: false, offsetY: true }" :items="ddlSexo" :item-text="'descripcion'"
+                            :item-value="'descripcion'" filled dense class="error609TextField" outlined solo
+                            label="Sexo">
                             <template v-slot:selection="{ item }">
-                              <span v-if="item.descripcion === 'femenino'"
-                                >femn.</span
-                              >
+                              <span v-if="item.descripcion === 'femenino'">femn.</span>
                               <span v-else>masc.</span>
                             </template>
                           </v-select>
@@ -747,32 +437,16 @@
                       <!--input sexo-->
 
                       <v-col cols="7" md="4" class="pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           categorias
                         </div>
                         <v-row no-gutters>
-                          <v-select
-                            v-model="anuncioUsuario.categorias"
-                            :menu-props="{ top: false, offsetY: true }"
-                            :items="getDdlCategorias"
-                            :item-text="'descripcion'"
-                            :item-value="'descripcion'"
-                            filled
-                            outlined
-                            label="Categorias"
-                            class="error609TextField"
-                            dense
-                            small-chips
-                            solo
-                            multiple
-                          >
+                          <v-select v-model="anuncioUsuario.categorias" :menu-props="{ top: false, offsetY: true }"
+                            :items="ddlCategorias" :item-text="'descripcion'" :item-value="'descripcion'" filled
+                            outlined label="Categorias" class="error609TextField" dense small-chips solo multiple>
                             <template v-slot:selection="{ index }">
-                              <span v-if="index === 0" class="text-caption"
-                                >( +{{ anuncioUsuario.categorias.length }} )
-                                ...</span
-                              >
+                              <span v-if="index === 0" class="text-caption">( +{{ anuncioUsuario.categorias.length }} )
+                                ...</span>
                             </template>
                           </v-select>
                         </v-row>
@@ -783,16 +457,10 @@
 
                     <v-row no-gutters>
                       <v-col class="mx-auto pr-4">
-                        <div
-                          class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize"
-                        >
+                        <div class="pink--text font-weight-black text-subtitle-1 ml-6 text-capitalize">
                           descripción
                         </div>
-                        <v-textarea
-                          v-model="anuncioUsuario.Sec_Descripcion.descripcion"
-                          outlined
-                          rows="7"
-                        >
+                        <v-textarea v-model="anuncioUsuario.Sec_Descripcion.descripcion" outlined rows="7">
                         </v-textarea>
                       </v-col>
                     </v-row>
@@ -802,26 +470,14 @@
                 </v-sheet>
                 <!--Form descripcion-->
 
-                <v-sheet
-                  fluid
-                  elevation="6"
-                  class="rounded-xl my-2 pa-3 full-anuncio-seccion"
-                  :class="fullAnuncioSeccionWeb"
-                  width="300"
-                  height="fit-content"
-                  v-show="!nuevaDescripcionView && !anuncioComprasView"
-                  style="white-space: pre-line;"
-                >
+                <v-sheet fluid elevation="6" class="rounded-xl my-2 pa-3 full-anuncio-seccion"
+                  :class="fullAnuncioSeccionWeb" width="300" height="fit-content"
+                  v-show="!nuevaDescripcionView && !anuncioComprasView" style="white-space: pre-line;">
                   {{ anuncioUsuario.Sec_Descripcion.descripcion }}
                 </v-sheet>
 
-                <v-sheet
-                  fluid
-                  elevation="0"
-                  v-show="anuncioComprasView"
-                  class="full-anuncio-seccion"
-                  style="overflow-y: hidden; width: 100%;"
-                >
+                <v-sheet fluid elevation="0" v-show="anuncioComprasView" class="full-anuncio-seccion"
+                  style="overflow-y: hidden; width: 100%;">
                   <dashboard-compras></dashboard-compras>
                 </v-sheet>
               </v-card-text>
@@ -832,52 +488,28 @@
             <v-card-action v-show="edicionView">
               <v-container>
                 <v-row align="space-around">
-                  <v-col
-                    v-show="!nuevaTarifaView && !nuevoContactoView"
-                    align="center"
-                  >
-                    <v-btn
-                      @click="salvarFormAnuncio"
-                      color="primary"
-                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                      tile
-                      raised
-                    >
+                  <v-col v-show="!nuevaTarifaView && !nuevoContactoView" align="center">
+                    <v-btn @click="salvarFormAnuncio" color="primary"
+                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow" tile raised>
                       <span style="color: white;">Guardar</span>
                     </v-btn>
                     <!--guardar descripcion-->
                   </v-col>
                   <!--BotonGuardar-->
 
-                  <v-col
-                    v-show="tabSeleccionado != 'revealDesc'"
-                    align="center"
-                  >
-                    <v-btn
-                      color="green"
-                      class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                      @click="abrirFormAnuncio(true)"
-                      raised
-                    >
+                  <v-col v-show="tabSeleccionado != 'revealDesc'" align="center">
+                    <v-btn color="green" class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                      @click="abrirFormAnuncio(true)" raised>
                       <span style="color: white;">Nuevo</span>
                     </v-btn>
                   </v-col>
                   <!--BotonNuevoContacto/Tarifa-->
 
                   <v-col align="center">
-                    <v-dialog
-                      transition="dialog-bottom-transition"
-                      max-width="600"
-                    >
+                    <v-dialog transition="dialog-bottom-transition" max-width="600">
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          color="black"
-                          class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
-                          style="border: none!important;"
-                          outlined
-                          v-on="on"
-                          v-bind="attrs"
-                        >
+                        <v-btn color="black" class="mx-2 rounded-xl btn-menu-pcview errorBoxShadow"
+                          style="border: none!important;" outlined v-on="on" v-bind="attrs">
                           Cancelar
                         </v-btn>
                       </template>
@@ -894,19 +526,13 @@
                           <v-card-actions class="justify-end">
                             <v-row no-gutters>
                               <v-col align="center">
-                                <v-btn text @click="dialog.value = false"
-                                  >No</v-btn
-                                >
+                                <v-btn text @click="dialog.value = false">No</v-btn>
                               </v-col>
                               <v-col align="center">
-                                <v-btn
-                                  text
-                                  @click="
-                                    cancelarFormAnuncio();
-                                    dialog.value = false;
-                                  "
-                                  >Si</v-btn
-                                >
+                                <v-btn text @click="
+                                  cancelarFormAnuncio();
+                                dialog.value = false;
+                                ">Si</v-btn>
                               </v-col>
                             </v-row>
                           </v-card-actions>
@@ -933,7 +559,7 @@ import FilePondImagenesAnuncio from "@/components/File-Pond-Imagenes-Anuncio";
 import AnuncioMixins from "../mixins/anuncio-mixins.js";
 import GeneralMixins from "../mixins/general-mixins.js";
 import PaqueteMixins from "../mixins/paquete-mixins.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "tarjeta-anuncio-usuario",
@@ -984,32 +610,37 @@ export default {
         precio: "",
         descripcion: "",
       },
-      DdlMunicipios: [],
-      DdlEstados: []
     };
   },
   computed: {
     ...mapGetters([
       "Usuario",
-      "getDdlCategorias",
-      "getDdlSexo",
       "FormAE",
     ]),
+    ...mapState({
+      _Ddl: (state) => state.panelHerramientas.ddls
+    }),
+    ddlSexo(){
+      return this.getDdlByCategory('ddlSexo');
+    },
     ddlEstados(){
-      return this.DdlEstados;
+      return this.getDdlByCategory('ddlEstado');
     },
     ddlMunicipios(){
-      return this.DdlMunicipios
+      return this.getDdlByCategory('ddlMunicipios');
+    },
+    ddlCategorias(){
+      return this.getDdlByCategory('ddlCategoriaAnuncio');
     },
     tarjetaWH() {
       const { xs, sm, md } = this.$vuetify.breakpoint;
       return xs || sm || md
         ? { carruselH: "500px", cuerpoAnuncioH: "auto", cuerpoAnuncioW: "auto" }
         : {
-            carruselH: "500px",
-            cuerpoAnuncioH: "500px",
-            cuerpoAnuncioW: "auto",
-          };
+          carruselH: "500px",
+          cuerpoAnuncioH: "500px",
+          cuerpoAnuncioW: "auto",
+        };
     },
     categoriaSeleccionada() {
       return 1;
@@ -1021,10 +652,10 @@ export default {
     },
     imagenesAnuncio() {
       //verificar los created del template anuncio edit display
-      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+      return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
         let _urlImage = `${infoImagen.nombre}`;
 
-        if(_urlImage.includes('cloudinary')){
+        if (_urlImage.includes('cloudinary')) {
           return {
             url: infoImagen.nombre,
             options: { type: "remote" },
@@ -1040,7 +671,7 @@ export default {
     },
     imagenesActuales() {
       let vueltaAnuncio = -1;
-      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+      return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
         vueltaAnuncio++;
         if (!!infoImagen) {
           return {
@@ -1051,7 +682,7 @@ export default {
       });
     },
     imagenesAnuncioFilePond() {
-      return this.anuncioUsuario.Sec_Imagenes.map(function(infoImagen) {
+      return this.anuncioUsuario.Sec_Imagenes.map(function (infoImagen) {
         if (!!infoImagen.nombre) {
           return {
             source: infoImagen.nombre,
@@ -1086,7 +717,7 @@ export default {
         this.nuevoContactoView
       );
     },
-    anuncioComprasView(){
+    anuncioComprasView() {
       return this.anuncioComprasInputView;
     },
     nuevaDescripcionView() {
@@ -1124,6 +755,13 @@ export default {
     },
   },
   methods: {
+    getDdlByCategory(category){
+      if (this._Ddl.some(ddl => ddl.categoria == category)) {
+        return this._Ddl.filter(ddl => ddl.categoria == category)
+      }
+      return this._Ddl.find(ddl => ddl.no_id == 0)
+    },
+
     //-----Crud Tarifas
     abrirFormAnuncio(isNew = false) {
       if (isNew) {
@@ -1370,7 +1008,7 @@ export default {
         //Añadiendo solamente la propiedad contacto en Vuex anuncioUsuario en lo que este en contactosSeleccionados
         for (
           let contactoSeleccionadosLoop = 0;
-          contactoSeleccionadosLoop < this.contactosSeleccionados.length -1;
+          contactoSeleccionadosLoop < this.contactosSeleccionados.length - 1;
           contactoSeleccionadosLoop++
         ) {
           newArrayContactoAnuncio.push({
@@ -1458,7 +1096,7 @@ export default {
       } //El anuncio tiene como seleccion el contacto que se quiere eliminar y lo quita tmb del array de seleccionados
     },
 
-    habilitarComprasAnuncio(){
+    habilitarComprasAnuncio() {
       let _idAnuncio;
 
       if (this.anuncioUsuario.hasOwnProperty("_id")) {
@@ -1467,7 +1105,7 @@ export default {
         _idAnuncio = this.anuncioUsuario.id;
       }
 
-      if(!!_idAnuncio){
+      if (!!_idAnuncio) {
         this.anuncioComprasInputView = true;
         return;
       }
@@ -1710,28 +1348,6 @@ export default {
 
     //Marcando contactoSeleccionados
     this.contactosSeleccionadosSet();
-
-    const _DdlEstados = this.$store.state.panelHerramientas.ddls.filter(
-        (Ddls) => {
-          return Ddls.categoria === "ddlEstado"
-        }
-      )
-    console.log("_ddlEstados...");
-    this.DdlEstados = _DdlEstados;
-
-    if(_DdlEstados.length <= 0){
-      let _MixinResult;
-
-      console.log("mixinDdlGeneral(ddlEstado)...");
-      _MixinResult = this.mixinDdlGeneral("ddlEstado");
-      console.dir(_MixinResult);
-      this.$store.dispatch("ddls", {
-        categoria: "ddlEstado",
-        categorias: _MixinResult.data
-      });
-
-      this.DdlEstados = _MixinResult.data;
-    }
 
   },
 };

@@ -174,8 +174,7 @@ export const actions = {
         //Seteo de usuario y anuncios usuario
         console.log("seteando usuario");
         console.dir(AccionResult);
-
-        //await commit('USUARIO_SET', AccionResult.data.queryUsuario);
+        await commit('USUARIO_SET', AccionResult.data.queryUsuario);
     }
 }
 
