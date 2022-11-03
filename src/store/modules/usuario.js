@@ -26,7 +26,7 @@ export const mutations = {
     CORREO_SET(state, payload) {
         state.usuario.usuario = payload;
     },
-    USUARIO_RESET(state){
+    USUARIO_RESET(state) {
         state.usuario = {
             "usuario": '',
             "numero_telefonico_verificado": false,
@@ -47,7 +47,7 @@ export const mutations = {
         state.usuario.Default_Contactos = payload;
     },
     CARGA_NUEVO_ANUNCIO(state, payload) {
-        state.usuario.anuncios_usuario.splice(0,1,payload);
+        state.usuario.anuncios_usuario.splice(0, 1, payload);
     },
     ELIMINAR_NUEVO_ANUNCIOVACIO(state, payload) {
         state.usuario.anuncios_usuario.shift();
@@ -98,7 +98,7 @@ export const actions = {
             console.log("anuncioEditado");
             console.dir(payload);
             console.dir(state.usuario.anuncios_usuario);
-            let newArray = state.usuario.anuncios_usuario.map(function(value) {
+            let newArray = state.usuario.anuncios_usuario.map(function (value) {
                 if (value._id === payload.id) {
                     payload._id = payload.id;
                     return payload;
@@ -110,21 +110,21 @@ export const actions = {
             resolve();
         });
     },
-    contactoDefaultEditado({commit, state}, payload){
+    contactoDefaultEditado({ commit, state }, payload) {
         console.log(`payload`);
         console.dir(payload);
         commit('CARGA_CONTACTOS_USUARIO', payload);
     },
-    anuncioUsuarioById({state}, payload){
-        return state.usuario.anuncios_usuario.filter(function(Anuncio){
+    anuncioUsuarioById({ state }, payload) {
+        return state.usuario.anuncios_usuario.filter(function (Anuncio) {
             let _compareAnuncioId;
-            if(Anuncio.hasOwnProperty("_id")){
+            if (Anuncio.hasOwnProperty("_id")) {
                 _compareAnuncioId = Anuncio._id;
-            } else{
+            } else {
                 _compareAnuncioId = Anuncio.id;
             }
 
-            if(_compareAnuncioId === payload){
+            if (_compareAnuncioId === payload) {
                 return Anuncio;
             }
         })
@@ -132,10 +132,10 @@ export const actions = {
     numerotelefonicoUsuario({ commit, state }, payload) {
         commit('NUMERO_TELEFONO_VERIFICADO', payload);
     },
-    cerrarSesion({commit, state}, payload){
+    cerrarSesion({ commit, state }, payload) {
         commit('USUARIO_OFFSET', {});
     },
-    validandoUsuario({commit}, payload){
+    validandoUsuario({ commit }, payload) {
         //Analizar validandoUsuario ya no se esta usando y auth-token no puede ser vista desde el frontend
         const token = Cookies.get('auth-token');
         if (!token) {
@@ -144,37 +144,60 @@ export const actions = {
 
         return token;
     },
-    async usuarioIdentificacion({ commit, state }, payload) {
-        let AccionResult;
+    usuarioIdentificacion({ commit, state }, payload) {
+        return new Promise(async (resolve, reject) => {
+            let AccionResult;
 
-        const token = Cookies.get('refresh-token');
-        if (!token) {
-            //commit y pasar nulo a usuario
-            console.log("si hay usuario pero no token");
-            await commit('USUARIO_RESET');
-            return;
-        }
+            const token = Cookies.get('refresh-token');
+            if (!token) {
+                //commit y pasar nulo a usuario
+                console.log( `usuarioIdentificacion... !token`)
+                await commit('USUARIO_RESET');
+                return reject({
+                    pagina: "home",
+                    componenteInterno: {
+                        panelHerramientasInicioSesion: true,
+                        activationAlert: {
+                            type: `error`,
+                            message: "Favor de Iniciar sesion o pasar a Registrarse!",
+                        },
+                    },
+                })
+            }
 
-        /*
-            Aqui se debe de dar el token para que lo busque... se debe de cambiar la posicion de la llamada
-        */
-        //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
-        try {
-            AccionResult = await apolloProvider.defaultClient.query({
-                query: GraphQLUserCalls.USUARIO_QUERY,
-                variables: {
-                    input: ''
-                }
-            });
-        } catch (error) {
-            console.table(error);
-            return;
-        }
+            /*
+                Aqui se debe de dar el token para que lo busque... se debe de cambiar la posicion de la llamada
+            */
+            //Hacer en mixin mejor y que lo llame en created y eso llame a los vuex.
+            try {
+                console.log( `usuarioIdentificacion...`)
+                AccionResult = await apolloProvider.defaultClient.query({
+                    query: GraphQLUserCalls.USUARIO_QUERY,
+                    variables: {
+                        input: ''
+                    }
+                });
+            } catch (error) {
+                await commit('USUARIO_RESET');
+                return reject({
+                    pagina: "home",
+                    componenteInterno: {
+                        panelHerramientasInicioSesion: true,
+                        activationAlert: {
+                            type: `error`,
+                            message: "Favor de Iniciar sesion o pasar a Registrarse!",
+                        },
+                    },
+                })
+            }
 
-        //Seteo de usuario y anuncios usuario
-        console.log("seteando usuario");
-        console.dir(AccionResult);
-        await commit('USUARIO_SET', AccionResult.data.queryUsuario);
+            //Seteo de usuario y anuncios usuario
+            console.log("seteando usuario");
+            console.dir(AccionResult);
+            await commit('USUARIO_SET', AccionResult.data.queryUsuario);
+            resolve();
+        });
+
     }
 }
 
