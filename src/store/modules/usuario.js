@@ -151,17 +151,9 @@ export const actions = {
             const token = Cookies.get('refresh-token');
             if (!token) {
                 //commit y pasar nulo a usuario
-                console.log( `usuarioIdentificacion... !token`)
                 await commit('USUARIO_RESET');
                 return reject({
-                    pagina: "home",
-                    componenteInterno: {
-                        panelHerramientasInicioSesion: true,
-                        activationAlert: {
-                            type: `error`,
-                            message: "Favor de Iniciar sesion o pasar a Registrarse!",
-                        },
-                    },
+                    pagina: "home"
                 })
             }
 

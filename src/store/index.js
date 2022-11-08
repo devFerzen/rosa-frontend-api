@@ -25,11 +25,7 @@ export default new Vuex.Store({
     contactoView: false,
     verificacionView: false,
     actualizandoContrasenaView: false,
-    tipoVerificacion: "",
-    Systema: {
-      apiMode: "http://localhost:3080/"
-      //apiMode: "/" 
-    },
+    tipoVerificacion: ""
   },
   mutations: {
     BUSQUEDA_VIEW(state, payload) {
@@ -111,13 +107,6 @@ export default new Vuex.Store({
     },
     offsetTipoVerificacion({ state, commit }, payload) {
       commit("TIPO_VERIFICACION_OFFSET", payload);
-    },
-    //Analizar, revertir el pensamiento y que en development este sea el path de URL
-    SystemaCreate({ state, commit }, payload) {
-      console.log(`SystemaCreate en: ${process.env.NODE_ENV}`);
-      if (process.env.NODE_ENV === "prod") {
-        commit("API_UPLOADS_SET");
-      }
-    },
+    }
   },
 });

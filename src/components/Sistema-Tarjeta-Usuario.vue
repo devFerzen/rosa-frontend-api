@@ -663,8 +663,7 @@ export default {
         }
 
         return {
-          url: "http://localhost:3080/uploads/" + infoImagen.nombre,
-          //url: "/uploads/" + infoImagen.nombre,
+          url: "/uploads/" + infoImagen.nombre,
           options: { type: "remote" },
         };
       });

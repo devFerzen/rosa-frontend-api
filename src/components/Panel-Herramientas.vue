@@ -91,7 +91,7 @@
           >
             <v-select
               v-model="busquedaCiudad"
-              :items="ddlMunicipios"
+              :items="DdlMunicipios"
               :item-text="'descripcion'"
               :item-value="'descripcion'"
               label="Municipio"

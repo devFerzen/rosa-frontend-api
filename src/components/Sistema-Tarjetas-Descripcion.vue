@@ -622,8 +622,7 @@ export default {
         console.log(anuncioNombre);
         return anuncioNombre;
       }
-      //return `/uploads/${anuncioNombre}`;
-      return `http://localhost:3080/uploads/${anuncioNombre}`;
+      return `/uploads/${anuncioNombre}`;
     },
 
     fullAnuncio_Display(payload) {
