@@ -18,7 +18,7 @@
                                 :color="hover ? 'red' : 'white'"></font-awesome-icon>
                             </v-list-item-title>
                             <v-list-item-subtitle class="white--text font-weight-black">
-                              {{anuncio.no_corazones | countView}}
+                              {{ anuncio.no_corazones | countView }}
                             </v-list-item-subtitle>
                           </v-list-item-content>
                         </v-list-item>
@@ -35,7 +35,7 @@
                                 justify-center align-center
                               ">
                               <font-awesome-icon :icon="['fas', 'eye']" class="fa-1x" color="white"></font-awesome-icon>
-                              <span class="text-caption" style="color: white;">{{ anuncio.no_vistas | countView}}</span>
+                              <span class="text-caption" style="color: white;">{{ anuncio.no_vistas | countView }}</span>
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -68,7 +68,7 @@
                           text-caption text-justify
                           anuncio-textDescripcion
                         " :class="anuncioTextDescMobile">
-                        {{anuncio.Sec_Descripcion.descripcion}}
+                        {{ anuncio.Sec_Descripcion.descripcion }}
                       </p>
                     </v-col>
                   </row>
@@ -95,7 +95,7 @@
                           <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x"></font-awesome-icon>
                         </v-list-item-title>
                         <v-list-item-subtitle class="black--text font-weight-regular text-center">
-                          {{anuncio.no_corazones | countView}}
+                          {{ anuncio.no_corazones | countView }}
                         </v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
@@ -112,7 +112,8 @@
                           ">
                           <font-awesome-icon :icon="['fas', 'eye']" class="fa-1x" color="white"></font-awesome-icon>
                           <span class="text-caption" style="color: white; padding-left: 2px;">{{ anuncio.no_vistas |
-                          countView}}</span>
+                              countView
+                          }}</span>
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -452,6 +453,7 @@ export default {
       limitScrollPosition: 310,
       anunciosBusqueda: [],
       selectedItem: "",
+      skip: 0,
       fullAnuncioCss: {
         seccion: "",
         list: "",
@@ -619,7 +621,6 @@ export default {
     gettingUrl(anuncioNombre) {
 
       if (anuncioNombre.includes("cloudinary")) {
-        console.log(anuncioNombre);
         return anuncioNombre;
       }
       return `/uploads/${anuncioNombre}`;
@@ -630,10 +631,19 @@ export default {
     },
 
     //Analizar aplicaBusqueda
-    async aplicaBusqueda() {
+    async aplicaBusqueda(withSkip = false) {
       let QueryResult = [];
+      let increment = 0;
+      let _skip = this.skip || 0;
+
+      if (withSkip) {
+        increment = _skip == 0 ? 6 : _skip;
+      }
+
       try {
-        QueryResult = await this.mixinBusqueda(this.getBusquedaQuery);
+        console.log(`increment: ${increment}`)
+        QueryResult = await this.mixinBusqueda(this.getBusquedaQuery, increment);
+        console.dir(QueryResult);
       } catch (error) {
         console.log("vue aplicaBusqueda...");
         console.dir(error);
@@ -644,6 +654,10 @@ export default {
 
       //Sin mensajes encontrados
       if (QueryResult.length <= 0) {
+
+        if (withSkip) {
+          return;
+        }
         this.mixinLlamadaRouter({
           componenteInterno: {
             activationAlert: {
@@ -655,6 +669,11 @@ export default {
         return
       }
 
+      if (withSkip) {
+        this.skip = increment + 6;
+        this.anunciosBusqueda = this.anunciosBusqueda.concat(QueryResult);
+        return;
+      }
       this.anunciosBusqueda = QueryResult;
     },
 
@@ -748,16 +767,16 @@ export default {
 
     PlusOne(tipo) {
 
-      if(tipo === undefined){
+      if (tipo === undefined) {
         return
       }
 
       if (tipo == "ojo") {
-        this.anunciosBusqueda[this._positionAnuncioArray].no_vistas = this.anunciosBusqueda[this._positionAnuncioArray].no_vistas + 1; 
+        this.anunciosBusqueda[this._positionAnuncioArray].no_vistas = this.anunciosBusqueda[this._positionAnuncioArray].no_vistas + 1;
         return
       }
 
-      this.anunciosBusqueda[this._positionAnuncioArray].no_corazones = this.anunciosBusqueda[this._positionAnuncioArray].no_corazones + 1; 
+      this.anunciosBusqueda[this._positionAnuncioArray].no_corazones = this.anunciosBusqueda[this._positionAnuncioArray].no_corazones + 1;
     },
   },
 

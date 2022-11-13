@@ -207,7 +207,6 @@
 <script>
 import { mapState } from "vuex";
 import GeneralMixins from "../mixins/general-mixins.js";
-import * as GraphqlCalls from "../graphql/general-mutations";
 
 export default {
   name: "panel-herramientas",

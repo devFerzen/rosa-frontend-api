@@ -117,8 +117,8 @@ export const ANUNCIO_BYID_QUERY = gql `
 `;
 
 export const ANUNCIOS_QUERY = gql `
-    query queryAnuncios($query: QueryAnuncioInput!){
-        queryAnuncios(query: $query){
+    query queryAnuncios($query: QueryAnuncioInput!, $limit: Int, $skip: Int){
+        queryAnuncios(query: $query, limit: $limit, skip: $skip){
             id
             Sec_Descripcion{
                 titulo

@@ -416,10 +416,12 @@ export default {
      * @param {*} payload idAnuncio
      * @returns
      */
-    mixinBusqueda(payload = {}) {
+    mixinBusqueda(payload = {}, skip = 0) {
       return new Promise(async (resolve, reject) => {
         let QueryResult;
         console.log("mixinBusqueda...");
+        console.dir(payload);
+
         let MixinResult;
 
         try {
@@ -427,6 +429,7 @@ export default {
             query: GraphqlCalls.ANUNCIOS_QUERY,
             variables: {
               query: payload,
+              skip: skip
             },
           });
         } catch (error) {
