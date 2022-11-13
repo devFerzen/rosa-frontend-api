@@ -631,10 +631,10 @@ export default {
     },
 
     //Analizar aplicaBusqueda
-    async aplicaBusqueda(withSkip = false) {
+    async aplicaBusqueda(withSkip = false, resetSkip = false) {
       let QueryResult = [];
       let increment = 0;
-      let _skip = this.skip || 0;
+      let _skip = resetSkip ? 0 : this.skip || 0;
 
       if (withSkip) {
         increment = _skip == 0 ? 6 : _skip;
@@ -797,7 +797,7 @@ export default {
     getBusquedaQuery: function (value) {
       console.log("getBusquedaQuery...");
       console.dir(value);
-      this.aplicaBusqueda();
+      this.aplicaBusqueda(false, true);
     },
   },
 };
