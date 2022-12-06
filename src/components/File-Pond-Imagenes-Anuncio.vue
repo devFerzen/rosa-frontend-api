@@ -50,8 +50,8 @@ setOptions({
   labelIdle:
     'Arrastar y colocar tus imágenes aquí ó <span class="filepond--label-action"> Explorar </span>',
   server: {
-    //url: 'http://localhost:3080/',
-    url: '/',
+    url: 'http://localhost:3080/',
+    //url: '/',
     process: {
       url: "upload",
     },

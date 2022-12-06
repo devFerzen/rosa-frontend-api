@@ -13,7 +13,7 @@
                       <v-hover v-slot:default="{ hover }">
                         <v-list-item class="red--text font-weight-black text-center">
                           <v-list-item-content>
-                            <v-list-item-title @click="accionCorazon(anuncio.id)" style="cursor: pointer">
+                            <v-list-item-title @click="accionCorazon(key, anuncio.id)" style="cursor: pointer">
                               <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x"
                                 :color="hover ? 'red' : 'white'"></font-awesome-icon>
                             </v-list-item-title>
@@ -35,7 +35,8 @@
                                 justify-center align-center
                               ">
                               <font-awesome-icon :icon="['fas', 'eye']" class="fa-1x" color="white"></font-awesome-icon>
-                              <span class="text-caption" style="color: white;">{{ anuncio.no_vistas | countView }}</span>
+                              <span class="text-caption" style="color: white;">{{ anuncio.no_vistas | countView
+                              }}</span>
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -148,6 +149,15 @@
           </v-card>
         </v-hover>
       </v-col>
+      <v-col :cols="gridColCard['cardCols']">
+        <v-expand-transition>
+          <v-card v-show="cargandoAnuncios" class="rounded-xl" flat :height="tarjetaWH['carruselH']"
+            :width="tarjetaWH['carruselW']">
+            <loading :LoadingOptions="{ icon: true, texto: 'Cargando...' }"></loading>
+          </v-card>
+        </v-expand-transition>
+
+      </v-col>
     </v-row>
     <!--grid de tarjetas-->
 
@@ -173,8 +183,8 @@
             <v-skeleton-loader class="mx-auto" width="500" type="actions"></v-skeleton-loader>
           </v-col>
         </v-row>
-        <!--Skeletoo vacío-->
       </v-sheet>
+      <!--Skeletoo vacío-->
       <!--Vista Vacia anuncio-->
 
       <v-card :height="fullAnuncioMbView" v-if="anuncioView.Estado.vivo">
@@ -211,7 +221,7 @@
                             <v-col cols="2" align="start" justify="start"
                               :order="fullAnuncioheadersOrder['iconoCorazon']">
                               <div class="body-2">
-                                <v-btn fab text depressed plain small @click="accionCorazon(anuncioView.id)">
+                                <v-btn fab text depressed plain small @click="accionCorazon(undefined, anuncioView.id)">
                                   <font-awesome-icon :icon="['fas', 'heart']" class="fa-2x" color="red">
                                   </font-awesome-icon>
                                 </v-btn>
@@ -381,7 +391,7 @@
                   <v-sheet class="pa-0 fullAnuncio-navBottom-web" style="background: transparent">
                     <v-row no-gutters>
                       <v-col style="height: 68px" class="d-flex justify-start">
-                        <v-btn color="pink" rounded icon @click="accionVer(_positionAnuncioArray, 'izq')">
+                        <v-btn color="pink" rounded icon @click="accionVer(positionAnuncioArray, 'izq')">
                           <font-awesome-icon class="fa-2x" :icon="['fa', 'arrow-left']">
                           </font-awesome-icon>
                         </v-btn>
@@ -408,7 +418,7 @@
                       <!--brand image H-->
 
                       <v-col style="height: 68px" class="d-flex justify-end">
-                        <v-btn color="pink" depressed rounded icon @click="accionVer(_positionAnuncioArray, 'der')">
+                        <v-btn color="pink" depressed rounded icon @click="accionVer(positionAnuncioArray, 'der')">
                           <font-awesome-icon class="fa-2x" :icon="['fa', 'arrow-right']">
                           </font-awesome-icon>
                         </v-btn>
@@ -424,9 +434,9 @@
           </v-row>
         </v-container>
       </v-card>
-      <!--Cuerpo Anuncio-->
     </v-dialog>
-    <!--Venta Anuncio Completa-->
+    <!--Cuerpo Anuncio-->
+    <!--Vista Vacia anuncio-->
   </div>
 </template>
 
@@ -438,13 +448,18 @@
   */
 import { mapGetters } from "vuex";
 import GeneralMixins from "../mixins/general-mixins.js";
+import Loading from "../components/Loading.vue";
+import { Promise, reject } from "q";
 
 export default {
   name: "sistema-tarjetas-descripcion",
   mixins: [GeneralMixins],
+  components: {
+    Loading
+  },
   props: {
     fullAnuncioEstado: { type: Boolean, default: false },
-    colUsuarioDesc: { type: String, default: "4" },
+    colUsuarioDesc: { type: String, default: "4" }
   },
   data() {
     return {
@@ -552,9 +567,13 @@ export default {
         ],
       },
       _positionAnuncioArray: 0,
+      cargandoAnuncios: false,
     };
   },
   computed: {
+    positionAnuncioArray() {
+      return this._positionAnuncioArray
+    },
     ...mapGetters(["getBusquedaQuery"]),
     tarjetaWH() {
       const { sm, xs } = this.$vuetify.breakpoint;
@@ -635,8 +654,12 @@ export default {
       let QueryResult = [];
       let increment = 0;
       let _skip = resetSkip ? 0 : this.skip || 0;
+      const esperando = () => {
+        return new Promise(reject => setTimeout(reject, 4000))
+      }
 
       if (withSkip) {
+        this.cargandoAnuncios = true;
         increment = _skip == 0 ? 6 : _skip;
       }
 
@@ -656,6 +679,7 @@ export default {
       if (QueryResult.length <= 0) {
 
         if (withSkip) {
+          this.cargandoAnuncios = false;
           return;
         }
         this.mixinLlamadaRouter({
@@ -672,6 +696,7 @@ export default {
       if (withSkip) {
         this.skip = increment + 6;
         this.anunciosBusqueda = this.anunciosBusqueda.concat(QueryResult);
+        this.cargandoAnuncios = await esperando();
         return;
       }
       this.anunciosBusqueda = QueryResult;
@@ -705,17 +730,14 @@ export default {
     /*
       accionVer muestra a un usuario un anuncio seleccionado
     */
-    async accionVer(key, cambioTipo = "") {
-      let queryResult;
-      console.log(`key ${key}`);
+    accionVer(key, cambioTipo = "") {
 
+      console.log(`key    ${key}`)
       if (cambioTipo == "der") {
         this._positionAnuncioArray = this.flechaDerNavegacion();
-        console.log(`new ${this._positionAnuncioArray}`);
       }
 
       if (cambioTipo == "izq") {
-        console.log(`izq ${this._positionAnuncioArray}`);
         this._positionAnuncioArray = this.flechaIzqNavegacion();
       }
 
@@ -731,6 +753,7 @@ export default {
     flechaIzqNavegacion() {
       //Devuelve la posicion para pasar a la izq
       let _result = this.anunciosBusqueda.length - 1;
+
       if (this._positionAnuncioArray > 0) {
         _result = this._positionAnuncioArray - 1;
       }
@@ -744,25 +767,28 @@ export default {
       if (this._positionAnuncioArray < this.anunciosBusqueda.length - 1) {
         _result = this._positionAnuncioArray + 1;
       }
+
       return _result;
     },
 
     /*
       accionCorazon acciona un like para usuario hacia un anuncio
     */
-    async accionCorazon(idAnuncio) {
+    async accionCorazon(key, idAnuncio) {
       let queryResult;
       try {
         queryResult = await this.mixinMeEncantaPlus(idAnuncio);
+        this.mixinLlamadaRouter(queryResult);
       } catch (error) {
         console.log("vue accionCorazon en error...");
         console.dir(error);
         this.mixinLlamadaRouter(error);
-        return;
+        return
       }
 
-      this.PlusOne('corzaon');
-      this.mixinLlamadaRouter(queryResult);
+      if (typeof key === 'number') {
+        this.PlusOne('corazon', key);
+      }
     },
 
     PlusOne(tipo) {
@@ -775,13 +801,13 @@ export default {
         this.anunciosBusqueda[this._positionAnuncioArray].no_vistas = this.anunciosBusqueda[this._positionAnuncioArray].no_vistas + 1;
         return
       }
-
       this.anunciosBusqueda[this._positionAnuncioArray].no_corazones = this.anunciosBusqueda[this._positionAnuncioArray].no_corazones + 1;
     },
   },
 
   async created() {
     const { xs, sm } = this.$vuetify.breakpoint;
+
     this.fullAnuncioCss.list = xs || sm ? "" : "full-anuncio-titlelist-web";
     this.fullAnuncioCss.seccion = xs || sm ? "" : "full-anuncio-seccion-web";
 

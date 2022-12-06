@@ -8,10 +8,7 @@
  */
 
 import * as GraphqlCalls from "../graphql/general-mutations";
-import * as GraphqlUsuarioCalls from "../graphql/usuario-mutations";
 import Result from "../utilities/Result";
-import { mapGetters } from "vuex";
-import * as GeneralTestMixin from "./Test/generalTest-mixin";
 
 export default {
   data() {
@@ -24,13 +21,12 @@ export default {
   methods: {
     /**
      * Mixin Para poder iniciar sesion a un usuario con correo y contraseña
-     * @param {*} payload Objecto que representa un correo y contraseña
-     * @returns
+     * @param {correo, contraseña} payload Objecto
+     * @returns {MixinResult}
      */
     mixinInicioSesion(payload) {
       return new Promise(async (resolve, reject) => {
-        let MutateResult;
-        let MixinResult;
+        let MutateResult, MixinResult;
 
         try {
           MutateResult = await this.$apollo.mutate({
@@ -183,13 +179,11 @@ export default {
           return reject(MixinResult);
         }
 
-        console.log("mixinMeEncantaPlus... result");
-        console.dir(MutateResult);
         MixinResult = {
           ...new Result(MutateResult, "anunciolike"),
         };
 
-
+        console.dir(MixinResult);
         return resolve(MixinResult);
       });
     },
@@ -483,14 +477,6 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log("mixinLlamadaRouter");
 
-        if (payload.hasOwnProperty("pagina")) {
-          if (payload.pagina !== undefined) {
-            this.$router.push({ name: payload.pagina }).catch((error) => {
-              //this.$router.push({ name: 'no-encontrado' });
-            });
-          }
-        }
-
         //Crear arreglo de objetos
         if (payload.hasOwnProperty('componenteInterno')) {
           for (let componenteInterno in payload.componenteInterno) {
@@ -500,19 +486,26 @@ export default {
             );
           }
         }
+        
+        if (payload.hasOwnProperty("pagina")) {
+          if (payload.pagina !== undefined) {
+            this.$router.push({ name: payload.pagina }).catch((error) => {
+              //this.$router.push({ name: 'no-encontrado' });
+            });
+          }
+        }
+
       });
     },
 
     //Agregar un sort
-    getMunicipios(nombre_estado) {
-      console.log(`getMunicipios... nombre_estado ${nombre_estado}`);
+    mixinGetMunicipios(nombre_estado) {
 
       let Estado = this.$store.state.panelHerramientas.ddls.filter((Ddls) => {
         return (
           Ddls.categoria === "ddlEstado" && Ddls.descripcion === nombre_estado
         );
       });
-      console.dir(Estado);
 
       const _municipiosList = this.$store.state.panelHerramientas.ddls.filter(
         (Ddls) => {
@@ -522,7 +515,6 @@ export default {
           );
         }
       );
-      console.dir(_municipiosList);
       this.DdlMunicipios = _municipiosList;
     },
 

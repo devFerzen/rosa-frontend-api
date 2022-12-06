@@ -14,8 +14,8 @@ import Cookies from 'js-cookie'
 Vue.use(Vuetify);
 
 const httpLink = new HttpLink({ 
-    //uri:'http://localhost:3080/graphql',
-    uri: "/graphql",
+    uri:'http://localhost:3080/graphql',
+    //uri: "/graphql",
     credentials: "include" 
 });
 const cache = new InMemoryCache({
@@ -50,8 +50,8 @@ const apolloProvider = new VueApollo({
     defaultClient: new ApolloClient({
         link,
         cache,
-        //uri: 'http://localhost:3080/graphql',
-        uri: "/graphql",
+        uri: 'http://localhost:3080/graphql',
+        //uri: "/graphql",
         credentials: 'include',
         connectToDevTools: true //ApolloDev browser tool 
     })

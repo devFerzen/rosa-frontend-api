@@ -366,7 +366,7 @@
                             :menu-props="{ top: false, offsetY: true }" :items="ddlEstados" :item-text="'descripcion'"
                             :item-value="'descripcion'" class="error609TextField" label="Estados" filled outlined solo
                             dense @change="
-                              getMunicipios(
+                              mixinGetMunicipios(
                                 anuncioUsuario.Sec_Descripcion.estado
                               )
                             ">

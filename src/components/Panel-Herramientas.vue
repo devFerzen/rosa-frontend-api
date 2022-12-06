@@ -76,7 +76,7 @@
               dense
               outlined
               class="error609TextField mb-0 select609"
-              @change="getMunicipios(busquedaEstado)"
+              @change="mixinGetMunicipios(busquedaEstado)"
             >
             </v-select>
           </v-col>

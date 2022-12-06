@@ -12,6 +12,7 @@
           @click="
             $router.push({ path: '/' }).catch((error) => {});
             $store.dispatch('panelHerramientasBusqueda', true);
+            $store.dispatch('querySet', Query);
           "
         />
       </div>
@@ -187,7 +188,6 @@
 import GeneralMixins from "./mixins/general-mixins.js";
 import UsuarioMixin from "./mixins/usuario-mixins.js";
 import { mapGetters, mapState } from "vuex";
-import * as GraphqlCalls from "./graphql/general-mutations";
 
 export default {
   name: "App",

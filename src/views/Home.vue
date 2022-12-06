@@ -29,10 +29,10 @@
 
       <v-col cols="12" :md="WidthComponents.sistemaWidth.lg">
         <espacio-publicitario v-if="actualizandoContrasenaView || contactanosView" />
-
-        <sistema-tarjetas-descripcion id="CardsGrid" ref="CardsGrid" :fullAnuncioEstado="hayAnuncio"
-          :colUsuarioDesc="WidthComponents.colUsuarioDesc" class="mx-2"
-          v-else-if="!actualizandoContrasenaView && !contactanosView" />
+        <sistema-tarjetas-descripcion 
+          id="CardsGrid" ref="CardsGrid" 
+          :fullAnuncioEstado="hayAnuncio" :colUsuarioDesc="WidthComponents.colUsuarioDesc" 
+          class="mx-2" v-else-if="!actualizandoContrasenaView && !contactanosView" />
       </v-col>
       <!--Cuerpo-->
     </v-row>
@@ -78,7 +78,7 @@ export default {
           lg: 9
         }
       },
-      panelHerramientasClass: ''
+      panelHerramientasClass: '',
     };
   },
   computed: {
